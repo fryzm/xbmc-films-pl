@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mrknow"
-       name="Filmy Online - mrknow.pl"
-       version="1.0.1"
-       provider-name="mrknow">
-  <requires>
-    <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.urlresolver" version="1.0.3"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource"
-            library="default.py">
-        <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary>Pliki Video ze strony mrknow.pl</summary>
-    <description>Plugin pozwala nam ogladac pliki video ze strony mrknow.pl</description>
-    <platform>all</platform>
-  </extension>
+<addon id="repository.mrknow.pl"
+		name="mrknow.pl XBMC Add-ons"
+		version="1.0.0"
+		provider-name="Mrknow">
+	<extension point="xbmc.addon.repository"
+		name="Mrknow.pl XBMC Add-on Repository">
+		<info compressed="false">http://xbmc-films-pl.googlecode.com/svn/trunk/src/addons.xml</info>
+		<checksum>http://xbmc-films-pl.googlecode.com/svn/trunk/src/addons.xml.md5</checksum>
+		<datadir zip="false">http://xbmc-films-pl.googlecode.com/svn/trunk/src</datadir>
+		<!--<hashes>true</hashes>-->
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Install Add-ons from mrknow.pl XBMC</summary>
+		<summary lang="de">Installiere Add-ons von mrknow.pl XBMC</summary>
+		<summary lang="es">Instalar Addons desde mrknow.pl XBMC</summary>
+		<summary lang="fr">Installe les Add-ons depuis mrknow.pl XBMC</summary>
+		<summary lang="nl">Add-ons van systems-design.eu mrknow.pl XBMC</summary>
+		<summary lang="pl">Instaluj wtyczki z mrknow.pl XBMC</summary>
+	</extension>
 </addon>

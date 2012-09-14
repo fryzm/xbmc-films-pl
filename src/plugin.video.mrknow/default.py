@@ -1,8 +1,9 @@
-import urllib,urllib2,re,xbmcplugin,xbmcgui
+import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
 import urlresolver
 from urlparse import urlparse, parse_qs
 
-#TV DASH - by You 2008.
+ptv = xbmcaddon.Addon()
+
 
 def CATEGORIES():
 #        addDir('','',1,'')
@@ -70,33 +71,42 @@ def VIDEOLINKS(url,name):
         link=response.read()
         response.close()
         match=re.compile('<IFRAME SRC="(.+?)" SCROLLING=no></IFRAME>').findall(link)
-#        match=re.compile('<IFRAME SRC="/wp-content/themes/player/miromare.php?page=(.+?)&t=(.+?)" SCROLLING=no></IFRAME>').findall(link)
-        print 'znalazlem-------'
-        print match
-#o =  urlparse('http;//www.mrknow.pl/'+match[0])
+ 
         o = parse_qs(urlparse('http;//www.mrknow.pl/'+match[0]).query)
+        stream_url = 'a'
         print o['t'][0]
         if o['t'][0] == 'p':
-                txthost = 'putlocker.com'
+             txthost = 'putlocker.com'
+             name = name + 'putloker.com'
         elif o['t'][0] == 'y':
-                txthost = 'youtube.com'
-        print txthost
-        sources = []
-        hosted_media = urlresolver.HostedMediaFile(host=txthost, media_id=o['page'][0])
-        sources.append(hosted_media)
-        source = urlresolver.choose_source(sources)
-        print source 
-        print hosted_media
-        if source:
-                stream_url = source.resolve()
+             txthost = 'youtube.com'
+             name = name + 'youtube.com'
+#        print txthost
+        if o['t'][0] == 'p' or o['t'][0] == 'y' :
+             sources = []
+             hosted_media = urlresolver.HostedMediaFile(host=txthost, media_id=o['page'][0])
+             sources.append(hosted_media)
+             source = urlresolver.choose_source(sources)
+             print source 
+             if source:
+                  stream_url = source.resolve()
+             else:
+                  return
+             print 'Stream:'+stream_url
+             addLink(name,stream_url,3,'','')
         else:
-                return
-        print 'Stream:'+stream_url        
-#        stream_url = source.resolve()
-#        listitem = xbmcgui.ListItem()
-#        xbmc.Player().play(stream_url, listitem)        
-        addLink(name,stream_url,'')
-                
+             addLink('Serwer 0', 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
+             addLink('Serwer 1', 'http://96.47.226.90/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
+             addLink('Serwer 2', 'http://64.79.100.121/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
+             addLink('Serwer 3', 'http://37.128.191.200/redir.php?content=0&file=' + o['page'][0],3,'',o['sub'][0])
+             
+    
+    
+           #  print "SSUUBBBSS:::"+o['sub'][0]
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+        
+ 
+ 
 def get_params():
         param=[]
         paramstring=sys.argv[2]
@@ -112,22 +122,53 @@ def get_params():
                         splitparams=pairsofparams[i].split('=')
                         if (len(splitparams))==2:
                                 param[splitparams[0]]=splitparams[1]
-                                
         return param
 
+def playVideo(name,url,subs):
+    #print "PlayVideo Name:" + name
+    #print "PlayVideo URL:" + url
+    liz=xbmcgui.ListItem(name, iconImage='DefaultVideo.png', thumbnailImage='')
+    liz.setInfo( type="Video", infoLabels={ "Title": name, } )
+    xbmcPlayer = xbmc.Player()
+    
+    if len(subs)>0:
+        subsdir = os.path.join(ptv.getAddonInfo('path'), "subs")
+        if not os.path.isdir(subsdir):
+            os.mkdir(subsdir)
+        srtfile = urllib2.urlopen(subs)
+        output = open((os.path.join(subsdir, "napisy.txt" )),"w+")
+        output.write(srtfile.read())
+        output.close()
+        
+        xbmcPlayer.play(url, liz)
+        xbmc.sleep( 5000 )
+        #xbmc.Player().setSubtitleStream(1)
+        xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+        xbmc.Player().showSubtitles( True )
+        if not xbmc.Player().isPlaying():
+            xbmc.sleep( 10000 )
+            #xbmc.Player().setSubtitleStream(1)
+            xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+            xbmc.Player().showSubtitles( True )
+        return True
+        
+    else:
+        xbmcPlayer.play(url, liz)
+        return True
 
-
-
-def addLink(name,url,iconimage):
-        ok=True
+def addLink(name,url,mode,iconimage,subs):
+        #print "SSUUBBBSS:::"+subs
+        #ok=True
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&subs="+urllib.quote_plus(subs)
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-        return ok
+        #liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        #liz.setProperty("IsPlayable", "false")
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
+        return False
 
 
-def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+def addDir(name,url,mode,iconimage,subs=''):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&subs="+urllib.quote_plus(subs)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
@@ -139,6 +180,7 @@ params=get_params()
 url=None
 name=None
 mode=None
+subs=None
 
 try:
         url=urllib.unquote_plus(params["url"])
@@ -150,6 +192,10 @@ except:
         pass
 try:
         mode=int(params["mode"])
+except:
+        pass
+try:
+        subs=urllib.unquote_plus(params["subs"])
 except:
         pass
 
@@ -168,6 +214,16 @@ elif mode==1:
 elif mode==2:
         print ""+url
         VIDEOLINKS(url,name)
+
+elif mode==3:
+        print "UUUUURRRRRLLLL"+url
+        print "MODE-------->>>>>"
+        print mode
+        print url 
+        print subs
+        print name
+        print ">>>>>"
+        playVideo(name,url,subs)
 
 
 

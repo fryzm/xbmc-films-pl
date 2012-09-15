@@ -1,5 +1,7 @@
+
 import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
 import urlresolver
+#from resources.lib.gui.gui import cGui
 from urlparse import urlparse, parse_qs
 
 ptv = xbmcaddon.Addon()
@@ -7,7 +9,9 @@ ptv = xbmcaddon.Addon()
 
 def CATEGORIES():
 #        addDir('','',1,'')
+        addDir("Mrknow.pl - szukaj ","http://www.mrknow.pl/",4,"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg")                       
         addDir("Mrknow.pl - ostatnio dodane","http://www.mrknow.pl/",1,"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg")                       
+        addDir("Mrknow.pl - Filmy HD","http://www.mrknow.pl/videostags/hd/",1,"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg")                       
         addDir("Mrknow.pl - Akcja","http://www.mrknow.pl/videoscategory/akcja/",1,"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg")                       
         addDir("Mrknow.pl - Animacja","http://www.mrknow.pl/videoscategory/animacja/",1,"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg")                       
         addDir("Mrknow.pl - Biograficzny","http://www.mrknow.pl/videoscategory/biograficzny/",1,"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg")                       
@@ -47,6 +51,69 @@ def CATEGORIES():
         addDir("Mrknow.pl - western","http://www.mrknow.pl/videoscategory/western/",1,"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg")                       
         addDir("Mrknow.pl - wojenny","http://www.mrknow.pl/videoscategory/wojenny/",1,"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg")                       
 
+def SZUKAJ(url):
+    sSearchText = showKeyBoard()
+    if not sSearchText:
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+        return
+    print "Szukaj - " + sSearchText
+    req = urllib2.Request('http://www.mrknow.pl/?s=' + sSearchText)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    #print "LINK:"+link
+    #
+    match=re.compile('<a class="widget-title" href="(.+?)"><img src="(.+?)" alt="(.+?)" title="(.+?)"  /> </a> ').findall(link)
+#   match=re.compile('<a class="video_thumb" href="(.+?)" rel="bookmark" title="(.+?)">(.\s+)<img src="(.+?)" alt="(.+?)" title="(.+?)"  />(.\s+)</a>(.\s+)<p class="title"><a href="(.+?)" rel="bookmark" title="">(.+?)</a></p><br>').findall(link)
+#    match=re.compile(' <a class="video_thumb" href="(.+?)" rel="bookmark" title="(.+?)">(.\s+)<img src="(.+?)" alt="(.+?)" title="(.+?)"  /> ').findall(link)
+    for i in match:
+        #print ":"+i[0] + " " + i[1] + " " + i[2] + " " + i[3]
+        addDir(i[2],i[0],2,i[1])
+        #<span class="i_next fr"><a href="http://www.mrknow.pl/videoscategory/akcja/page/2/">Next</a> </span>
+    match1=re.compile('<a (.+?)><strong>next</strong></a>',re.U).findall(link)
+    print "Match: "
+    print match1
+    #print link
+    if len(match1) > 0:
+        match2=re.compile('href="(.+?)"').findall(match1[0])
+        #print match2
+        addDir('Natepna strona',match2[0],5,'')
+
+def SZUKAJ1(url):
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match=re.compile('<a class="widget-title" href="(.+?)"><img src="(.+?)" alt="(.+?)" title="(.+?)"  /> </a> ').findall(link)
+    for i in match:
+        addDir(i[2],i[0],2,i[1])
+    match1=re.compile('<a (.+?)><strong>next</strong></a>',re.U).findall(link)
+    print "Match: "
+    print match1
+    #print link
+    if len(match1) > 0:
+        match2=re.compile('href="(.+?)"').findall(match1[0])
+        #print match2
+        addDir('Natepna strona',match2[0],5,'')
+
+        
+    
+  
+def showKeyBoard(sDefaultText = ""):
+    # Create the keyboard object and display it modal
+    oKeyboard = xbmc.Keyboard(sDefaultText)
+    oKeyboard.doModal()
+    
+    # If key board is confirmed and there was text entered return the text
+    if oKeyboard.isConfirmed():
+      sSearchText = oKeyboard.getText()
+      if len(sSearchText) > 0:
+        return sSearchText
+
+    return False
+        
 def INDEX(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -108,8 +175,7 @@ def VIDEOLINKS(url,name):
             match=re.compile('<source type="video/mp4" src="(.+?)">').findall(link)
             name = name + ' - video.anyfiles.pl'
             addLink(name,match[0],3,'','')
-        else:
-           a=a
+
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
  
@@ -223,15 +289,14 @@ elif mode==2:
         VIDEOLINKS(url,name)
 
 elif mode==3:
-        print "UUUUURRRRRLLLL"+url
-        print "MODE-------->>>>>"
-        print mode
-        print url 
-        print subs
-        print name
-        print ">>>>>"
+#        print "UUUUURRRRRLLLL"+url
+#        print "MODE-------->>>>>"
         playVideo(name,url,subs)
-
-
+elif mode==4:
+        print "SZUKAJ"+url
+        SZUKAJ(url)
+elif mode==5:
+        print "SZUKAJ1"+url
+        SZUKAJ1(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

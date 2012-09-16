@@ -162,10 +162,17 @@ def VIDEOLINKS(url,name):
              print 'Stream:'+stream_url
              addLink(name,stream_url,3,'','')
         elif o['t'][0] == 'n':
-             addLink('Serwer 0 - noobroom.com', 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
-             addLink('Serwer 1 - noobroom.com', 'http://96.47.226.90/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
-             addLink('Serwer 2 - noobroom.com', 'http://64.79.100.121/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
-             addLink('Serwer 3 - noobroom.com', 'http://37.128.191.200/redir.php?content=0&file=' + o['page'][0],3,'',o['sub'][0])
+             if o.has_key('sub'):
+                addLink('Serwer 0 - noobroom.com', 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
+                addLink('Serwer 1 - noobroom.com', 'http://96.47.226.90/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
+                addLink('Serwer 2 - noobroom.com', 'http://64.79.100.121/index.php?file=' + o['page'][0]+ '&start',3,'',o['sub'][0])
+                addLink('Serwer 3 - noobroom.com', 'http://37.128.191.200/redir.php?content=0&file=' + o['page'][0],3,'',o['sub'][0])
+             else:
+                addLink('Serwer 0 - noobroom.com', 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start',3,'','')
+                addLink('Serwer 1 - noobroom.com', 'http://96.47.226.90/index.php?file=' + o['page'][0]+ '&start',3,'','')
+                addLink('Serwer 2 - noobroom.com', 'http://64.79.100.121/index.php?file=' + o['page'][0]+ '&start',3,'','')
+                addLink('Serwer 3 - noobroom.com', 'http://37.128.191.200/redir.php?content=0&file=' + o['page'][0],3,'','')
+                
         elif o['t'][0] == 'a':  
             req = urllib2.Request('http://video.anyfiles.pl///video/'+o['page'][0])
             req.add_header('User-Agent', 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3')

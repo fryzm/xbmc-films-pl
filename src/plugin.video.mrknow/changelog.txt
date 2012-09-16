@@ -1,10 +1,13 @@
 
 
-Version 1.0.1
+Wersja 1.0.1
 Initial release
 
-Version 1.0.4
+Wersja 1.0.4
 - dodano noobroom.com
 - dodano anyfiles.pl
 - dodano wyszukiwanie
 
+Wersja 1.0.5
+- poprawiono youtube
+- poprawiono noobroom.com bez napisów

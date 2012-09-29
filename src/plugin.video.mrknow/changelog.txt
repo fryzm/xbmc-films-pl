@@ -11,3 +11,8 @@ Wersja 1.0.4
 Wersja 1.0.5
 - poprawiono youtube
 - poprawiono noobroom.com bez napisów
+
+Wersja 1.0.6
+- dodano serwis iptak
+
+

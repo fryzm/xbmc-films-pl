@@ -22,7 +22,7 @@ log = pLog.pLog()
 
 MENU_TABLE = { 1000: "www.mrknow.pl [filmy online]",
                2000: "IPTAK [filmy online]",
-              # 3000: "To się wytnie"
+               3000: "To się wytnie [TV online]"
 }
 
 

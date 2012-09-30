@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
-import elementtree.ElementTree as ET
+import cookielib
 from urlparse import urlparse, parse_qs
 import urlresolver
+from cookielib import CookieJar
 
 
 scriptID = 'plugin.video.mrknow'
@@ -17,27 +18,40 @@ import pLog, settings, Parser
 
 log = pLog.pLog()
 
-mainUrl = 'http://m.tosiewytnie.pl/'
+mainUrl = 'http://tosiewytnie.pl/'
 polecane = 'mindex.html'
 sort_desc = '?o=malejaco&f=tytul'
 playerUrl = 'http://www.youtube.pl/'
 
 HOST = 'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B176 Safari/7534.48.3'
+cj = cookielib.CookieJar()
+
 
 MENU_TAB = {1: "Polecane",
-            2: "Kanały", 
-            3: "Rankingi",
-            4: "Szukaj"}
+            2: "Rankingi - Najpopularniejsze",
+            3: "Rankingi - Najnowsze",
+            4: "Rankingi - Najczęściej komentowane",
+            5: "Rankingi - Najgorsze",
+            6: "Kanały - Najnowsze",
+            7: "Kanały - Alfabetycznie",
+            8: "Kanały - Najpopularniejsze",
+            9: "Kanały - Ilość produkcji"}
+    #        10: "Szukaj"}
 
-KANALY_TAB = {1: "Najnowsze",
-              2: "Alfabetycznie",
-              3: "Najpopularniejsze",
-              4: "Ilość produkcji"}    
-RANKING_TAB = {1: "Najpopularniejsze",
-               2: "Najnowsze",
-               3: "Najczęściej komentowane",
-               4: "Najgorsze"}              
+class MyHTTPErrorProcessor(urllib2.HTTPErrorProcessor):
 
+    def http_response(self, request, response):
+        code, msg, hdrs = response.code, response.msg, response.info()
+
+        if not (200 <= code < 300):
+            response = self.parent.error(
+                'http', request, response, code, msg, hdrs)
+        return response
+
+    https_response = http_response
+
+
+               
 class ToSieWytnie:
     def __init__(self):
         log.info('Starting ToSieWytnie')
@@ -50,177 +64,77 @@ class ToSieWytnie:
             self.add('tosiewytnie', 'main-menu', val, val, 'None', 'None', 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-    def listsCatMenu(self, table, kat):
-        for num, val in table.items():
-            self.add('tosiewytnie', 'categories-menu', kat, val, 'None', 'None', 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-
-    def listsCategoriesMenu(self):
-        req = urllib2.Request(mainUrl)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<li data-theme="c">(.*?)<a href="(.*?)" data-transition="slide">(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        print len(match)
-        
+    def pageadditemscat(self, data,category):
+        match = re.compile('<div class="clip"><a href="(.*?)" class="title"><img class="preview" src="(.*?)" alt="" />(.*?)</a><br/>(.*?): (.*?)<br/><img src="(.*?)" alt="(.*?)"/>').findall(data)
         if len(match) > 0:
-            log.info('Listuje kategorie: ')
             for i in range(len(match)):
-                url = mainUrl + match[i][1]
-                self.add('iptak', 'categories-menu', match[i][2].strip(), 'None', 'None', url, 'None', 'None', True, False)
+                opis = match[i][2] + ' - ilość produkcji:'+ match[i][4]
+                url =  mainUrl + match[i][0]
+                self.add('tosiewytnie', 'categories-menu', category, opis , match[i][1], url, '', 'None', True, False)
+
+    def listsCategoriesMenu(self,url,category=''):
+        newurl = url
+        nrstrony = 0 
+        while (nrstrony < 3):
+            urldata = self.pagedo(newurl)
+            self.pageadditemscat(urldata,category)
+            geturl = self.pageafindnext(urldata)
+            if len(geturl) > 0:
+                newurl = mainUrl + geturl[0]
+                nrstrony = nrstrony +1
+            else:
+                nrstrony = 4
+        if nrstrony == 3:
+           #service=tosiewytnie&name=categories-menu&category=Kanały
+           self.add('tosiewytnie', 'main-menu', category, 'Następna strona', 'None', newurl, 'None', 'None', True, False)
+                
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-
-    def getSearchURL(self, key):
-        url = mainUrl + 'search.php?phrase=' + urllib.quote_plus(key) 
-        return url
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', HOST)
-        #openURL = urllib2.urlopen(req)
-        #readURL = openURL.read()
+        
         
     def pagedo(self,url):
-        req = urllib2.Request('http://tosiewytnie.pl/accepted,1,mindex.html')
-        req.add_header('User-Agent', HOST)
-        page = urllib2.urlopen(req);response=page.read();page.close()
-        cookie=page.info()['Set-Cookie']
-        print cookie
-        # top is for obtaining the cookie via the info get.
-        req = urllib2.Request(url)#send the new url with the cookie.
-        req.add_header('User-Agent', HOST)
-        req.add_header('Cookie',cookie)
-        page = urllib2.urlopen(req)
-        response=page.read();page.close()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj), MyHTTPErrorProcessor)
+        opener.addheaders = [('User-agent', HOST)]
+        urllib2.install_opener(opener)
+        page = urllib2.urlopen('http://tosiewytnie.pl/accepted,1,mindex.html')
+        page = urllib2.urlopen(url)
+        response =  page.read()
+        page.close()
         return response
-    def listsItems(self, url):
-        readURL = self.pagedo(url)
-        print readURL
+    def pageadditems(self, data):
+        match = re.compile('<div class="clip"><a href="(.*?)" class="title"><img class="preview" src="(.*?)" alt="" />(.*?)</a><br/>(.*?)<br/><div class="saw"><img src="(.*?)" alt="(.*?)"/></div><br/><br/><a href="(.*?)">').findall(data)
+        if len(match) > 0:
+            for i in range(len(match)):
+                self.add('tosiewytnie', 'playSelectedMovie', 'None', match[i][2], match[i][1], match[i][0], '', 'None', True, False)
+ 
+    def pageafindnext(self, data):
+        match = re.compile('<a class="next" href="(.*?)">Następne</a>').findall(data)
         
-        #match = re.compile('<li data-theme="c" action="watch">(.*?)<a href="(.*?)" data-transition="slide">(.*?)<img src="(.*?)" height="90px" width="90px" title="(.*?)" />(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        #if len(match) > 0:
-        #    for i in range(len(match)):
-        #    #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-        #     self.add('iptak', 'playSelectedMovie', 'None', match[i][5], match[i][3], match[i][1], 'aaaa', 'None', True, False)
-       
-       #     
-       #         req1 = urllib2.Request(mainUrl + match[i][1])
-       #         req1.add_header('User-Agent', HOST)
-       #         openURL1 = urllib2.urlopen(req)
-       #         readURL1 = openURL1.read()
-       #         openURL1.close()
-       #         match1 = re.compile('<a data-role="button" data-transition="fade" data-theme="b" href=\'(.*?)\' target="_blank" data-icon="arrow-r" data-iconpos="top">(.*?)</a>', re.DOTALL).findall(readURL)
-       #         print match1
-       #         if len(match1) > 0:
-       #             self.add('iptak', 'playSelectedMovie', 'None', match[i][3], match[a][1], match[a][0], match[a][4], 'None', True, False)
-       
+        return match
+           
         
-        #match1 = re.compile('<a href="(.*?)" data-transition="slidedown">').findall(readURL)
-      # 
-      #  if len(match1) > 0:
-      #      log.info('Nastepna strona kategorie: '+  match1[0])
-      #      self.add('iptak', 'categories-menu', 'Następna Strona', 'None', 'None', mainUrl + match1[0], 'None', 'None', True, False)
+    def listsItems(self, url,category=''):
+        newurl = url
+        nrstrony = 0 
+        while (nrstrony < 3):
+            urldata = self.pagedo(newurl)
+            self.pageadditems(urldata)
+            geturl = self.pageafindnext(urldata)
+            if len(geturl) > 0:
+                newurl = mainUrl + geturl[0]
+                nrstrony = nrstrony +1
+            else:
+                nrstrony = 4
+        if nrstrony == 3:
+           self.add('tosiewytnie', 'categories-menu', category, 'Następna strona', 'None', newurl, 'None', 'None', True, False)
+                
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-
-    def listsItemsPage(self, url):
-        if not url.startswith("http://"):
-            url = mainUrl + url
-        if self.getSizeAllItems(url) > 0  and self.getSizeItemsPerPage(url) > 0:
-            a = math.ceil(float(self.getSizeAllItems(url)) / float(self.getSizeItemsPerPage(url)))
-            for i in range(int(a)):
-                num = i + 1
-                title = 'Lista ' + str(num)
-                destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('iptak', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
-
-
-    def listsItemsSerialPage(self, url, sizeOfSerialParts):
-        if not url.startswith("http://"):
-            url = mainUrl + url
-        if sizeOfSerialParts > 0  and self.getSizeItemsPerPage(url) > 0:
-            a = math.ceil(float(sizeOfSerialParts) / float(self.getSizeItemsPerPage(url)))
-            for i in range(int(a)):
-                num = i + 1
-                title = 'Lista ' + str(num)
-                destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('iptak', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1])) 
-
-
-    def getMovieLinkFromXML(self, url):
+    def getMovieLink(self, url):
         urlLink = 'None'
         url = mainUrl + url
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<a data-role="button" data-transition="fade" data-theme="b" href=\'(.*?)\' target="_blank" data-icon="arrow-r" data-iconpos="top">(.*?)</a>', re.DOTALL).findall(readURL)
-        
-        o = parse_qs(urlparse(mainUrl + match[0][0]).query)
-        stream_url = 'a'
-        sources = []
-        hosted_media = urlresolver.HostedMediaFile(host='youtube.com', media_id=o['v'][0])
-        sources.append(hosted_media)
-        source = urlresolver.choose_source(sources)
-        
-        if source:
-            stream_url = source.resolve()
-        else:
-            return
-        return stream_url
-
-
-    def getSizeAllItems(self, url):
-        numItems = 0
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<li data-theme="c" action="watch">(.*?)<a href="(.*?)" data-transition="slide">(.*?)<img src="(.*?)" height="90px" width="90px" title="(.*?)" />(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        if len(match) == 1:
-            numItems = match[0]
-        return numItems
-    
-    
-    def getSizeItemsPerPage(self, url):
-        numItemsPerPage = 0
-        openURL = urllib.urlopen(url)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<div class="movie-(.+?)>').findall(readURL)
-        if len(match) > 0:
-            numItemsPerPage = len(match)
-        return numItemsPerPage        
-
-    def getMovieID(self, url):
-        id = 0
-        tabID = url.split(',')
-        if len(tabID) > 0:
-            id = tabID[1]
-        return id
-
-
-    def getItemTitles(self, table):
-        out = []
-        for i in range(len(table)):
-            value = table[i]
-            out.append(value[1])
-        return out
-
-    def getItemURL(self, table, key):
-        link = ''
-        for i in range(len(table)):
-            value = table[i]
-            if key in value[0]:
-                link = value[2]
-                break
-        return link
-
+        urldata = self.pagedo(url)
+        match = re.compile('<div class="clip"><a href="(.*?)">').findall(urldata)
+        return match[0]
 
     def searchInputText(self):
         text = None
@@ -233,9 +147,6 @@ class ToSieWytnie:
 
     def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
         u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)
-        #log.info(str(u))
-        #if name == 'main-menu' or name == 'categories-menu':
-         #   title = category 
         if iconimage == '':
             iconimage = "DefaultVideo.png"
         liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
@@ -256,11 +167,6 @@ class ToSieWytnie:
         try:
             xbmcPlayer = xbmc.Player()
             xbmcPlayer.play(videoUrl, liz)
-            
-            if not xbmc.Player().isPlaying():
-                xbmc.sleep( 10000 )
-                #xbmcPlayer.play(url, liz)
-            
         except:
             d = xbmcgui.Dialog()
             d.ok('Błąd przy przetwarzaniu.', 'Problem')        
@@ -277,24 +183,48 @@ class ToSieWytnie:
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Polecane':
-            log.info('Jest Polecane: ' + str(url))
-            self.listsItems('http://tosiewytnie.pl/mkanaly.html')
-        elif name == 'main-menu' and category == 'Rankingi':
-            log.info('Jest Rankingi: ')
-            self.listsCatMenu(RANKING_TAB,'Rankingi')
+            log.info(category)
+            self.listsItems('http://tosiewytnie.pl/mindex.html',category)
+        elif name == 'main-menu' and category == 'Rankingi - Najpopularniejsze':
+            log.info(category)
+            self.listsItems('http://tosiewytnie.pl/mrankingi.html',category)
+        elif name == 'main-menu' and category == 'Rankingi - Najnowsze':
+            log.info(category)
+            self.listsItems('http://tosiewytnie.pl/type,new,mrankingi.html',category)
+
+        elif name == 'main-menu' and category == 'Rankingi - Najczęściej komentowane':
+            log.info(category)
+            self.listsItems('http://tosiewytnie.pl/type,comment,mrankingi.html',category)
+
+        elif name == 'main-menu' and category == 'Rankingi - Najgorsze':
+            log.info(category)
+            self.listsItems('http://tosiewytnie.pl/type,worst,mrankingi.html',category)
             
-        elif name == 'main-menu' and category == 'Kanały':
-            log.info('Jest Kanały: ')
-            self.listsCatMenu(KANALY_TAB, 'Kanały')
-            
-        elif name == 'main-menu' and category == "Szukaj":
-            key = self.searchInputText()
-            self.listsItems(self.getSearchURL(key))
+        elif name == 'main-menu' and category == 'Kanały - Najnowsze':
+            if url == 'None':
+                url = 'http://tosiewytnie.pl/mkanaly.html'
+            self.listsCategoriesMenu(url,category)
+
+        elif name == 'main-menu' and category == 'Kanały - Alfabetycznie':
+            if url == 'None':
+                url = 'http://tosiewytnie.pl/type,4,mkanaly.html'
+            self.listsCategoriesMenu(url,category)
+
+        elif name == 'main-menu' and category == 'Kanały - Najpopularniejsze':
+            if url == 'None':
+                url = 'http://tosiewytnie.pl/type,1,mkanaly.html'
+            self.listsCategoriesMenu(url,category)
+
+        elif name == 'main-menu' and category == 'Kanały - Ilość produkcji':
+            if url == 'None':
+                url = 'http://tosiewytnie.pl/type,3,mkanaly.html'
+            self.listsCategoriesMenu(url,category)
+        
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
             self.listsItems(url)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            self.LOAD_AND_PLAY_VIDEO(self.getMovieLink(url), title, icon)
 
         
   

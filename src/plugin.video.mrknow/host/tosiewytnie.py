@@ -134,7 +134,13 @@ class ToSieWytnie:
         url = mainUrl + url
         urldata = self.pagedo(url)
         match = re.compile('<div class="clip"><a href="(.*?)">').findall(urldata)
-        return match[0]
+        print match
+        movlink = match[0]
+        movlink = movlink.replace('/m3', '/h')
+        movlink = movlink.replace('mp4', 'mov')
+        
+        print movlink
+        return movlink
 
     def searchInputText(self):
         text = None

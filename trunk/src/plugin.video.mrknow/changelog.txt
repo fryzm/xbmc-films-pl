@@ -18,5 +18,10 @@ Wersja 1.0.6
 Wersja 1.1.0
 - dodano serwis tosiewytnie.pl
 
+Wersja 1.1.1
+- dodano serwis videoslasher.pl
+
+
+
 
 

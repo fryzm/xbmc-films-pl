@@ -6,6 +6,8 @@ import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
 import urlresolver
+import cookielib
+from cookielib import CookieJar
 
 
 scriptID = 'plugin.video.mrknow'
@@ -20,6 +22,20 @@ import pLog, settings, Parser
 log = pLog.pLog()
 HOST = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 mainUrl = 'http://www.mrknow.pl/'
+cj = cookielib.CookieJar()
+
+class MyHTTPErrorProcessor(urllib2.HTTPErrorProcessor):
+
+    def http_response(self, request, response):
+        code, msg, hdrs = response.code, response.msg, response.info()
+
+        if not (200 <= code < 300):
+            response = self.parent.error(
+                'http', request, response, code, msg, hdrs)
+        return response
+
+    https_response = http_response
+
 
 MENU_TAB = {1: "Filmy HD",
             2: "Ostatnio Dodane",
@@ -107,6 +123,40 @@ class mrknowpl:
 
             if o['t'][0] == 'p':
                  txthost = 'putlocker.com'
+            elif o['t'][0] == 'v':
+                txthost = 'videoslasher.com'
+                opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj), MyHTTPErrorProcessor)
+                opener.addheaders = [('User-agent', HOST)]
+                urllib2.install_opener(opener)
+                page = urllib2.urlopen('http://www.videoslasher.com/video/' + o['page'][0])
+                #page = urllib2.urlopen(url)
+                link =  page.read()
+                match1=re.compile('user: (.+?),').findall(link)
+                match2=re.compile('code: \'(.+?)\',').findall(link)
+                match3=re.compile('hash: \'(.+?)\'').findall(link)
+                match4=re.compile('playlist: \'/playlist/(.+?)\'').findall(link)  
+#                print match1[0]
+#                print match2[0]
+##                print match3[0]
+                print match4[0]
+                formdata = { "user" : match1[0], "code": match2[0], "hash" : match3[0] }
+                data_encoded = urllib.urlencode(formdata)
+                request = urllib2.Request('http://www.videoslasher.com/service/player/on-start', data_encoded) # lub urllib2.Request(url, data=data)
+                response = urllib2.urlopen(request)
+                link = response.read()
+                page.close()
+                page = urllib2.urlopen('http://www.videoslasher.com//playlist/' + match4[0])
+                link2 =  page.read()
+                page.close()
+                match5=re.compile('url="(.+?)"').findall(link2)  
+                cookies = []
+                for cookie in cj:
+                    cookies.append( "%s=%s" % (cookie.name, cookie.value) )
+                ckStr = ';'.join(cookies)
+                stream_url[0] = ( '%s|Cookie="%s"' % (match5[1],ckStr) )
+                log.info(stream_url)
+
+                 
             elif o['t'][0] == 'y':
                  txthost = 'youtube.com'
 
@@ -130,16 +180,17 @@ class mrknowpl:
                 stream_url[0] = match[0]
 
             elif o['t'][0] == 'n':
-                wybierz = ['Amsteradm - zalecany','Miami','Chicago']
+                wybierz = ['Amsteradm - zalecany','Dallas']
                 d = xbmcgui.Dialog()
                 item = d.select("Wybierz serwer", wybierz)
                 if item == 0:
-                    stream_url[0] = 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start'
+                    #stream_url[0] = 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start=0&hd=0&auth=0&type=flv'
+                    stream_url[0] = 'http://37.128.191.200/fork.php?type=flv&auth=0&loc=1&hd=0&file=' + o['page'][0]+ '&start=0'
+                    #http://178.159.0.84/index.php?file=1387&start=0&hd=0&auth=0&type=flv
                 elif item == 1:
-                    stream_url[0] = 'http://96.47.226.90/index.php?file=' + o['page'][0]+ '&start'
-                elif item == 2:
-                    stream_url[0] = 'http://64.79.100.121/index.php?file=' + o['page'][0]+ '&start'
-
+                    stream_url[0] = 'http://37.128.191.200/fork.php?type=flv&auth=0&loc=2&hd=0&file=' + o['page'][0]+ '&start=0'
+                    #http://96.44.147.140/index.php?file=1387&start=0&hd=0&auth=0&type=flv
+                
                 if o.has_key('sub'):
                     stream_url[1] = o['sub'][0]
             return stream_url

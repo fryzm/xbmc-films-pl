@@ -190,7 +190,12 @@ class mrknowpl:
                 elif item == 1:
                     stream_url[0] = 'http://37.128.191.200/fork.php?type=flv&auth=0&loc=2&hd=0&file=' + o['page'][0]+ '&start=0'
                     #http://96.44.147.140/index.php?file=1387&start=0&hd=0&auth=0&type=flv
-                
+                req = urllib2.Request('http://37.128.191.200/views.php?f='+ o['page'][0])
+                req.add_header('User-Agent', HOST)
+                response = urllib2.urlopen(req)
+                link=response.read()
+                log.info(link)
+                response.close()
                 if o.has_key('sub'):
                     stream_url[1] = o['sub'][0]
             return stream_url

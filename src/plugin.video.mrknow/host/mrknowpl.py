@@ -184,18 +184,19 @@ class mrknowpl:
                 d = xbmcgui.Dialog()
                 item = d.select("Wybierz serwer", wybierz)
                 if item == 0:
-                    #stream_url[0] = 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start=0&hd=0&auth=0&type=flv'
-                    stream_url[0] = 'http://37.128.191.200/fork.php?type=flv&auth=0&loc=1&hd=0&file=' + o['page'][0]+ '&start=0'
+                    stream_url[0] = 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start=0&hd=0&auth=0&type=flv'
                     #http://178.159.0.84/index.php?file=1387&start=0&hd=0&auth=0&type=flv
                 elif item == 1:
-                    stream_url[0] = 'http://37.128.191.200/fork.php?type=flv&auth=0&loc=2&hd=0&file=' + o['page'][0]+ '&start=0'
+                    stream_url[0] = 'http://96.44.147.140/index.php?file=' + o['page'][0] + '&start=0&hd=0&auth=0&type=flv'
                     #http://96.44.147.140/index.php?file=1387&start=0&hd=0&auth=0&type=flv
-                req = urllib2.Request('http://37.128.191.200/views.php?f='+ o['page'][0])
-                req.add_header('User-Agent', HOST)
+                
+                #http://37.128.191.200/views.php?f=1387&_=1351550963808
+                req = urllib2.Request('http://37.128.191.200/views.php?f='+o['page'][0]+'&_=1351550963808')
+                req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
                 response = urllib2.urlopen(req)
                 link=response.read()
-                log.info(link)
                 response.close()
+                
                 if o.has_key('sub'):
                     stream_url[1] = o['sub'][0]
             return stream_url

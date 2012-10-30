@@ -2,7 +2,7 @@
 
 #from resources.lib.gui.gui import cGui
 from urlparse import urlparse, parse_qs
-import urllib, urllib2, re, os, sys, math
+import urllib, urllib2, re, os, sys, math, time
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
 import urlresolver
@@ -191,7 +191,9 @@ class mrknowpl:
                     #http://96.44.147.140/index.php?file=1387&start=0&hd=0&auth=0&type=flv
                 
                 #http://37.128.191.200/views.php?f=1387&_=1351550963808
-                req = urllib2.Request('http://37.128.191.200/views.php?f='+o['page'][0]+'&_=1351550963808')
+                urlhelo = 'http://37.128.191.200/views.php?f='+o['page'][0]+'&_='+ str(int(time.time()*1000))
+                log.info(urlhelo)
+                req = urllib2.Request(urlhelo)
                 req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
                 response = urllib2.urlopen(req)
                 link=response.read()

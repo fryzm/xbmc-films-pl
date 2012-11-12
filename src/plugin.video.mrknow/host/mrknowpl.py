@@ -60,11 +60,13 @@ class mrknowpl:
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<h3> <a href="(.*?)" >(.*?)</a> </h3>(.*?)<a class="video_thumb" href="(.*?)" rel="bookmark" title="">(.*?)<img src="(.*?)" alt="" title=""  />(.*?)</a>', re.DOTALL).findall(readURL)
+        #match = re.compile('<h3> <a href="(.*?)" >(.*?)</a> </h3>(.*?)<a class="video_thumb" href="(.*?)" rel="bookmark" title="">(.*?)<img src="(.*?)" alt="" title=""  />(.*?)</a>', re.DOTALL).findall(readURL)
+        match = re.compile('class="menu-item menu-item-type-taxonomy menu-item-object-videoscategory menu-item-(.+?)"><a href="(.*?)">(.*?)</a></li>', re.DOTALL).findall(readURL)
         #self.add('mrknowpl', 'categories-menu', 'Filmy HD','None',"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg", "http://www.mrknow.pl/videostags/hd/", 'None', 'None', True, False)
+        print match
         if len(match) > 0:
             for i in range(len(match)):
-                self.add('mrknowpl', 'categories-menu', match[i][1],'None',match[i][5], match[i][0], 'None', 'None', True, False)
+                self.add('mrknowpl', 'categories-menu', match[i][2],'None','None', match[i][1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def searchInputText(self):
@@ -102,12 +104,16 @@ class mrknowpl:
         link=response.read()
         #log.info('LINK: '+ link)
         response.close()
-        match=re.compile(' <a class="video_thumb" href="(.+?)" rel="bookmark" title="(.+?)">(.\s+)<img src="(.+?)" alt="(.+?)" title="(.+?)"  /> ').findall(link)
+        #match=re.compile(' <a class="video_thumb" href="(.+?)" rel="bookmark" title="(.+?)">(.\s+)<img src="(.+?)" alt="(.+?)" title="(.+?)"  /> ').findall(link)
+        match=re.compile('<img src="(.+?)"  />	</a>	<h3><a href="(.+?)/">(.+?)</a></h3>').findall(link)
+        print match
+        #add(  service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
         if len(match) > 0:
             for i in range(len(match)):
-                self.add('mrknowpl','playSelectedMovie', 'None', match[i][1], match[i][3], match[i][0], 'None', 'None', True, False) 
-            match1=re.compile('<span class="i_next fr" ><a href="(.+?)" >Next</a> </span>').findall(link)
+                self.add('mrknowpl','playSelectedMovie', 'None', match[i][2], match[i][0], match[i][1], 'None', 'None', True, False) 
+            match1=re.compile('<a href=\'(.*?)\' class=\'nextpostslink\'>').findall(link)
             if len(match1) > 0:
+                print match1
                 self.add('mrknowpl', 'categories-menu', 'Natepna strona','None',"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg", match1[0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -217,19 +223,37 @@ class mrknowpl:
             output = open((os.path.join(subsdir, "napisy.txt" )),"w+")
             output.write(srtfile.read())
             output.close()
+            xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+
             
             xbmcPlayer.play(movielink[0], liz)
-            xbmc.sleep( 5000 )
-            xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
-            xbmc.Player().showSubtitles( True )
-            if not xbmc.Player().isPlaying():
-                xbmc.sleep( 10000 )
-                xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
-                xbmc.Player().showSubtitles( True )
-            return True
+            time.sleep(10)
+            while not xbmc.Player().isPlaying(): #ensure playing
+                time.sleep(1)
+                
+                count = 0
+                while xbmc.Player().isPlaying():
+                    xbmc.Player().showSubtitles(1)
+                    xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+                    return true
+                    #count = count + 1
+                    #if (count > 60):
+                       # count = 0
+               #do keep alive stuff
+               
+                    #time.sleep(1000)
+                    #print "DUPA: " + str(count) #1 second            #xbmc.sleep( 5000 )
+            #xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+            #xbmc.Player().showSubtitles( True )
+            #if not xbmc.Player().isPlaying():
+            #    xbmc.sleep( 10000 )
+            #    xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+            #    xbmc.Player().showSubtitles( True )
+            #return True
             
         else:
             xbmcPlayer.play(movielink[0], liz)
+           # print 'xbmc.isPlaying() %s' % xbmc.isPlaying()
             return True
     
     def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
@@ -265,7 +289,7 @@ class mrknowpl:
             self.CATEGORIES()
         elif name == 'main-menu' and category == 'Ostatnio Dodane':
             log.info('Jest Ostatnio Dodane: ')
-            self.listsItems(mainUrl)
+            self.listsItems(mainUrl+ '/filmy')
         elif name == 'main-menu' and category == 'Filmy HD':
             log.info('Jest HD: ')
             self.listsItems(mainUrl + 'videostags/hd/')

@@ -111,7 +111,7 @@ class mrknowpl:
         if len(match) > 0:
             for i in range(len(match)):
                 self.add('mrknowpl','playSelectedMovie', 'None', match[i][2], match[i][0], match[i][1], 'None', 'None', True, False) 
-            match1=re.compile('<a href=\'(.*?)\' class=\'nextpostslink\'>').findall(link)
+            match1=re.compile('<a href="(.+?)" class="nextpostslink">').findall(link)
             if len(match1) > 0:
                 print match1
                 self.add('mrknowpl', 'categories-menu', 'Natepna strona','None',"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg", match1[0], 'None', 'None', True, False)

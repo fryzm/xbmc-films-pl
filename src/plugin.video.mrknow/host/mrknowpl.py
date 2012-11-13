@@ -85,11 +85,12 @@ class mrknowpl:
         link=response.read()
         #log.info('LINK: '+ link)
         response.close()
-        match=re.compile('<a class="widget-title" href="(.*?)"><img src="(.*?)" alt="(.*?)" title="(.*?)"  /> </a>').findall(link)
+        #match=re.compile('<a class="widget-title" href="(.*?)"><img src="(.*?)" alt="(.*?)" title="(.*?)"  /> </a>').findall(link)
+        match=re.compile('<img src="(.+?)"  />	</a>	<h3><a href="(.+?)/">(.+?)</a></h3>').findall(link)
         #print match
         if len(match) > 0:
             for i in range(len(match)):
-                self.add('mrknowpl','playSelectedMovie', 'None', match[i][2], match[i][1], match[i][0], 'None', 'None', True, False) 
+                self.add('mrknowpl','playSelectedMovie', 'None', match[i][2], match[i][0], match[i][1], 'None', 'None', True, False) 
             match1=re.compile('<a href="(.*?)" ><strong>next</strong></a>').findall(link)
             print match1
             if len(match1) > 0:

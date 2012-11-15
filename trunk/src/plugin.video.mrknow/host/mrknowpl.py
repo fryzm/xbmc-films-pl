@@ -2,6 +2,8 @@
 
 #from resources.lib.gui.gui import cGui
 from urlparse import urlparse, parse_qs
+
+
 import urllib, urllib2, re, os, sys, math, time
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
@@ -40,7 +42,9 @@ class MyHTTPErrorProcessor(urllib2.HTTPErrorProcessor):
 MENU_TAB = {1: "Filmy HD",
             2: "Ostatnio Dodane",
             3: "Kategorie", 
-            4: "Szukaj"}
+            4: "Rok produkcji",
+            5: "Dobre",
+            6: "Szukaj"}
 
             
 class mrknowpl:
@@ -52,6 +56,21 @@ class mrknowpl:
     def listsMainMenu(self, table):
         for num, val in table.items():
             self.add('mrknowpl', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+    def CATYEAR(self):
+        req = urllib2.Request(mainUrl)
+        req.add_header('User-Agent', HOST)
+        openURL = urllib2.urlopen(req)
+        readURL = openURL.read()
+        openURL.close()
+        #match = re.compile('<h3> <a href="(.*?)" >(.*?)</a> </h3>(.*?)<a class="video_thumb" href="(.*?)" rel="bookmark" title="">(.*?)<img src="(.*?)" alt="" title=""  />(.*?)</a>', re.DOTALL).findall(readURL)
+        match = re.compile("<a href='http://www.mrknow.pl/prodyear/([0-9]+)/' class='tag-link-(.+?)' title='(.+?)' style='font-size: (.+?)'>(.+?)</a>", re.DOTALL).findall(readURL)
+        #self.add('mrknowpl', 'categories-menu', 'Filmy HD','None',"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg", "http://www.mrknow.pl/videostags/hd/", 'None', 'None', True, False)
+        print match
+        if len(match) > 0:
+            for i in range(len(match)):
+                self.add('mrknowpl', 'categories-menu', match[i][0],'None','None', mainUrl+ 'prodyear/' + match[i][0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
     def CATEGORIES(self):
@@ -96,7 +115,33 @@ class mrknowpl:
             if len(match1) > 0:
                 self.add('mrknowpl', 'szukaj', 'Nastêpna strona','None',"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg", match1[0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    
+    def movieinfo(self,txt):
+        log.info('URL: '+ txt)
+        req = urllib2.Request(txt)
+        req.add_header('User-Agent', HOST)
+        response = urllib2.urlopen(req)
+        link=response.read()
+        #log.info('LINK: '+ link)
+        response.close()
+        #match=re.compile(' <a class="video_thumb" href="(.+?)" rel="bookmark" title="(.+?)">(.\s+)<img src="(.+?)" alt="(.+?)" title="(.+?)"  /> ').findall(link)
+        match=re.compile('<p>(.*)</p>\n<div class="sharedaddy sd-sharing-enabled"').findall(link)
+        match1=re.compile('<p><center>\n\n(.*)<img src="(.*)"  /></center>').findall(link)
         
+        print "match"
+        print match
+        print "match1"
+        print match1
+        print "match -- "
+        
+        
+    def unescape(self,s):
+        s = s.replace("&lt;", "<")
+        s = s.replace("&gt;", ">")
+        # this has to be last:
+        s = s.replace("&amp;", "&")
+        return s 
+            
     def listsItems(self,url):
         log.info('URL: '+ url)
         req = urllib2.Request(url)
@@ -111,7 +156,11 @@ class mrknowpl:
         #add(  service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
         if len(match) > 0:
             for i in range(len(match)):
-                self.add('mrknowpl','playSelectedMovie', 'None', match[i][2], match[i][0], match[i][1], 'None', 'None', True, False) 
+                #self.movieinfo(match[i][1])
+                link_txt1 = self.unescape(match[i][0])
+                link_txt2 = link_txt1.replace("w=120", "w=400");
+                link_txt3 = link_txt2.replace("h=160", "w=550");
+                self.add('mrknowpl','playSelectedMovie', 'None', urllib.unquote_plus(match[i][2]), link_txt3, urllib.unquote_plus(match[i][1]), 'None', 'None', True, False) 
             match1=re.compile('<a href="(.+?)" class="nextpostslink">').findall(link)
             if len(match1) > 0:
                 print match1
@@ -288,13 +337,22 @@ class mrknowpl:
         elif name == 'main-menu' and category == 'Kategorie':
             log.info('Jest Kategoria: ' + str(url))
             self.CATEGORIES()
+        elif name == 'main-menu' and category == 'Rok produkcji':
+            log.info('Jest Year: ' + str(url))
+            self.CATYEAR()
         elif name == 'main-menu' and category == 'Ostatnio Dodane':
             log.info('Jest Ostatnio Dodane: ')
             self.listsItems(mainUrl+ '/filmy')
         elif name == 'main-menu' and category == 'Filmy HD':
             log.info('Jest HD: ')
             self.listsItems(mainUrl + 'videostags/hd/')
-            
+        elif name == 'main-menu' and category == 'Dobre':
+            log.info('Jest Dobre: ')
+            self.listsItems(mainUrl + 'filmy/?sortby=voting&sortdir=desc')
+        
+#http://www.mrknow.pl/filmy/?sortby=voting&sortdir=desc
+        
+        
         elif name == 'main-menu' and category == "Szukaj":
             log.info('Jest Szukaj: ')
             key = self.searchInputText()

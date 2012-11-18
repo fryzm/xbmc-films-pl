@@ -43,8 +43,9 @@ MENU_TAB = {1: "Filmy HD",
             2: "Ostatnio Dodane",
             3: "Kategorie", 
             4: "Rok produkcji",
-            5: "Dobre",
-            6: "Szukaj"}
+            5: "Aktorzy",
+            6: "Dobre",
+            7: "Szukaj"}
 
             
 class mrknowpl:
@@ -72,6 +73,22 @@ class mrknowpl:
             for i in range(len(match)):
                 self.add('mrknowpl', 'categories-menu', match[i][0],'None','None', mainUrl+ 'prodyear/' + match[i][0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+    def CATACTORS(self):
+        req = urllib2.Request(mainUrl+'/aktorzy')
+        req.add_header('User-Agent', HOST)
+        openURL = urllib2.urlopen(req)
+        readURL = openURL.read()
+        openURL.close()
+        #match = re.compile('<h3> <a href="(.*?)" >(.*?)</a> </h3>(.*?)<a class="video_thumb" href="(.*?)" rel="bookmark" title="">(.*?)<img src="(.*?)" alt="" title=""  />(.*?)</a>', re.DOTALL).findall(readURL)
+        match = re.compile("<a href='(.+?)' class='tag-link-(.+?)' title='(.+?)' style='font-size: (.+?)'>(.+?)</a>", re.DOTALL).findall(readURL)
+        #self.add('mrknowpl', 'categories-menu', 'Filmy HD','None',"http://a3.sphotos.ak.fbcdn.net/hphotos-ak-prn1/527643_381614815229671_28469409_n.jpg", "http://www.mrknow.pl/videostags/hd/", 'None', 'None', True, False)
+        print match
+        if len(match) > 0:
+            for i in range(len(match)):
+                self.add('mrknowpl', 'categories-menu', match[i][4],'None','None', match[i][0], 'None', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
         
     def CATEGORIES(self):
         req = urllib2.Request(mainUrl)
@@ -174,6 +191,8 @@ class mrknowpl:
             link=response.read()
             response.close()
             match=re.compile('<IFRAME SRC="(.+?)" SCROLLING=no></IFRAME>').findall(link)
+            print 'MATCH'
+            print match
             o = parse_qs(urlparse('http;//www.mrknow.pl/'+match[0]).query)
             stream_url = [''] * 2
 
@@ -340,6 +359,10 @@ class mrknowpl:
         elif name == 'main-menu' and category == 'Rok produkcji':
             log.info('Jest Year: ' + str(url))
             self.CATYEAR()
+        elif name == 'main-menu' and category == 'Aktorzy':
+            log.info('Jest Year: ' + str(url))
+            self.CATACTORS()
+            
         elif name == 'main-menu' and category == 'Ostatnio Dodane':
             log.info('Jest Ostatnio Dodane: ')
             self.listsItems(mainUrl+ '/filmy')
@@ -367,4 +390,6 @@ class mrknowpl:
             log.info('url: ' + str(url))
             self.listsItems(url)
         if name == 'playSelectedMovie':
+            log.info('URL: '+url)
             self.playVideo(url, title, icon)
+            

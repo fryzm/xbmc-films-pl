@@ -21,8 +21,8 @@ Wersja 1.1.0
 Wersja 1.1.1
 - dodano serwis videoslasher.pl
 
-Wersja 1.1.2
-- poprawiono filmy hd z noobroom 
+Wersja 1.2.0
+- Dodano nowy serwis noobroom.com
 
 
 

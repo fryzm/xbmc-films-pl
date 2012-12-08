@@ -255,18 +255,22 @@ class mrknowpl:
                 stream_url[0] = match[0]
 
             elif o['t'][0] == 'n':
-                wybierz = ['Amsteradm - zalecany','Dallas']
+                wybierz = ['Serwer 1 - zalecany','Serwer 2', 'Serwer 3', 'Serwer 4']
                 d = xbmcgui.Dialog()
                 item = d.select("Wybierz serwer", wybierz)
                 if item == 0:
-                    stream_url[0] = 'http://178.159.0.82/index.php?file=' + o['page'][0]+ '&start=0&hd=0&auth=0&type=flv'
+                    stream_url[0] = 'http://96.47.226.90/index.php?file=' + o['page'][0]+ '&start=0&hd=0&auth=0&type=flv&tv=0'
                     #http://178.159.0.84/index.php?file=1387&start=0&hd=0&auth=0&type=flv
                 elif item == 1:
-                    stream_url[0] = 'http://96.44.147.140/index.php?file=' + o['page'][0] + '&start=0&hd=0&auth=0&type=flv'
+                    stream_url[0] = 'http://31.7.59.242/index.php?file=' + o['page'][0] + '&start=0&hd=0&auth=0&type=flv&tv=0'
+                elif item == 2:
+                    stream_url[0] = 'http://108.61.83.186/index.php?file=' + o['page'][0] + '&start=0&hd=0&auth=0&type=flv&tv=0'
+                elif item == 3:
+                    stream_url[0] = 'http://213.163.64.203/index.php?file=' + o['page'][0] + '&start=0&hd=0&auth=0&type=flv&tv=0'
                     #http://96.44.147.140/index.php?file=1387&start=0&hd=0&auth=0&type=flv
                 
                 #http://37.128.191.200/views.php?f=1387&_=1351550963808
-                urlhelo = 'http://37.128.191.200/views.php?f='+o['page'][0]+'&_='+ str(int(time.time()*1000))
+                urlhelo = 'http://72.8.190.49/views.php?f='+o['page'][0]+'&_='+ str(int(time.time()*1000))
                 log.info(urlhelo)
                 req = urllib2.Request(urlhelo)
                 req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -292,33 +296,20 @@ class mrknowpl:
             output = open((os.path.join(subsdir, "napisy.txt" )),"w+")
             output.write(srtfile.read())
             output.close()
+            time.sleep(1)
             xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+            xbmc.Player().showSubtitles(True)
 
             
             xbmcPlayer.play(movielink[0], liz)
             time.sleep(10)
-            while not xbmc.Player().isPlaying(): #ensure playing
-                time.sleep(1)
-                
-                count = 0
-                while xbmc.Player().isPlaying():
-                    xbmc.Player().showSubtitles(1)
-                    xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
-                    return true
-                    #count = count + 1
-                    #if (count > 60):
-                       # count = 0
-               #do keep alive stuff
-               
-                    #time.sleep(1000)
-                    #print "DUPA: " + str(count) #1 second            #xbmc.sleep( 5000 )
-            #xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
-            #xbmc.Player().showSubtitles( True )
-            #if not xbmc.Player().isPlaying():
-            #    xbmc.sleep( 10000 )
-            #    xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
-            #    xbmc.Player().showSubtitles( True )
-            #return True
+            xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+            xbmc.Player().showSubtitles(True)
+            if not xbmc.Player().isPlaying():
+                xbmc.sleep( 10 )
+                xbmc.Player().setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+                xbmc.Player().showSubtitles(True)
+            return True
             
         else:
             xbmcPlayer.play(movielink[0], liz)

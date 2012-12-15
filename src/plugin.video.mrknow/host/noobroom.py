@@ -17,7 +17,7 @@ import pLog, settings, Parser
 
 log = pLog.pLog()
 
-mainUrl = 'http://72.8.190.49/'
+mainUrl = 'http://192.31.185.34/'
 sort_asc = '?o=rosnaco&f=tytul'
 sort_desc = '?o=malejaco&f=tytul'
 playerUrl = 'http://www.youtube.pl/'
@@ -118,7 +118,7 @@ class Noobroom:
     def getMovieLinkFromXML(self, url):
         urlLink = 'None'
         print url 
-        wybierz = ['Serwer 1 - zalecany','Serwer 2','Serwer 3','Serwer 4']
+        wybierz = ['Serwer 1 - zalecany','Serwer 2','Serwer 3','Serwer 4','Serwer 1 HD']
         d = xbmcgui.Dialog()
         item = d.select("Wybierz serwer", wybierz)
         if item == 0:
@@ -130,6 +130,9 @@ class Noobroom:
             stream_url = 'http://108.61.83.186/index.php?file='+url+'&start=0&hd=0&auth=0&type=flv&tv=0'
         elif item == 3:
             stream_url = 'http://213.163.64.203/index.php?file='+url+'&start=0&hd=0&auth=0&type=flv&tv=0'
+        elif item == 4:
+            stream_url =  'http://72.8.190.49/fork.php?type=flv&auth=0&loc=6&hd=0&tv=0&file=323'
+        #http://72.8.190.49/fork.php?type=flv&auth=0&loc=6&hd=0&tv=0&file=323&start=92652950
         
         
         #

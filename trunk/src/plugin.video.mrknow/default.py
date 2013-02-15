@@ -5,7 +5,7 @@ import os, time, base64, logging, calendar
 import xbmcaddon
 
 scriptID = 'plugin.video.mrknow'
-scriptname = "Filmy online www.mrknow.pl"
+scriptname = "Films online"
 ptv = xbmcaddon.Addon(scriptID)
 
 #BASE_RESOURCE_PATH = os.path.join( os.getcwd(), "resources" )
@@ -14,15 +14,16 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
 import pLog, settings, Parser
-import iptak, mrknowpl, tosiewytnie, noobroom
+#import iptak, mrknowpl, tosiewytnie, noobroom
+import noobroom
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
 
 
-MENU_TABLE = { 1000: "www.mrknow.pl [filmy online]",
-               2000: "IPTAK [filmy online]",
-               3000: "To się wytnie [TV online]",
+MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
+               #2000: "IPTAK [filmy online]",
+               #3000: "To się wytnie [TV online]",
                4000: "noobroom.com"
 }
 

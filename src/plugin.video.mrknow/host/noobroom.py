@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import urllib, urllib2, re, os, sys, math,  time
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
-import elementtree.ElementTree as ET
 from urlparse import urlparse, parse_qs
-import urlresolver
+import urlparser
 
 
 scriptID = 'plugin.video.mrknow'
@@ -17,15 +16,16 @@ import pLog, settings, Parser
 
 log = pLog.pLog()
 
-mainUrl = 'http://192.31.185.34/'
+mainUrl = 'http://37.221.166.252/'
 sort_asc = '?o=rosnaco&f=tytul'
 sort_desc = '?o=malejaco&f=tytul'
 playerUrl = 'http://www.youtube.pl/'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-MENU_TAB = {1: "Wszystkie filmy",
-            3: "Szukaj - nie dziala" }
+MENU_TAB = {1: "Ordered by A-Z",
+            2: "Ordered by IMDb Rating",
+            3: "Search  - broken..." }
 
 
 class Noobroom:
@@ -67,6 +67,27 @@ class Noobroom:
         #openURL = urllib2.urlopen(req)
         #readURL = openURL.read()
         
+    def listsItems2(self, url):
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', HOST)
+        openURL = urllib2.urlopen(req)
+        readURL = openURL.read()
+        openURL.close()
+        match = re.compile("<b>(.*?)</b>(.*?)<a style='color:#fff' href='/?(.*?)'>(.*?)</a>", re.DOTALL).findall(readURL)
+        print match
+        if len(match) > 0:
+        #http://72.8.190.49/2img/336.jpg
+        #s = url.replace('?','')
+            for i in range(len(match)):
+                strid = match[i][0]
+                strid = strid.replace('?','')
+
+            #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('noobroom', 'playSelectedMovie', 'None', match[i][1], mainUrl + '2img/'+strid+'.jpg', strid, 'aaaa', 'None', True, False)
+               
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+
 
     def listsItems(self, url):
         req = urllib2.Request(url)
@@ -74,7 +95,7 @@ class Noobroom:
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile("<a href='/?(.*?)'>(.*?)</a>", re.DOTALL).findall(readURL)
+        match = re.compile("<a style='color:#fff' href='/?(.*?)'>(.*?)</a>", re.DOTALL).findall(readURL)
         print match
         if len(match) > 0:
         #http://72.8.190.49/2img/336.jpg
@@ -118,27 +139,16 @@ class Noobroom:
     def getMovieLinkFromXML(self, url):
         urlLink = 'None'
         print url 
-        wybierz = ['Serwer 1 - zalecany','Serwer 2','Serwer 3','Serwer 4','Serwer 1 HD']
+        wybierz = ['Server 1']
         d = xbmcgui.Dialog()
-        item = d.select("Wybierz serwer", wybierz)
+        item = d.select("Choose Server", wybierz)
         if item == 0:
-            stream_url =  'http://96.47.226.90/index.php?file='+url+'&hd=0&auth=0&type=flv&tv=0&start'
+            #stream_url =  'http://96.47.226.90/index.php?file='+url+'&hd=0&auth=0&type=flv&tv=0&start'
+            stream_url =  'http://37.221.166.252/fork.php?type=flv&auth=0&loc=15&hd=0&tv=0&file='+url+'&start=0'
         #http://72.8.190.49/fork.php?type=flv&auth=0&loc=6&hd=0&tv=0&file=323
-        elif item == 1:
-            stream_url = 'http://31.7.59.242/index.php?file='+url+'&start=0&hd=0&auth=0&type=flv&tv=0'
-        elif item == 2:
-            stream_url = 'http://108.61.83.186/index.php?file='+url+'&start=0&hd=0&auth=0&type=flv&tv=0'
-        elif item == 3:
-            stream_url = 'http://213.163.64.203/index.php?file='+url+'&start=0&hd=0&auth=0&type=flv&tv=0'
-        elif item == 4:
-            stream_url =  'http://72.8.190.49/fork.php?type=flv&auth=0&loc=6&hd=0&tv=0&file=323'
-        #http://72.8.190.49/fork.php?type=flv&auth=0&loc=6&hd=0&tv=0&file=323&start=92652950
-        
-        
-        #
                
         #http://37.128.191.200/views.php?f=1387&_=1351550963808
-        urlhelo = mainUrl + 'views.php?f=323&_='+ str(int(time.time()*1000))
+        urlhelo = mainUrl + 'views.php?f='+url+'&_='+ str(int(time.time()*1000))
         log.info(urlhelo)
         req = urllib2.Request(urlhelo)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -251,9 +261,13 @@ class Noobroom:
         icon = self.parser.getParam(params, "icon")
         if name == None:
             self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Wszystkie filmy':
-            log.info('Wszystkie filmy: ')
+        elif name == 'main-menu' and category == 'Ordered by A-Z':
+            log.info('Ordered by A-Z: ')
             self.listsItems(mainUrl + 'azlist.php')
+
+        elif name == 'main-menu' and category == 'Ordered by IMDb Rating':
+            log.info('Ordered by IMDb Rating: ')
+            self.listsItems(mainUrl + 'rating.php')
             
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()

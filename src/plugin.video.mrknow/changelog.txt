@@ -2,27 +2,16 @@
 
 Wersja 1.0.1
 Initial release
-
-Wersja 1.0.4
-- dodano noobroom.com
-- dodano anyfiles.pl
-- dodano wyszukiwanie
-
-Wersja 1.0.5
-- poprawiono youtube
-- poprawiono noobroom.com bez napisów
-
-Wersja 1.0.6
-- dodano serwis iptak
-
-Wersja 1.1.0
-- dodano serwis tosiewytnie.pl
+.....
 
 Wersja 1.1.1
 - dodano serwis videoslasher.pl
 
 Wersja 1.2.0
 - Dodano nowy serwis noobroom.com
+
+Wersja 1.3.0
+- serwis noobroom.com
 
 
 

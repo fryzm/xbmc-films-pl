@@ -15,7 +15,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
 import pLog, settings, Parser
 #import iptak, mrknowpl, tosiewytnie, noobroom
-import noobroom, iptak
+import noobroom, iptak, wykop
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
@@ -23,7 +23,7 @@ log = pLog.pLog()
 
 MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
                2000: "iptak.pl [PL]",
-               #3000: "To się wytnie [TV online]",
+               3000: "wykop.pl [PL]",
                4000: "noobroom.com [EN]"
 }
 
@@ -49,8 +49,8 @@ class MrknowFilms:
     elif mode == 2000 or service == 'iptak':
         tv = iptak.IPTAK()
         tv.handleService()
-    elif mode == 3000 or service == 'tosiewytnie':
-        tv = tosiewytnie.ToSieWytnie()
+    elif mode == 3000 or service == 'wykop':
+        tv = wykop.WYKOP()
         tv.handleService()
     elif mode == 4000 or service == 'noobroom':
         tv = noobroom.Noobroom()

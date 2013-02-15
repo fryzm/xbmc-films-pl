@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
-import elementtree.ElementTree as ET
 from urlparse import urlparse, parse_qs
-import urlresolver
+import urlparser
 
 
 scriptID = 'plugin.video.mrknow'
@@ -34,6 +33,8 @@ class IPTAK:
         log.info('Starting IPTAK')
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
+        self.up = urlparser.urlparser()
+
 
 
     def listsMainMenu(self, table):
@@ -135,19 +136,14 @@ class IPTAK:
         readURL = openURL.read()
         openURL.close()
         match = re.compile('<a data-role="button" data-transition="fade" data-theme="b" href=\'(.*?)\' target="_blank" data-icon="arrow-r" data-iconpos="top">(.*?)</a>', re.DOTALL).findall(readURL)
-        
+        print "Film"
+        print match
         o = parse_qs(urlparse(mainUrl + match[0][0]).query)
         stream_url = 'a'
+        print o
         sources = []
-        hosted_media = urlresolver.HostedMediaFile(host='youtube.com', media_id=o['v'][0])
-        sources.append(hosted_media)
-        source = urlresolver.choose_source(sources)
-        
-        if source:
-            stream_url = source.resolve()
-        else:
-            return
-        return stream_url
+        linkVideo = self.up.getVideoLink('http://www.youtube.com/watch?v=' + o['v'][0])
+        return linkVideo
 
 
     def getSizeAllItems(self, url):

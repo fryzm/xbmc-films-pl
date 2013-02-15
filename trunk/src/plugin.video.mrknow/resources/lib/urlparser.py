@@ -3,6 +3,7 @@ import cookielib, os, string, StringIO
 import os, time, base64, logging, calendar
 import urllib, urllib2, re, sys, math
 import xbmcaddon, xbmc, xbmcgui, simplejson
+from urlparse import urlparse, parse_qs
 
 scriptID = 'plugin.video.polishtv.live'
 scriptname = "Polish Live TV"
@@ -80,9 +81,33 @@ class urlparser:
         nUrl = self.parserRAPIDVIDEO(url)
     if host== 'www.videoslasher.com':
         nUrl = self.parserVIDEOSLASHER(url)	
+    if host== 'www.youtube.com':
+        nUrl = self.parserYOUTUBE(url)	
+    
     return nUrl
 
+  def get_host_and_id(self, url):
+        if url.find('?') > -1:
+            o = parse_qs(urlparse(url).query)
+            print o
+            video_id =  o['v'][0]
+        else:
+            r = re.findall('/([0-9A-Za-z_\-]+)', url)
+            if r:
+                video_id = r[-1]
+        if video_id:
+            return video_id
+        else:
+            log.info('youtube: video id not found')
+            return False
 
+  def parserYOUTUBE(self,url):
+    media_id = self.get_host_and_id(url)
+    print "Mdia ID"
+    print media_id
+    plugin = 'plugin://plugin.video.youtube/?action=play_video&videoid=' + media_id
+    return plugin
+    
   def parserPUTLOCKER(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)    

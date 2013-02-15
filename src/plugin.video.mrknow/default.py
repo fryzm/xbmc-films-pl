@@ -15,16 +15,16 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
 import pLog, settings, Parser
 #import iptak, mrknowpl, tosiewytnie, noobroom
-import noobroom
+import noobroom, iptak
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
 
 
 MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
-               #2000: "IPTAK [filmy online]",
+               2000: "iptak.pl [PL]",
                #3000: "To się wytnie [TV online]",
-               4000: "noobroom.com"
+               4000: "noobroom.com [EN]"
 }
 
 

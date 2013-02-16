@@ -139,12 +139,14 @@ class Noobroom:
     def getMovieLinkFromXML(self, url):
         urlLink = 'None'
         print url 
-        wybierz = ['Server 1']
+        wybierz = ['Server 1', 'Server 2']
         d = xbmcgui.Dialog()
         item = d.select("Choose Server", wybierz)
         if item == 0:
             #stream_url =  'http://96.47.226.90/index.php?file='+url+'&hd=0&auth=0&type=flv&tv=0&start'
             stream_url =  'http://37.221.166.252/fork.php?type=flv&auth=0&loc=15&hd=0&tv=0&file='+url+'&start=0'
+        elif item == 1:
+            stream_url = 'http://178.159.0.136/index.php?file=631&start=181480779&hd=0&auth=0&type=flv&tv=0'
         #http://72.8.190.49/fork.php?type=flv&auth=0&loc=6&hd=0&tv=0&file=323
                
         #http://37.128.191.200/views.php?f=1387&_=1351550963808
@@ -251,6 +253,77 @@ class Noobroom:
             d.ok('Błąd przy przetwarzaniu.', 'Problem')        
         return ok
 
+    def seekhack(self,player, url, item):
+        print ("*** SEEK *** " )
+        
+        if url.find("start=") >= 0:
+            flag, lastseek = url.split("&")[-1].split("=")
+            lastseek = int(lastseek)
+            if flag:
+                import json
+                import socket
+                import select
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.connect(("127.0.0.1", 9090))
+
+                while player.isPlaying():
+                    xbmc.sleep(1000)	
+                    print "Sniffing for notifications..."
+                    
+                    if len(select.select([sock], [], [], 0)[0]) != 0:
+                        notific_str = sock.recv(4096)
+                        print ("###??", notific_str)
+                        notifs = ['{"jsonrpc"' + noti for noti in notific_str.split('{"jsonrpc"')]
+                        print notifs
+                        for notific in notifs[1:]:
+                            print ("!??", notific)
+                            notific = json.loads(notific)
+                            if notific["method"] == "Player.OnSeek":
+                                ctime = sum(
+                                        int(notific["params"]["data"]["player"]["time"][k]) * mul
+                                        for k, mul in ( ("hours", 3600 ), ("minutes", 60), ("seconds", 1))
+                                    )
+
+                                seekoff = sum(
+                                        int(notific["params"]["data"]["player"]["seekoffset"][k]) * mul
+                                        for k, mul in ( ("hours", 3600 ), ("minutes", 60), ("seconds", 1))
+                                    )
+                                curtime = player.getTime()
+                                alltime = player.getTotalTime()
+                                print ("--- MOVIE TIME --- :",curtime,alltime)
+                                #UGLY hack because going backwards can take us beyond the current played item's start time, have to provide a good default (10min)
+                                if ctime < 1:
+                                    seekoff = -600
+                                lastseek =  int(94499*curtime)
+                                #lastseek=4631466
+                                if lastseek < 0:
+                                    lastseek = 0
+                                print ("??", lastseek)
+                                #player.stop()
+                                #item.setProperty("StartPercent",  "20")
+                                #item.setInfo("video", {"Player.Time" :  str(seek), "VideoPlayer.Time" :  str(seek)})
+                                #xbmc.sleep(8000)	
+                                player.play("&".join(url.split("&")[:-1]) + "&start={0}".format(lastseek), item)
+                                #xbmc.sleep(8000)	
+                                xbmc.executebuiltin("PlayerControl(Play)")
+                            
+    def play(self, url, title, icon):
+        #scraper = resources.scraper.SCRAPER
+        #addon	= xbmcaddon.Addon( id=ID )
+        #bitrate	= int(addon.getSetting( "vid_quality" ))
+        #obj,fmt		= scraper.menu_play(params["url"])
+        #diff, sbitrate, url = sorted([(abs(int(sbitrate) - int(bitrate)), sbitrate, pl) for sbitrate, pl in sorted(obj.iteritems())])[0]	
+        print ("using:", url)
+        #item = xbmcgui.ListItem(params["name"])
+        item=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
+        item.setInfo( type="Video", infoLabels={ "Title": title, } )
+        
+        player = xbmc.Player(xbmc.PLAYER_CORE_AUTO)
+        player.play(url, item)
+        
+        xbmc.sleep(4000)	
+        #xbmc.executebuiltin("PlayerControl(Play)")
+        self.seekhack(player, url, item)
 
     def handleService(self):
     	params = self.parser.getParams()
@@ -277,6 +350,7 @@ class Noobroom:
             self.listsItems(url)
         if name == 'playSelectedMovie':
             self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            #self.play(self.getMovieLinkFromXML(url), title, icon)
 
         
   

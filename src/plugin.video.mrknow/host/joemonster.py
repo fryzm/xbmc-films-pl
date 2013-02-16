@@ -21,6 +21,7 @@ mainUrl = 'http://www.joemonster.org/'
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
 MENU_TAB = {1: "Najnowsze",
+            2: "Najpopularniejsze",
             9: "Szukaj" }
 
 
@@ -257,6 +258,11 @@ class joemonster:
         elif name == 'main-menu' and category == 'Najnowsze':
             log.info('Jest Wszystkie: ')
             self.listsItems('http://www.joemonster.org/filmy/najnowsze')
+        elif name == 'main-menu' and category == 'Najpopularniejsze':
+            log.info('Jest Wszystkie: ')
+            self.listsItems('http://www.joemonster.org/filmy/najpopularniejsze')
+            
+            
             
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()

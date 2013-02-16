@@ -83,9 +83,13 @@ class urlparser:
         nUrl = self.parserVIDEOSLASHER(url)	
     if host== 'www.youtube.com':
         nUrl = self.parserYOUTUBE(url)	
-    
+    if host== 'stream.streamo.tv':
+        nUrl = self.parserSTREAMO(url)	
     return nUrl
-
+    
+  def parserSTREAMO(self,url):
+    return url
+    
   def get_host_and_id(self, url):
         if url.find('?') > -1:
             o = parse_qs(urlparse(url).query)

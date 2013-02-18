@@ -3,7 +3,8 @@ import cookielib, os, string, StringIO
 import os, time, base64, logging, calendar
 import urllib, urllib2, re, sys, math
 import xbmcaddon, xbmc, xbmcgui, simplejson
-from urlparse import urlparse, parse_qs
+import urlparse
+import httplib 
 
 scriptID = 'plugin.video.polishtv.live'
 scriptname = "Polish Live TV"
@@ -85,32 +86,100 @@ class urlparser:
         nUrl = self.parserYOUTUBE(url)	
     if host== 'stream.streamo.tv':
         nUrl = self.parserSTREAMO(url)	
+    if host== 'tosiewytnie.pl':
+        nUrl = self.parsertosiewytnie(url)	
+    if host== 'www.liveleak.com':
+        nUrl = self.parserliveleak(url)	
+    if host== 'vimeo.com':
+        nUrl = self.parserVIMEO(url)	
     return nUrl
+#www.liveleak.com
+
+  def parserVIMEO(self,url):
+    query = urlparse.urlparse(url)
+    p = urlparse.parse_qs(query.query)
+    print p
+    link = "plugin://plugin.video.vimeo/?action=play_video&videoid=" + p['clip_id'][0]
+    return link
+
+  def parserliveleak(self,url):
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match=re.compile('file: "(.+?)",').findall(link)
+    print match
+    for url in match:
+      return url
+          
+        
+  def check_url(self,url):
+    def _head(url):
+        (scheme, netloc, path, params, query, fragment) = urlparse.urlparse(url)
+        #print ("URL:", scheme, netloc, path, params, query, fragment)
+        connection = httplib.HTTPConnection(netloc)
+        connection.request('HEAD',  path  +'?'+ query ) 
+        return connection.getresponse()
+    # redirection limit, default of 10
+    redirect = 10
+    # Perform HEAD
+    resp = _head(url)
+    # check for redirection
+    while (resp.status >= 300) and (resp.status <= 399):
+        # tick the redirect
+        redirect -= 1
+        # if redirect is 0, we tried :-(
+        if redirect == 0:
+            # we hit our redirection limit, raise exception
+            return False
+        # Perform HEAD
+        url = resp.getheader('location')
+        resp = _head(url)
+    if resp.status >= 200 and resp.status <= 299:
+        # horray!  We found what we were looking for.
+        return True
+    else:
+        # Status unsure, might be, 404, 500, 401, 403, raise error with actual status code.
+        return False
+
     
+  def parsertosiewytnie(self,url):
+    movlink = url
+    movlink = movlink.replace('/m3', '/h')
+    if (self.check_url(movlink)):
+        return movlink
+    else:
+        movlink = movlink.replace('mp4', 'mov')
+        return movlink
+ 
   def parserSTREAMO(self,url):
     return url
-    
-  def get_host_and_id(self, url):
-        if url.find('?') > -1:
-            o = parse_qs(urlparse(url).query)
-            print o
-            video_id =  o['v'][0]
-        else:
-            r = re.findall('/([0-9A-Za-z_\-]+)', url)
-            if r:
-                video_id = r[-1]
-        if video_id:
-            return video_id
-        else:
-            log.info('youtube: video id not found')
-            return False
 
   def parserYOUTUBE(self,url):
-    media_id = self.get_host_and_id(url)
-    print "Mdia ID"
-    print media_id
-    plugin = 'plugin://plugin.video.youtube/?action=play_video&videoid=' + media_id
-    return plugin
+    """
+    Examples:
+    - http://youtu.be/SA2iWivDJiE
+    - http://www.youtube.com/watch?v=_oPAwA_Udwc&feature=feedu
+    - http://www.youtube.com/embed/SA2iWivDJiE
+    - http://www.youtube.com/v/SA2iWivDJiE?version=3&amp;hl=en_US
+    """
+    query = urlparse.urlparse(url)
+    if query.hostname == 'youtu.be':
+        return query.path[1:]
+    if query.hostname in ('www.youtube.com', 'youtube.com'):
+        if query.path == '/watch':
+            p = urlparse.parse_qs(query.query)
+            return 'plugin://plugin.video.youtube/?action=play_video&videoid=' + p['v'][0]
+        if query.path[:7] == '/embed/':
+            print query
+            print query.path.split('/')[2]
+            return 'plugin://plugin.video.youtube/?action=play_video&videoid=' + query.path.split('/')[2]
+        if query.path[:3] == '/v/':
+            return 'plugin://plugin.video.youtube/?action=play_video&videoid=' + query.path.split('/')[2]
+    # fail?
+    return None        
+
     
   def parserPUTLOCKER(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }

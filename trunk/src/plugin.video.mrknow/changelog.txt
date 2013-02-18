@@ -5,13 +5,15 @@ Initial release
 .....
 
 Wersja 1.1.1
-- dodano serwis videoslasher.pl
+- dodano serwis tosiewytnie
 
 Wersja 1.2.0
 - Dodano nowy serwis noobroom.com
 
 Wersja 1.3.0
 - serwis noobroom.com
+- serwis wykop.pl
+- serwis joemonster.org
 
 
 

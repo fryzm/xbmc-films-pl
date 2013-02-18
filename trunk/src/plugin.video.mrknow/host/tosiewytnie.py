@@ -3,7 +3,7 @@ import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 import cookielib
 from urlparse import urlparse, parse_qs
-import urlresolver
+import urlparser
 from cookielib import CookieJar
 
 
@@ -57,6 +57,7 @@ class ToSieWytnie:
         log.info('Starting ToSieWytnie')
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
+        self.up = urlparser.urlparser()
 
 
     def listsMainMenu(self, table):
@@ -65,10 +66,10 @@ class ToSieWytnie:
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def pageadditemscat(self, data,category):
-        match = re.compile('<div class="clip"><a href="(.*?)" class="title"><img class="preview" src="(.*?)" alt="" />(.*?)</a><br/>(.*?): (.*?)<br/><img src="(.*?)" alt="(.*?)"/>').findall(data)
+        match = re.compile('<div class="clip"><a href="(.*?)" class="title"><img class="preview" src="(.*?)" alt="" />(.*?)</a><br/>(.*?)<br/>').findall(data)
         if len(match) > 0:
             for i in range(len(match)):
-                opis = match[i][2] + ' - ilość produkcji:'+ match[i][4]
+                opis = match[i][2] + ' - '+ match[i][3]
                 url =  mainUrl + match[i][0]
                 self.add('tosiewytnie', 'categories-menu', category, opis , match[i][1], url, '', 'None', True, False)
 
@@ -101,16 +102,14 @@ class ToSieWytnie:
         page.close()
         return response
     def pageadditems(self, data):
-        match = re.compile('<div class="clip"><a href="(.*?)" class="title"><img class="preview" src="(.*?)" alt="" />(.*?)</a><br/>(.*?)<br/><div class="saw"><img src="(.*?)" alt="(.*?)"/></div><br/><br/><a href="(.*?)">').findall(data)
+        match = re.compile('<div class="clip"><a href="(.*?)" class="title"><img class="preview" src="(.*?)" alt="" />(.*?)</a>').findall(data)
         if len(match) > 0:
             for i in range(len(match)):
                 self.add('tosiewytnie', 'playSelectedMovie', 'None', match[i][2], match[i][1], match[i][0], '', 'None', True, False)
  
     def pageafindnext(self, data):
         match = re.compile('<a class="next" href="(.*?)">Następne</a>').findall(data)
-        
         return match
-           
         
     def listsItems(self, url,category=''):
         newurl = url
@@ -134,13 +133,8 @@ class ToSieWytnie:
         url = mainUrl + url
         urldata = self.pagedo(url)
         match = re.compile('<div class="clip"><a href="(.*?)">').findall(urldata)
-        print match
-        movlink = match[0]
-        movlink = movlink.replace('/m3', '/h')
-        movlink = movlink.replace('mp4', 'mov')
-        
-        print movlink
-        return movlink
+        linkVideo = self.up.getVideoLink(match[0])
+        return linkVideo
 
     def searchInputText(self):
         text = None

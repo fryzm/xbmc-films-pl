@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: iso-8859-2 -*-
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
@@ -80,7 +80,7 @@ class joemonster:
             for i in range(len(match)):
             
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('joemonster', 'playSelectedMovie', 'None', match[i][2], match[i][1], mainUrl+match[i][0], match[i][5], 'None', True, False)
+                self.add('joemonster', 'playSelectedMovie', 'None', match[i][2].decode('iso-8859-2').encode('utf8'), match[i][1], mainUrl+match[i][0], match[i][5], 'None', True, False)
        
        #     
        #         req1 = urllib2.Request(mainUrl + match[i][1])
@@ -94,11 +94,12 @@ class joemonster:
        #             self.add('joemonster', 'playSelectedMovie', 'None', match[i][3], match[a][1], match[a][0], match[a][4], 'None', True, False)
        
         
-        #match1 = re.compile(' <a href="(.*?)" class="inlblk tdnone vtop button" style="right: 0px">następna</a>').findall(readURL)
-        #print match1
+        match1 = re.compile('<a href="(.*?)" class="pagerNav" title="(.*?)">(.*?)</a>').findall(readURL)
+        print match1
 
-        #log.info('Nastepna strona: '+  match1[0])
-        #self.add('joemonster', 'categories-menu', 'Następna', 'None', 'None', match1[0], 'None', 'None', True, False)
+        
+        log.info('Nastepna strona: '+  match1[10][0])
+        self.add('joemonster', 'categories-menu', 'Nastepna', 'None', 'None', mainUrl+match1[-2][0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -139,10 +140,7 @@ class joemonster:
         match = re.compile('<iframe id="ytplayer" type="text/html"   src="(.*?)"  allowfullscreen webkitallowfullscreen mozallowfullscreen  frameborder="0" WIDTH="800" HEIGHT="450"></iframe>', re.DOTALL).findall(readURL)
         print match
         if len(match) > 0:
-            o = urlparse(match[0])
-            tmppath = o.path
-            id = tmppath.replace("/embed/", "");
-            linkVideo = self.up.getVideoLink('http://www.youtube.com/watch?v='+id)
+            linkVideo = self.up.getVideoLink(match[0])
             return linkVideo
         match = re.compile('<div id="flashcontent101"><embed src="(.*?)" allowfullscreen="true"  type="application/x-shockwave-flash" WIDTH="800" HEIGHT="450" wmode="opaque"></embed>', re.DOTALL).findall(readURL)
         print match
@@ -151,7 +149,11 @@ class joemonster:
             print o
             linkVideo =  urllib.unquote(o['file'][0])
             return linkVideo
-
+        match = re.compile('<param name="movie" value="(.*?)">', re.DOTALL).findall(readURL)
+        print match
+        if len(match) > 0:       
+            linkVideo = self.up.getVideoLink(match[0])
+            return linkVideo
 
     def getSizeAllItems(self, url):
         numItems = 0

@@ -10,7 +10,7 @@ scriptID = 'plugin.video.mrknow'
 scriptname = "Wtyczka XBMC www.mrknow.pl"
 ptv = xbmcaddon.Addon(scriptID)
 
-import pLog, Parser, settings, pCommon
+import pLog, Parser, settings, pCommon, urlparser
 
 
 log = pLog.pLog()
@@ -20,6 +20,8 @@ sets = settings.TVSettings()
 class pageparser:
   def __init__(self):
     self.cm = pCommon.common()
+    self.up = urlparser.urlparser()
+    
 
 
   def hostSelect(self, v):
@@ -87,18 +89,34 @@ class pageparser:
   def drhtv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-#    print ("link", link)
     match=re.compile('<script type="text/javascript"> channel="(.*?)"').findall(link)
-    print ("Match",match)
-    query_data = { 'url': 'http://yukons.net/lb.php', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link1 = self.cm.getURLRequestData(query_data)
-    link1 = link1.replace("srv=", "");
-    videolink = 'rtmp://' +link1 + '/kuyo/' + match[0] 
-    videolink += ' pageUrl=http://yukons.net/watch/' + match[0] + ' live=true'
-    videolink += ' swfVfy=http://yukons.net/yukplay.swf '
-    print ("videolink", videolink)
-    return videolink
+    match1=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=640; v_height=400;</script><script type='text/javascript' src='http://www.reyhq.com/player.js'></script>").findall(link)
+    match2=re.compile("<script type='text/javascript' src='http://www.sawlive.tv/embed/(.*?)'>").findall(link)
+    match3=re.compile("<script type='text/javascript' src='http://sawlive.tv/embed/(.*?)'>").findall(link)
+    match4=re.compile('<script type="text/javascript" src="http://www.ilive.to/embed/(.*?)&width=640&height=400&autoplay=true">').findall(link)
+    match5=re.compile("<script type='text/javascript'> channel='(.*?)'; user='(.*?)'; width='640'; height='400';</script><script type='text/javascript' src='http://jimey.tv/player/jimeytv_embed.js'>").findall(link)
+    #
+    
+    print ("Match",match2,match1,match,match3,match5)
+    if len(match) > 0:
+        linkVideo = self.up.getVideoLink('http://yukons.net/'+match[0])
+        return linkVideo
+    elif len(match1) > 0:
+        linkVideo = self.up.getVideoLink('http://www.reyhq.com/'+match1[0])
+        return linkVideo
+    elif len(match2) > 0:
+        linkVideo = self.up.getVideoLink('http://www.sawlive.tv/embed/'+match2[0])
+        return linkVideo
+    elif len(match3) > 0:
+        linkVideo = self.up.getVideoLink('http://www.sawlive.tv/embed/'+match3[0])
+        return linkVideo
+    elif len(match4) > 0:
+        print ("Match",match4)
+        linkVideo = self.up.getVideoLink('http://www.ilive.to/embed/'+match4[0])
+        return linkVideo
 
+    else:
+        return False
 
   def parserHD3D(self,url):
     username = ptv.getSetting('hd3d_login')

@@ -92,8 +92,83 @@ class urlparser:
         nUrl = self.parserliveleak(url)	
     if host== 'vimeo.com':
         nUrl = self.parserVIMEO(url)	
+    if host== 'yukons.net':
+        nUrl = self.parserYUKONS(url)
+    if host== 'www.reyhq.com':
+        nUrl = self.parserREYHQ(url)      
+    if host== 'www.sawlive.tv':
+        nUrl = self.parserSAWLIVE(url)  
+    if host== 'www.ilive.to':
+        nUrl = self.parserILIVE(url)      
+        
     return nUrl
+
+  def parserILIVE(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link21 = self.cm.getURLRequestData(query_data)
+    match21=re.compile("<iframe src='(.*?)'").findall(link21)
+    req = urllib2.Request(match21[0])
+    req.add_header('Referer', 'http://www.drhtv.com.pl/')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link22=response.read()
+    response.close()
+     #file\': \'http://mobilestreaming.ilive.to:1935/edge/0vs62vldjnkjfrl/playplist.m3u8\',
+    match22=re.compile("'file': '(.*?)',").findall(link22)
+    
+    print ("AAAA",match22)
+    print ("BBBB",link22)
+    if len(match22[1]) > 0:
+        videolink = match22[1]
+        print ("videolink", match22[1])
+        return match22[1]
+    else:
+        return False
+
+    
+  def parserSAWLIVE(self,url):
+    query = urlparse.urlparse(url)
+    channel = query.path
+    channel=channel.replace("/embed/","")
+    #self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "sawlive.cookie"
+    query_data = { 'url': 'http://www.sawlive.tv/embed/' + channel, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link21 = self.cm.getURLRequestData(query_data)
+    match21=re.compile("var escapa = unescape\('(.*?)'\);").findall(link21)
+    start= urllib.unquote(match21[0]).find('src="')
+    end = len(urllib.unquote(match21[0]))
+    url =  urllib.unquote(match21[0])[start+5:end] +'/7777772e64726874762e636f6d2e706c'
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link22 = self.cm.getURLRequestData(query_data)
+    match22=re.compile("SWFObject\('(.*?)','mpl','100%','100%','9'\);").findall(link22)
+    match23=re.compile("so.addVariable\('file', '(.*?)'\);").findall(link22)
+    match24=re.compile("so.addVariable\('streamer', '(.*?)'\);").findall(link22)
+    videolink = match24[0] + ' playpath=' +match23[0] + ' swfUrl=' + match22[0] + ' pageUrl=http://sawlive.tv/embed/' +channel + ' live=true swfVfy=true'
+    return videolink
+
 #www.liveleak.com
+  def parserREYHQ(self,url):
+    query = urlparse.urlparse(url)
+    channel = query.path
+    channel=channel.replace("/","")
+    videolink = 'rtmp://' + '89.248.172.239:1935/live' 
+    videolink += ' pageUrl=http://www.reyhq.com live=true playpath='+match1[0]
+    videolink += ' swfVfy=http://www.reyhq.com/player/player-licensed.swf'
+    print ("videolink", videolink)
+    return videolink
+
+  def parserYUKONS(self,url):
+    query = urlparse.urlparse(url)
+    channel = query.path
+    channel=channel.replace("/","")
+    query_data = { 'url': 'http://yukons.net/lb.php', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link1 = self.cm.getURLRequestData(query_data)
+    link1 = link1.replace("srv=", "");
+    videolink = 'rtmp://' +link1 + '/kuyo/' + channel 
+    videolink += ' pageUrl=http://yukons.net/watch/' + channel + ' live=true'
+    videolink += ' swfVfy=http://yukons.net/yukplay.swf '
+    print ("videolink", videolink)
+    return videolink
+
 
   def parserVIMEO(self,url):
     query = urlparse.urlparse(url)

@@ -15,7 +15,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
 import pLog, settings, Parser
 #import iptak, mrknowpl, tosiewytnie, noobroom
-import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl
+import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
@@ -27,6 +27,7 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
                4100: "drhtv.com.pl",
                4500: "tosiewytnie.pl",
                3000: "wykop.pl",
+               6000: "milanos.pl",
                5000: "joemonster.org",
                9000: "noobroom.com"
 }
@@ -70,6 +71,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 4500 or service == 'tosiewytnie':
         tv = tosiewytnie.ToSieWytnie()
+        tv.handleService()
+    elif mode == 6000 or service == 'milanos':
+        tv = milanos.milanos()
         tv.handleService()
 
 

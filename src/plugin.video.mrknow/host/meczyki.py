@@ -80,11 +80,17 @@ class MECZYKI:
         match = re.compile('<td class="flag">(.*?)</tr>', re.DOTALL).findall(readURL)
 #        print ("Match", match)
         for i in range(len(match)):
-            print ("Ile",i)
+            #print ("Ile",i)
             match1 = re.compile('href="(.*?)">OGLĄDAJ</a></td>', re.DOTALL).findall(match[i])
             match2 = re.compile('<img src="(.*?)" alt="(.*?)" /></td>\n                <td class="channel">\n                    <span class="channel_name">(.*?)</span>', re.DOTALL).findall(match[i])
+            match3 = re.compile('<td class="desc">(.*?)</td>', re.DOTALL).findall(match[i])
+            tytul = match2[0][2] + ' - ' +' '.join(str(match3[0]).translate(None, string.whitespace[:5]).split())
+            tytul = tytul.replace('&nbsp;','')
+            #print ("Match",match3[0], tytul)
+            predkosc = match3[0]
             if len(match1) > 0:
-                self.add('meczyki', 'playSelectedMovie', 'None',match2[0][2], mainUrl+match2[0][0], match1[0], 'aaaa', 'None', True, False)
+                if tytul.find('Meczyki') == -1:
+                    self.add('meczyki', 'playSelectedMovie', 'None',tytul, mainUrl+match2[0][0], match1[0], 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 

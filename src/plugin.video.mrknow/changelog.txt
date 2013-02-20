@@ -19,6 +19,9 @@ Wersja 1.4.0
 - serwis meczyki.pl
 - serwis drhtv.com.pl
 
+Wersja 1.4.2
+- poprawki do meczyki.pl nowe streamy
+
 
 
 

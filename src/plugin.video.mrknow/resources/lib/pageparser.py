@@ -56,13 +56,32 @@ class pageparser:
     
     if host == 'livemecz.com':
         nUrl = self.livemecz(url)
-    if host == 'www.drhtv.com.pl':
+    elif host == 'www.drhtv.com.pl':
         nUrl = self.drhtv(url)
- 
+    elif host == 'www.realtv.com.pl':
+        nUrl = self.realtv(url)
+    elif host == 'www.transmisje.info':
+        nUrl = self.transmisjeinfo(url)
+    else:
+        nUrl = self.pageanalyze(url)
+#http://www.transmisje.info/kanal-3
     return nUrl
-#www.liveleak.com
+ 
+  def transmisjeinfo(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match=re.compile('<iframe width="(.*?)" height="(.*?)" src="(.*?)" scrolling="no" frameborder="0" style="border: 0px none transparent;">').findall(link)
+    print ("Match",match)
+    return self.pageanalyze('http://www.transmisje.info'+match[0][2],'http://www.transmisje.info')
 
+  def realtv(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match=re.compile('<iframe frameborder="0" height="420" marginheight="0px" marginwidth="0px" name="RealTV.com.pl" scrolling="no" src="(.*?)" width="650">').findall(link)
+    print ("Match",match)
+    return self.pageanalyze(match[0],'http://www.realtv.com.pl')
 
+ 
   def livemecz(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
@@ -71,49 +90,43 @@ class pageparser:
     link = self.cm.getURLRequestData(query_data)
     match=re.compile('<iframe marginheight="0" marginwidth="0" name="livemecz.com" src="(.*?)" frameborder="0" height="480" scrolling="no" width="640">').findall(link)
     print ("Match",match)
-    query_data = { 'url': match[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link = self.cm.getURLRequestData(query_data)    
-    match=re.compile('<script type="text/javascript"> channel="(.*?)"; width="640"; height="480";</script><script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
-    print ("Match",match)
-    query_data = { 'url': 'http://yukons.net/lb.php', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link1 = self.cm.getURLRequestData(query_data)
-    link1 = link1.replace("srv=", "");
-    videolink = 'rtmp://' +link1 + '/kuyo/' + match[0] 
-    videolink += ' pageUrl=http://yukons.net/watch/' + match[0] + ' live=true'
-    videolink += ' swfVfy=http://yukons.net/yukplay.swf '
-    print ("videolink", videolink)
-    return videolink
-    #
-     
+    return self.pageanalyze(match[0],'http://livemecz.com/')
 
   def drhtv(self,url):
+    return self.pageanalyze(url,'http://www.drhtv.com.pl/')
+
+  def pageanalyze(self,url,referer=''):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match=re.compile('<script type="text/javascript"> channel="(.*?)"').findall(link)
+    match=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
     match1=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=640; v_height=400;</script><script type='text/javascript' src='http://www.reyhq.com/player.js'></script>").findall(link)
     match2=re.compile("<script type='text/javascript' src='http://www.sawlive.tv/embed/(.*?)'>").findall(link)
     match3=re.compile("<script type='text/javascript' src='http://sawlive.tv/embed/(.*?)'>").findall(link)
     match4=re.compile('<script type="text/javascript" src="http://www.ilive.to/embed/(.*?)&width=640&height=400&autoplay=true">').findall(link)
     match5=re.compile("<script type='text/javascript'> channel='(.*?)'; user='(.*?)'; width='640'; height='400';</script><script type='text/javascript' src='http://jimey.tv/player/jimeytv_embed.js'>").findall(link)
-    #
+    match6=re.compile("<script type='text/javascript'> width=(.*?), height=(.*?), channel='(.*?)', e='(.*?)';</script><script type='text/javascript' src='http://www.mips.tv/content/scripts/mipsEmbed.js'>").findall(link)
+    match7=re.compile('<script type="text/javascript">fid="(.*?)"; v_width=(.*?); v_height=(.*?);</script><script type="text/javascript" src="http://www.ukcast.tv/embed.js"></script>').findall(link)
     
-    print ("Match",match2,match1,match,match3,match5)
+    print ("Match",match2,match1,match,match3,match4,match5)
     if len(match) > 0:
-        linkVideo = self.up.getVideoLink('http://yukons.net/'+match[0])
-        return linkVideo
+        return self.up.getVideoLink('http://yukons.net/'+match[0][0])
     elif len(match1) > 0:
-        linkVideo = self.up.getVideoLink('http://www.reyhq.com/'+match1[0])
-        return linkVideo
+        return self.up.getVideoLink('http://www.reyhq.com/'+match1[0])
     elif len(match2) > 0:
-        linkVideo = self.up.getVideoLink('http://www.sawlive.tv/embed/'+match2[0])
-        return linkVideo
+        print ("Match2",match2)
+        return self.up.getVideoLink('http://www.sawlive.tv/embed/'+match2[0],url)
     elif len(match3) > 0:
-        linkVideo = self.up.getVideoLink('http://www.sawlive.tv/embed/'+match3[0])
-        return linkVideo
+        return self.up.getVideoLink('http://www.sawlive.tv/embed/'+match3[0],url)
     elif len(match4) > 0:
-        print ("Match",match4)
-        linkVideo = self.up.getVideoLink('http://www.ilive.to/embed/'+match4[0])
-        return linkVideo
+        print ("Match4",match4)
+        return self.up.getVideoLink('http://www.ilive.to/embed/'+match4[0],referer)
+    elif len(match6) > 0:
+        print ("Match6",match6[0])
+        return self.up.getVideoLink('http://mips.tv/embedplayer/'+match6[0][2]+'/'+match6[0][3]+'/'+match6[0][0]+'/'+match6[0][1])
+    elif len(match7) > 0:
+        print ("Match7",match7)
+        return self.up.getVideoLink('http://www.ukcast.tv/embed.php?u='+match7[0][0]+'&amp;vw='+match7[0][1]+'&amp;vh='+match7[0][2])
+
 
     else:
         return False

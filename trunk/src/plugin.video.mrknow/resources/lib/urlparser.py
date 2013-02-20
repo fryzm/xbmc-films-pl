@@ -46,11 +46,11 @@ class urlparser:
     return hostName
 
 
-  def getVideoLink(self, url):
+  def getVideoLink(self, url,referer=''):
     nUrl=''
     host = self.getHostName(url)
     log.info("video hosted by: " + host)
-    log.info(url)
+    log.info('URL: '+url + ' ' +referer)
     
     if host == 'www.putlocker.com':
         nUrl = self.parserPUTLOCKER(url)
@@ -97,24 +97,43 @@ class urlparser:
     if host== 'www.reyhq.com':
         nUrl = self.parserREYHQ(url)      
     if host== 'www.sawlive.tv':
-        nUrl = self.parserSAWLIVE(url)  
+        nUrl = self.parserSAWLIVE(url,referer)  
     if host== 'www.ilive.to':
-        nUrl = self.parserILIVE(url)      
-        
+        nUrl = self.parserILIVE(url,referer)      
+    if host== 'mips.tv':
+        nUrl = self.parserMIPS(url,referer)      
+    if host== 'www.ukcast.tv':
+        nUrl = self.parserUKCAST(url,referer)              
     return nUrl
-
-  def parserILIVE(self,url):
+    
+  def parserUKCAST(self,url,referer):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link21 = self.cm.getURLRequestData(query_data)
-    match21=re.compile("<iframe src='(.*?)'").findall(link21)
-    req = urllib2.Request(match21[0])
-    req.add_header('Referer', 'http://www.drhtv.com.pl/')
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-    response = urllib2.urlopen(req)
-    link22=response.read()
-    response.close()
+    link22 = self.cm.getURLRequestData(query_data)
+    match22=re.compile("SWFObject\('(.*?)','mpl','','','9'\);").findall(link22)
+    match23=re.compile("so.addVariable\('file', '(.*?)'\);").findall(link22)
+    match24=re.compile("so.addVariable\('streamer', '(.*?)'\);").findall(link22)
+    videolink = match24[0] + ' playpath=' +match23[0] + ' swfUrl=' + match22[0] + ' pageUrl=http://www.ukcast.tv live=true swfVfy=true'
+    print ("Link",videolink)
+    return videolink
+
+  def parserMIPS(self,url,referer):
+    query = urlparse.urlparse(url)
+    channel = query.path
+    channel=channel.replace("/embed/","")
+    params = query.path.split("/")
+    print ("Query",query,params)
+    return False
+#    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+#    link21 = self.cm.getURLRequestData(query_data)
+#    match21=re.compile("<iframe src='(.*?)'").findall(link21)
+#    req = urllib2.Request(match21[0])
+#    req.add_header('Referer', referer)
+#    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+#    response = urllib2.urlopen(req)
+#    link22=response.read()
+#    response.close()
      #file\': \'http://mobilestreaming.ilive.to:1935/edge/0vs62vldjnkjfrl/playplist.m3u8\',
-    match22=re.compile("'file': '(.*?)',").findall(link22)
+#    match22=re.compile("'file': '(.*?)',").findall(link22)
     
     print ("AAAA",match22)
     print ("BBBB",link22)
@@ -124,34 +143,59 @@ class urlparser:
         return match22[1]
     else:
         return False
+    
+  def parserILIVE(self,url,referer):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link21 = self.cm.getURLRequestData(query_data)
+    match21=re.compile("<iframe src='(.*?)'").findall(link21)
+    req = urllib2.Request(match21[0])
+    req.add_header('Referer', referer)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link22=response.read()
+    response.close()
+    match22=re.compile("'file': '(.*?)',").findall(link22)
+    if len(match22[1]) > 0:
+        videolink = match22[1]
+        return match22[1]
+    else:
+        return False
 
     
-  def parserSAWLIVE(self,url):
+  def parserSAWLIVE(self,url,referer):
+    def decode(tmpurl):
+        host = self.getHostName(tmpurl)
+        result = ''
+        for i in host:
+            result += hex(ord(i)).split('x')[1]
+        return result
+ 
     query = urlparse.urlparse(url)
     channel = query.path
     channel=channel.replace("/embed/","")
-    #self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "sawlive.cookie"
     query_data = { 'url': 'http://www.sawlive.tv/embed/' + channel, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link21 = self.cm.getURLRequestData(query_data)
     match21=re.compile("var escapa = unescape\('(.*?)'\);").findall(link21)
     start= urllib.unquote(match21[0]).find('src="')
     end = len(urllib.unquote(match21[0]))
-    url =  urllib.unquote(match21[0])[start+5:end] +'/7777772e64726874762e636f6d2e706c'
+#    print("SAW:",link21,match21)
+    url =  urllib.unquote(match21[0])[start+5:end] + '/' + decode(referer)
+#        url =  urllib.unquote(match21[0])[start+5:end] +'/7777772e64726874762e636f6d2e706c'
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link22 = self.cm.getURLRequestData(query_data)
     match22=re.compile("SWFObject\('(.*?)','mpl','100%','100%','9'\);").findall(link22)
     match23=re.compile("so.addVariable\('file', '(.*?)'\);").findall(link22)
     match24=re.compile("so.addVariable\('streamer', '(.*?)'\);").findall(link22)
+    print ("Match",match22,match23,match24,link22)
     videolink = match24[0] + ' playpath=' +match23[0] + ' swfUrl=' + match22[0] + ' pageUrl=http://sawlive.tv/embed/' +channel + ' live=true swfVfy=true'
     return videolink
 
-#www.liveleak.com
   def parserREYHQ(self,url):
     query = urlparse.urlparse(url)
     channel = query.path
     channel=channel.replace("/","")
     videolink = 'rtmp://' + '89.248.172.239:1935/live' 
-    videolink += ' pageUrl=http://www.reyhq.com live=true playpath='+match1[0]
+    videolink += ' pageUrl=http://www.reyhq.com live=true playpath='+channel
     videolink += ' swfVfy=http://www.reyhq.com/player/player-licensed.swf'
     print ("videolink", videolink)
     return videolink

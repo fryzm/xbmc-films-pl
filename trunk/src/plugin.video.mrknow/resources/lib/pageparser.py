@@ -99,7 +99,7 @@ class pageparser:
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
-    match1=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=640; v_height=400;</script><script type='text/javascript' src='http://www.reyhq.com/player.js'></script>").findall(link)
+    match1=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=(.*?); v_height=(.*?);</script><script type='text/javascript' src='http://www.reyhq.com/player.js'></script>").findall(link)
     match2=re.compile("<script type='text/javascript' src='http://www.sawlive.tv/embed/(.*?)'>").findall(link)
     match3=re.compile("<script type='text/javascript' src='http://sawlive.tv/embed/(.*?)'>").findall(link)
     match4=re.compile('<script type="text/javascript" src="http://www.ilive.to/embed/(.*?)&width=640&height=400&autoplay=true">').findall(link)
@@ -111,7 +111,7 @@ class pageparser:
     if len(match) > 0:
         return self.up.getVideoLink('http://yukons.net/'+match[0][0])
     elif len(match1) > 0:
-        return self.up.getVideoLink('http://www.reyhq.com/'+match1[0])
+        return self.up.getVideoLink('http://www.reyhq.com/'+match1[0][0])
     elif len(match2) > 0:
         print ("Match2",match2)
         return self.up.getVideoLink('http://www.sawlive.tv/embed/'+match2[0],url)

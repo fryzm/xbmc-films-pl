@@ -218,7 +218,11 @@ class urlparser:
     query = urlparse.urlparse(url)
     p = urlparse.parse_qs(query.query)
     print p
-    link = "plugin://plugin.video.vimeo/?action=play_video&videoid=" + p['clip_id'][0]
+    if len(p) > 0:
+        link = "plugin://plugin.video.vimeo/?action=play_video&videoid=" + p['clip_id'][0]
+    else:
+        tmp = query.path.split("/")
+        link = link = "plugin://plugin.video.vimeo/?action=play_video&videoid=" +tmp[1]
     return link
 
   def parserliveleak(self,url):
@@ -244,7 +248,7 @@ class urlparser:
     redirect = 10
     # Perform HEAD
     resp = _head(url)
-    # check for redirection
+
     while (resp.status >= 300) and (resp.status <= 399):
         # tick the redirect
         redirect -= 1
@@ -289,6 +293,7 @@ class urlparser:
     if query.hostname in ('www.youtube.com', 'youtube.com'):
         if query.path == '/watch':
             p = urlparse.parse_qs(query.query)
+            print p
             return 'plugin://plugin.video.youtube/?action=play_video&videoid=' + p['v'][0]
         if query.path[:7] == '/embed/':
             print query

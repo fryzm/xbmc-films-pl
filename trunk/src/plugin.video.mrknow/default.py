@@ -25,6 +25,7 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
                2000: "iptak.pl",
                4000: "meczyki.pl",
                4100: "drhtv.com.pl",
+             #  4200: "livelooker.com",
                4500: "tosiewytnie.pl",
                3000: "wykop.pl",
                6000: "milanos.pl",
@@ -63,6 +64,11 @@ class MrknowFilms:
     elif mode == 4100 or service == 'drhtvcompl':
         tv = drhtvcompl.drhtvcompl()
         tv.handleService()
+        
+    elif mode == 4200 or service == 'livelooker':
+        tv = livelooker.livelooker()
+        tv.handleService()
+        
     elif mode == 5000 or service == 'joemonster':
         tv = joemonster.joemonster()
         tv.handleService()

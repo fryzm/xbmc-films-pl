@@ -2,57 +2,63 @@
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
-import urlparser
+import pageparser
+import string
 
 
 scriptID = 'plugin.video.mrknow'
-scriptname = "Filmy online www.mrknow.pl - wykop"
+scriptname = "Wtyczka XBMC www.mrknow.pl - livelooker"
 ptv = xbmcaddon.Addon(scriptID)
 
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser
+import pLog, settings, Parser, BeautifulSoup
 
 log = pLog.pLog()
 
-mainUrl = 'http://www.wykop.pl/m/'
-playerUrl = 'http://www.youtube.pl/'
+mainUrl = 'http://www.livelooker.com'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-MENU_TAB = {1: "Wszystkie",
-            3: "Szukaj" }
+MENU_TAB = {1: "Dzisiaj",
+            2: "Jutro",
+            3: "Pojutrze",
+            12: "Filmiki" }
 
 
-class WYKOP:
+class livelooker:
     def __init__(self):
-        log.info('Starting wykop.pl')
-        self.cm = pCommon.common()
+        log.info('Starting livelooker.pl')
+        self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
-        self.up = urlparser.urlparser()
-
-
+        self.up = pageparser.pageparser()
 
     def listsMainMenu(self, table):
         for num, val in table.items():
-            self.add('wykop', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
+            self.add('livelooker', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-    def listsCategoriesMenu(self):
-        req = urllib2.Request(mainUrl)
+    def listsCategoriesMenu(self,url):
+        req = urllib2.Request(url)
         req.add_header('User-Agent', HOST)
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<li data-theme="c">(.*?)<a href="(.*?)" data-transition="slide">(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        
-        if len(match) > 0:
-            log.info('Listuje kategorie: ')
-            for i in range(len(match)):
-                url = mainUrl + match[i][1]
-                self.add('wykop', 'categories-menu', match[i][2].strip(), 'None', 'None', url, 'None', 'None', True, False)
+        match = re.compile('<div class="transmission" id="(.*?)">(.*?)</table>', re.DOTALL).findall(readURL)
+        for i in range(len(match)):
+            #print ("Ile",i)
+            match1 = re.compile('<div class="name">(.*?)<a href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[i][1])
+            match2 = re.compile('<div class="time" style="float: left;">(.*?)</div>', re.DOTALL).findall(match[i][1])
+            #match1 = re.compile('<div class="transmission" id="(.*?)">(.*?)</table>', re.DOTALL).findall(readURL)
+            #print match1
+            if len(match1) > 0:
+                p = re.compile(r'<.*?>')
+                tytul = match2[0] + ' ' + ' '.join(str(match1[0][2]).translate(None, string.whitespace[:5]).split())
+                tytul =  p.sub('', tytul)
+                tytul = tytul.replace("&nbsp;", "")
+                self.add('livelooker', 'categories-menu', tytul, 'None', 'None', mainUrl+ match1[0][1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -66,20 +72,25 @@ class WYKOP:
         
 
     def listsItems(self, url):
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
-        match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
-        if len(match) > 0:
-            for i in range(len(match)):
-             if match[i][3].find('video') > -1:# 0
-            
-                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('wykop', 'playSelectedMovie', 'None', match[i][2], 'None', match[i][1], 'aaaa', 'None', True, False)
- 
-        match1 = re.compile(' <a href="(.*?)" class="inlblk tdnone vtop button" style="right: 0px">następna</a>').findall(link)
-        log.info('Nastepna strona: '+  match1[0])
-        self.add('wykop', 'categories-menu', 'Następna', 'None', 'None', match1[0], 'None', 'None', True, False)
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', HOST)
+        openURL = urllib2.urlopen(req)
+        readURL = openURL.read()
+        openURL.close()
+        match = re.compile('<td class="flag">(.*?)</tr>', re.DOTALL).findall(readURL)
+#        print ("Match", match)
+        for i in range(len(match)):
+            #print ("Ile",i)
+            match1 = re.compile('href="(.*?)">OGLĄDAJ</a></td>', re.DOTALL).findall(match[i])
+            match2 = re.compile('<img src="(.*?)" alt="(.*?)" /></td>\n                <td class="channel">\n                    <span class="channel_name">(.*?)</span>', re.DOTALL).findall(match[i])
+            match3 = re.compile('<td class="desc">(.*?)</td>', re.DOTALL).findall(match[i])
+            tytul = match2[0][2] + ' - ' +' '.join(str(match3[0]).translate(None, string.whitespace[:5]).split())
+            tytul = tytul.replace('&nbsp;','')
+            #print ("Match",match3[0], tytul)
+            predkosc = match3[0]
+            if len(match1) > 0:
+                if tytul.find('livelooker') == -1:
+                    self.add('livelooker', 'playSelectedMovie', 'None',tytul, mainUrl+match2[0][0], match1[0], 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -92,7 +103,7 @@ class WYKOP:
                 num = i + 1
                 title = 'Lista ' + str(num)
                 destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('wykop', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
+                self.add('livelooker', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))        
 
 
@@ -105,15 +116,12 @@ class WYKOP:
                 num = i + 1
                 title = 'Lista ' + str(num)
                 destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('wykop', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
+                self.add('livelooker', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1])) 
 
 
     def getMovieLinkFromXML(self, url):
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<blockquote cite="(.*?)"', re.DOTALL).findall(link)
-        linkVideo = self.up.getVideoLink(match[0])
+        linkVideo = self.up.getVideoLink(url)
         return linkVideo
 
 
@@ -219,9 +227,15 @@ class WYKOP:
         icon = self.parser.getParam(params, "icon")
         if name == None:
             self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Wszystkie':
-            log.info('Jest Wszystkie: ')
-            self.listsItems(mainUrl)
+        elif name == 'main-menu' and category == 'Dzisiaj':
+            log.info('Jest Dzisiaj: ')
+            self.listsCategoriesMenu('http://livelooker.com/pl/dzisiaj.html')
+        elif name == 'main-menu' and category == 'Jutro':
+            log.info('Jest Dzisiaj: ')
+            self.listsCategoriesMenu('http://www.livelooker.pl/jutro,1,dzien.html')
+        elif name == 'main-menu' and category == 'Pojutrze':
+            log.info('Jest Dzisiaj: ')
+            self.listsCategoriesMenu('http://www.livelooker.pl/pojutrze,2,dzien.html')
             
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()

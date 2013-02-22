@@ -12,18 +12,18 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser
+import pLog, settings, Parser, pCommon
 
 log = pLog.pLog()
 
-mainUrl = 'http://m.iptak.pl/'
+mainUrl = 'http://iptak.pl/'
 sort_asc = '?o=rosnaco&f=tytul'
 sort_desc = '?o=malejaco&f=tytul'
 playerUrl = 'http://www.youtube.pl/'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-MENU_TAB = {1: "Polecane",
+MENU_TAB = {1: "Nowości",
             2: "Kategorie", 
             3: "Szukaj" }
 
@@ -31,7 +31,10 @@ MENU_TAB = {1: "Polecane",
 class IPTAK:
     def __init__(self):
         log.info('Starting IPTAK')
-        self.settings = settings.TVSettings()
+        #self.settings = settings.TVSettings()
+        #self.parser = Parser.Parser()
+        self.up = urlparser.urlparser()
+        self.cm = pCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
 
@@ -49,14 +52,18 @@ class IPTAK:
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<li data-theme="c">(.*?)<a href="(.*?)" data-transition="slide">(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        print len(match)
+        match = re.compile('<div id="category">(.*?)</ul>', re.DOTALL).findall(readURL)
+        print match
+        #
+        match1 = re.compile('<h5>(.*?)</h5>', re.DOTALL).findall(match[0])
+        match2 = re.compile('<a(.*?)href="(.*?)">', re.DOTALL).findall(match[0])
+        print match1
+        print match2
         
-        if len(match) > 0:
+        if len(match1) > 0:
             log.info('Listuje kategorie: ')
-            for i in range(len(match)):
-                url = mainUrl + match[i][1]
-                self.add('iptak', 'categories-menu', match[i][2].strip(), 'None', 'None', url, 'None', 'None', True, False)
+            for i in range(len(match1)):
+                self.add('iptak', 'categories-menu', match1[i].strip(), 'None', 'None', match2[i][1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -75,24 +82,17 @@ class IPTAK:
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<li data-theme="c" action="watch">(.*?)<a href="(.*?)" data-transition="slide">(.*?)<img src="(.*?)" height="90px" width="90px" title="(.*?)" />(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        if len(match) > 0:
-            for i in range(len(match)):
-            #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-             self.add('iptak', 'playSelectedMovie', 'None', match[i][5], match[i][3], match[i][1], 'aaaa', 'None', True, False)
-       
-       #     
-       #         req1 = urllib2.Request(mainUrl + match[i][1])
-       #         req1.add_header('User-Agent', HOST)
-       #         openURL1 = urllib2.urlopen(req)
-       #         readURL1 = openURL1.read()
-       #         openURL1.close()
-       #         match1 = re.compile('<a data-role="button" data-transition="fade" data-theme="b" href=\'(.*?)\' target="_blank" data-icon="arrow-r" data-iconpos="top">(.*?)</a>', re.DOTALL).findall(readURL)
-       #         print match1
-       #         if len(match1) > 0:
-       #             self.add('iptak', 'playSelectedMovie', 'None', match[i][3], match[a][1], match[a][0], match[a][4], 'None', True, False)
-       
-        
+        match = re.compile('<div id="right">(.*?)<div id="footer">', re.DOTALL).findall(readURL)
+        match1 = re.compile('<div id="item"><a href="(.*?)" title="(.*?)"><img height="80" width="80" alt="(.*?)" src="(.*?)"/>',re.DOTALL).findall(match[0])
+        print match1
+        if len(match1) > 0:
+            for i in range(len(match1)):
+                okladka = match1[i][3].replace('mala','srednia')
+                okladka = okladka.replace('../../..','')
+                
+                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('iptak', 'playSelectedMovie', 'None', match1[i][1], mainUrl+okladka, match1[i][0], 'aaaa', 'None', True, False)
+ 
         match1 = re.compile('<a href="(.*?)" data-transition="slidedown">').findall(readURL)
        
         if len(match1) > 0:
@@ -128,23 +128,15 @@ class IPTAK:
 
 
     def getMovieLinkFromXML(self, url):
-        urlLink = 'None'
-        url = mainUrl + url
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<a data-role="button" data-transition="fade" data-theme="b" href=\'(.*?)\' target="_blank" data-icon="arrow-r" data-iconpos="top">(.*?)</a>', re.DOTALL).findall(readURL)
+        print ("URL", url)
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile("\('#slideshow'\).load\('(.*?)'\);", re.DOTALL).findall(link)
         print "Film"
-        print match
-        o = parse_qs(urlparse(mainUrl + match[0][0]).query)
-        stream_url = 'a'
-        print o
-        sources = []
-        linkVideo = self.up.getVideoLink('http://www.youtube.com/watch?v=' + o['v'][0])
+        o = parse_qs(urlparse(match[0]).query)
+        linkVideo = self.up.getVideoLink('http://www.youtube.com/watch?v=' + o['g'][0])
         return linkVideo
-
+        
 
     def getSizeAllItems(self, url):
         numItems = 0
@@ -251,8 +243,8 @@ class IPTAK:
         elif name == 'main-menu' and category == 'Kategorie':
             log.info('Jest Kategoria: ' + str(url))
             self.listsCategoriesMenu()
-        elif name == 'main-menu' and category == 'Polecane':
-            log.info('Jest Polecane: ')
+        elif name == 'main-menu' and category == 'Nowości':
+            log.info('Jest Nowości: ')
             self.listsItems(mainUrl)
             
         elif name == 'main-menu' and category == "Szukaj":

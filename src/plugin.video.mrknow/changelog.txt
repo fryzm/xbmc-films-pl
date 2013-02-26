@@ -18,6 +18,15 @@ Wersja 1.4.2
 Wersja 1.4.3
 - sewis milanos.pl
 
+Wersja 1.4.4
+dodano:
+ FilmBox Extra
+ FilmBox Basic
+ FightBox
+ DocuBox
+ FashionBox
+ KinoPolska
+ Kino Polska Muzyka
 
 
 

@@ -10,7 +10,7 @@ scriptID = 'plugin.video.polishtv.live'
 scriptname = "Polish Live TV"
 ptv = xbmcaddon.Addon(scriptID)
 
-import pLog, Parser, settings, pCommon
+import pLog, Parser, settings, pCommon,xppod
 #import maxvideo, anyfiles
 
 log = pLog.pLog()
@@ -427,9 +427,38 @@ class urlparser:
 
 
   def parserANYFILES(self,url):
-    self.anyfiles = anyfiles.serviceParser()
-    retVal = self.anyfiles.getVideoUrl(url)
-    return retVal
+    COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "anyfiles.cookie"
+    self.cm.checkDir(ptv.getAddonInfo('path') + os.path.sep + "cookies")
+    self.cm.addCookieItem(COOKIEFILE, {'name': 'AnyF18', 'value': 'mam18', 'domain': 'video.anyfiles.pl'}, False)
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'cookiefile': COOKIEFILE, 'load_cookie': True, 'save_cookie': True, 'use_post': False, 'return_data': True }
+    data = self.cm.getURLRequestData(query_data)
+    #var flashvars = {"uid":"player-vid-8552","m":"video","st":"c:1LdwWeVs3kVhWex2PysGP45Ld4abN7s0v4wV"};
+    match = re.search("""var flashvars = {.+?"st":"(.+?)"}""",data)
+    if match:
+        nUrl = xppod.Decode(match.group(1)[2:]).encode('utf-8').strip()
+        if 'http://' in nUrl: url2 = nUrl
+        else: url2 = 'http://video.anyfiles.pl' + nUrl
+                
+        query_data = { 'url': url2+ "&ref=" +urllib.quote_plus(url), 'use_host': False, 'use_cookie': True, 'cookiefile': COOKIEFILE, 'load_cookie': True, 'save_cookie': False, 'use_post': False, 'return_data': True }
+        data = self.cm.getURLRequestData(query_data)
+        data = xppod.Decode(data).encode('utf-8').strip()
+
+        #json cleanup
+        while data[-2:] != '"}': data = data[:-1]
+        result = simplejson.loads(data)
+        if (result['ytube']=='0'):
+            vUrl = result['file'].split("or")
+            print ("Dasta",vUrl[0])
+            vUrl = vUrl[0].encode('utf-8').split(' ')
+            return vUrl[0]
+        else:
+            p = result['file'].split("/")
+            if 'watch' in p[3]: videoid = p[3][8:19]
+            else: videoid = p[3]
+            plugin = 'plugin://plugin.video.youtube/?action=play_video&videoid=' + videoid
+            return plugin
+            return False 
+
   
   
   def parserWOOTLY(self,url):

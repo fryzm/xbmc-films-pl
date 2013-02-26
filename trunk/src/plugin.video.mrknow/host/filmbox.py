@@ -2,63 +2,71 @@
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
-import pageparser
-import string
+import urlparser
+import json
 
 
 scriptID = 'plugin.video.mrknow'
-scriptname = "Wtyczka XBMC www.mrknow.pl - meczyki"
+scriptname = "Filmy online www.mrknow.pl - filmbox"
 ptv = xbmcaddon.Addon(scriptID)
 
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser, BeautifulSoup
+import pLog, pCommon, Parser
 
 log = pLog.pLog()
 
-mainUrl = 'http://www.meczyki.pl'
+mainUrl = 'http://www.filmboxliveapp.com/mobile/ios/pl/images/'
+chanels = 'http://www.filmboxliveapp.com/channel/channels_pl.json'
+playerUrl = 'http://www.youtube.pl/'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-MENU_TAB = {1: "Dzisiaj",
-            2: "Jutro",
-            3: "Pojutrze",
-            12: "Filmiki" }
+MENU_TAB = {1: "Wszystkie",
+            3: "Szukaj" }
 
 
-class MECZYKI:
+class filmbox:
     def __init__(self):
-        log.info('Starting meczyki.pl')
-        self.settings = settings.TVSettings()
+        log.info('Starting filmbox.pl')
+        self.cm = pCommon.common()
         self.parser = Parser.Parser()
-        self.up = pageparser.pageparser()
+        self.up = urlparser.urlparser()
+
+
 
     def listsMainMenu(self, table):
-        for num, val in table.items():
-            self.add('meczyki', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
+        query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        
+        objs = json.loads(link)
+        print objs 
+        for o in objs["channels"]:
+            nazwa = json.dumps(o["name"]).replace('"','')
+            print nazwa
+            stream = json.dumps(o["stream"]).replace('"','')
+            image = o["images"][0]["image"]
+            
+            #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+            self.add('filmbox', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
+
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-    def listsCategoriesMenu(self,url):
-        req = urllib2.Request(url)
+    def listsCategoriesMenu(self):
+        req = urllib2.Request(mainUrl)
         req.add_header('User-Agent', HOST)
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<div class="transmission" id="(.*?)">(.*?)</table>', re.DOTALL).findall(readURL)
-        for i in range(len(match)):
-            #print ("Ile",i)
-            match1 = re.compile('<div class="name">(.*?)<a href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[i][1])
-            match2 = re.compile('<div class="time" style="float: left;">(.*?)</div>', re.DOTALL).findall(match[i][1])
-            #match1 = re.compile('<div class="transmission" id="(.*?)">(.*?)</table>', re.DOTALL).findall(readURL)
-            #print match1
-            if len(match1) > 0:
-                p = re.compile(r'<.*?>')
-                tytul = match2[0] + ' ' + ' '.join(str(match1[0][2]).translate(None, string.whitespace[:5]).split())
-                tytul =  p.sub('', tytul)
-                tytul = tytul.replace("&nbsp;", "")
-                self.add('meczyki', 'categories-menu', tytul, 'None', 'None', mainUrl+ match1[0][1], 'None', 'None', True, False)
+        match = re.compile('<li data-theme="c">(.*?)<a href="(.*?)" data-transition="slide">(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
+        
+        if len(match) > 0:
+            log.info('Listuje kategorie: ')
+            for i in range(len(match)):
+                url = mainUrl + match[i][1]
+                self.add('filmbox', 'categories-menu', match[i][2].strip(), 'None', 'None', url, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -72,23 +80,20 @@ class MECZYKI:
         
 
     def listsItems(self, url):
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<td class="flag">(.*?)</tr>', re.DOTALL).findall(readURL)
-#        print ("Match", match)
-        for i in range(len(match)):
-            #print ("Ile",i)
-            match1 = re.compile('href="(.*?)">OGLĄDAJ</a></td>', re.DOTALL).findall(match[i])
-            match2 = re.compile('<img src="(.*?)" alt="(.*?)" /></td>\n                <td class="channel">\n                    <span class="channel_name">(.*?)</span>', re.DOTALL).findall(match[i])
-            match3 = re.compile('<td class="desc">(.*?)</td>', re.DOTALL).findall(match[i])
-            tytul =  ' '.join(str(match3[0]).translate(None, string.whitespace[:5]).split())
-            tytul = tytul.replace('&nbsp;','').replace('WWW','') + ' '+match2[0][2]
-            if len(match1) > 0:
-                if tytul.find('Meczyki') == -1:
-                    self.add('meczyki', 'playSelectedMovie', 'None',tytul , mainUrl+match2[0][0], match1[0], 'aaaa', 'None', True, False)
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
+        match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
+        if len(match) > 0:
+            for i in range(len(match)):
+             if match[i][3].find('video') > -1:# 0
+            
+                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('filmbox', 'playSelectedMovie', 'None', match[i][2], 'None', match[i][1], 'aaaa', 'None', True, False)
+ 
+        match1 = re.compile(' <a href="(.*?)" class="inlblk tdnone vtop button" style="right: 0px">następna</a>').findall(link)
+        log.info('Nastepna strona: '+  match1[0])
+        self.add('filmbox', 'categories-menu', 'Następna', 'None', 'None', match1[0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -101,7 +106,7 @@ class MECZYKI:
                 num = i + 1
                 title = 'Lista ' + str(num)
                 destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('meczyki', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
+                self.add('filmbox', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))        
 
 
@@ -114,12 +119,15 @@ class MECZYKI:
                 num = i + 1
                 title = 'Lista ' + str(num)
                 destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('meczyki', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
+                self.add('filmbox', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1])) 
 
 
     def getMovieLinkFromXML(self, url):
-        linkVideo = self.up.getVideoLink(url)
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile('<blockquote cite="(.*?)"', re.DOTALL).findall(link)
+        linkVideo = self.up.getVideoLink(match[0])
         return linkVideo
 
 
@@ -225,15 +233,9 @@ class MECZYKI:
         icon = self.parser.getParam(params, "icon")
         if name == None:
             self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Dzisiaj':
-            log.info('Jest Dzisiaj: ')
-            self.listsCategoriesMenu('http://www.meczyki.pl/')
-        elif name == 'main-menu' and category == 'Jutro':
-            log.info('Jest Dzisiaj: ')
-            self.listsCategoriesMenu('http://www.meczyki.pl/jutro,1,dzien.html')
-        elif name == 'main-menu' and category == 'Pojutrze':
-            log.info('Jest Dzisiaj: ')
-            self.listsCategoriesMenu('http://www.meczyki.pl/pojutrze,2,dzien.html')
+        elif name == 'main-menu' and category == 'Wszystkie':
+            log.info('Jest Wszystkie: ')
+            self.listsItems(mainUrl)
             
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()
@@ -242,7 +244,7 @@ class MECZYKI:
             log.info('url: ' + str(url))
             self.listsItems(url)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            self.LOAD_AND_PLAY_VIDEO(url, title, icon)
 
         
   

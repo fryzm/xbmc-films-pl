@@ -28,6 +28,6 @@ dodano:
  KinoPolska
  Kino Polska Muzyka
 
-
+Wersja 1.4.5 - dodano wersjê alpha serwisu VOD ONET PL, coœ zaczyna dzia³aæ 
 
 

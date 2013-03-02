@@ -15,7 +15,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
 import pLog, settings, Parser
 #import iptak, mrknowpl, tosiewytnie, noobroom
-import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox
+import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
@@ -47,6 +47,7 @@ SPORT_ONLINE_TABLE = {
 FILM_ONLINE_TABLE = {
 		     #2000 : ["Iptak.pl", 'iptak'],
              #9000: ["noobroom.com","noobroom"]
+             7000: ["Vod Onet PL","vodpl"]
 }
 
 class MrknowFilms:
@@ -75,6 +76,9 @@ class MrknowFilms:
         
     elif mode == 1000 or service == 'mrknowpl':
         tv = mrknowpl.mrknowpl()
+        tv.handleService()
+    elif mode == 7000 or service == 'vodpl':
+        tv = vodpl.vodpl()
         tv.handleService()
     elif mode == 2000 or service == 'iptak':
         tv = iptak.IPTAK()
@@ -112,7 +116,7 @@ class MrknowFilms:
   def CATEGORIES(self):
 
         self.addDir("Telewizja", 1, False, 'telewizja', False)
-#        self.addDir("Filmy", 2, False, 'film', False)
+        self.addDir("Filmy", 2, False, 'film', False)
         self.addDir("Rozrywka", 4, False, 'rozrywka', False)
         self.addDir('Sport', 19, False, 'nagrywanie', False)
 #        self.addDir('Ustawienia', 20, True, 'ustawienia', False)

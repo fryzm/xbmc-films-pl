@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.image.mrknow" name="mrknow" version="0.1.1"
-       provider-name="mrknow [mrknow@interia.pl]">
+<addon id="plugin.image.mrknow"
+       name="Filmy Online - mrknow.pl"
+       version="1.4.4"
+       provider-name="mrknow">
   <requires>
-    <import addon="script.module.simplejson" version="2.0.10"/>
+    <import addon="xbmc.python" version="1.0"/>
+
+
   </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-    <provides>image</provides>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <summary>Pliki Video ze strony mrknow.pl</summary>
+    <description>Plugin pozwala nam ogladac filmy, telewizje z polskich stron internetowych</description>
     <platform>all</platform>
-    <summary lang="en">View photos from http://www.demotywatory.pl.</summary>
-    <description>
-      View photos from http://www.demotywatory.pl.
-    </description>
-    <license>GPL 2.0</license>
   </extension>
 </addon>
 
 <addon id="plugin.video.mrknow"
        name="Filmy Online - mrknow.pl"
-       version="1.4.4"
+       version="1.4.52"
        provider-name="mrknow">
   <requires>
     <import addon="xbmc.python" version="1.0"/>

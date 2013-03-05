@@ -16,6 +16,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 import pLog, settings, Parser
 #import iptak, mrknowpl, tosiewytnie, noobroom
 import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
+import filmboxmoovie
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
@@ -47,7 +48,8 @@ SPORT_ONLINE_TABLE = {
 FILM_ONLINE_TABLE = {
 		     #2000 : ["Iptak.pl", 'iptak'],
              #9000: ["noobroom.com","noobroom"]
-             7000: ["Vod Onet PL","vodpl"]
+             7000: ["Vod Onet PL","vodpl"],
+             7100: ["Filmy","filmboxmoovie"]
 }
 
 class MrknowFilms:
@@ -80,6 +82,10 @@ class MrknowFilms:
     elif mode == 7000 or service == 'vodpl':
         tv = vodpl.vodpl()
         tv.handleService()
+    elif mode == 7100 or service == 'filmboxmoovie':
+        tv = filmboxmoovie.filmboxmoovie()
+        tv.handleService()
+        
     elif mode == 2000 or service == 'iptak':
         tv = iptak.IPTAK()
         tv.handleService()

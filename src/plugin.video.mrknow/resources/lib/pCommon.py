@@ -142,6 +142,8 @@ class common:
     	out_data = None
     	opener = None
     	headers = { 'User-Agent' : host }
+        if 'use_xml' in params:
+            headers = { 'User-Agent' : host, 'Content-Type': 'text/xml' }
     	if dbg == 'true':
     		log.info('pCommon - getURLRequestData() -> params: ' + str(params))
         if params['use_host']:
@@ -151,11 +153,13 @@ class common:
 			if params['load_cookie']:
 				cj.load(params['cookiefile'], ignore_discard = True)
         if params['use_post']:
-	        headers = { 'User-Agent' : host }
-	        if dbg == 'true':
-	        	log.info('pCommon - getURLRequestData() -> post data: ' + str(post_data))
-	        dataPost = urllib.urlencode(post_data)
-	        req = urllib2.Request(params['url'], dataPost, headers)
+            #headers = {'User-Agent' : host}
+            #log.info('pCommon - getURLRequestData() -> post data: ' + str(post_data))
+            if 'use_xml' in params:
+                dataPost = post_data
+            else:
+                dataPost = urllib.urlencode(post_data)
+            req = urllib2.Request(params['url'], dataPost, headers)
         if not params['use_post']:
             req = urllib2.Request(params['url'])
             req.add_header('User-Agent', host)

@@ -105,19 +105,10 @@ CHARS = [
 ]
 
 
-    
-
 class common:
     def __init__(self):
         pass
-
-    def html_special_chars(self,txt):
-        txt = txt.replace('#038;','')
-        txt = txt.replace('&#8221;','"')
-        txt = txt.replace('&#8222;','"')
-        txt = txt.replace('&#8211;','-')
-        
-        return txt
+    
     
     def getCookieItem(self, cookiefile, item):
 	ret = ''

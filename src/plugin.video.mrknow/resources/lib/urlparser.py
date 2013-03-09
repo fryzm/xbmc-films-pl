@@ -74,7 +74,7 @@ class urlparser:
         nUrl = self.parserANYFILES(url)
     if host == 'www.videoweed.es' or host == 'www.videoweed.com' or host == 'videoweed.es' or host == 'videoweed.com':
         nUrl = self.parserVIDEOWEED(url)
-    if host== 'www.novamov.com':
+    if host== 'www.novamov.com' or host == 'embed.novamov.com':
         nUrl = self.parserNOVAMOV(url)
     if host== 'www.nowvideo.eu':
         nUrl = self.parserNOWVIDEO(url)
@@ -556,9 +556,10 @@ class urlparser:
       link = self.cm.getURLRequestData(query_data)
       match_file = re.compile('flashvars.file="(.+?)";').findall(link)
       match_key = re.compile('flashvars.filekey="(.+?)";').findall(link)
+      print "match_key",match_key,match_file
       if len(match_file) > 0 and len(match_key) > 0:
           get_api_url = ('http://www.novamov.com/api/player.api.php?key=%s&user=undefined&codes=1&pass=undefined&file=%s') % (match_key[0], match_file[0])
-	  link_api = link_api = { 'url': get_api_url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+          link_api = self.cm.getURLRequestData({ 'url': get_api_url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True })
           match_url = re.compile('url=(.+?)&title').findall(link_api)
           if len(match_url) > 0:
               return match_url[0]

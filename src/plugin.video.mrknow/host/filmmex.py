@@ -12,28 +12,31 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser
+import pLog, settings, Parser,pCommon
 
 log = pLog.pLog()
 
-mainUrl = 'http://filmmex.pl/filmy/'
+mainUrl = 'http://filmmex.pl/'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-MENU_TAB = {1: "Data dodania",
-            2: "Popularność",
-            3: "Oglądalność",
-            4: "Komentarze",
-            5: "Alfabetycznie",
-            9: "Szukaj" }
+MENU_TAB = {5: "Gorące",
+            6: "Kategorie",
+            10: "Data dodania",
+            12: "Data premiery",
+            13: "Oglądalność",
+            14: "Oceny",
+            15: "Alfabetycznie"
+            }
 
 
-class Filmmex:
+class filmmex:
     def __init__(self):
         log.info('Starting filmmex.pl')
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
+        self.cm = pCommon.common()
 
 
 
@@ -44,19 +47,20 @@ class Filmmex:
 
 
     def listsCategoriesMenu(self):
-        req = urllib2.Request(mainUrl)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<li data-theme="c">(.*?)<a href="(.*?)" data-transition="slide">(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        print len(match)
+        query_data = { 'url': 'http://filmmex.pl/kategorie.html', 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile('<div class="leftMenu">(.*?)<span>Wersja</span>', re.DOTALL).findall(link)
+        match1 = re.compile('<a href="(.*?)">(.*?)</a> ', re.DOTALL).findall(match[0])
+        print match
+        print match1
+        #<a href="filmy,Akcja.html">Akcja</a> 
         
-        if len(match) > 0:
+        if len(match1) > 0:
             log.info('Listuje kategorie: ')
-            for i in range(len(match)):
-                url = mainUrl + match[i][1]
-                self.add('filmmex', 'categories-menu', match[i][2].strip(), 'None', 'None', url, 'None', 'None', True, False)
+            for i in range(len(match1)):
+                url = mainUrl + match1[i][0].replace('.html','')
+                print url
+                self.add('filmmex', 'categories-menu', match1[i][1].strip(), 'None', 'None', url, 'None', 'None', True, False,'0','sort_field=data-dodania&sort_method=asc')
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -68,30 +72,43 @@ class Filmmex:
         #openURL = urllib2.urlopen(req)
         #readURL = openURL.read()
         
-
-    def listsItems(self, url, type='data'):
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', HOST)
-        #openURL = urllib2.urlopen(req)
-        #readURL = openURL.read()
-        #openURL.close()
-        data = urllib.urlencode({'dlenewssortby' : type, 'dledirection'  : 'DESC', 'set_new_sort' : 'dle_sort_cat', 'set_direction_sort' : 'dle_direction_cat'})
-        req = urllib2.Request(url, data)
-        response = urllib2.urlopen(req)
-        readURL = response.read()
-        #print readURL
-        match = re.compile('<div class="covv"><img src="(.*?)" width="140" height="190" alt="(.*?)" title="(.*?)"></div>\s(.*?)<header>\s(.*?)<h2 class="title"><a href="(.*?)" title="(.*?)">(.*?)</a></h2>', re.DOTALL).findall(readURL)
-        print match
-        if len(match) > 0:
-            for i in range(len(match)):
-                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('filmmex', 'playSelectedMovie', 'None', match[i][2],  match[i][0], match[i][5], 'aaaa', 'None', True, False)
-
-        match1 = re.compile('<a href="(.*?)">Nast\xeapna</a>').findall(readURL)
+    def listsItemsOther(self, url):
+        #http://filmmex.pl/kategorie,0,wszystkie,wszystkie,1900-2013,.html?sort_field=data-dodania&sort_method=asc
+        #urllink = url + ',' + str(strona) + ',wszystkie,wszystkie,1900-2013,.html?' + filtrowanie
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile('<div class="mostPopular movies hotMovies">(.*?)<div class="newMovies movies_r">', re.DOTALL).findall(link)
+        match1 = re.compile('<li>\n                        <div class="poster" style="background:url\(\'(.*?)\'\) no-repeat 11px 0px"></div>\n                        <div class="title">\n                            <h2><a href="(.*?)" title="(.*?)">(.*?)</a></h2>', re.DOTALL).findall(match[0])
         print match1
+        if len(match1) > 0:
+            for i in range(len(match1)):
+                data = self.cm.getURLRequestData({ 'url': mainUrl+ match1[i][1], 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True })
+                if (data.find('http://filmmex.pl/static/img/niedostepny.jpg')) == -1:
+                    #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                    self.add('filmmex', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0].replace('_small',''), mainUrl+ match1[i][1], 'aaaa', 'None', True, False)
 
-        log.info('Nastepna strona: '+  match1[0])
-        self.add('filmmex', 'categories-menu', 'Następna', 'None', 'None', match1[0], 'None', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+        
+    def listsItems(self, url, strona='0', filtrowanie=''):
+        print strona
+        print filtrowanie
+        #http://filmmex.pl/kategorie,0,wszystkie,wszystkie,1900-2013,.html?sort_field=data-dodania&sort_method=asc
+        urllink = url + ',' + str(strona) + ',wszystkie,wszystkie,1900-2013,.html?' + filtrowanie
+        print urllink
+        query_data = { 'url': urllink, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile('<div class="moviesWrap">(.*?)<footer>', re.DOTALL).findall(link)
+        match1 = re.compile('<li data-movie_url="(.*?)">\r\n            <img class="poster" src="(.*?)" alt="(.*?)" />\r\n            <div class="title">\r\n                <h2><a title="(.*?)" href="(.*?)">(.*?)</a></h2>', re.DOTALL).findall(match[0])
+        if len(match1) > 0:
+            for i in range(len(match1)):
+                data = self.cm.getURLRequestData({ 'url': mainUrl+ match1[i][0], 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True })
+                if (data.find('http://filmmex.pl/static/img/niedostepny.jpg')) == -1:
+                    #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                    self.add('filmmex', 'playSelectedMovie', 'None', match1[i][5],  match1[i][1].replace('_small',''), mainUrl+ match1[i][0], 'aaaa', 'None', True, False)
+        #urllink = url + ',' + str((int(strona)+1)) + ',wszystkie,wszystkie,1900-2013,.html?' + filtrowanie
+        log.info('Nastepna strona: '+  urllink)
+        self.add('filmmex', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona) + 1), filtrowanie)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -122,18 +139,41 @@ class Filmmex:
 
 
     def getMovieLinkFromXML(self, url):
-        urlLink = 'None'
-        print url
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<div class="freeee" id="loader(.*?)">', re.DOTALL).findall(readURL)
-        print "Film"
-        print match
-        linkVideo = self.up.getVideoLink('http://www.putlocker.com/embed/' + match[0])
-        return linkVideo
+        HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
+        query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match1 = re.compile('<ul class="players" style="float:right;width:200px;height:27px;overflow:hidden">(.*?)</ul>', re.DOTALL).findall(link)
+        match2 = re.compile('<li class="(.*?)"><a href="(.*?)">(.*?)</a></li>', re.DOTALL).findall(match1[0])
+        tab = []
+        for i in range(len(match2)):
+            if (match2[i][2].find('div')) > -1:
+                #<div class="s-quality_mid_active"></div><span>Średnia jakość</span>putlocker
+                match3 = re.compile('<span>(.*?)</span>', re.DOTALL).findall(match2[i][2])
+                tab.append(match3[0] + ' - ' + match2[i][2].split('</span>')[1]) 
+            else:
+                tab.append(match2[i][2])           
+        d = xbmcgui.Dialog()        
+        video_menu = d.select("Wybór playera ...", tab)
+        if video_menu != "" and video_menu>=0:
+            print ("AAAAAA",match2[video_menu][1])
+            url = mainUrl + match2[video_menu][1]
+            query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+            link = self.cm.getURLRequestData(query_data)
+            match1 = re.compile('<iframe src="(.*?)" width="640" height="360" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(link)
+            if len(match1)==0:
+                match1 = re.compile('<iframe src="(.*?)" style="width:640px;height:503px;border:0px;" scrolling="no"></iframe>', re.DOTALL).findall(link)
+            if len(match1)==0:
+                match1 = re.compile('<iframe style="overflow: hidden; border: 0; width: 640px; height: 360px" src="(.*?)" scrolling="no"></iframe>', re.DOTALL).findall(link)
+            if len(match1)==0:
+                match1 = re.compile('clip: {\r\n                    url: \'(.*?)\',', re.DOTALL).findall(link)
+                return match1[0]
+            if len(match1)>0:
+                linkVideo = self.up.getVideoLink(match1[0])
+                print linkVideo
+                return linkVideo
+            else:
+                return False
+
 
 
     def getSizeAllItems(self, url):
@@ -193,8 +233,8 @@ class Filmmex:
         return text
     
 
-    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
-        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)
+    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True, strona = '', filtrowanie=''):
+        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)+ "&strona=" + urllib.quote_plus(strona)+ "&filtrowanie=" + urllib.quote_plus(filtrowanie)
         #log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
             title = category 
@@ -236,23 +276,33 @@ class Filmmex:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
+        strona = self.parser.getParam(params, "strona")
+        filtrowanie = self.parser.getParam(params, "filtrowanie")
+        print("url",url,strona, filtrowanie)
+        
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Data dodania':
             log.info('Jest Wszystkie: ')
-            self.listsItems(mainUrl,'date')
-        elif name == 'main-menu' and category == 'Popularność':
+            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=data-dodania&sort_method=asc')
+        elif name == 'main-menu' and category == 'Data premiery':
             log.info('Jest Wszystkie: ')
-            self.listsItems(mainUrl,'rating')
+            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=data-premiery&sort_method=desc')
         elif name == 'main-menu' and category == 'Oglądalność':
             log.info('Jest Wszystkie: ')
-            self.listsItems(mainUrl,'news_read')
-        elif name == 'main-menu' and category == 'Komentarze':
+            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=odslony&sort_method=desc')
+        elif name == 'main-menu' and category == 'Oceny':
             log.info('Jest Wszystkie: ')
-            self.listsItems(mainUrl,'comm_num')
+            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=ocena&sort_method=desc')
         elif name == 'main-menu' and category == 'Alfabetycznie':
             log.info('Jest Wszystkie: ')
-            self.listsItems(mainUrl,'title')
+            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=alfabetycznie&sort_method=asc')
+        elif name == 'main-menu' and category == 'Gorące':
+            log.info('Jest Gorące: ')
+            self.listsItemsOther('http://filmmex.pl/')
+        elif name == 'main-menu' and category == 'Kategorie':
+            log.info('Jest Gorące: ')
+            self.listsCategoriesMenu()
  
 
             
@@ -261,7 +311,7 @@ class Filmmex:
             self.listsItems(self.getSearchURL(key))
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
-            self.listsItems(url)
+            self.listsItems(url,strona,filtrowanie)
         if name == 'playSelectedMovie':
             self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
 

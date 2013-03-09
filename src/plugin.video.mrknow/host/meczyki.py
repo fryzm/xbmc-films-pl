@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser, BeautifulSoup
+import pLog, settings, Parser,pCommon
 
 log = pLog.pLog()
 
@@ -33,6 +33,8 @@ class MECZYKI:
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
         self.up = pageparser.pageparser()
+        self.cm = pCommon.common()
+        
 
     def listsMainMenu(self, table):
         for num, val in table.items():
@@ -41,11 +43,13 @@ class MECZYKI:
 
 
     def listsCategoriesMenu(self,url):
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
+        #req = urllib2.Request(url)
+        #req.add_header('User-Agent', HOST)
+        #openURL = urllib2.urlopen(req)
+        #readURL = openURL.read()
+        #openURL.close()
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        readURL = self.cm.getURLRequestData(query_data)
         match = re.compile('<div class="transmission" id="(.*?)">(.*?)</table>', re.DOTALL).findall(readURL)
         for i in range(len(match)):
             #print ("Ile",i)

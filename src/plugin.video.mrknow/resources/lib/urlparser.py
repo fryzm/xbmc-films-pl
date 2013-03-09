@@ -10,7 +10,7 @@ scriptID = 'plugin.video.polishtv.live'
 scriptname = "Polish Live TV"
 ptv = xbmcaddon.Addon(scriptID)
 
-import pLog, Parser, settings, pCommon,xppod
+import pLog, parser, settings, pCommon,xppod
 #import maxvideo, anyfiles
 
 log = pLog.pLog()
@@ -104,8 +104,29 @@ class urlparser:
         nUrl = self.parserMIPS(url,referer)      
     if host== 'www.ukcast.tv':
         nUrl = self.parserUKCAST(url,referer)              
+    if host== 'castamp.com':
+        nUrl = self.parserCASTAMP(url,referer)              
     return nUrl
     
+  def parserCASTAMP(self,url,referer):
+    print url,referer
+    req = urllib2.Request(url)
+    req.add_header('Referer', referer)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link22=response.read()
+    response.close()
+    query = urlparse.urlparse(url)
+    p = urlparse.parse_qs(query.query)
+    print p['c']
+    match22=re.compile("'flashplayer': \"(.*?)\",").findall(link22)
+    match23=re.compile("'streamer': '(.*?)',").findall(link22)
+    match24=re.compile("'file': '(.*)',").findall(link22)
+    #rtmpdump -r "rtmpe://204.45.157.74/live" -a "live" -f "WIN 11,6,602,171" -W "http://www.udemy.com/static/flash/player5.9.swf" -p "http://www.castamp.com/embed.php?c=ilmecz&tk=1dGwTOdu&vwidth=640&vheight=480" -y "ilmecz" -o ilmecz.flv
+    videolink = match23[0] + ' playpath=' +p['c'][0] + ' swfUrl=' + match22[0] + ' pageUrl=http://castamp.com/embed.php'
+    print ("Link",videolink)
+    return videolink
+
   def parserUKCAST(self,url,referer):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link22 = self.cm.getURLRequestData(query_data)
@@ -207,8 +228,10 @@ class urlparser:
     query_data = { 'url': 'http://yukons.net/lb.php', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link1 = self.cm.getURLRequestData(query_data)
     link1 = link1.replace("srv=", "");
-    videolink = 'rtmp://' +link1 + '/kuyo/' + channel 
-    videolink += ' pageUrl=http://yukons.net/watch/' + channel + ' live=true'
+    #"rtmp://198.144.158.83:443/kuyo" --app "kuyo" --flashVer "LNX 11,2,202,273" --swfVfy "http://yukons.net/yukplay.swf" 
+    #--pageUrl  "http://yukons.net" --playpath "drhtvvekko" -o drhtvvekko.flv
+    videolink = 'rtmp://198.144.158.83:443/kuyo app=kuyo playpath=' + channel 
+    videolink += ' pageUrl=http://yukons.net live=true'
     videolink += ' swfVfy=http://yukons.net/yukplay.swf '
     print ("videolink", videolink)
     return videolink

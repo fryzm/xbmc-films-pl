@@ -30,4 +30,4 @@ dodano:
 
 Wersja 1.4.5 - dodano wersjê alpha serwisu VOD ONET PL, coœ zaczyna dzia³aæ 
 
-
+Wersja 1.4.6 - poprawiono meczyki.pl

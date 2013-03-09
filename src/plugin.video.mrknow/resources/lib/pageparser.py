@@ -3,8 +3,7 @@ import cookielib, os, string, StringIO
 import os, time, base64, logging, calendar
 import urllib, urllib2, re, sys, math
 import xbmcaddon, xbmc, xbmcgui, simplejson
-import urlparse
-import httplib 
+import urlparse, httplib, random, string
 
 scriptID = 'plugin.video.mrknow'
 scriptname = "Wtyczka XBMC www.mrknow.pl"
@@ -54,9 +53,9 @@ class pageparser:
     log.info("video hosted by: " + host)
     log.info(url)
     
-    if host == 'livemecz.com':
-        nUrl = self.livemecz(url)
-    elif host == 'www.drhtv.com.pl':
+    #if host == 'livemecz.com':
+    #    nUrl = self.livemecz(url)
+    if host == 'www.drhtv.com.pl':
         nUrl = self.drhtv(url)
     elif host == 'www.realtv.com.pl':
         nUrl = self.realtv(url)
@@ -64,6 +63,10 @@ class pageparser:
         nUrl = self.transmisjeinfo(url)
     elif host == '79.96.137.217' or host == 'http://178.216.200.26':
         nUrl = self.azap(url)
+    #http://bbpolska.webd.pl
+    elif host == 'bbpolska.webd.pl':
+        nUrl = self.bbpolska(url)
+    
     else:
         nUrl = self.pageanalyze(url)
 #http://www.transmisje.info/kanal-3
@@ -84,7 +87,23 @@ class pageparser:
     else:
         return False
     
+  def bbpolska(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match=re.compile('<div id="player">(.*?)</div>').findall(link)
+    print match
+    if len(match)>0:
+        match1=re.compile('src="(.*?)"').findall(match[0])
+        print match1
+        return self.pageanalyze(match1[0],match1[0])
+    else:
+        return False
+    
+    match=re.compile('<iframe width="(.*?)" height="(.*?)" src="(.*?)" scrolling="no" frameborder="0" style="border: 0px none transparent;">').findall(link)
+    print ("Match",match)
+    return self.pageanalyze('http://www.transmisje.info'+match[0][2],'http://www.transmisje.info')
   
+
   def transmisjeinfo(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
@@ -111,7 +130,7 @@ class pageparser:
     return self.pageanalyze(match[0],'http://livemecz.com/')
 
   def drhtv(self,url):
-    return self.pageanalyze(url,'http://www.drhtv.com.pl/')
+    return self.pageanalyze(url,url)
 
   def pageanalyze(self,url,referer=''):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
@@ -124,8 +143,10 @@ class pageparser:
     match5=re.compile("<script type='text/javascript'> channel='(.*?)'; user='(.*?)'; width='640'; height='400';</script><script type='text/javascript' src='http://jimey.tv/player/jimeytv_embed.js'>").findall(link)
     match6=re.compile("<script type='text/javascript'> width=(.*?), height=(.*?), channel='(.*?)', e='(.*?)';</script><script type='text/javascript' src='http://www.mips.tv/content/scripts/mipsEmbed.js'>").findall(link)
     match7=re.compile('<script type="text/javascript">fid="(.*?)"; v_width=(.*?); v_height=(.*?);</script><script type="text/javascript" src="http://www.ukcast.tv/embed.js"></script>').findall(link)
+    match8=re.compile('<script type="text/javascript"> channel="(.*?)"; vwidth="(.*?)"; vheight="(.*?)";</script><script type="text/javascript" src="http://castamp.com/embed.js"></script>').findall(link)
+    #
     
-    print ("Match",match2,match1,match,match3,match4,match5)
+    print ("Match",match8,match2,match1,match,match3,match4,match5)
     if len(match) > 0:
         return self.up.getVideoLink('http://yukons.net/'+match[0][0])
     elif len(match1) > 0:
@@ -144,6 +165,10 @@ class pageparser:
     elif len(match7) > 0:
         print ("Match7",match7)
         return self.up.getVideoLink('http://www.ukcast.tv/embed.php?u='+match7[0][0]+'&amp;vw='+match7[0][1]+'&amp;vh='+match7[0][2])
+    elif len(match8) > 0:
+        print ("Match8",match8)
+        return self.up.getVideoLink('http://castamp.com/embed.php?c='+match8[0][0]+'&ch=1',referer)
+        #return self.up.getVideoLink('http://www.castamp.com/embed.php?c='+ match8[0][0] +'&tk='+domainsa+'&vwidth=600&vheight=400')
 
 
     else:

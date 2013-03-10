@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="noobroom.com">
+		<setting type="lsep" label="Adres ip ze strony www.noobroom.com" />
+		<setting id="noobroom_ip" type="ipaddress" label="Adres ip" default="185.8.196.237" />
+	</category>
+
+</settings>

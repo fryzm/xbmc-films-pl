@@ -16,7 +16,7 @@ import pLog, settings, Parser
 
 log = pLog.pLog()
 
-mainUrl = 'http://37.221.166.252/'
+
 sort_asc = '?o=rosnaco&f=tytul'
 sort_desc = '?o=malejaco&f=tytul'
 playerUrl = 'http://www.youtube.pl/'
@@ -25,7 +25,8 @@ HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, 
 
 MENU_TAB = {1: "Ordered by A-Z",
             2: "Ordered by IMDb Rating",
-            3: "Search  - broken..." }
+            3: "Ordered by latest",
+            4: "Search  - broken..." }
 
 
 class Noobroom:
@@ -33,6 +34,11 @@ class Noobroom:
         log.info('Starting Noobroom')
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
+        noobroom_ip = ptv.getSetting('noobroom_ip')
+        if noobroom_ip == '':
+            self.settings.showSettings()
+
+        self.mainUrl = 'http://'+noobroom_ip+'/'
 
 
     def listsMainMenu(self, table):
@@ -42,7 +48,7 @@ class Noobroom:
 
 
     def listsCategoriesMenu(self):
-        req = urllib2.Request(mainUrl)
+        req = urllib2.Request(self.mainUrl)
         req.add_header('User-Agent', HOST)
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
@@ -54,13 +60,13 @@ class Noobroom:
         if len(match) > 0:
             log.info('Listuje kategorie: ')
             for i in range(len(match)):
-                url = mainUrl + match[i][0]
+                url = self.mainUrl + match[i][0]
                 self.add('noobroom', 'categories-menu', match[i][1].strip(), 'None', 'None', url, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
     def getSearchURL(self, key):
-        url = mainUrl + 'search.php?phrase=' + urllib.quote_plus(key) 
+        url = self.mainUrl + 'search.php?phrase=' + urllib.quote_plus(key) 
         return url
         #req = urllib2.Request(url)
         #req.add_header('User-Agent', HOST)
@@ -83,7 +89,7 @@ class Noobroom:
                 strid = strid.replace('?','')
 
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('noobroom', 'playSelectedMovie', 'None', match[i][1], mainUrl + '2img/'+strid+'.jpg', strid, 'aaaa', 'None', True, False)
+                self.add('noobroom', 'playSelectedMovie', 'None', match[i][1], self.mainUrl + '2img/'+strid+'.jpg', strid, 'aaaa', 'None', True, False)
                
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -98,21 +104,34 @@ class Noobroom:
         match = re.compile("<a style='color:#fff' href='/?(.*?)'>(.*?)</a>", re.DOTALL).findall(readURL)
         print match
         if len(match) > 0:
-        #http://72.8.190.49/2img/336.jpg
-        #s = url.replace('?','')
             for i in range(len(match)):
                 strid = match[i][0]
                 strid = strid.replace('?','')
 
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('noobroom', 'playSelectedMovie', 'None', match[i][1], mainUrl + '2img/'+strid+'.jpg', strid, 'aaaa', 'None', True, False)
-               
+                self.add('noobroom', 'playSelectedMovie', 'None', match[i][1], self.mainUrl + '2img/'+strid+'.jpg', strid, 'aaaa', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    def listsItemsOther(self, url):
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', HOST)
+        openURL = urllib2.urlopen(req)
+        readURL = openURL.read()
+        openURL.close()
+        match = re.compile('<a style="text-decoration:underline;color:#fff;font-family: verdana,geneva,sans-serif;" href=\'/?(.*?)\'>(.*?)</a><br>', re.DOTALL).findall(readURL)
+        print match
+        if len(match) > 0:
+            for i in range(len(match)):
+                strid = match[i][0]
+                strid = strid.replace('?','')
+
+            #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('noobroom', 'playSelectedMovie', 'None', match[i][1], self.mainUrl + '2img/'+strid+'.jpg', strid, 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
     def listsItemsPage(self, url):
         if not url.startswith("http://"):
-            url = mainUrl + url
+            url = self.mainUrl + url
         if self.getSizeAllItems(url) > 0  and self.getSizeItemsPerPage(url) > 0:
             a = math.ceil(float(self.getSizeAllItems(url)) / float(self.getSizeItemsPerPage(url)))
             for i in range(int(a)):
@@ -125,7 +144,7 @@ class Noobroom:
 
     def listsItemsSerialPage(self, url, sizeOfSerialParts):
         if not url.startswith("http://"):
-            url = mainUrl + url
+            url = self.mainUrl + url
         if sizeOfSerialParts > 0  and self.getSizeItemsPerPage(url) > 0:
             a = math.ceil(float(sizeOfSerialParts) / float(self.getSizeItemsPerPage(url)))
             for i in range(int(a)):
@@ -139,26 +158,29 @@ class Noobroom:
     def getMovieLinkFromXML(self, url):
         urlLink = 'None'
         print url 
-        wybierz = ['Server 1', 'Server 2']
+#        wybierz = ['Server 1', 'Server 2']
+        wybierz = ['Server 1']
         d = xbmcgui.Dialog()
         item = d.select("Choose Server", wybierz)
         if item == 0:
             #stream_url =  'http://96.47.226.90/index.php?file='+url+'&hd=0&auth=0&type=flv&tv=0&start'
-            stream_url =  'http://37.221.166.252/fork.php?type=flv&auth=0&loc=15&hd=0&tv=0&file='+url+'&start=0'
+            stream_url =  'http://178.159.0.55/fork.php?type=flv&auth=0&loc=15&hd=0&tv=0&file='+url+'&start=0'
         elif item == 1:
             stream_url = 'http://178.159.0.136/index.php?file=631&start=181480779&hd=0&auth=0&type=flv&tv=0'
         #http://72.8.190.49/fork.php?type=flv&auth=0&loc=6&hd=0&tv=0&file=323
                
         #http://37.128.191.200/views.php?f=1387&_=1351550963808
-        urlhelo = mainUrl + 'views.php?f='+url+'&_='+ str(int(time.time()*1000))
+        urlhelo = self.mainUrl + 'views.php?f='+url+'&_='+ str(int(time.time()*1000))
         log.info(urlhelo)
         req = urllib2.Request(urlhelo)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-
-        return stream_url
+        if item >-1:
+            return stream_url
+        else:
+            return False
 
 
     def getSizeAllItems(self, url):
@@ -336,11 +358,15 @@ class Noobroom:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Ordered by A-Z':
             log.info('Ordered by A-Z: ')
-            self.listsItems(mainUrl + 'azlist.php')
+            self.listsItems(self.mainUrl + 'azlist.php')
 
         elif name == 'main-menu' and category == 'Ordered by IMDb Rating':
             log.info('Ordered by IMDb Rating: ')
-            self.listsItems(mainUrl + 'rating.php')
+            self.listsItems(self.mainUrl + 'rating.php')
+        elif name == 'main-menu' and category == 'Ordered by latest':
+            log.info('Ordered by latest: ')
+            self.listsItemsOther(self.mainUrl + 'latest.php')
+#
             
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()

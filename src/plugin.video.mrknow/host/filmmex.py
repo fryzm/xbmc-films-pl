@@ -145,7 +145,9 @@ class filmmex:
         match1 = re.compile('<ul class="players" style="float:right;width:200px;height:27px;overflow:hidden">(.*?)</ul>', re.DOTALL).findall(link)
         match2 = re.compile('<li class="(.*?)"><a href="(.*?)">(.*?)</a></li>', re.DOTALL).findall(match1[0])
         tab = []
+        tab.append("Player premium")   
         for i in range(len(match2)):
+            print ("Match2",match2)
             if (match2[i][2].find('div')) > -1:
                 #<div class="s-quality_mid_active"></div><span>Średnia jakość</span>putlocker
                 match3 = re.compile('<span>(.*?)</span>', re.DOTALL).findall(match2[i][2])
@@ -154,21 +156,34 @@ class filmmex:
                 tab.append(match2[i][2])           
         d = xbmcgui.Dialog()        
         video_menu = d.select("Wybór playera ...", tab)
-        if video_menu != "" and video_menu>=0:
-            print ("AAAAAA",match2[video_menu][1])
-            url = mainUrl + match2[video_menu][1]
+        print ("video_menu",video_menu)
+        if video_menu != "" and video_menu==0:
+            url = mainUrl + match2[0][1] + '&premium'
+            print "premium", url
             query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
             link = self.cm.getURLRequestData(query_data)
-            match1 = re.compile('<iframe src="(.*?)" width="640" height="360" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(link)
+            match1 = re.compile('clip: {\r\n                    url: \'(.*?)\',', re.DOTALL).findall(link)
+            return match1[0]
+            
+        if video_menu != "" and video_menu>=1:
+            video_menu = video_menu-1
+            print match2
+            print ("AAAAAA",match2[video_menu][1])
+            url = mainUrl + match2[video_menu][1] + '&standard'
+            query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+            link = self.cm.getURLRequestData(query_data)
+            match1 = re.compile('<iframe src="(.*?)" width="(.*?)" height="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(link)
+            linkVideo = ''
             if len(match1)==0:
-                match1 = re.compile('<iframe src="(.*?)" style="width:640px;height:503px;border:0px;" scrolling="no"></iframe>', re.DOTALL).findall(link)
+                match1 = re.compile('<iframe src="(.*?)" style="(.*?)" scrolling="no"></iframe>', re.DOTALL).findall(link)
+                print ("1",match1)
             if len(match1)==0:
-                match1 = re.compile('<iframe style="overflow: hidden; border: 0; width: 640px; height: 360px" src="(.*?)" scrolling="no"></iframe>', re.DOTALL).findall(link)
-            if len(match1)==0:
-                match1 = re.compile('clip: {\r\n                    url: \'(.*?)\',', re.DOTALL).findall(link)
-                return match1[0]
+                match1 = re.compile('<iframe src="(.*?)" style="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(link)
+                print ("2",match1)                #
+            #    
+            print ("3",match1)
             if len(match1)>0:
-                linkVideo = self.up.getVideoLink(match1[0])
+                linkVideo = self.up.getVideoLink(match1[0][0])
                 print linkVideo
                 return linkVideo
             else:

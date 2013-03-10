@@ -43,11 +43,6 @@ class MECZYKI:
 
 
     def listsCategoriesMenu(self,url):
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', HOST)
-        #openURL = urllib2.urlopen(req)
-        #readURL = openURL.read()
-        #openURL.close()
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         readURL = self.cm.getURLRequestData(query_data)
         match = re.compile('<div class="transmission" id="(.*?)">(.*?)</table>', re.DOTALL).findall(readURL)
@@ -83,6 +78,8 @@ class MECZYKI:
         openURL.close()
         match = re.compile('<td class="flag">(.*?)</tr>', re.DOTALL).findall(readURL)
 #        print ("Match", match)
+        valTab = [] 
+        strTab = [] 
         for i in range(len(match)):
             #print ("Ile",i)
             match1 = re.compile('href="(.*?)">OGLĄDAJ</a></td>', re.DOTALL).findall(match[i])
@@ -92,7 +89,15 @@ class MECZYKI:
             tytul = tytul.replace('&nbsp;','').replace('WWW','') + ' '+match2[0][2]
             if len(match1) > 0:
                 if tytul.find('Meczyki') == -1:
-                    self.add('meczyki', 'playSelectedMovie', 'None',tytul , mainUrl+match2[0][0], match1[0], 'aaaa', 'None', True, False)
+                    strTab.append(tytul)
+                    strTab.append(mainUrl+match2[0][0])
+                    strTab.append(match1[0])
+                    valTab.append(strTab)
+                    strTab = []
+                    valTab.sort(key = lambda x: x[0], reverse=True)
+        for i in valTab:
+            self.add('meczyki', 'playSelectedMovie', 'None', i[0], i[1], i[2], 'None', 'None', True, False)
+           #self.add('meczyki', 'playSelectedMovie', 'None',tytul , mainUrl+match2[0][0], match1[0], 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 

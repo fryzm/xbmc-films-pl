@@ -53,8 +53,9 @@ class pageparser:
     log.info("video hosted by: " + host)
     log.info(url)
     
-    #if host == 'livemecz.com':
-    #    nUrl = self.livemecz(url)
+    if host == 'livemecz.com':
+        nUrl = self.livemecz(url)
+        print "Self",nUrl
     if host == 'www.drhtv.com.pl':
         nUrl = self.drhtv(url)
     elif host == 'www.realtv.com.pl':
@@ -63,13 +64,12 @@ class pageparser:
         nUrl = self.transmisjeinfo(url)
     elif host == '79.96.137.217' or host == 'http://178.216.200.26':
         nUrl = self.azap(url)
-    #http://bbpolska.webd.pl
     elif host == 'bbpolska.webd.pl':
         nUrl = self.bbpolska(url)
-    
-    else:
+    elif nUrl  == '':
+        print "Jedziemy na ELSE - "+  nUrl
         nUrl = self.pageanalyze(url)
-#http://www.transmisje.info/kanal-3
+    print ("Link:",nUrl)
     return nUrl
   
   def azap(self,url):
@@ -126,8 +126,10 @@ class pageparser:
     query_data = { 'url': match[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match=re.compile('<iframe marginheight="0" marginwidth="0" name="livemecz.com" src="(.*?)" frameborder="0" height="480" scrolling="no" width="640">').findall(link)
-    print ("Match",match)
-    return self.pageanalyze(match[0],'http://livemecz.com/')
+    print ("Match livemecz",match)
+    videolink =  self.pageanalyze(match[0],'http://livemecz.com/')
+    print ("videolink  livemecz",videolink)
+    return videolink
 
   def drhtv(self,url):
     return self.pageanalyze(url,url)
@@ -145,7 +147,8 @@ class pageparser:
     match7=re.compile('<script type="text/javascript">fid="(.*?)"; v_width=(.*?); v_height=(.*?);</script><script type="text/javascript" src="http://www.ukcast.tv/embed.js"></script>').findall(link)
     match8=re.compile('<script type="text/javascript"> channel="(.*?)"; vwidth="(.*?)"; vheight="(.*?)";</script><script type="text/javascript" src="http://castamp.com/embed.js"></script>').findall(link)
     match9=re.compile("<script type='text/javascript'>id='(.*?)'; width='(.*?)'; height='(.*?)';</script><script type='text/javascript' src='http://liveview365.tv/js/player.js'></script>").findall(link)
-    #<script type='text/javascript'>id='hd24s1'; width='580'; height='400';</script><script type='text/javascript' src='http://liveview365.tv/js/player.js'></script>
+    match10=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script>\r\n<script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
+    #print ("link",link)
     
     print ("Match",match8,match2,match1,match,match3,match4,match5)
     if len(match) > 0:
@@ -172,7 +175,9 @@ class pageparser:
     elif len(match9) > 0:
         print ("Match9",match9)
         return self.up.getVideoLink('http://liveview365.tv/embedded?id='+match9[0][0],referer)
-        #return self.up.getVideoLink('http://www.castamp.com/embed.php?c='+ match8[0][0] +'&tk='+domainsa+'&vwidth=600&vheight=400')
+    elif len(match10) > 0:
+        print ("Match10",match10)
+        return self.up.getVideoLink('http://yukons.net/'+match10[0][0])
 
 
     else:

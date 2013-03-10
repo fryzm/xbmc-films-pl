@@ -267,8 +267,8 @@ class urlparser:
     #--pageUrl  "http://yukons.net" --playpath "drhtvvekko" -o drhtvvekko.flv
     videolink = 'rtmp://198.144.158.83:443/kuyo app=kuyo playpath=' + channel 
     videolink += ' pageUrl=http://yukons.net live=true'
-    videolink += ' swfVfy=http://yukons.net/yukplay.swf '
-    print ("videolink", videolink)
+    videolink += ' swfVfy=http://yukons.net/yukplay.swf'
+    #print ("videolink", videolink)
     return videolink
 
 

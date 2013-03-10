@@ -85,7 +85,7 @@ class pageparser:
     if len(match)>0:
         return match[0]
     else:
-        return False
+        return self.pageanalyze(match1[0])
     
   def bbpolska(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
@@ -144,7 +144,8 @@ class pageparser:
     match6=re.compile("<script type='text/javascript'> width=(.*?), height=(.*?), channel='(.*?)', e='(.*?)';</script><script type='text/javascript' src='http://www.mips.tv/content/scripts/mipsEmbed.js'>").findall(link)
     match7=re.compile('<script type="text/javascript">fid="(.*?)"; v_width=(.*?); v_height=(.*?);</script><script type="text/javascript" src="http://www.ukcast.tv/embed.js"></script>').findall(link)
     match8=re.compile('<script type="text/javascript"> channel="(.*?)"; vwidth="(.*?)"; vheight="(.*?)";</script><script type="text/javascript" src="http://castamp.com/embed.js"></script>').findall(link)
-    #
+    match9=re.compile("<script type='text/javascript'>id='(.*?)'; width='(.*?)'; height='(.*?)';</script><script type='text/javascript' src='http://liveview365.tv/js/player.js'></script>").findall(link)
+    #<script type='text/javascript'>id='hd24s1'; width='580'; height='400';</script><script type='text/javascript' src='http://liveview365.tv/js/player.js'></script>
     
     print ("Match",match8,match2,match1,match,match3,match4,match5)
     if len(match) > 0:
@@ -168,6 +169,9 @@ class pageparser:
     elif len(match8) > 0:
         print ("Match8",match8)
         return self.up.getVideoLink('http://castamp.com/embed.php?c='+match8[0][0]+'&ch=1',referer)
+    elif len(match9) > 0:
+        print ("Match9",match9)
+        return self.up.getVideoLink('http://liveview365.tv/embedded?id='+match9[0][0],referer)
         #return self.up.getVideoLink('http://www.castamp.com/embed.php?c='+ match8[0][0] +'&tk='+domainsa+'&vwidth=600&vheight=400')
 
 

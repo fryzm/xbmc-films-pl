@@ -16,6 +16,25 @@ import pLog, parser, settings, pCommon,xppod
 log = pLog.pLog()
 sets = settings.TVSettings()
 
+CHARS = [
+    [ 'F', 'a' ],
+    [ 'a', 'F' ],
+    [ 'A', 'f' ],
+    [ 'k', 'B' ],
+    [ 'K', 'b' ],
+    [ 'b', 'K' ],
+    [ 'B', 'k' ],
+    [ 'm', 'I' ],
+    [ 'M', 'i' ],
+    [ 'i', 'M' ],
+    [ 'I', 'm' ],
+    [ 'D', 'x' ],
+    [ 'x', 'D' ],
+    [ 'O', 'y' ],
+    [ 'y', 'O' ],
+    [ 'C', 'z' ],
+    [ 'z', 'C' ],   
+]    
 
 class urlparser:
   def __init__(self):
@@ -105,9 +124,25 @@ class urlparser:
     if host== 'www.ukcast.tv':
         nUrl = self.parserUKCAST(url,referer)              
     if host== 'castamp.com':
-        nUrl = self.parserCASTAMP(url,referer)              
+        nUrl = self.parserCASTAMP(url,referer)   
+    if host== 'liveview365.tv':
+        nUrl = self.parserLIVEVIEW365(url,referer)   
+#liveview365.tv
+        
     return nUrl
     
+  def parserLIVEVIEW365(self,url,referer):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link22 = self.cm.getURLRequestData(query_data)
+    match22=re.compile("var so = new SWFObject\('(.*?)', 'player'").findall(link22)
+    print match22
+    match23=re.compile("so.addVariable\('file', '(.*?)'\);").findall(link22)
+    print match23
+    #match24=re.compile("so.addVariable\('streamer', '(.*?)'\);").findall(link22)
+    videolink = 'rtmp://93.114.44.30:1935/cdn2/liveview365 playpath=' +match23[0] + ' swfUrl=' + match22[0] + ' pageUrl='+url+' live=true swfVfy=true'
+    print ("Link",videolink)
+    return videolink
+
   def parserCASTAMP(self,url,referer):
     print url,referer
     req = urllib2.Request(url)
@@ -514,22 +549,17 @@ class urlparser:
 
 
   def parserMAXVIDEO(self, url):
-      self.api = maxvideo.API()
-      
-      self.servset = sets.getSettings('maxvideo')
-      if self.servset['maxvideo_notify'] == 'true': notify = True
-      else: notify = False
-
-      videoUrl = ''
-      videoHash = url.split('/')[-1]
-      login = self.api.Login(self.servset['maxvideo_login'], self.servset['maxvideo_password'], notify)
-      if (login):
-	  self.cm.checkDir(ptv.getAddonInfo('path') + os.path.sep + "cookies")
-	  cookiefile = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "maxvideo.cookie"	
-      else: 
-	  cookiefile = ''	
-      videoUrl = self.api.getVideoUrl(videoHash, cookiefile, notify)
-      return videoUrl
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    #print link 
+    #file: "http://ds26.nextvideo.pl:8008/f26fb2771cedf58991362553ea2d000b0dcdf550403ca04db2f2e2da1cd299b6/x/file.flv",
+    match = re.compile('file: "(.*?)",').findall(link)    
+    print match
+    if len(match)>0:
+        videoUrl = match[0]
+    else:
+        match = re.compile('file: "(.*?)",').findall(link)
+    return videoUrl
     
       
   def parserVIDEOWEED(self, url):
@@ -646,5 +676,17 @@ class urlparser:
 
 
 
-
+  def checklnt(self,AString):
+    #{var TMPResult="";
+    for i in range(len(AString)):
+    #for(i=0;i<AString.length;i++){
+        #TMPResult=TMPResult+parseStign(AString.charAt(i));}
+        a=a
+    return TMPResult
+  def parseStign(self, string):
+    out = string
+    for i in range(len(CHARS)):
+        out = string.replace(CHARS[i][0], CHARS[i][1])
+        string = out
+    return out 
           

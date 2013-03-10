@@ -46,7 +46,7 @@ SPORT_ONLINE_TABLE = {
 
 FILM_ONLINE_TABLE = {
 		     #2000 : ["Iptak.pl", 'iptak'],
-             #9000: ["noobroom.com","noobroom"]
+             7300: ["Noobroom.com","noobroom"],
              7000: ["Vod Onet PL","vodpl"],
              7100: ["Filmy","filmboxmoovie"],
              7200: ["Filmmex","filmmex"]
@@ -88,6 +88,9 @@ class MrknowFilms:
     elif mode == 7200 or service == 'filmmex':
         tv = filmmex.filmmex()
         tv.handleService()
+    elif mode == 7300 or service == 'noobroom':
+        tv = noobroom.Noobroom()
+        tv.handleService()
         
     elif mode == 2000 or service == 'iptak':
         tv = iptak.IPTAK()
@@ -121,7 +124,10 @@ class MrknowFilms:
     elif mode == 6000 or service == 'milanos':
         tv = milanos.milanos()
         tv.handleService()
-
+    elif mode == 20:
+        log.info('Wyświetlam ustawienia')
+        self.settings.showSettings()
+        
   def CATEGORIES(self):
 
         self.addDir("Telewizja", 1, False, 'telewizja', False)

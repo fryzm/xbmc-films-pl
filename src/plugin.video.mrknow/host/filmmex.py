@@ -299,7 +299,7 @@ class filmmex:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Data dodania':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=data-dodania&sort_method=asc')
+            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=data-dodania&sort_method=desc')
         elif name == 'main-menu' and category == 'Data premiery':
             log.info('Jest Wszystkie: ')
             self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=data-premiery&sort_method=desc')
@@ -311,7 +311,7 @@ class filmmex:
             self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=ocena&sort_method=desc')
         elif name == 'main-menu' and category == 'Alfabetycznie':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=alfabetycznie&sort_method=asc')
+            self.listsItems('http://filmmex.pl/kategorie',0,'sort_field=alfabetycznie&sort_method=desc')
         elif name == 'main-menu' and category == 'Gorące':
             log.info('Jest Gorące: ')
             self.listsItemsOther('http://filmmex.pl/')

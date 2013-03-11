@@ -1,0 +1,26 @@
+#summary One-sentence summary of this page.
+
+= NooBroom.com i napisy  =
+
+Aby oglądać filmy w dobrej jakości z polskimi napisami należy skonfigurować odpowiednio wtyczkę do obsługi napisów:
+
+1. Z repozytorium XBMC.org Add-ons [domyślnego] z kategorii napisy instalujemy dodatek XBMC Subtitles.
+[https://dl.dropbox.com/u/63137012/xbmc/zrzut_ekranu-XBMC%20Media%20Center-11.png]
+
+2. W karcie wybór języka ustawiamy na polski i jeśli ktoś dodatkowo chce - angielski
+[https://dl.dropbox.com/u/63137012/xbmc/zrzut_ekranu-XBMC%20Media%20Center-12.png]
+
+3. Ważne! Z listy Wybierz serwis wybieramy TYLKO OpenSubtitles.org. Pozostałe polskie serwisy nie działają (przynajmniej mi :)).
+
+4. W zakładce Zaawansowane ustawiamy wg screenów:
+[https://dl.dropbox.com/u/63137012/xbmc/zrzut_ekranu-XBMC%20Media%20Center-14.png]
+
+[https://dl.dropbox.com/u/63137012/xbmc/zrzut_ekranu-XBMC%20Media%20Center-16.png]
+Proponuje odznaczyć ostatnią opcję, gdyż i tak automatyczne pobieranie nie działa z tym dodatkiem :)
+
+5. Zamykamy ustawienia. Przechodzimy do filmu, który chcemy obejrzeć z napisami. Klikamy pierwszą ikonkę z brzegu, służy ona do pobierania napisów.
+[https://dl.dropbox.com/u/63137012/xbmc/zrzut_ekranu-XBMC%20Media%20Center-5.png]
+
+6. Powinna się nam wczytać lista dostępnych napisów. Polecam pobierać napisów z 720p lub HD w nazwie, zazwyczaj są lepiej dopasowane. Po zaakceptowaniu możemy już oglądać film z napisami :)
+[https://dl.dropbox.com/u/63137012/xbmc/zrzut_ekranu-XBMC%20Media%20Center-6.png]
+[https://dl.dropbox.com/u/63137012/xbmc/zrzut_ekranu-XBMC%20Media%20Center-7.png]

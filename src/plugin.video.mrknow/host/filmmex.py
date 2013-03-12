@@ -172,8 +172,11 @@ class filmmex:
             url = mainUrl + match2[video_menu][1] + '&standard'
             query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
             link = self.cm.getURLRequestData(query_data)
-            match1 = re.compile('<iframe src="(.*?)" width="(.*?)" height="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(link)
-            linkVideo = ''
+            match1 = re.compile('clip: {\r\n                    url: \'(.*?)\',', re.DOTALL).findall(link)
+            if len(match1)==0:
+                match1 = re.compile('<iframe src="(.*?)" width="(.*?)" height="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(link)
+                print ("0",match1)
+                #linkVideo = ''
             if len(match1)==0:
                 match1 = re.compile('<iframe src="(.*?)" style="(.*?)" scrolling="no"></iframe>', re.DOTALL).findall(link)
                 print ("1",match1)

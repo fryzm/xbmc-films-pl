@@ -48,7 +48,7 @@ class filmboxmoovie:
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<select id="filter-genre" class="input-large">(.*?)</select>', re.DOTALL).findall(readURL)
+        match = re.compile('<select id="filter-genre" class="input-medium">(.*?)</select>', re.DOTALL).findall(readURL)
         
         if len(match) > 0:
             log.info('Listuje kategorie: ')
@@ -75,13 +75,13 @@ class filmboxmoovie:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
         postdata = {'page' : strona, 'package' : 'UltimatePackage', 'genre' : category, 'sort' : 'created_at', 'records_per_page' : '30', 'live' : '0',}
         link = self.cm.getURLRequestData(query_data, postdata)
-        #print link
-        match1 = re.compile('<div class="movie-box">\r\n        <div>\r\n            <a href="(.*?)" class="play">\r\n            Odtw\xc3\xb3rz film</a>\r\n            <img src="(.*?)" alt="(.*?)" />\r\n', re.DOTALL).findall(link)
-        #print match1
+        #match1 = re.compile('<div class="movie-box">\r\n        <div>\r\n            <a href="(.*?)" class="play">\r\n            Odtw\xc3\xb3rz film</a>\r\n            <img src="(.*?)" alt="(.*?)" />\r\n', re.DOTALL).findall(link)
+        match1 = re.compile('<div class="film">\r\n\t\t\t<div class="caption" onclick="location.href=\'(.*?)\'">(.*?)</div>\r\n\t\t\t\r\n            <img src="(.*?)" alt="(.*?)" />', re.DOTALL).findall(link)
+        #print ("match1",match1)
         if len(match1) > 0:
             for i in range(len(match1)):
                     #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('filmboxmoovie', 'playSelectedMovie', 'None', match1[i][2], match1[i][1], mainUrl + match1[i][0], 'aaaa', 'None', True, False)
+                self.add('filmboxmoovie', 'playSelectedMovie', 'None', match1[i][1], match1[i][2], mainUrl + match1[i][0], 'aaaa', 'None', True, False)
        
         match4 = re.compile('<div id="pagination">(.*?)</div>', re.DOTALL).findall(link)
         self.add('filmboxmoovie', 'categories-menu', 'Następna', 'None', 'None', category, 'None', 'None', True, False,str(int(strona)+1))

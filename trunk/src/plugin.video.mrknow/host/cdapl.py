@@ -48,7 +48,7 @@ class cdapl:
         self.up = urlparser.urlparser()
 
     def getstring(self,data):
-        data = data.replace('&oacute;','ó')
+        data = data.replace('&oacute;','ó').replace('&Oacute;','Ó')
         #data = data.replace('\u017c','ż').replace('\u017b','Ż')
         return data
         

@@ -2,7 +2,7 @@
 <settings>
 	<category label="noobroom.com">
 		<setting type="lsep" label="Adres ip ze strony www.noobroom.com" />
-		<setting id="noobroom_ip" type="text" label="Adres ip" default="http://noobroom1.com" />
+		<setting id="noobroom_ip" type="text" label="Adres ip" default="noobroom1.com" />
 	</category>
 
 </settings>

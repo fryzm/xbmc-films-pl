@@ -47,7 +47,7 @@ SPORT_ONLINE_TABLE = {
 }
 
 FILM_ONLINE_TABLE = {
-		     #7400 : ["Cda.pl", 'cdapl'],
+		     7400 : ["Cda.pl", 'cdapl'],
              7300: ["Noobroom.com","noobroom"],
              7000: ["Vod Onet PL","vodpl"],
              7100: ["Filmy","filmboxmoovie"],

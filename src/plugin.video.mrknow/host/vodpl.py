@@ -30,7 +30,8 @@ MENU_TAB = {2: "filmy",
             3: "polecamy",
             4: "dokumenty",
             5: "bajki",
-            6: "seriale"}
+            6: "seriale",
+            7: "tv"}
 
 
 class vodpl:
@@ -80,8 +81,15 @@ class vodpl:
     def listsSerialeMenu(self,category):
         valTab = [] 
         strTab = [] 
-        data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
-        vod_filmy = eval(self.getpage(data))
+        if category == "seriale":
+            data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
+            vod_filmy = eval(self.getpage(data))
+            vod_filmy = eval(self.getpage(data))
+        elif category == "tv":
+            data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"tv"},"context":"onet/vod","range":[0,10000]}}'
+            vod_filmy = eval(self.getpage(data))
+
+
         print vod_filmy
         for e in vod_filmy["result"]["data"]:
             strTab.append(self.getstring(e["seriesTitle"]))
@@ -112,7 +120,7 @@ class vodpl:
             data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
             vod_filmy = eval(self.getpage(data))
         vod_filmy = eval(self.getpage(data))
-        print vod_filmy
+        print ("VOD FILMY", vod_filmy["result"]["data"])
         for e in vod_filmy["result"]["data"][0]["items"]:
             strTab.append(self.getstring(e["name"]))
             strTab.append(e["value"])
@@ -203,6 +211,22 @@ class vodpl:
                 strTab = []
                 valTab.sort(key = lambda x: x[0])
         if category == 'seriale':
+            vod_getitems = '{"method":"cmsQuery","id":"9EA24AB8-4896-4F2E-87BC-1F5C6D1EC4C7","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"episodes","args":{"withoutDRM":"True","device":"mobile","seriesId":"'+id1+'","payment":["-svod","-ppv"]},"context":"onet/vod","range":[0,10000]}}'
+            vod_items = eval(self.getpage(vod_getitems))
+            for e in vod_items["result"]["data"]:
+                title = 'odc. '+ str(e["episode"]) + " - " + self.getstring(e["title"])
+                if 'poster' in e:
+                    image = imgurl + e['poster']["imageId"] + ',10,1.jpg'
+                else:
+                    image = ''
+                strTab.append(title)
+                strTab.append(image)
+                strTab.append(e["videoId"])
+                strTab.append(e["ckmId"])
+                valTab.append(strTab)
+                strTab = []
+                valTab.sort(key = lambda x: x[0])
+        if category == 'tv':
             vod_getitems = '{"method":"cmsQuery","id":"9EA24AB8-4896-4F2E-87BC-1F5C6D1EC4C7","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"episodes","args":{"withoutDRM":"True","device":"mobile","seriesId":"'+id1+'","payment":["-svod","-ppv"]},"context":"onet/vod","range":[0,10000]}}'
             vod_items = eval(self.getpage(vod_getitems))
             for e in vod_items["result"]["data"]:
@@ -385,6 +409,9 @@ class vodpl:
         elif name == 'main-menu' and category == 'polecamy':
             log.info('Jest polecamy: ')
             self.listsItems1('polecamy')
+        elif name == 'main-menu' and category == 'tv':
+            log.info('Jest polecamy: ')
+            self.listsSerialeMenu('tv')
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()
             self.listsItems(self.getSearchURL(key))

@@ -2,7 +2,7 @@
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
-import urlparser
+import urlparser,urlparse
 import json
 
 
@@ -19,12 +19,26 @@ log = pLog.pLog()
 
 mainUrl = 'http://cda.pl/'
 movies = 'http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=best&section=vid'
+moovie_news = 'http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=date&section=vid'
+#alfabetycznie - http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=alf&section=vid
+#naj ocenione - http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=rate&section=vid
+#popularne http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=popular&section=vid
+#najnowsze http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=date&section=vid
+#najtrafniejsze http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=best&section=vid
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-MENU_TAB = {1: "filmy",
-            3: "Szukaj" }
+o_filmow_na_stronie = 65
 
+MENU_TAB = {#1: "Najtrafniejsze",
+            2: "Najwyżej ocenione",
+            3: "Popularne",
+            4: "Najnowsze",
+            5: "Alfabetycznie",
+            6: "Szukaj",
+            }
+
+max_stron = 0            
 
 class cdapl:
     def __init__(self):
@@ -33,61 +47,46 @@ class cdapl:
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
 
-
-
+    def getstring(self,data):
+        data = data.replace('&oacute;','ó')
+        #data = data.replace('\u017c','ż').replace('\u017b','Ż')
+        return data
+        
     def listsMainMenu(self, table):
         for num, val in table.items():
             self.add('cdapl', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-
-    def listsCategoriesMenu(self):
-        req = urllib2.Request(mainUrl)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<table style="width:100%"><tr><td style="width:30%;vertical-align:middle;"><a href="(.*?)" title="(.*?)"><img style="width:50px;height:40px;" src="(.*?)" alt="" /></a></td>', re.DOTALL).findall(readURL)
-        print match
-        if len(match) > 0:
-            log.info('Listuje kategorie: ')
-            for i in range(len(match)):
-                url = mainUrl + match[i][1]
-                self.add('cdapl', 'categories-menu', match[i][2].strip(), 'None', 'None', url, 'None', 'None', True, False)
+    def listsCategoriesMenu(self,url):
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        #ile jest filmów ?
+        match = re.compile('<li class="active"id="mVid"><a href="#" onclick="moreVideo\(\);return false;">Video \((.*?)\)</a></li>', re.DOTALL).findall(link)
+        ilejest = int(match[0])
+        policz = int(ilejest/o_filmow_na_stronie) +1
+        max_stron = policz
+        parsed = urlparse.urlparse(url)
+        typ = urlparse.parse_qs(parsed.query)['s'][0]
+        for i in range(0, (policz)):
+            purl = 'http://www.cda.pl/video/show/ca%C5%82e_filmy_or_ca%C5%82y_film/p'+str(i+1)+'?s='+typ
+            self.add('cdapl', 'categories-menu', 'Strona '+str(i+1), 'None', 'None', purl, 'None', 'None', True, False,str(i+1))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
     def getSearchURL(self, key):
-        url = mainUrl + 'search.php?phrase=' + urllib.quote_plus(key) 
+        url = 'http://www.cda.pl/info/' + urllib.quote_plus(key) 
         return url
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', HOST)
-        #openURL = urllib2.urlopen(req)
-        #readURL = openURL.read()
-        
 
-    def listsItems(self, url):
+    def listsItems(self, url,strona):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
         match = re.compile('<li id="mVid"><a href="#" onclick="moreVideo\(\);return false;">Video \((.*?)\)</a></li>', re.DOTALL).findall(link)
-        print match
-        print ("link",link)
-        #<img height="90" width="120" src="http://img3.cda.pl/3118369d3d4423b7756e1354b896943a/13285257514001-71.jpg" \r\n    alt="Seksmisja (1983) - ca\xc5\x82y film">\r\n     \r\n    <span class="timeElem">\r\n      01:56:20    </span>\r\n    </a>\r\n  <div class="text"> \r\n    <a class="titleElem" title="Seksmisja (1983) - ca\xc5\x82y film" href="/video/30124aa/Seksmisja-1983-caly-film">Seksmisja (1983) - ca\xc5\x82y film</a>
         match1 = re.compile('<img height="90" width="120" src="(.*?)" \r\n    alt="(.*?)">\r\n     \r\n    <span class="timeElem">\r\n(.*?)</span>\r\n    </a>\r\n  <div class="text"> \r\n    <a class="titleElem" title="(.*?)" href="(.*?)">(.*?)</a>', re.DOTALL).findall(link)
         
         if len(match1) > 0:
             for i in range(len(match1)):
-#                print ("Match",match1[i][0],match1[i][1],match1[i][2],match1[i][4])
-        #     if match[i][3].find('video') > -1:# 0
-            
-                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('cdapl', 'playSelectedMovie', 'None', match1[i][1] +' - ' + match1[i][2], match1[i][0], mainUrl+match1[i][4], 'aaaa', 'None', True, False)
- 
-        #match1 = re.compile(' <a href="(.*?)" class="inlblk tdnone vtop button" style="right: 0px">następna</a>').findall(link)
-        #log.info('Nastepna strona: '+  match1[0])
-        #self.add('cdapl', 'categories-menu', 'Następna', 'None', 'None', match1[0], 'None', 'None', True, False)
+                self.add('cdapl', 'playSelectedMovie', 'None', self.getstring(match1[i][1]) +' - ' + match1[i][2], match1[i][0], mainUrl+match1[i][4], 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -118,11 +117,12 @@ class cdapl:
 
 
     def getMovieLinkFromXML(self, url):
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cdapl.cookie"
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
+        cookie_1 =  self.cm.getCookieItem(self.COOKIEFILE,'PHPSESSID')
         match = re.compile("type: 'download',\r\n      config: {\r\n        file:'(.*?)'", re.DOTALL).findall(link)
-        print ("AAAAAAAAAAAAAA",match,url,link)
-        linkVideo = match[0]
+        linkVideo = match[0] + '|Cookie="PHPSESSID='+cookie_1+'"'
         return linkVideo
 
 
@@ -183,8 +183,8 @@ class cdapl:
         return text
     
 
-    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
-        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)
+    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True,strona=''):
+        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)+ "&strona=" + urllib.quote_plus(strona)
         #log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
             title = category 
@@ -207,7 +207,7 @@ class cdapl:
         liz.setInfo( type="Video", infoLabels={ "Title": title, } )
         try:
             xbmcPlayer = xbmc.Player()
-            xbmcPlayer.play(videoUrl, liz)
+            xbmcPlayer.play(videoUrl+"|Referer=http://static.cda.pl/player5.9/player.swf", liz)
             
             if not xbmc.Player().isPlaying():
                 xbmc.sleep( 10000 )
@@ -226,22 +226,37 @@ class cdapl:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
+        strona = self.parser.getParam(params, "strona")
+        
         
         if name == None:
             self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'filmy':
-            log.info('Jest Wszystkie: ')
-            #self.listsCategoriesMenu(chanels)
-            self.listsItems(movies)
+        elif name == 'main-menu' and category == 'Najtrafniejsze':
+            log.info('Jest Najtrafniejsze: ')
+            self.listsCategoriesMenu('http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=best&section=vid')
+        elif name == 'main-menu' and category == 'Najwyżej ocenione':
+            log.info('Jest Najwyżej ocenione: ')
+            self.listsCategoriesMenu('http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=rate&section=vid')
+        elif name == 'main-menu' and category == 'Popularne':
+            log.info('Jest Popularne: ')
+            self.listsCategoriesMenu('http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=popular&section=vid')
+        elif name == 'main-menu' and category == 'Najnowsze':
+            log.info('Jest Najnowsze: ')
+            self.listsCategoriesMenu('http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=date&section=vid')
+        elif name == 'main-menu' and category == 'Alfabetycznie':
+            log.info('Jest Alfabetycznie: ')
+            self.listsCategoriesMenu('http://www.cda.pl/info/ca%C5%82e_filmy_or_ca%C5%82y_film?s=alf&section=vid')
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()
-            self.listsItems(self.getSearchURL(key))
+            if key != None:
+                self.listsItems(self.getSearchURL(key),0)
         elif name == 'categories-menu' and category == 'filmy':
             log.info('url: ' + str(movies))
             self.listsItems(movies)
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
-            self.listsItems(url)            
+            log.info('strona: ' + str(strona))
+            self.listsItems(url,strona)            
         if name == 'playSelectedMovie':
             self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
 

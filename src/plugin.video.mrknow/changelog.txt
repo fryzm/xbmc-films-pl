@@ -4,7 +4,19 @@ Wersja 1.0.1
 Initial release
 .....
 Wersja 1.3.0
-.......
+- serwis noobroom.com
+- serwis wykop.pl
+- serwis joemonster.org
+
+Wersja 1.4.0
+- serwis meczyki.pl
+- serwis drhtv.com.pl
+
+Wersja 1.4.2
+- poprawki do meczyki.pl nowe streamy
+
+Wersja 1.4.3
+- sewis milanos.pl
 
 Wersja 1.4.4
 dodano:
@@ -18,14 +30,8 @@ dodano:
 
 Wersja 1.4.5 - dodano wersjê alpha serwisu VOD ONET PL, coœ zaczyna dzia³aæ 
 
-Wersja 1.4.61 
-	- dodano filmmex.pl
-
-Wersja 1.4.65 
-	- dodano cda.pl
-	
-Wersja 1.4.651 
-	- dodano tv w VOD onet pl
-
+Wersja 1.4.6 - poprawiono meczyki.pl
+Wersja 1.4.61 - dodano filmmex.pl
+Wersja 1.4.62 - drobne poprawki
 
 

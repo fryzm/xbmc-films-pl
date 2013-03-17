@@ -80,6 +80,7 @@ class filmboxmoovie:
         #print ("match1",match1)
         if len(match1) > 0:
             for i in range(len(match1)):
+                print ("M",match1[i])
                     #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                 self.add('filmboxmoovie', 'playSelectedMovie', 'None', match1[i][1], match1[i][2], mainUrl + match1[i][0], 'aaaa', 'None', True, False)
        
@@ -116,8 +117,11 @@ class filmboxmoovie:
 
 
     def getMovieLinkFromXML(self, url):
+        print ("URL",url)
+        url1 =  urllib.quote(url).replace('%3A',':')
+        print ("URL1",url1)
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "filmboxmoovie.cookie"
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+        query_data = { 'url': url1, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
 
         match = re.compile('<embed width="(.*?)" height="(.*?)" src="(.*?)" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="transparent" flashvars="(.*?)">', re.DOTALL).findall(link)

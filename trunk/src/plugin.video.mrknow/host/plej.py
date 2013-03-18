@@ -121,8 +121,11 @@ class plej:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('src: "(.*?)",', re.DOTALL).findall(link)
+        match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
         #print ("ZZZZZZZZ",match,url,link)
         if len(match)>0:
+            return True
+        elif len(match1)>0:
             return True
         else:
             return False
@@ -132,9 +135,14 @@ class plej:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('src: "(.*?)",', re.DOTALL).findall(link)
+        match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
         #print ("AAAAAAAAAAAAAA",match,url,link)
         if len(match)>0:
             linkVideo = match[0]
+            return linkVideo
+        if len(match1)>0:
+            match2 = re.compile('video     : \'(.*?)\',', re.DOTALL).findall(link)
+            linkVideo = match1[0] + '/'+match2[0]
             return linkVideo
         
             

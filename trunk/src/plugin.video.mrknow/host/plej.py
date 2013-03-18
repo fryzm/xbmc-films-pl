@@ -40,12 +40,14 @@ class plej:
         query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<table style="width:100%"><tr><td style="width:30%;vertical-align:middle;"><a href="(.*?)" title="(.*?)"><img style="width:50px;height:40px;" src="(.*?)" alt="" /></a></td>', re.DOTALL).findall(link)
-        print match
+        #print match
         for o in range(len(match)):
-            #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-            #self.add('plej', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
-            self.add('plej', 'playSelectedMovie', 'None', match[o][1], mainUrl+match[o][2], mainUrl+match[o][0], 'None', 'None', True, False)
-
+            #if self.getMovieType(mainUrl+match[o][0]) == True:
+                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                #self.add('plej', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
+                self.add('plej', 'playSelectedMovie', 'None', match[o][1], mainUrl+match[o][2], mainUrl+match[o][0], 'None', 'None', True, False)
+            #else:
+            #    self.add('plej', 'items-menu', 'None', match[o][1], mainUrl+match[o][2], mainUrl+match[o][0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -56,7 +58,7 @@ class plej:
         readURL = openURL.read()
         openURL.close()
         match = re.compile('<table style="width:100%"><tr><td style="width:30%;vertical-align:middle;"><a href="(.*?)" title="(.*?)"><img style="width:50px;height:40px;" src="(.*?)" alt="" /></a></td>', re.DOTALL).findall(readURL)
-        print match
+        #print match
         if len(match) > 0:
             log.info('Listuje kategorie: ')
             for i in range(len(match)):
@@ -77,18 +79,16 @@ class plej:
     def listsItems(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
-        match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
-        if len(match) > 0:
-            for i in range(len(match)):
-             if match[i][3].find('video') > -1:# 0
-            
-                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('plej', 'playSelectedMovie', 'None', match[i][2], 'None', match[i][1], 'aaaa', 'None', True, False)
- 
-        match1 = re.compile(' <a href="(.*?)" class="inlblk tdnone vtop button" style="right: 0px">następna</a>').findall(link)
-        log.info('Nastepna strona: '+  match1[0])
-        self.add('plej', 'categories-menu', 'Następna', 'None', 'None', match1[0], 'None', 'None', True, False)
+        match = re.compile('playListXml : \'(.*?)\',', re.DOTALL).findall(link)
+        query_data = { 'url': mainUrl+match[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        #print ("LINK",link)
+        match1 = re.compile('<media><type>(.*?)</type><streamer></streamer><token></token><hd></hd><video>(.*?)</video><thumb></thumb><preview></preview><title>(.*?)</title></media>', re.DOTALL).findall(link)
+        #print match1
+        #linkVideo = self.up.getVideoLink(match[0])
+        for i in range(len(match1)):
+            self.add('plej', 'playYoutube', 'None', match1[i][2], 'None', self.up.getVideoLink(match1[i][1]), 'aaaa', 'None', True, True)
+
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -117,15 +117,28 @@ class plej:
                 self.add('plej', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1])) 
 
-
-    def getMovieLinkFromXML(self, url):
+    def getMovieType(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('src: "(.*?)",', re.DOTALL).findall(link)
-        print ("AAAAAAAAAAAAAA",match,url,link)
-        linkVideo = match[0]
-        return linkVideo
-
+        #print ("ZZZZZZZZ",match,url,link)
+        if len(match)>0:
+            return True
+        else:
+            return False
+        
+    def getMovieLinkFromXML(self, url):
+        #print ("URL",url)
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile('src: "(.*?)",', re.DOTALL).findall(link)
+        #print ("AAAAAAAAAAAAAA",match,url,link)
+        if len(match)>0:
+            linkVideo = match[0]
+            return linkVideo
+        
+            
+        
 
     def getSizeAllItems(self, url):
         numItems = 0
@@ -227,20 +240,25 @@ class plej:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
+        #print(name,category,url)
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Wszystkie':
             log.info('Jest Wszystkie: ')
             self.listsCategoriesMenu(chanels)
             
-        elif name == 'main-menu' and category == "Szukaj":
+        elif name == 'items-menu':
             key = self.searchInputText()
-            self.listsItems(self.getSearchURL(key))
+            self.listsItems(url)
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
             self.listsItems(url)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
-
+            if self.getMovieType(url) == True:
+                self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            else:
+                self.listsItems(url)
+        if name == 'playYoutube':
+                self.LOAD_AND_PLAY_VIDEO(url, title, icon)
         
   

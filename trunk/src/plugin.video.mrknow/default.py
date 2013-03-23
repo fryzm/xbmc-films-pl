@@ -15,7 +15,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
 import pLog, settings, Parser
 import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
-import filmboxmoovie,filmmex,plej,cdapl
+import filmboxmoovie,filmmex,plej,cdapl,nextplus
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
@@ -33,6 +33,8 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
 TV_ONLINE_TABLE = {
 		     2100 : ["Film Box [wyświetl kanały]", 'filmbox'],
              2200 : ["Plej.tv [TESTY...]", 'plej'],
+             2300 : ["Nextplus [TESTY...]", 'nextplus'],
+             
              
 }
 FUN_ONLINE_TABLE = {
@@ -105,6 +107,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 2200 or service == 'plej':
         tv = plej.plej()
+        tv.handleService()
+    elif mode == 2300 or service == 'nextplus':
+        tv = nextplus.nextplus()
         tv.handleService()
     elif mode == 3000 or service == 'wykop':
         tv = wykop.WYKOP()

@@ -127,9 +127,21 @@ class urlparser:
         nUrl = self.parserCASTAMP(url,referer)   
     if host== 'liveview365.tv':
         nUrl = self.parserLIVEVIEW365(url,referer)   
+    if host== 'www.jokerupload.com':
+        nUrl = self.parserjokerupload(url)   
+    
 #liveview365.tv
         
     return nUrl
+
+  def parserjokerupload(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.search("'file': '(.*?)'",link)
+    if match:   
+      return match.group(1)
+    else: 
+      return False
     
   def parserLIVEVIEW365(self,url,referer):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }

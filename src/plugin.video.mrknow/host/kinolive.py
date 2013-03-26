@@ -27,11 +27,13 @@ MENU_TAB = {0: "Filmy",
             3: "Filmy z dubbingiem",
             4: "Filmy polskie",
             5: "Filmy HD",
-#            6: "Top 100",
+            6: "Top 100 - najczęściej oglądane",
+            7: "Top 100 - ulubione",
+            8: "Top 100 - najwyżej ocenione",
 #            7: "Popularne z okresu",
 #            10: "Sortowanie",
             12: "Kategorie",
-#            15: "Szukaj"
+            15: "Szukaj"
             }
 
 
@@ -78,31 +80,40 @@ class kinolive:
 
 
     def getSearchURL(self, key):
-        url = mainUrl + 'search.php?phrase=' + urllib.quote_plus(key) 
-        return url
+        if key != None:
+            url = mainUrl + '/search?search_query='+ urllib.quote_plus(key)+'&x=0&y=0'  
+            return url
+        else:
+            return False
         #req = urllib2.Request(url)
         #req.add_header('User-Agent', HOST)
         #openURL = urllib2.urlopen(req)
         #readURL = openURL.read()
         
     def listsItemsOther(self, url):
-        #http://kinolive.pl/kategorie,0,wszystkie,wszystkie,1900-2013,.html?sort_field=data-dodania&sort_method=asc
-        #urllink = url + ',' + str(strona) + ',wszystkie,wszystkie,1900-2013,.html?' + filtrowanie
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
-        link = self.cm.getURLRequestData(query_data)
-        match = re.compile(' <!-- Movie -->(.*?)<!-- END:Movie -->', re.DOTALL).findall(link)
-        print ("MAAAAT",match)
-        match1 = re.compile('<li>\n                        <div class="poster" style="background:url\(\'(.*?)\'\) no-repeat 11px 0px"></div>\n                        <div class="title">\n                            <h2><a href="(.*?)" title="(.*?)">(.*?)</a></h2>', re.DOTALL).findall(match[0])
-        print match1
-        if len(match1) > 0:
-            for i in range(len(match1)):
-                #data = self.cm.getURLRequestData({ 'url': mainUrl+ match1[i][1], 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True })
-                #if (data.find('http://kinolive.pl/static/img/niedostepny.jpg')) == -1:
-                    #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                    self.add('kinolive', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0].replace('_small',''), mainUrl+ match1[i][1], 'aaaa', 'None', True, False)
+            query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+            link = self.cm.getURLRequestData(query_data)
+            match = re.compile('<!-- Filmy start -->(.*?)<!-- Filmy koniec -->', re.DOTALL).findall(link)
+            match1 = re.compile('<img src="(.*?)" alt="film online" title="(.*?)" height="133" width="100"></a>\n                            <a href="(.*?)" class="en pl-white">(.*?)</a>', re.DOTALL).findall(match[0])
+            if len(match1) > 0:
+                for i in range(len(match1)):
+                        #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                        self.add('kinolive', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0], mainUrl+ match1[i][2], 'aaaa', 'None', True, False)
 
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+            xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    def listsItemsTop(self, url):
+            query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+            link = self.cm.getURLRequestData(query_data)
+            match = re.compile('<table>(.*?)</table>', re.DOTALL).findall(link)
+            print("A",match)
+            if len(match) > 0:
+                for i in range(len(match)):
+                        match1 = re.compile('<a href="(.*?)"><img src="(.*?)" width="107" height="142" title="(.*?)" alt="(.*?)" /></a>', re.DOTALL).findall(match[i])
+                        print match1
+                        #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                        self.add('kinolive', 'playSelectedMovie', 'None', match1[0][2],  match1[0][1], mainUrl+ match1[0][0], 'aaaa', 'None', True, False)
 
+            xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
     def listsItems(self, url, strona='0', filtrowanie=''):
         if filtrowanie == None:
@@ -306,12 +317,22 @@ class kinolive:
         elif name == 'main-menu' and category == 'Kategorie':
             log.info('Jest Gorące: ')
             self.listsCategoriesMenu()
- 
+
+        elif name == 'main-menu' and category == 'Top 100 - najczęściej oglądane':
+            log.info('Jest Gorące: ')
+            self.listsItemsTop('http://kinolive.pl/top100?o=mv')
+        elif name == 'main-menu' and category == 'Top 100 - ulubione':
+            log.info('Jest Gorące: ')
+            self.listsItemsTop('http://kinolive.pl/top100?o=tf')
+        elif name == 'main-menu' and category == 'Top 100 - najwyżej ocenione':
+            log.info('Jest Gorące: ')
+            self.listsItemsTop('http://kinolive.pl/top100?o=tr')
 
             
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()
-            self.listsItems(self.getSearchURL(key))
+            if key != None:
+                self.listsItemsOther(self.getSearchURL(key))
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
             self.listsItems(url,strona,filtrowanie)

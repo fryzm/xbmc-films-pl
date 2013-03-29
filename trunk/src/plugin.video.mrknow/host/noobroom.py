@@ -101,28 +101,27 @@ class Noobroom:
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile("<a style='color:#fff' href='/?(.*?)'>(.*?)</a>", re.DOTALL).findall(readURL)
+        match = re.compile("<a class='.+?' id='(.+?)' style='color:.+?' href='.+?'>(.+?)</a><br>", re.DOTALL).findall(readURL)
         print match
         if len(match) > 0:
             for i in range(len(match)):
                 strid = match[i][0]
-                strid = strid.replace('?','')
 
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                 self.add('noobroom', 'playSelectedMovie', 'None', match[i][1], self.mainUrl + '2img/'+strid+'.jpg', strid, 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
+        
     def listsItemsOther(self, url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', HOST)
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<a style="text-decoration:underline;color:#fff;font-family: verdana,geneva,sans-serif;" href=\'/?(.*?)\'>(.*?)</a><br>', re.DOTALL).findall(readURL)
+        match = re.compile("""<a class='.+?' id='(.+?)' style="text-decoration:underline;color:.+?;" href='.+?'>(.+?)</a><br>""", re.DOTALL).findall(readURL)
         print match
         if len(match) > 0:
             for i in range(len(match)):
                 strid = match[i][0]
-                strid = strid.replace('?','')
 
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                 self.add('noobroom', 'playSelectedMovie', 'None', match[i][1], self.mainUrl + '2img/'+strid+'.jpg', strid, 'aaaa', 'None', True, False)
@@ -157,31 +156,20 @@ class Noobroom:
 
     def getMovieLinkFromXML(self, url):
         urlLink = 'None'
+        stream_url = ''
         print url 
-#        wybierz = ['Server 1', 'Server 2']
-        wybierz = ['Server 1']
+        wybierz = ['Server 1', 'Server 2', 'Server 3']
+#        wybierz = ['Server 1']
         d = xbmcgui.Dialog()
         item = d.select("Choose Server", wybierz)
         if item == 0:
-            #stream_url =  'http://96.47.226.90/index.php?file='+url+'&hd=0&auth=0&type=flv&tv=0&start'
-            stream_url =  'http://178.159.0.55/fork.php?type=flv&auth=0&loc=15&hd=0&tv=0&file='+url+'&start=0'
+            stream_url =  self.mainUrl+ '/fork.php?type=flv&auth=0&loc=15&hd=0&tv=0&file='+url
         elif item == 1:
-            stream_url = 'http://178.159.0.136/index.php?file=631&start=181480779&hd=0&auth=0&type=flv&tv=0'
-        #http://72.8.190.49/fork.php?type=flv&auth=0&loc=6&hd=0&tv=0&file=323
-               
-        #http://37.128.191.200/views.php?f=1387&_=1351550963808
-        urlhelo = self.mainUrl + 'views.php?f='+url+'&_='+ str(int(time.time()*1000))
-        log.info(urlhelo)
-        req = urllib2.Request(urlhelo)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        if item >-1:
-            return stream_url
-        else:
-            return False
-
+            stream_url =  self.mainUrl+ '/fork.php?type=flv&auth=0&loc=12&hd=0&tv=0&file='+url
+        elif item == 2:
+            stream_url =  self.mainUrl+ '/fork.php?type=flv&auth=0&loc=14&hd=0&tv=0&file='+url
+        return stream_url
+        
 
     def getSizeAllItems(self, url):
         numItems = 0
@@ -264,11 +252,7 @@ class Noobroom:
         liz.setInfo( type="Video", infoLabels={ "Title": title, } )
         try:
             xbmcPlayer = xbmc.Player()
-            xbmcPlayer.play(videoUrl, liz)
-            
-            if not xbmc.Player().isPlaying():
-                xbmc.sleep( 10000 )
-                #xbmcPlayer.play(url, liz)
+            xbmcPlayer.play(videoUrl+'|Referer=http://noobroom1.com/player.swf', liz )
             
         except:
             d = xbmcgui.Dialog()
@@ -325,7 +309,9 @@ class Noobroom:
                                 #item.setProperty("StartPercent",  "20")
                                 #item.setInfo("video", {"Player.Time" :  str(seek), "VideoPlayer.Time" :  str(seek)})
                                 #xbmc.sleep(8000)	
-                                player.play("&".join(url.split("&")[:-1]) + "&start={0}".format(lastseek), item)
+                                #player.play("&".join(url.split("&")[:-1]) + "&start={0}".format(lastseek), item)
+                                player.play('http://178.159.0.10/index.php?file=1238&start=34746738&hd=0&auth=0&type=flv&tv=0|Referer=http://noobroom1.com/player.swf')
+                                
                                 #xbmc.sleep(8000)	
                                 xbmc.executebuiltin("PlayerControl(Play)")
                             

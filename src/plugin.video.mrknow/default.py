@@ -34,7 +34,7 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
 TV_ONLINE_TABLE = {
 		     2100 : ["Film Box [wyświetl kanały]", 'filmbox'],
              2200 : ["Plej.tv [TESTY...]", 'plej'],
-             2300 : ["Nextplus [TESTY...]", 'nextplus'],
+             2300 : ["Nextplus [wyświetl kanały]", 'nextplus'],
              
              
 }
@@ -53,7 +53,7 @@ FILM_ONLINE_TABLE = {
 		     7400 : ["Cda.pl", 'cdapl'],
              7300: ["Noobroom.com","noobroom"],
              7000: ["Vod Onet PL","vodpl"],
-             7100: ["Filmy","filmboxmoovie"],
+             7100: ["Filmbox Movie","filmboxmoovie"],
              7200: ["Filmmex","filmmex"],
              7500: ["Kinolive","kinolive"],
 }
@@ -148,11 +148,11 @@ class MrknowFilms:
         
   def CATEGORIES(self):
 
-        self.addDir("Telewizja", 1, False, 'telewizja', False)
-        self.addDir("Filmy", 2, False, 'film', False)
-        self.addDir("Rozrywka", 4, False, 'rozrywka', False)
-        self.addDir('Sport', 19, False, 'nagrywanie', False)
-#        self.addDir('Ustawienia', 20, True, 'ustawienia', False)
+        self.addDir("Telewizja", 1, False, 'Telewizja', False)
+        self.addDir("Filmy", 2, False, 'Filmy', False)
+        self.addDir("Rozrywka", 4, False, 'Rozrywka', False)
+        self.addDir('Sport', 19, False, 'Sport', False)
+        self.addDir('Ustawienia', 20, True, 'Ustawienia', False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
   def listsTable(self, table):
@@ -179,6 +179,7 @@ class MrknowFilms:
 
 
   def addDir(self, name, mode, autoplay, icon, isPlayable = True):
+    #print("Dane",name, mode, autoplay, icon, isPlayable)
     u=sys.argv[0] + "?mode=" + str(mode)
     if icon != False:
       icon = os.path.join(ptv.getAddonInfo('path'), "images/") + icon + '.png'

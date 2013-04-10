@@ -90,7 +90,7 @@ class vodpl:
             vod_filmy = eval(self.getpage(data))
 
 
-        print vod_filmy
+#        print vod_filmy
         for e in vod_filmy["result"]["data"]:
             strTab.append(self.getstring(e["seriesTitle"]))
             if 'poster' in e:
@@ -120,7 +120,7 @@ class vodpl:
             data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
             vod_filmy = eval(self.getpage(data))
         vod_filmy = eval(self.getpage(data))
-        print ("VOD FILMY", vod_filmy["result"]["data"])
+#        print ("VOD FILMY", vod_filmy["result"]["data"])
         for e in vod_filmy["result"]["data"][0]["items"]:
             strTab.append(self.getstring(e["name"]))
             strTab.append(e["value"])
@@ -148,6 +148,7 @@ class vodpl:
         if category == 'seriale':
             vod_getitems = ''
         vod_items = eval(self.getpage(vod_getitems))
+#        print ("vod_items",vod_items)
         for e in vod_items[0]["result"]["data"]:
             title = self.getstring(e["title"])
             if 'poster' in e:
@@ -158,12 +159,12 @@ class vodpl:
             strTab.append(image)
             strTab.append(e["videoId"])
             strTab.append(e["ckmId"])
-            
+            strTab.append(str(e["year"]))
             valTab.append(strTab)
             strTab = []
             valTab.sort(key = lambda x: x[0])
         for i in valTab:
-            self.add('vodpl', 'playSelectedMovie', 'None', i[0], i[1], 'None', 'None', 'None', False, False,i[2],i[3] )
+            self.add('vodpl', 'playSelectedMovie', 'None', i[0], i[1], 'None', 'None', 'None', False, False,i[2],i[3],i[4] )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItems1(self, category,id1='',id2=''):
@@ -190,23 +191,23 @@ class vodpl:
         if category == 'polecamy':
             vod_getitems = '{"method":"cmsQuery","id":"70DC3E4B-3E1F-4FF5-AFDE-B5970A6FCF60","jsonrpc":"2.0","params":{"sort":"DEFAULT","method":"guideListsByType","args":{"type":"mobile-sg-polecane","guidelistView":"listitem"},"context":"onet/vod"}}'
             vod_items = eval(self.getpage(vod_getitems,'http://content.external.cms.onetapi.pl/')) 
-            print vod_items 
+#            print vod_items 
             for e in vod_items["result"]["data"][0]["contentLeads"]:
-                print e["title"]
-                print e['poster']["imageId"]
-                print e["videoId"]
-                print e["ckmId"]
+#                print e["title"]
+#                print e['poster']["imageId"]
+#                print e["videoId"]
+#                print e["ckmId"]
                 title = self.getstring(e["title"])
                 if 'poster' in e:
                     image = imgurl + e['poster']["imageId"] + ',10,1.jpg'
                 else:
                     image = ''
-                print e
+#                print e
                 strTab.append(self.getstring(e["title"]))
                 strTab.append(image)
                 strTab.append(str(e["videoId"]))
                 strTab.append(e["ckmId"])
-                
+                strTab.append(str(e["year"]))
                 valTab.append(strTab)
                 strTab = []
                 valTab.sort(key = lambda x: x[0])
@@ -243,8 +244,9 @@ class vodpl:
                 strTab = []
                 valTab.sort(key = lambda x: x[0])
         for i in valTab:
-            print i
-            self.add('vodpl', 'playSelectedMovie', 'None', i[0], i[1], 'None', 'None', 'None', False, False,i[2],i[3] )
+            if i[4] is None:
+                i[4] = 0
+            self.add('vodpl', 'playSelectedMovie', 'None', i[0], i[1], 'None', 'None', 'None', False, False,i[2],i[3],i[4] )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
     def listsItemsPage(self, url):
@@ -359,8 +361,8 @@ class vodpl:
         return text
     
 
-    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True,id1='0',id2='0'):
-        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage) + "&id1=" + urllib.quote_plus(id1) + "&id2=" + urllib.quote_plus(id2)
+    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True,id1='0',id2='0',year=''):
+        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage) + "&id1=" + urllib.quote_plus(id1) + "&id2=" + urllib.quote_plus(id2) + "&year=" + urllib.quote_plus(year)
         #log.info(str(u))
 #        if name == 'main-menu' or name == 'categories-menu':
 #            title = category 
@@ -373,9 +375,11 @@ class vodpl:
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=folder)
             
 
-    def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon):
+    def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon,year):
+        if year == '': 
+            year='0'
         liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-        liz.setInfo( type="Video", infoLabels={ "Title": title, } )
+        liz.setInfo( type="Video", infoLabels={ "Title": title, "Year": int(year) } )
         xbmcPlayer = xbmc.Player()
         xbmcPlayer.play(videoUrl, liz)
         return True
@@ -390,7 +394,8 @@ class vodpl:
         icon = self.parser.getParam(params, "icon")
         id1 = self.parser.getParam(params, "id1")
         id2 = self.parser.getParam(params, "id2")
-        print ("ID",category,id1,id2, params)
+        year = self.parser.getParam(params, "year")
+#        print ("ID",category,id1,id2, params,year)
         
         if name == None:
             self.listsMainMenu(MENU_TAB)
@@ -425,7 +430,7 @@ class vodpl:
         if name == 'playSelectedMovie':
             #self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon)
             #print self.getMovieLinkFromXML(id1,id2)
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon)
+            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon, year)
 
         
   

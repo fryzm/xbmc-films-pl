@@ -46,7 +46,7 @@ class kinolive:
         self.cm = pCommon.common()
         #noobroom_ip = ptv.getSetting('noobroom_ip')
         #username=marian2013&password=westwest&submit_login=Zaloguj
-        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinolive.cookie"
+        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveserial.cookie"
         query_data = {'url': 'http://kinolive.pl/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
         #if ptv.getSetting('kinolive_login') == 'true':
@@ -66,15 +66,11 @@ class kinolive:
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<ul class="select-movie-type movie-kat-selection">(.*?)</ul>', re.DOTALL).findall(link)
         match1 = re.compile('<a href="#" rel="filter" type="kat" value="(.*?)" >&#9632; (.*?)</a>', re.DOTALL).findall(match[0])
-        print match
-        print match1
-        #<a href="filmy,Akcja.html">Akcja</a> 
         
         if len(match1) > 0:
             log.info('Listuje kategorie: ')
             for i in range(len(match1)):
                 url = mainUrl + match1[i][0].replace('.html','')
-                print url
                 self.add('kinolive', 'categories-menu', match1[i][1].strip(), 'None', 'None', catUrl, 'None', 'None', True, False,'1','kat='+match1[i][0])
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -105,11 +101,9 @@ class kinolive:
             query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
             link = self.cm.getURLRequestData(query_data)
             match = re.compile('<table>(.*?)</table>', re.DOTALL).findall(link)
-            print("A",match)
             if len(match) > 0:
                 for i in range(len(match)):
                         match1 = re.compile('<a href="(.*?)"><img src="(.*?)" width="107" height="142" title="(.*?)" alt="(.*?)" /></a>', re.DOTALL).findall(match[i])
-                        print match1
                         #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                         self.add('kinolive', 'playSelectedMovie', 'None', match1[0][2],  match1[0][1], mainUrl+ match1[0][0], 'aaaa', 'None', True, False)
 
@@ -168,10 +162,8 @@ class kinolive:
         data = self.cm.getURLRequestData(query_data, post_data)
         marian = json.loads(data)
         match3 = re.compile('<iframe src="(.*?)" style="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(marian["player_code"])
-        print data
         linkVideo =''
         if ptv.getSetting('kinolive_login') == 'true':
-            print ("Kinolive.pl login:")
             post_data = {'username': ptv.getSetting('kinolive_user'), 'password': ptv.getSetting('kinolive_pass'), 'submit_login': 'Zaloguj'}
             query_data = {'url': 'http://kinolive.pl/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             data = self.cm.getURLRequestData(query_data, post_data)
@@ -181,7 +173,6 @@ class kinolive:
             marian = json.loads(data)
             if marian["premium"] != None: 
                 linkVideo = marian["premium"].decode('utf8')
-        print ("LINK",linkVideo)
         if linkVideo !='':
             return linkVideo
         else:
@@ -268,7 +259,7 @@ class kinolive:
                 d.ok('Nie znaleziono streamingu.', 'Może to chwilowa awaria.', 'Spróbuj ponownie za jakiś czas')
                 return False
         liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-        liz.setInfo( type="Video", infoLabels={ "Title": title, } )
+        liz.setInfo( type = "Video", infoLabels={ "Title": title, } )
         try:
             xbmcPlayer = xbmc.Player()
             xbmcPlayer.play(videoUrl+'|Referer=http://kinolive.pl/media/player.swf', liz)
@@ -292,7 +283,6 @@ class kinolive:
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
         filtrowanie = self.parser.getParam(params, "filtrowanie")
-        print("url",url,strona, filtrowanie,category,name)
         
         if name == None:
             self.listsMainMenu(MENU_TAB)

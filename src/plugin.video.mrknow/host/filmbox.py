@@ -52,7 +52,7 @@ class filmbox:
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
             #self.add('filmbox', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
             self.add('filmbox', 'playSelectedMovie', 'None', nazwa, image, stream, 'None', 'None', True, False)
-
+        
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 

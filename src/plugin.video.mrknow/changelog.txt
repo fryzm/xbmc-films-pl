@@ -1,5 +1,5 @@
-Wersja 1.4.82  - Nowe ikony dla serwisu dostarczy³ Micha³o. Dziêki 
- Poprawiono noobroom.com
+Wersja 1.4.82  - Nowe ikony dla serwisu dostarczy³ Micha³. Dziêki 
+ Poprawiono noobroom.com - dodano 2 nowe ukryte serwery
 
 Wersja 1.4.8  - dodano kinolive
 

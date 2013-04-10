@@ -13,5 +13,14 @@
 		<setting id="kinolive_pass" type="text" label="hasło" option="hidden"  default="" />
 
 	</category>
+		<category label="scs.pl">
+		<setting type="lsep" label="zaloguj sie do serwisu"/>
+		<setting id="scs.pl_login" type="bool" label="Zaloguj się" default="false" />
+		<setting type="sep"/>
+		<setting type="lsep" label="Login i hasło" />
+		<setting id="scs.pl_user" type="text" label="login" default="" />
+		<setting id="scs.pl_pass" type="text" label="hasło" option="hidden"  default="" />
+
+	</category>
 
 </settings>

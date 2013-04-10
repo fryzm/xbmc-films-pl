@@ -571,6 +571,8 @@ class urlparser:
         videoUrl = match[0]
     else:
         match = re.compile('file: "(.*?)",').findall(link)
+        print match
+        videoUrl = match[0]
     return videoUrl
     
       

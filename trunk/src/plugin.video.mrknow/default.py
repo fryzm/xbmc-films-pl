@@ -16,7 +16,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 import pLog, settings, Parser
 import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
-import kinolive
+import kinolive,tvpstream,kinoliveseriale,scs
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
@@ -32,9 +32,11 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
                9000: "noobroom.com"
 }
 TV_ONLINE_TABLE = {
-		     2100 : ["Film Box [wyświetl kanały]", 'filmbox'],
+		     2100 : ["Film Box", 'filmbox'],
              2200 : ["Plej.tv [TESTY...]", 'plej'],
-             2300 : ["Nextplus [wyświetl kanały]", 'nextplus'],
+             2300 : ["Nextplus", 'nextplus'],
+             2400 : ["TVP Stream", 'tvpstream'],
+             
              
              
 }
@@ -47,6 +49,11 @@ FUN_ONLINE_TABLE = {
 SPORT_ONLINE_TABLE = {
                4000: ["meczyki.pl","meczyki"],
                4100: ["drhtv.com.pl","drhtvcompl"]
+}
+
+SERIALE_ONLINE_TABLE = {
+               8000: ["kinolive.pl [testy]","kinoliveseriale"],
+               8100: ["scs.pl [testy]","scs"]
 }
 
 FILM_ONLINE_TABLE = {
@@ -81,7 +88,15 @@ class MrknowFilms:
         self.LIST(SPORT_ONLINE_TABLE)
     elif mode == 2:
         self.LIST(FILM_ONLINE_TABLE)
+    elif mode == 3:
+        self.LIST(SERIALE_ONLINE_TABLE)
         
+    elif mode == 8000 or service == 'kinoliveseriale':
+        tv = kinoliveseriale.kinoliveseriale()
+        tv.handleService()
+    elif mode == 8100 or service == 'scs':
+        tv = scs.scs()
+        tv.handleService()
     elif mode == 1000 or service == 'mrknowpl':
         tv = mrknowpl.mrknowpl()
         tv.handleService()
@@ -115,6 +130,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 2300 or service == 'nextplus':
         tv = nextplus.nextplus()
+        tv.handleService()
+    elif mode == 2400 or service == 'tvpstream':
+        tv = tvpstream.tvpstream()
         tv.handleService()
     elif mode == 3000 or service == 'wykop':
         tv = wykop.WYKOP()
@@ -150,6 +168,7 @@ class MrknowFilms:
 
         self.addDir("Telewizja", 1, False, 'Telewizja', False)
         self.addDir("Filmy", 2, False, 'Filmy', False)
+        self.addDir("Seriale", 3, False, 'Filmy', False)
         self.addDir("Rozrywka", 4, False, 'Rozrywka', False)
         self.addDir('Sport', 19, False, 'Sport', False)
         self.addDir('Ustawienia', 20, True, 'Ustawienia', False)

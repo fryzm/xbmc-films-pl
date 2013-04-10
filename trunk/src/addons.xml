@@ -20,7 +20,7 @@
 
 <addon id="plugin.video.mrknow"
        name="Filmy Online - mrknow.pl"
-       version="1.4.82"
+       version="1.4.90"
        provider-name="mrknow">
   <requires>
     <import addon="xbmc.python" version="1.0"/>

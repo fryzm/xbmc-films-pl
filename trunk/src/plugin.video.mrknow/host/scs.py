@@ -37,11 +37,12 @@ class scs:
         self.up = urlparser.urlparser()
         self.cm = pCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "scs.cookie"
+        self.COOKIEFILE1 = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "scs1.cookie"
         query_data = {'url': 'http://scs.pl/logowanie.html', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
         if ptv.getSetting('scs.pl_login') == 'true':
             post_data = {'email': ptv.getSetting('scs.pl_user'), 'password': ptv.getSetting('scs.pl_pass'), 'submit_login': 'Zaloguj'}
-            query_data = {'url': 'http://scs.pl/logowanie.html', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+            query_data = {'url': 'http://scs.pl/logowanie.html', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE1, 'use_post': True, 'return_data': True}
             data = self.cm.getURLRequestData(query_data, post_data)
 
     def getstring(self,data):
@@ -174,34 +175,44 @@ class scs:
  
     def getMovieLinkFromXML(self, url):
         HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
-        query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match1 = re.compile('<input type="hidden" name="currentmirrorload" value="(.*?)"', re.DOTALL).findall(link)
-        match2 = re.compile('c\[(.*?)\] = "(.*?)"; ccc\[(.*?)\] = "(.*?)"; cd\[(.*?)\] = "(.*?)"; ci\[(.*?)\] = "(.*?)"; cccc\[(.*?)\] = "(.*?)";', re.DOTALL).findall(link)
+        match1 = re.compile('<div style="background: url\(\'/static/img/mirror_c_.png\'\) repeat scroll 0% 0% transparent;" class="switch_button_lang"><a href="(.*?)">(.*?)</a></div>', re.DOTALL).findall(link)
+        print ("Match1",match1)
         tab = []
         match4 = []
-        for i in range(len(match2)):
-            post_data = {'f': match2[i][1]}
- #           query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-            query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': False, 'save_cookie': False, 'use_post': True, 'return_data': True}
-            data = self.cm.getURLRequestData(query_data, post_data)
-            match3 = re.compile('<iframe src="(.*?)" (.*?)></iframe>', re.DOTALL).findall(data)
-            if len(match3)>0:
-                tab.append('Wideo  - ' + self.up.getHostName(match3[0][0]))
-                match4.append(match3[0][0])
-        if ptv.getSetting('scs.pl_login') == 'true':
-                    match5 = re.compile('data: "f=(.*?)",', re.DOTALL).findall(data)
-                    post_data = {'f': match5[1]}
+        for k in range(len(match1)):
+            query_data = { 'url': mainUrl+match1[k][0], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+            link = self.cm.getURLRequestData(query_data)        
+            match2 = re.compile('c\[(.*?)\] = "(.*?)"; ccc\[(.*?)\] = "(.*?)"; cd\[(.*?)\] = "(.*?)"; ci\[(.*?)\] = "(.*?)"; cccc\[(.*?)\] = "(.*?)";', re.DOTALL).findall(link)
+            for i in range(len(match2)):
+                post_data = {'f': match2[i][1]}
+                query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+                #query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': False, 'save_cookie': False, 'use_post': True, 'return_data': True}
+                data = self.cm.getURLRequestData(query_data, post_data)
+                match10 = re.compile('data: "f=(.*?)",', re.DOTALL).findall(data)
+                if len(match10)>0:
+                    post_data = {'f': match10[0]}
+                    query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+                    data = self.cm.getURLRequestData(query_data, post_data)
+                    match3 = re.compile('<iframe src="(.*?)" (.*?)></iframe>', re.DOTALL).findall(data)
+                    if len(match3)>0:
+                        tab.append(match1[k][1]+'  - ' + self.up.getHostName(match3[0][0]))
+                        match4.append(match3[0][0])
+                    
+                    post_data = {'f': match10[1]}
                     query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
                     data = self.cm.getURLRequestData(query_data, post_data)
                     match6 = re.compile("url: '(.*?)',", re.DOTALL).findall(data)
-                    tab.append('Wideo  - Premium')
+                    tab.append('Premium - ' + match1[k][1])
                     match4.append(match6[0])
         d = xbmcgui.Dialog()        
         video_menu = d.select("Wybór jakości video", tab)
         if video_menu != "":
             url = match4[video_menu]
             return self.up.getVideoLink(url)
+        else:
+            return False
 
     def searchInputText(self):
         text = None

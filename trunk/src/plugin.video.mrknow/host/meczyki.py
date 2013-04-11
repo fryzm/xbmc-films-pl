@@ -82,16 +82,24 @@ class MECZYKI:
         strTab = [] 
         for i in range(len(match)):
             #print ("Ile",i)
-            match1 = re.compile('href="(.*?)">OGLĄDAJ</a></td>', re.DOTALL).findall(match[i])
-            match2 = re.compile('<img src="(.*?)" alt="(.*?)" /></td>\n                <td class="channel">\n                    <span class="channel_name">(.*?)</span>', re.DOTALL).findall(match[i])
+            match1 = re.compile('href="(.*?)"', re.DOTALL).findall(match[i])
+            match2 = re.compile('<img src="(.*?)" /></td>\n                <td class="channel">\n                    <span class="channel_name">(.*?)</span>', re.DOTALL).findall(match[i])
             match3 = re.compile('<td class="desc">(.*?)</td>', re.DOTALL).findall(match[i])
-            tytul =  ' '.join(str(match3[0]).translate(None, string.whitespace[:5]).split())
-            tytul = tytul.replace('&nbsp;','').replace('WWW','') + ' '+match2[0][2]
+            print ("A",match[i])
+            print ("2",match2)
+            print ("1",match1)
+            print ("3",match3)
+            
+            tytul =  match3[0] + ' - ' + match2[0][1]
+            tytul = tytul.replace('&nbsp;','').replace('WWW','').replace('\n','').replace(' ','')
+            link = match1[0].replace(' ','').replace('\n','')
+            print("AAAA|",link)
+
             if len(match1) > 0:
                 if tytul.find('Meczyki') == -1:
                     strTab.append(tytul)
                     strTab.append(mainUrl+match2[0][0])
-                    strTab.append(match1[0])
+                    strTab.append(link)
                     valTab.append(strTab)
                     strTab = []
                     valTab.sort(key = lambda x: x[0], reverse=True)

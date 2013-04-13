@@ -85,18 +85,27 @@ class MECZYKI:
             match1 = re.compile('href="(.*?)"', re.DOTALL).findall(match[i])
             match2 = re.compile('<img src="(.*?)" /></td>\n                <td class="channel">\n                    <span class="channel_name">(.*?)</span>', re.DOTALL).findall(match[i])
             match3 = re.compile('<td class="desc">(.*?)</td>', re.DOTALL).findall(match[i])
-            print ("A",match[i])
-            print ("2",match2)
-            print ("1",match1)
-            print ("3",match3)
-            
+#            print ("A",match[i])
+#            print ("2",match2)
+#            print ("1",match1)
+#            print ("3",match3)
             tytul =  match3[0] + ' - ' + match2[0][1]
             tytul = tytul.replace('&nbsp;','').replace('WWW','').replace('\n','').replace(' ','')
             link = match1[0].replace(' ','').replace('\n','')
-            print("AAAA|",link)
-
-            if len(match1) > 0:
-                if tytul.find('Meczyki') == -1:
+            #print("AAAA|",link)
+            if len(match1) > 0 and len(match3[0].replace('&nbsp;','').replace('WWW','').replace('\n','').replace(' ',''))>0:
+                jadymy = True
+                print tytul
+                if tytul.find('Meczyki') >-1:
+                    jadymy = False
+                if tytul.find('PREMIUM') >-1:
+                    jadymy = False
+                if tytul.find('Derbymecz') >-1:
+                    jadymy = False
+                if tytul.find('Sopcast') >-1:
+                    jadymy = False
+            
+                if jadymy==True:
                     strTab.append(tytul)
                     strTab.append(mainUrl+match2[0][0])
                     strTab.append(link)

@@ -129,11 +129,93 @@ class urlparser:
         nUrl = self.parserLIVEVIEW365(url,referer)   
     if host== 'www.jokerupload.com':
         nUrl = self.parserjokerupload(url)   
-    
-#liveview365.tv
+    if host== 'www.putlive.in':
+        nUrl = self.parserputlive(url,referer)   
+    if host== 'emb.aliez.tv':
+        nUrl = self.parseraliez(url)   
+    if host== 'www.ucaster.eu':
+        nUrl = self.parseucaster(url,referer)   
+    if host== 'www.flashwiz.tv':
+        nUrl = self.parseflashwiz(url,referer)   
         
+
     return nUrl
 
+  def parseflashwiz(self,url,referer):
+    print ("Zaa",url,referer)
+    req = urllib2.Request(url)
+    req.add_header('Referer', 'http://'+referer)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    print link
+    #rtmpdump -r "rtmpe://46.19.140.18/live" -a "live" -f "WIN 11,6,602,180" -W "http://www.flashwiz.tv/player/player-licensed.swf" -p "http://www.flashwiz.tv/embed.php?live=gregrehherh&vw=600&vh=400" -y "gregrehherh" -o gregrehherh.flv
+    query = urlparse.urlparse(url)
+    p = urlparse.parse_qs(query.query)
+    print p['live']
+    link = 'rtmpe://46.19.140.18/live playpath='+p['live'][0]+' pageUrl=http://www.flashwiz.tv/player/player-licensed.swf swfUrl=http://www.flashwiz.tv/player/player-licensed.swf' 
+    return link
+    
+    
+  def parseucaster(self,url,referer):
+    print ("a",url,referer)
+    req = urllib2.Request(url)
+#    req.add_header('Referer', 'http://'+referer)
+    req.add_header('Referer', 'http://livemecz.com/transmisja3.php')
+    #http://livemecz.com/transmisja3.php
+    #http://www.ucaster.eu:1935/loadbalancer
+    
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+  
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.search('"file":		"(.*?)"',link)
+    print ("ZZZZzzzz",link)
+    
+    if match:   
+       link = urllib.unquote(match.group(1)) + ' pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
+       #link = 'rtmp://play.aliez.com/aliezlive-live/ playpath=streama14689?tstart=20130413084058&tend=20130414084258&ip=89.75.148.189&token=3b4d4e1f2af33a8b6a3d2  pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
+       #link = 'rtmp://play.aliez.com/aliezlive-live/streama14689?tstart=20130413084058&tend=20130414084258&ip=89.75.148.189&token=3b4d4e1f2af33a8b6a3d2 pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
+       return link
+    else: 
+      return False
+
+  def parseraliez(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.search('"file":		"(.*?)"',link)
+    print ("ZZZZzzzz",match)
+    if match:   
+       link = urllib.unquote(match.group(1)) + ' pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
+       #link = 'rtmp://play.aliez.com/aliezlive-live/ playpath=streama14689?tstart=20130413084058&tend=20130414084258&ip=89.75.148.189&token=3b4d4e1f2af33a8b6a3d2  pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
+       #link = 'rtmp://play.aliez.com/aliezlive-live/streama14689?tstart=20130413084058&tend=20130414084258&ip=89.75.148.189&token=3b4d4e1f2af33a8b6a3d2 pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
+       return link
+    else: 
+      return False
+
+  def parserputlive(self,url,referer):
+    print ("a",url,referer)
+    req = urllib2.Request(url)
+    req.add_header('Referer', 'http://'+referer)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    print ("Link",link)
+    match = re.compile('html\(unescape\("(.*?)"\)\);').findall(link)
+    if len(match)>0:
+        print urllib.unquote(match[0])
+        match1 = re.compile('src="(.*?)"').findall(urllib.unquote(match[0]))
+        match2 = re.compile('streamer=(.*?)&amp;').findall(urllib.unquote(match[0]))
+        match3 = re.compile('file=(.*?)&amp;').findall(urllib.unquote(match[0]))
+        print ("Link",match1)
+        print ("Link",match2)
+        print ("Link",match3)
+        return match2[0] + match3[0] + ' pageUrl='+ match1[0]+' swfUrl='+ match1[0]
   def parserjokerupload(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)

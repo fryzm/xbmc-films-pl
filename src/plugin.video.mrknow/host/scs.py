@@ -208,7 +208,8 @@ class scs:
                     match4.append(match6[0])
         d = xbmcgui.Dialog()        
         video_menu = d.select("Wybór jakości video", tab)
-        if video_menu != "":
+        
+        if video_menu > -1:
             url = match4[video_menu]
             return self.up.getVideoLink(url)
         else:

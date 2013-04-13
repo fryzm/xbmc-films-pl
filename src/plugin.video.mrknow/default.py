@@ -16,7 +16,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 import pLog, settings, Parser
 import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
-import kinolive,tvpstream,kinoliveseriale,scs
+import kinolive,tvpstream,kinoliveseriale,scs,netvi
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, iptak
 
 log = pLog.pLog()
@@ -36,6 +36,7 @@ TV_ONLINE_TABLE = {
              2200 : ["Plej.tv [TESTY...]", 'plej'],
              2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
+             2500 : ["Netvi.tv [Testy]", 'netvi'],
              
              
              
@@ -47,7 +48,7 @@ FUN_ONLINE_TABLE = {
                5000: ["joemonster.org","joemonster"]
 }
 SPORT_ONLINE_TABLE = {
-               4000: ["meczyki.pl","meczyki"],
+               4000: ["meczyki.pl [dziala ok 20%]","meczyki"],
                4100: ["drhtv.com.pl","drhtvcompl"]
 }
 
@@ -133,6 +134,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 2400 or service == 'tvpstream':
         tv = tvpstream.tvpstream()
+        tv.handleService()
+    elif mode == 2500 or service == 'netvi':
+        tv = netvi.netvi()
         tv.handleService()
     elif mode == 3000 or service == 'wykop':
         tv = wykop.WYKOP()

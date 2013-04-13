@@ -22,5 +22,14 @@
 		<setting id="scs.pl_pass" type="text" label="hasło" option="hidden"  default="" />
 
 	</category>
+<category label="netvi.pl">
+		<setting type="lsep" label="zaloguj sie do serwisu"/>
+		<setting id="netvi.pl_login" type="bool" label="Zaloguj się" default="false" />
+		<setting type="sep"/>
+		<setting type="lsep" label="Login i hasło" />
+		<setting id="netvi.pl_user" type="text" label="login" default="" />
+		<setting id="netvi.pl_pass" type="text" label="hasło" option="hidden"  default="" />
+
+	</category>
 
 </settings>

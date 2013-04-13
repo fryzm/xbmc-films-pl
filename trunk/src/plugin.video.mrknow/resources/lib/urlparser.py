@@ -165,7 +165,8 @@ class urlparser:
     req.add_header('Referer', 'http://livemecz.com/transmisja3.php')
     #http://livemecz.com/transmisja3.php
     #http://www.ucaster.eu:1935/loadbalancer
-    
+    #C:\Users\domw\Downloads\rtmpdump-2.4-git-010913-windows>rtmpdump.exe -v -r "rtmp://play.aliez.com/aliezlive-live/streama14689?tstart=20130413081240&tend=20130414081440&ip
+    #=89.75.148.189&token=33bc467b6f19bdc285daf" --pageUrl=http://aliez.tv/live/mlb/ --swfUrl=http://player.longtailvideo.com/player.swf --app aliezlive-live -o test12.avi
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
     response = urllib2.urlopen(req)
     link=response.read()

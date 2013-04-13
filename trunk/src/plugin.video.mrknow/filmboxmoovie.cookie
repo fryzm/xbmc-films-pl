@@ -1,3 +1,6 @@
-#LWP-Cookies-2.0
-Set-Cookie3: BC="39e84244-7b69-4a36-a38b-66113189e28c"; path="/"; domain="app10.ams.unicornapp.com"; path_spec; expires="2015-04-13 05:40:50Z"; version=0
-Set-Cookie3: BC="c0648e55-20e8-4b9b-b549-485bfab66823"; path="/"; domain="r.unicornmedia.com"; path_spec; expires="2015-04-13 05:40:50Z"; version=0
+# Netscape HTTP Cookie File
+# http://www.netscape.com/newsref/std/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+app9.ams.unicornapp.com	FALSE	/	FALSE	1428950143	BC	babed038-786b-4cc6-92a5-d7e72da5b461
+r.unicornmedia.com	FALSE	/	FALSE	1428950129	BC	265a0081-6dc1-4e86-bd4b-252aec372989

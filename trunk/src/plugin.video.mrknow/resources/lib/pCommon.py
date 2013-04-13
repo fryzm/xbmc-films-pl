@@ -75,7 +75,8 @@ HOST_TABLE = { 100: 'Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefo
 HOST = 'Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0'
 HISTORYFILE = xbmc.translatePath(ptv.getAddonInfo('profile') + "history.xml")
 
-cj = cookielib.LWPCookieJar()
+#cj = cookielib.LWPCookieJar()
+cj = cookielib.MozillaCookieJar()
 
 CHARS = [
     [ ' ', '_' ],

@@ -1,0 +1,7 @@
+# Netscape HTTP Cookie File
+# http://www.netscape.com/newsref/std/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+watch.netvi.tv	FALSE	/	FALSE		PHPSESSID	17m2gmsnckon8u2o89v580i4a4
+watch.netvi.tv	FALSE	/	TRUE		netviapisessid	7bbd5d822b76cf661fa33edf99d4016d
+watch.netvi.tv	FALSE	/	FALSE		sso_redirect	0

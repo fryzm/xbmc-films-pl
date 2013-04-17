@@ -1,3 +1,8 @@
+Wersja 1.5.01  
+ Nowe ikony dla serwisów 
+ Poprawiono plej.tv - dodano logowanie do serwsiu 
+ Dodano netvi.pl
+
 Wersja 1.4.82  - Nowe ikony dla serwisu dostarczy³ Micha³. Dziêki 
  Poprawiono noobroom.com - dodano 2 nowe ukryte serwery
 

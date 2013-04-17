@@ -37,6 +37,7 @@ TV_ONLINE_TABLE = {
              2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
              2500 : ["Netvi.tv [Testy]", 'netvi'],
+             #2600 : ["Test", 'test'],
              
              
              
@@ -137,6 +138,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 2500 or service == 'netvi':
         tv = netvi.netvi()
+        tv.handleService()
+    elif mode == 2600 or service == 'test':
+        tv = test.test()
         tv.handleService()
     elif mode == 3000 or service == 'wykop':
         tv = wykop.WYKOP()

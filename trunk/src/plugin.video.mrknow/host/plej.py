@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser
+import pLog, pCommon, Parser, settings
 
 log = pLog.pLog()
 
@@ -33,11 +33,25 @@ class plej:
         self.cm = pCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-
+        self.cm = pCommon.common()
+        self.settings = settings.TVSettings()
+        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "pley.cookie"
+        if ptv.getSetting('plej_login') == 'true':
+            post_data = {'login': ptv.getSetting('plej_user'), 'pass': ptv.getSetting('plej_pass'), 'log_in2':'Zaloguj'}
+            query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+            data = self.cm.getURLRequestData(query_data, post_data)
+            #print ("Data1",data)
+            #post_data = {'login': ptv.getSetting('plej_user'), 'pass': ptv.getSetting('plej_pass'), 'log_in2':'Zaloguj'}
+            #query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+            #data = self.cm.getURLRequestData(query_data, post_data)
+            #print ("Data2",data)
+        else:
+            log.info('Wyświetlam ustawienia')
+            self.settings.showSettings()
 
 
     def listsMainMenu(self, table):
-        query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<table style="width:100%"><tr><td style="width:30%;vertical-align:middle;"><a href="(.*?)" title="(.*?)"><img style="width:50px;height:40px;" src="(.*?)" alt="" /></a></td>', re.DOTALL).findall(link)
         #print match
@@ -145,64 +159,7 @@ class plej:
             linkVideo = match1[0] + '/'+match2[0]
             return linkVideo
         
-            
-        
 
-    def getSizeAllItems(self, url):
-        numItems = 0
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<li data-theme="c" action="watch">(.*?)<a href="(.*?)" data-transition="slide">(.*?)<img src="(.*?)" height="90px" width="90px" title="(.*?)" />(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        if len(match) == 1:
-            numItems = match[0]
-        return numItems
-    
-    
-    def getSizeItemsPerPage(self, url):
-        numItemsPerPage = 0
-        openURL = urllib.urlopen(url)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<div class="movie-(.+?)>').findall(readURL)
-        if len(match) > 0:
-            numItemsPerPage = len(match)
-        return numItemsPerPage        
-
-    def getMovieID(self, url):
-        id = 0
-        tabID = url.split(',')
-        if len(tabID) > 0:
-            id = tabID[1]
-        return id
-
-
-    def getItemTitles(self, table):
-        out = []
-        for i in range(len(table)):
-            value = table[i]
-            out.append(value[1])
-        return out
-
-    def getItemURL(self, table, key):
-        link = ''
-        for i in range(len(table)):
-            value = table[i]
-            if key in value[0]:
-                link = value[2]
-                break
-        return link
-
-
-    def searchInputText(self):
-        text = None
-        k = xbmc.Keyboard()
-        k.doModal()
-        if (k.isConfirmed()):
-            text = k.getText()
-        return text
     
 
     def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
@@ -231,8 +188,8 @@ class plej:
             xbmcPlayer = xbmc.Player()
             xbmcPlayer.play(videoUrl, liz)
             
-            if not xbmc.Player().isPlaying():
-                xbmc.sleep( 10000 )
+           # if not xbmc.Player().isPlaying():
+           #     xbmc.sleep( 10000 )
                 #xbmcPlayer.play(url, liz)
             
         except:
@@ -248,7 +205,7 @@ class plej:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
-        #print(name,category,url)
+        print(name,category,url,title)
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Wszystkie':

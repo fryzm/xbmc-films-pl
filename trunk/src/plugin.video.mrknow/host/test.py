@@ -6,56 +6,56 @@ import urlparser,json
 
 
 scriptID = 'plugin.video.mrknow'
-scriptname = "Filmy online www.mrknow.pl - netvi"
+scriptname = "Filmy online www.mrknow.pl - test"
 ptv = xbmcaddon.Addon(scriptID)
 
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,pCommon,settings
+import pLog, settings, Parser,pCommon
 
 log = pLog.pLog()
 
-mainUrl = 'http://netvi.pl/'
-catUrl = 'https://watch.netvi.tv/api/channels/list'
+mainUrl = 'http://test.pl/'
+catUrl = 'https://watch.test.tv/api/channels/list'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-class netvi:
+class test:
     def __init__(self):
-        log.info('Starting netvi.pl')
+        log.info('Starting test.pl')
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
         self.cm = pCommon.common()
-        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "netvi.cookie"
-        if ptv.getSetting('netvi.pl_login') == 'true':
-            post_data = {'login': ptv.getSetting('netvi.pl_user'), 'password': ptv.getSetting('netvi.pl_pass')}
-            query_data = {'url': 'https://watch.netvi.tv/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-            data = self.cm.getURLRequestData(query_data, post_data)
-            print ("Data1",data)
-            query_data = {'url': 'https://watch.netvi.tv/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-            data = self.cm.getURLRequestData(query_data, post_data)
-            #<script type="text/javascript" src="https://support.netvi.tv/sso/n474o434e4s2g4l5l436e4t2z5z5/6f8993c277c26f92d6f3b7fa77b13151c8b95e2e0e6811399a7c3a658f5f5444/d4o4f4e4l4t4/d4o4f4e4l4t463p5f416a4p4o5e5z3k4r5/t213z2u213/o2"></script>
-            print ("Data2",data)
-        else:
-            log.info('Wyświetlam ustawienia')
-            self.settings.showSettings()
+        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "test.cookie"
+        #if ptv.getSetting('test.pl_login') == 'true':
+        #    post_data = {'login': ptv.getSetting('test.pl_user'), 'password': ptv.getSetting('test.pl_pass')}
+        #    query_data = {'url': 'https://watch.test.tv/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+        #    data = self.cm.getURLRequestData(query_data, post_data)
+        #    print ("Data1",data)
+        #    query_data = {'url': 'https://watch.test.tv/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+        #    data = self.cm.getURLRequestData(query_data, post_data)
+        #    #<script type="text/javascript" src="https://support.test.tv/sso/n474o434e4s2g4l5l436e4t2z5z5/6f8993c277c26f92d6f3b7fa77b13151c8b95e2e0e6811399a7c3a658f5f5444/d4o4f4e4l4t4/d4o4f4e4l4t463p5f416a4p4o5e5z3k4r5/t213z2u213/o2"></script>
+        #    print ("Data2",data)
+        #else:
+        #    log.info('Wyświetlam ustawienia')
+        #    self.settings.showSettings()
 
 
 
     def listsCategoriesMenu(self):
-        query_data = { 'url': catUrl, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }        
-        link = self.cm.getURLRequestData(query_data)
+        #query_data = { 'url': catUrl, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }        
+        #link = self.cm.getURLRequestData(query_data)
         #match = re.compile('<ul class="select-movie-type movie-kat-selection">(.*?)</ul>', re.DOTALL).findall(link)
         #match1 = re.compile('<a href="#" rel="filter" type="kat" value="(.*?)" >&#9632; (.*?)</a>', re.DOTALL).findall(match[0])
-        print link
-        json_object = json.loads(link)
-        print json_object
-        for chanel in json_object['channels']:   
-            print chanel['name']
-            log.info('Listuje kanały: ')
-            self.add('netvi', 'playSelectedMovie', 'None', chanel['name'],chanel['thumbnail'], 'https://watch.netvi.tv/api/channels/get/'+chanel['id']+'?format_id=1', 'None', 'None', True, False)
+        #print link
+        #json_object = json.loads(link)
+        ##print json_object
+        #for chanel in json_object['channels']:   
+        #    print chanel['name']
+        #    log.info('Listuje kanały: ')
+        self.add('test', 'playSelectedMovie', 'None', "Test","None", 'http://iis.phqstreamer19.kpnstreaming.nl/live/pkpnedge/RTL4.isml/Manifest', 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def getMovieLinkFromXML(self, url):
@@ -80,10 +80,10 @@ class netvi:
                 tab.append('Bitrate - '+match[i][1])
             d = xbmcgui.Dialog()        
             video_menu = d.select("Wybór jakości video", tab)
-            #rtmpdump -r "rtmp://w-stream2.4vod.tv:1935/3/_definst_" -a "3/_definst_" -f "WIN 11,6,602,180" -W "https://watch.netvi.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf" -p "https://watch.netvi.tv/" --live -C S:a28777a987ae7d30e252fb07493e9054 -C S:Hxzqq96TqcvzFO61Kl2xq4RimcruUu3X -y "mp4:33.stream" -o mp4_33.stream.flv
-#            link = 'rtmp://w-stream3.4vod.tv:1935/3/_definst_ app=3/_definst_ swfUrl=https://watch.netvi.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf pageUrl=https://watch.netvi.tv/ live=true conn=S:'+json_object['stream_channel']['url_params'][1]+' conn=S:'+json_object['stream_channel']['url_params'][2]+' playpath='+match[0]
+            #rtmpdump -r "rtmp://w-stream2.4vod.tv:1935/3/_definst_" -a "3/_definst_" -f "WIN 11,6,602,180" -W "https://watch.test.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf" -p "https://watch.test.tv/" --live -C S:a28777a987ae7d30e252fb07493e9054 -C S:Hxzqq96TqcvzFO61Kl2xq4RimcruUu3X -y "mp4:33.stream" -o mp4_33.stream.flv
+#            link = 'rtmp://w-stream3.4vod.tv:1935/3/_definst_ app=3/_definst_ swfUrl=https://watch.test.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf pageUrl=https://watch.test.tv/ live=true conn=S:'+json_object['stream_channel']['url_params'][1]+' conn=S:'+json_object['stream_channel']['url_params'][2]+' playpath='+match[0]
             if video_menu > -1:
-                link = match1[0]+' app='+json_object['stream_channel']['channel_id']+'/_definst_ swfUrl=https://watch.netvi.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf pageUrl=https://watch.netvi.tv/ live=true conn=S:'+json_object['stream_channel']['url_params'][1]+' conn=S:'+json_object['stream_channel']['url_params'][2]+' playpath='+match[video_menu][0]
+                link = match1[0]+' app='+json_object['stream_channel']['channel_id']+'/_definst_ swfUrl=https://watch.test.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf pageUrl=https://watch.test.tv/ live=true conn=S:'+json_object['stream_channel']['url_params'][1]+' conn=S:'+json_object['stream_channel']['url_params'][2]+' playpath='+match[video_menu][0]
                 return link
             else:
                 return False
@@ -123,7 +123,7 @@ class netvi:
         liz.setInfo( type = "Video", infoLabels={ "Title": title, } )
         try:
             xbmcPlayer = xbmc.Player()
-            #xbmcPlayer.play(videoUrl+'|Referer=https://watch.netvi.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf', liz)
+            #xbmcPlayer.play(videoUrl+'|Referer=https://watch.test.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf', liz)
             xbmcPlayer.play(videoUrl, liz)
             
             if not xbmc.Player().isPlaying():
@@ -178,7 +178,7 @@ class netvi:
             log.info('url: ' + str(url))
             self.listsItems(url,strona,filtrowanie)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            self.LOAD_AND_PLAY_VIDEO(url, title, icon)
 
         
   

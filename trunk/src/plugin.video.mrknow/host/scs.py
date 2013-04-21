@@ -22,10 +22,10 @@ catUrl = 'http://scs.pl/seriale.html'
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
 MENU_TAB = {0: "Alfabetycznie",
-#            1: "Top 30",
-#            2: "Ostatnie dodane seriale",
-#            3: "Ostatnie dodane odcinki"
-#            12: "Kategorie",
+            1: "Ostatnio aktualizowane seriale",
+            2: "Najczęściej oglądane seriale",
+            3: "Ulubione seriale naszych użytkowników",
+            12: "Kategorie"
 #            15: "Szukaj"
             }
 
@@ -59,14 +59,12 @@ class scs:
     def listsCategoriesMenu(self):
         query_data = { 'url': catUrl, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<ul class="select-movie-type movie-kat-selection">(.*?)</ul>', re.DOTALL).findall(link)
-        match1 = re.compile('<a href="#" rel="filter" type="kat" value="(.*?)" >&#9632; (.*?)</a>', re.DOTALL).findall(match[0])
-        
-        if len(match1) > 0:
+        match = re.compile('<h2> <a title="(.*?)" href="(.*?)" onclick="show\(\'(.*?)\'\);return false;" class="serial_category"><span class="title1">(.*?)</span>(.*?)</a></h2>', re.DOTALL).findall(link)        
+        print match
+        if len(match) > 0:
             log.info('Listuje kategorie: ')
-            for i in range(len(match1)):
-                url = mainUrl + match1[i][0].replace('.html','')
-                self.add('scs', 'categories-menu', match1[i][1].strip(), 'None', 'None', catUrl, 'None', 'None', True, False,'1','kat='+match1[i][0])
+            for i in range(len(match)):
+                self.add('scs', 'categories-menu', match[i][0].strip() + ' '+ match[i][4], 'None', 'None', mainUrl+match[i][1], 'None', 'None', True, False,'','')
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -127,28 +125,29 @@ class scs:
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
     def listsItemsTop(self, url,str1,str2):
+
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         match = re.compile(str1+'(.*?)'+str2, re.DOTALL).findall(link)
-        match1 = re.compile('<a href="(.*?)" title="(.*?)" class="useTooltip" style="width:180px;"><img src="(.*?)" alt=""(.*?)/></a>', re.DOTALL).findall(match[0])
-        if len(match1) > 0:
+ #       print match
+        if len(match) > 0:
+            match1 = re.compile('<img src="(.*?)" alt="(.*?)" /></a><div class="img_box_text"><a href="(.*?)"(.*?)>(.*?)</a><br/><a href="(.*?)" class="title2" title="(.*?)">(.*?)</a></div></div><span class="newest_ep" id="(.*?)">(.*?)<br/><a href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[0])
+#                                '<img src="(.*?)" alt="(.*?)" /></a><div class="img_box_text"><a href="(.*?)"(.*?)>(.*?)</a><br/><a href="(.*?)" class="title2" title="(.*?)">(.*?)</a></div></div><span class="newest_ep" id="(.*?)">(.*?)<br/><a href="(.*?)">(.*?)</a></span></div>
+            print match1
             for i in range(len(match1)):
-                title = match1[i][1].replace('<span style="color:red;position:absolute;margin-top:-0px;margin-left:2px;">new</span>','')
-                self.add('scs', 'serial-menu', 'None', title,  match1[i][2], mainUrl+ match1[i][0], 'aaaa', 'None', True, False,'',match1[i][2])
+                self.add('scs', 'serial-menu', 'None', match1[i][1] + ' - ' +match1[i][11],  match1[i][0], mainUrl+ match1[i][2], 'aaaa', 'None', True, False,'',match1[i][2])
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItemsOst(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('Ostatnie dodane odcinki(.*?)Najwyżej oceniane seriale', re.DOTALL).findall(link)
-        match1 = re.compile('<div class="pl-serial-mini-module">(.*?)</ul>', re.DOTALL).findall(match[0])
+        match = re.compile('<div class="box_wide_header">(.*?)<div class="footer_links">', re.DOTALL).findall(link)
+        print match
+        match1 = re.compile('<div class="serialBox2">\n                            <a title="(.*?)" class="serial_green" href="(.*?)">(.*?)</a><br/>\n                <a title="(.*?)" class="serial_gray" href="(.*?)">(.*?)</a><br/>\n', re.DOTALL).findall(match[0])
+        print match1
         if len(match1) > 0:
             for i in range(len(match1)):
-                match2 = re.compile('<div class="serial-title">(.*?)</div>', re.DOTALL).findall(match1[i])
-                match3 = re.compile('<div class="serial-image"><img src="(.*?)" width="68" height="90" alt="" /></div>', re.DOTALL).findall(match1[i])
-                match4 = re.compile('<li><a href="(.*?)">(.*?)</a></li>', re.DOTALL).findall(match1[i])
-                for j in range(len(match4)):
-                    self.add('scs', 'playSelectedMovie', 'None', match2[0] + match4[j][1],  match3[0], mainUrl+ match4[j][0], 'aaaa', 'None', True, False,'',match1[i][2])
+                self.add('scs', 'serial-menu', 'None', match1[i][2]+ ' / ' + match1[i][5], 'None', mainUrl+ match1[i][1], 'aaaa', 'None', True, False,'','')
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItemsPage(self, url):
@@ -174,6 +173,7 @@ class scs:
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
  
     def getMovieLinkFromXML(self, url):
+        print ("getMovieLinkFromXML:",url)
         HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
         query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
@@ -196,22 +196,23 @@ class scs:
                     query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
                     data = self.cm.getURLRequestData(query_data, post_data)
                     match3 = re.compile('<iframe src="(.*?)" (.*?)></iframe>', re.DOTALL).findall(data)
+                    tmphost = 'Nieznany'
                     if len(match3)>0:
-                        tab.append(match1[k][1]+'  - ' + self.up.getHostName(match3[0][0]))
+                        tmphost = self.up.getHostName(match3[0][0])
+                        tab.append(match1[k][1]+'  - ' + tmphost )
                         match4.append(match3[0][0])
                     
                     post_data = {'f': match10[1]}
                     query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
                     data = self.cm.getURLRequestData(query_data, post_data)
                     match6 = re.compile("url: '(.*?)',", re.DOTALL).findall(data)
-                    tab.append('Premium - ' + match1[k][1])
+                    tab.append(match1[k][1] + ' - ' + tmphost+' [COLOR=ffFFFF00] Premium ' + self.up.getHostName(match6[0]) + '[/COLOR]')
                     match4.append(match6[0])
         d = xbmcgui.Dialog()        
         video_menu = d.select("Wybór jakości video", tab)
         
         if video_menu > -1:
-            url = match4[video_menu]
-            return self.up.getVideoLink(url)
+            return self.up.getVideoLink(match4[video_menu]) 
         else:
             return False
 
@@ -239,6 +240,7 @@ class scs:
             
 
     def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon):
+        print ("videoUrl",videoUrl)
         ok=True
         if videoUrl == '':
                 d = xbmcgui.Dialog()
@@ -248,11 +250,7 @@ class scs:
         liz.setInfo( type = "Video", infoLabels={ "Title": title, } )
         try:
             xbmcPlayer = xbmc.Player()
-            xbmcPlayer.play(videoUrl+'|Referer=http://kinolive.pl/media/player.swf', liz)
-            
-            if not xbmc.Player().isPlaying():
-                xbmc.sleep( 10000 )
-                #xbmcPlayer.play(url, liz)
+            xbmcPlayer.play(videoUrl, liz)
             
         except:
             d = xbmcgui.Dialog()
@@ -269,7 +267,7 @@ class scs:
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
         img = self.parser.getParam(params, "img")
-        #print ("DANE",url,title,strona)
+        print ("DANE",url,title,strona)
         
         
         if name == None:
@@ -277,6 +275,9 @@ class scs:
         elif name == 'main-menu' and category == 'Alfabetycznie':
             log.info('Jest Alfabetycznie: ')
             self.listsItemsA(catUrl)
+        elif name == 'main-menu' and category == 'Kategorie':
+            log.info('Jest Kategorie: ')
+            self.listsCategoriesMenu()
         elif name == 'page-menu' and category == 'None':
             log.info('Jest Alfabetycznie Litera: '+ title)
             self.listsItemsS(catUrl,title)
@@ -286,23 +287,31 @@ class scs:
         elif name == 'items-menu' and category == 'None':
             log.info('Jest Sezon: '+strona)
             self.listsItems(url,strona)
-        elif name == 'main-menu' and category == 'Top 30':
-            log.info('Jest Top 30: ')
-            self.listsItemsTop(catUrl,'TOP 30','Ostatnie dodane seriale')
-        elif name == 'main-menu' and category == 'Ostatnie dodane seriale':
-            self.listsItemsTop(catUrl,'Ostatnie dodane seriale', 'Ostatnie dodane odcinki')
-        elif name == 'main-menu' and category == 'Ostatnie dodane odcinki':
-            log.info('Jest Gorące: ')
-            self.listsItemsOst(catUrl)
+        elif name == 'main-menu' and category == 'Ostatnio aktualizowane seriale':
+            log.info('Jest Ostatnio aktualizowane seriale: ')
+            str2 = '<div class="footer_links">'
+            str1 = '<h2>Ostatnio aktualizowane <strong>seriale</strong></h2>'
+            self.listsItemsTop('http://scs.pl/ostatnio_aktualizowane_seriale.html',str1,str2)
+        elif name == 'main-menu' and category == 'Najczęściej oglądane seriale':
+            str2 = '<div class="footer_links">'
+            str1 = '<h2>Najczęściej oglądane <strong>seriale</strong></h2>'
+            self.listsItemsTop('http://scs.pl/najczesciej_ogladane_seriale.html',str1,str2)
+        elif name == 'main-menu' and category == 'Ulubione seriale naszych użytkowników':
+            str2 = '<div class="footer_links">'
+            str1 = '<h2>Ulubione <strong>seriale</strong> naszych użytkowników</h2>'
+            log.info('Jest Ulubione seriale naszych użytkowników: ')
+            self.listsItemsTop('http://scs.pl/ulubione_seriale_naszych_uzytkownikow.html',str1,str2)
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()
             if key != None:
                 self.listsItemsOther(self.getSearchURL(key))
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
-            self.listsItems(url,strona,filtrowanie)
+            self.listsItemsOst(url)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            link = self.getMovieLinkFromXML(url)
+            print "LINK: "+link
+            self.LOAD_AND_PLAY_VIDEO(link, title, icon)
 
         
   

@@ -70,7 +70,7 @@ class filmboxmoovie:
     def listsItems(self, category,strona='1'):
         
         #page=1&package=UltimatePackage&genre=comedy&sort=title&records_per_page=30&live=0
-        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "filmboxmoovie.cookie"
+        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "filmboxmoovie.cookie"
         url = mainUrl + '/ajax/run_module/list_videos/ajax'
         query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
         postdata = {'page' : strona, 'package' : 'UltimatePackage', 'genre' : category, 'sort' : 'created_at', 'records_per_page' : '30', 'live' : '0',}

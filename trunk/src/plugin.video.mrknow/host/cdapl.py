@@ -117,13 +117,7 @@ class cdapl:
 
 
     def getMovieLinkFromXML(self, url):
-        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cdapl.cookie"
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        cookie_1 =  self.cm.getCookieItem(self.COOKIEFILE,'PHPSESSID')
-        match = re.compile("type: 'download',\r\n      config: {\r\n        file:'(.*?)'", re.DOTALL).findall(link)
-        linkVideo = match[0] + '|Cookie="PHPSESSID='+cookie_1+'"'
-        return linkVideo
+        return self.up.getVideoLink(url)
 
 
     def getSizeAllItems(self, url):

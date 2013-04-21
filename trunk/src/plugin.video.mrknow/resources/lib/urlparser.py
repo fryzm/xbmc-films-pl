@@ -47,7 +47,7 @@ class urlparser:
     if len(v) > 0:
       valTab = []
       for i in range(len(v)):
-	valTab.append(str(i+1) + '. ' + self.getHostName(v[i], True))
+        valTab.append(str(i+1) + '. ' + self.getHostName(v[i], True))
       item = d.select("Wybor hostingu", valTab)
       if item >= 0: hostUrl = v[item]
     else: d.ok ('Brak linkow','Przykro nam, ale nie znalezlismy zadnego linku do video.', 'Sproboj ponownie za jakis czas')
@@ -60,8 +60,8 @@ class urlparser:
     if match:
       hostName = match.group(1)
       if (nameOnly):
-	n = hostName.split('.')
-	hostName = n[-2]
+        n = hostName.split('.')
+        hostName = n[-2]
     return hostName
 
 
@@ -85,7 +85,7 @@ class urlparser:
         nUrl = self.parserODSIEBIE(url) 
     if host == 'www.wgrane.pl':
         nUrl = self.parserWGRANE(url)
-    if host == 'www.cda.pl':
+    if host == 'www.cda.pl' or host == 'ebd.cda.pl' or host =='cda.pl':
         nUrl = self.parserCDA(url)
     if host == 'maxvideo.pl' or host == 'nextvideo.pl':
         nUrl = self.parserMAXVIDEO(url)
@@ -100,17 +100,17 @@ class urlparser:
     if host== 'www.rapidvideo.com':
         nUrl = self.parserRAPIDVIDEO(url)
     if host== 'www.videoslasher.com':
-        nUrl = self.parserVIDEOSLASHER(url)	
+        nUrl = self.parserVIDEOSLASHER(url) 
     if host== 'www.youtube.com':
-        nUrl = self.parserYOUTUBE(url)	
+        nUrl = self.parserYOUTUBE(url)  
     if host== 'stream.streamo.tv':
-        nUrl = self.parserSTREAMO(url)	
+        nUrl = self.parserSTREAMO(url)  
     if host== 'tosiewytnie.pl':
-        nUrl = self.parsertosiewytnie(url)	
+        nUrl = self.parsertosiewytnie(url)  
     if host== 'www.liveleak.com':
-        nUrl = self.parserliveleak(url)	
+        nUrl = self.parserliveleak(url) 
     if host== 'vimeo.com':
-        nUrl = self.parserVIMEO(url)	
+        nUrl = self.parserVIMEO(url)    
     if host== 'yukons.net':
         nUrl = self.parserYUKONS(url)
     if host== 'www.reyhq.com':
@@ -137,10 +137,11 @@ class urlparser:
         nUrl = self.parseucaster(url,referer)   
     if host== 'www.flashwiz.tv':
         nUrl = self.parseflashwiz(url,referer)   
-        
-
     return nUrl
 
+  def parserSTREAMO(self,url):
+    return url
+    
   def parseflashwiz(self,url,referer):
     print ("Zaa",url,referer)
     req = urllib2.Request(url)
@@ -174,7 +175,7 @@ class urlparser:
   
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match = re.search('"file":		"(.*?)"',link)
+    match = re.search('"file":      "(.*?)"',link)
     print ("ZZZZzzzz",link)
     
     if match:   
@@ -188,7 +189,7 @@ class urlparser:
   def parseraliez(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match = re.search('"file":		"(.*?)"',link)
+    match = re.search('"file":      "(.*?)"',link)
     print ("ZZZZzzzz",match)
     if match:   
        link = urllib.unquote(match.group(1)) + ' pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
@@ -274,17 +275,7 @@ class urlparser:
     params = query.path.split("/")
     print ("Query",query,params)
     return False
-#    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-#    link21 = self.cm.getURLRequestData(query_data)
-#    match21=re.compile("<iframe src='(.*?)'").findall(link21)
-#    req = urllib2.Request(match21[0])
-#    req.add_header('Referer', referer)
-#    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-#    response = urllib2.urlopen(req)
-#    link22=response.read()
-#    response.close()
-     #file\': \'http://mobilestreaming.ilive.to:1935/edge/0vs62vldjnkjfrl/playplist.m3u8\',
-#    match22=re.compile("'file': '(.*?)',").findall(link22)
+
     
     print ("AAAA",match22)
     print ("BBBB",link22)
@@ -429,8 +420,6 @@ class urlparser:
         movlink = movlink.replace('mp4', 'mov')
         return movlink
  
-  def parserSTREAMO(self,url):
-    return url
 
   def parserYOUTUBE(self,url):
     """
@@ -458,32 +447,35 @@ class urlparser:
     return None        
 
     
+
   def parserPUTLOCKER(self,url):
-    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    query_data = { 'url': url.replace('file', 'embed'), 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)    
     r = re.search('value="(.+?)" name="fuck_you"', link)
     if r:
       self.cm.checkDir(ptv.getAddonInfo('path') + os.path.sep + "cookies")
       self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "putlocker.cookie"
-      query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
+      query_data = { 'url': url.replace('file', 'embed'), 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
       postdata = {'fuck_you' : r.group(1), 'confirm' : 'Close Ad and Watch as Free User'}
       link = self.cm.getURLRequestData(query_data, postdata)
       match = re.compile("playlist: '(.+?)'").findall(link)
+
       if len(match) > 0:
         url = "http://www.putlocker.com" + match[0]
         query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('</link><media:content url="(.+?)" type="video').findall(link)
+        print match
         if len(match) > 0:
           url = match[0].replace('&amp;','&')
+          print url
           return url
-        else:
-          return False
-      else:
-        return False
-    else:
-      return False
-
+#        else:
+#          return False
+#      else:
+#        return False
+#    else:
+#      return False
 
   def parserMEGUSTAVID(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
@@ -557,16 +549,16 @@ class urlparser:
     else: 
       return False
 
-
   def parserCDA(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match = re.search("""file: ['"](.+?)['"],""",link)
     if match:   
-      return match.group(1)
+      linkVideo = match.group(1) + '|Cookie="PHPSESSID=1&Referer=http://static.cda.pl/player5.9/player.swf'
+      print linkVideo
+      return linkVideo
     else: 
       return False
-
 
   def parserDWN(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
@@ -669,14 +661,14 @@ class urlparser:
         get_api_url = ('%s/api/player.api.php?user=undefined&codes=1&file=%s&pass=undefined&key=%s') % (match_domain[0], match_file[0], match_filekey[0])
         link_api = { 'url': get_api_url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         if 'url' in link_api:
-              parser = Parser.Parser()
-              params = parser.getParams(link_api)
-              return parser.getParam(params, "url")
+            parser = Parser.Parser()
+            params = parser.getParams(link_api)
+            return parser.getParam(params, "url")
         else:
-              return False
+            return False
     else:
         return False
-	
+    
       
   def parserNOVAMOV(self, url):
       query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
@@ -701,8 +693,8 @@ class urlparser:
       match_key = re.compile('flashvars.filekey="(.+?)";').findall(link)
       if len(match_file) > 0 and len(match_key) > 0:
           get_api_url = ('http://www.nowvideo.eu/api/player.api.php?codes=1&key=%s&user=undefined&pass=undefined&file=%s') % (match_key[0], match_file[0])
-	  query_data = { 'url': get_api_url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-	  link_api = self.cm.getURLRequestData(query_data)
+          query_data = { 'url': get_api_url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+          link_api = self.cm.getURLRequestData(query_data)
           match_url = re.compile('url=(.+?)&title').findall(link_api)
           if len(match_url) > 0:
               return match_url[0]
@@ -756,18 +748,18 @@ class urlparser:
     
     match = re.compile("playlist: '/playlist/(.+?)'").findall(data)
     if len(match)>0:
-      query_data = { 'url': 'http://www.videoslasher.com//playlist/' + match[0], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE,  'use_post': True, 'return_data': True }
-      data = self.cm.getURLRequestData(query_data)
-      match = re.compile('<title>Video</title><media:content url="(.+?)"').findall(data)
-      if len(match)>0:
-	sid = self.cm.getCookieItem(self.COOKIEFILE,'authsid')
-	if sid != '':
-	  streamUrl = match[0] + '|Cookie="authsid=' + sid + '"'
-	  return streamUrl	
-	else:
-	  return False
-      else:
-	return False
+        query_data = { 'url': 'http://www.videoslasher.com//playlist/' + match[0], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE,  'use_post': True, 'return_data': True }
+        data = self.cm.getURLRequestData(query_data)
+        match = re.compile('<title>Video</title><media:content url="(.+?)"').findall(data)
+        if len(match)>0:
+            sid = self.cm.getCookieItem(self.COOKIEFILE,'authsid')
+            if sid != '':
+                streamUrl = match[0] + '|Cookie="authsid=' + sid + '"'
+                return streamUrl  
+            else:
+                return False
+        else:
+            return False
     else:
       return False
 

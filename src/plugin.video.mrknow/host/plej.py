@@ -36,6 +36,8 @@ class plej:
         self.cm = pCommon.common()
         self.settings = settings.TVSettings()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "plej.cookie"
+        
+    def login(self):    
         if ptv.getSetting('plej_login') == 'true':
             post_data = {'login': ptv.getSetting('plej_user'), 'pass': ptv.getSetting('plej_pass'), 'log_in2':'Zaloguj'}
             query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
@@ -216,6 +218,7 @@ class plej:
         icon = self.parser.getParam(params, "icon")
         print(name,category,url,title)
         if name == None:
+            self.login()
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Wszystkie':
             log.info('Jest Wszystkie: ')

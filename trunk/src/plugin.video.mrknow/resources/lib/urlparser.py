@@ -636,18 +636,21 @@ class urlparser:
 
 
   def parserMAXVIDEO(self, url):
-    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link = self.cm.getURLRequestData(query_data)
-    #print link 
-    #file: "http://ds26.nextvideo.pl:8008/f26fb2771cedf58991362553ea2d000b0dcdf550403ca04db2f2e2da1cd299b6/x/file.flv",
-    match = re.compile('file: "(.*?)",').findall(link)    
-    print match
-    if len(match)>0:
-        videoUrl = match[0]
+    mainUrl = 'http://maxvideo.pl'
+    apiVideoUrl = mainUrl + '/api/get_link.php'
+    query = urlparse.urlparse(url)
+    videoHash = query.path.replace('/embed/w/','')
+    print ("ZAW",query,videoHash)
+    
+    query_data = { 'url': apiVideoUrl, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }
+    data = self.cm.getURLRequestData(query_data, {'v' : videoHash})
+    result = simplejson.loads(data)
+    print result
+    result = dict([(str(k), v) for k, v in result.items()])
+    if 'error' in result: 
+        videoUrl = ''
     else:
-        match = re.compile('file: "(.*?)",').findall(link)
-        print match
-        videoUrl = match[0]
+        videoUrl = result['ok'].encode('UTF-8')
     return videoUrl
     
       

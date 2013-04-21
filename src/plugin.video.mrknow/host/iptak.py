@@ -3,6 +3,7 @@ import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
 import urlparser
+import urlparse
 
 
 scriptID = 'plugin.video.mrknow'
@@ -21,7 +22,7 @@ sort_asc = '?o=rosnaco&f=tytul'
 sort_desc = '?o=malejaco&f=tytul'
 playerUrl = 'http://www.youtube.pl/'
 
-HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
+HOST = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:19.0) Gecko/20121213 Firefox/19.0'
 
 MENU_TAB = {1: "Nowości",
             2: "Kategorie", 
@@ -37,6 +38,7 @@ class IPTAK:
         self.cm = pCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
+        self.page = ""
 
 
 
@@ -53,12 +55,8 @@ class IPTAK:
         readURL = openURL.read()
         openURL.close()
         match = re.compile('<div id="category">(.*?)</ul>', re.DOTALL).findall(readURL)
-        print match
-        #
         match1 = re.compile('<h5>(.*?)</h5>', re.DOTALL).findall(match[0])
         match2 = re.compile('<a(.*?)href="(.*?)">', re.DOTALL).findall(match[0])
-        print match1
-        print match2
         
         if len(match1) > 0:
             log.info('Listuje kategorie: ')
@@ -68,7 +66,7 @@ class IPTAK:
 
 
     def getSearchURL(self, key):
-        url = mainUrl + 'search.php?phrase=' + urllib.quote_plus(key) 
+        url = mainUrl + '/kategoria/szukaj?s=' + urllib.quote_plus(key) 
         return url
         #req = urllib2.Request(url)
         #req.add_header('User-Agent', HOST)
@@ -76,115 +74,66 @@ class IPTAK:
         #readURL = openURL.read()
         
 
-    def listsItems(self, url):
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<div id="right">(.*?)<div id="footer">', re.DOTALL).findall(readURL)
-        match1 = re.compile('<div id="item"><a href="(.*?)" title="(.*?)"><img height="80" width="80" alt="(.*?)" src="(.*?)"/>',re.DOTALL).findall(match[0])
-        print match1
+    def listsItems(self, url,page):
+        print('page:',page,url)
+        query_data = { 'url': url+page, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        readURL = self.cm.getURLRequestData(query_data)
+        match1 = re.compile('<div id="item"(.*?)><a title="(.*?)" href="(.*?)"><img src="(.*?)" height="(.*?)" width="(.*?)" alt="(.*?)"/><h6>(.*?)</h6></a>',re.DOTALL).findall(readURL)
+        print ("NBN",readURL)
         if len(match1) > 0:
             for i in range(len(match1)):
-                okladka = match1[i][3].replace('mala','srednia')
-                okladka = okladka.replace('../../..','')
-                
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('iptak', 'playSelectedMovie', 'None', match1[i][1], mainUrl+okladka, match1[i][0], 'aaaa', 'None', True, False)
- 
-        match1 = re.compile('<a href="(.*?)" data-transition="slidedown">').findall(readURL)
-       
-        if len(match1) > 0:
-            log.info('Nastepna strona kategorie: '+  match1[0])
-            self.add('iptak', 'categories-menu', 'Następna Strona', 'None', 'None', mainUrl + match1[0], 'None', 'None', True, False)
+                self.add('iptak', 'playSelectedMovie', 'None', match1[i][1], match1[i][3], match1[i][2], 'aaaa', 'None', True, False)
+        match2 = re.compile('<div style="width:640px; font-size: 18px;" id="stronicowanie">(.*?)</div>' ,re.DOTALL).findall(readURL)
+        print ("ZZZ",match2)
+        if len(match2)>0:
+            match3 = re.compile('<a href="(.*?)">(.*?)</a>',re.UNICODE).findall(match2[0])
+            print ("ZZZ",match3)
+            newpage = match3[-1][0].replace('./','')
+            print ("ZZZ11",newpage,page)
+            if len(match3)>0 and newpage != page:
+                log.info('Nastepna strona: '+ match3[-1][0])
+                self.add('iptak', 'categories-menu', 'Następna Strona', 'None', 'None', url, 'None', 'None', True, False, newpage)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-    def listsItemsPage(self, url):
-        if not url.startswith("http://"):
-            url = mainUrl + url
-        if self.getSizeAllItems(url) > 0  and self.getSizeItemsPerPage(url) > 0:
-            a = math.ceil(float(self.getSizeAllItems(url)) / float(self.getSizeItemsPerPage(url)))
-            for i in range(int(a)):
-                num = i + 1
-                title = 'Lista ' + str(num)
-                destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('iptak', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
+    def listsItemsN(self, url):
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        readURL = self.cm.getURLRequestData(query_data)
+        match = re.compile('ci</h3>(.*?)<div id="footer">',re.DOTALL).findall(readURL)
+        print match
+        if len(match) > 0:
+            match1 = re.compile('<a href="(.*?)" title="(.*?)"><img height="(.*?)" width="(.*?)" alt="(.*?)" src="(.*?)"/><h6>(.*?)</h6></a>',re.DOTALL).findall(match[0])
+            print match1
+            if len(match1) > 0:
+                for i in range(len(match1)):
+                    okladka = match1[i][5].replace('mala','srednia').replace('../../..','')
+                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+                    self.add('iptak', 'playSelectedMovie', 'None', match1[i][1], mainUrl+okladka, match1[i][0], 'aaaa', 'None', True, False)
 
-
-    def listsItemsSerialPage(self, url, sizeOfSerialParts):
-        if not url.startswith("http://"):
-            url = mainUrl + url
-        if sizeOfSerialParts > 0  and self.getSizeItemsPerPage(url) > 0:
-            a = math.ceil(float(sizeOfSerialParts) / float(self.getSizeItemsPerPage(url)))
-            for i in range(int(a)):
-                num = i + 1
-                title = 'Lista ' + str(num)
-                destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('iptak', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1])) 
 
 
+
     def getMovieLinkFromXML(self, url):
-        print ("URL", url)
+        print ("URL XML", url)
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile("\('#slideshow'\).load\('(.*?)'\);", re.DOTALL).findall(link)
-        print "Film"
-        o = parse_qs(urlparse(match[0]).query)
-        linkVideo = self.up.getVideoLink('http://www.youtube.com/watch?v=' + o['g'][0])
+        match = re.compile('{playMovie\("(.*?)","(.*?)"\)', re.DOTALL).findall(link)
+        print ("A1",match)
+        if len(match) > 0:
+            if match[0][1] == 'cda':
+                linkVideo = self.up.getVideoLink('http://www.cda.pl/video/'+match[0][0])
+            elif match[0][1] == 'yt':
+                linkVideo = self.up.getVideoLink('http://www.youtube.com/watch?v='+match[0][0])
+            else:
+                linkVideo = False
+            return linkVideo
+        else:
+            return False
         return linkVideo
         
-
-    def getSizeAllItems(self, url):
-        numItems = 0
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<li data-theme="c" action="watch">(.*?)<a href="(.*?)" data-transition="slide">(.*?)<img src="(.*?)" height="90px" width="90px" title="(.*?)" />(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        if len(match) == 1:
-            numItems = match[0]
-        return numItems
-    
-    
-    def getSizeItemsPerPage(self, url):
-        numItemsPerPage = 0
-        openURL = urllib.urlopen(url)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<div class="movie-(.+?)>').findall(readURL)
-        if len(match) > 0:
-            numItemsPerPage = len(match)
-        return numItemsPerPage        
-
-    def getMovieID(self, url):
-        id = 0
-        tabID = url.split(',')
-        if len(tabID) > 0:
-            id = tabID[1]
-        return id
-
-
-    def getItemTitles(self, table):
-        out = []
-        for i in range(len(table)):
-            value = table[i]
-            out.append(value[1])
-        return out
-
-    def getItemURL(self, table, key):
-        link = ''
-        for i in range(len(table)):
-            value = table[i]
-            if key in value[0]:
-                link = value[2]
-                break
-        return link
-
+  
 
     def searchInputText(self):
         text = None
@@ -195,8 +144,8 @@ class IPTAK:
         return text
     
 
-    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
-        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)
+    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True,page = ''):
+        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)+ "&page=" + urllib.quote_plus(page)
         #log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
             title = category 
@@ -238,6 +187,10 @@ class IPTAK:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
+        page = self.parser.getParam(params, "page") 
+        if page ==None:
+            page=''
+        
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Kategorie':
@@ -245,15 +198,16 @@ class IPTAK:
             self.listsCategoriesMenu()
         elif name == 'main-menu' and category == 'Nowości':
             log.info('Jest Nowości: ')
-            self.listsItems(mainUrl)
+            self.listsItemsN(mainUrl)
             
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()
-            self.listsItems(self.getSearchURL(key))
+            self.listsItems(self.getSearchURL(key),page)
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
-            self.listsItems(url)
+            self.listsItems(url,page)
         if name == 'playSelectedMovie':
+            log.info('playSelectedMovie: ' + str(url))
             self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
 
         

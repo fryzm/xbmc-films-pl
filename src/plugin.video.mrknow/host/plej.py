@@ -93,15 +93,13 @@ class plej:
     def listsItems(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('playListXml : \'(.*?)\',', re.DOTALL).findall(link)
-        query_data = { 'url': mainUrl+match[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        #print ("LINK",link)
-        match1 = re.compile('<media><type>(.*?)</type><streamer></streamer><token></token><hd></hd><video>(.*?)</video><thumb></thumb><preview></preview><title>(.*?)</title></media>', re.DOTALL).findall(link)
-        #print match1
+        match = re.compile("\n            'playlist':(.*?)'autostart': 'true',",re.DOTALL).findall(link)
+        print ("LINK",match)
+        match1 = re.compile('{"file":"(.*?)"}],"title":"(.*?)"}', re.DOTALL).findall(match[0])
+        print ("Match1",match1)
         #linkVideo = self.up.getVideoLink(match[0])
         for i in range(len(match1)):
-            self.add('plej', 'playYoutube', 'None', match1[i][2], 'None', self.up.getVideoLink(match1[i][1]), 'aaaa', 'None', True, True)
+            self.add('plej', 'playYoutube', 'None', str(i) +'. ' +match1[i][1], 'None', self.up.getVideoLink(match1[i][0].replace('\\','')), 'aaaa', 'None', True, True)
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

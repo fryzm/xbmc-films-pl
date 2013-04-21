@@ -244,8 +244,8 @@ class vodpl:
                 strTab = []
                 valTab.sort(key = lambda x: x[0])
         for i in valTab:
-            if i[4] is None:
-                i[4] = 0
+            if str(len(i)) > 4:
+                i.append('0')
             self.add('vodpl', 'playSelectedMovie', 'None', i[0], i[1], 'None', 'None', 'None', False, False,i[2],i[3],i[4] )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         

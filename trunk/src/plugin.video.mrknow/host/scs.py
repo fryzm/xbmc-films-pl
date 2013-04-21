@@ -38,6 +38,8 @@ class scs:
         self.cm = pCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "scs.cookie"
         self.COOKIEFILE1 = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "scs1.cookie"
+        
+    def login(self):    
         query_data = {'url': 'http://scs.pl/logowanie.html', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
         if ptv.getSetting('scs.pl_login') == 'true':
@@ -272,6 +274,7 @@ class scs:
         
         
         if name == None:
+            self.login()
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Alfabetycznie':
             log.info('Jest Alfabetycznie: ')

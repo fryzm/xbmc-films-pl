@@ -34,7 +34,7 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
 }
 TV_ONLINE_TABLE = {
 		     2100 : ["Film Box", 'filmbox'],
-             2200 : ["Plej.tv [TESTY...]", 'plej'],
+             2200 : ["Plej.tv", 'plej'],
              2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
              2500 : ["Netvi.tv [Testy]", 'netvi'],
@@ -55,8 +55,8 @@ SPORT_ONLINE_TABLE = {
 }
 
 SERIALE_ONLINE_TABLE = {
-               8000: ["kinolive.pl [testy]","kinoliveseriale"],
-               8100: ["scs.pl [testy]","scs"]
+               8000: ["kinolive.pl","kinoliveseriale"],
+               8100: ["scs.pl","scs"]
 }
 
 FILM_ONLINE_TABLE = {

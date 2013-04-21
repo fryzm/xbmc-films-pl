@@ -44,6 +44,19 @@ class scs:
             post_data = {'email': ptv.getSetting('scs.pl_user'), 'password': ptv.getSetting('scs.pl_pass'), 'submit_login': 'Zaloguj'}
             query_data = {'url': 'http://scs.pl/logowanie.html', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE1, 'use_post': True, 'return_data': True}
             data = self.cm.getURLRequestData(query_data, post_data)
+            if self.isLoggedIn(data) == True:
+                xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('scs.pl_user') + ", Zostales poprawnie zalogowany,4000)")
+            else:
+                xbmc.executebuiltin("XBMC.Notification(Blad logowania, uzywam Player z limitami,4000)")  
+        else:
+            xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
+
+    def isLoggedIn(self, data):
+        lStr = 'href="wyloguj.html">[wyloguj]<'
+        if lStr in data:
+          return True
+        else:
+          return False
 
     def getstring(self,data):
         data = data.replace('\xe5\x9a','Ś')
@@ -60,7 +73,6 @@ class scs:
         query_data = { 'url': catUrl, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<h2> <a title="(.*?)" href="(.*?)" onclick="show\(\'(.*?)\'\);return false;" class="serial_category"><span class="title1">(.*?)</span>(.*?)</a></h2>', re.DOTALL).findall(link)        
-        print match
         if len(match) > 0:
             log.info('Listuje kategorie: ')
             for i in range(len(match)):
@@ -74,10 +86,6 @@ class scs:
             return url
         else:
             return False
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', HOST)
-        #openURL = urllib2.urlopen(req)
-        #readURL = openURL.read()
         
     def listsItemsOther(self, url):
             query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
@@ -86,7 +94,6 @@ class scs:
             match1 = re.compile('<img src="(.*?)" alt="film online" title="(.*?)" height="133" width="100"></a>\n                            <a href="(.*?)" class="en pl-white">(.*?)</a>', re.DOTALL).findall(match[0])
             if len(match1) > 0:
                 for i in range(len(match1)):
-                        #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                         self.add('scs', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0], mainUrl+ match1[i][2], 'aaaa', 'None', True, False)
 
             xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -129,11 +136,8 @@ class scs:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         match = re.compile(str1+'(.*?)'+str2, re.DOTALL).findall(link)
- #       print match
         if len(match) > 0:
             match1 = re.compile('<img src="(.*?)" alt="(.*?)" /></a><div class="img_box_text"><a href="(.*?)"(.*?)>(.*?)</a><br/><a href="(.*?)" class="title2" title="(.*?)">(.*?)</a></div></div><span class="newest_ep" id="(.*?)">(.*?)<br/><a href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[0])
-#                                '<img src="(.*?)" alt="(.*?)" /></a><div class="img_box_text"><a href="(.*?)"(.*?)>(.*?)</a><br/><a href="(.*?)" class="title2" title="(.*?)">(.*?)</a></div></div><span class="newest_ep" id="(.*?)">(.*?)<br/><a href="(.*?)">(.*?)</a></span></div>
-            print match1
             for i in range(len(match1)):
                 self.add('scs', 'serial-menu', 'None', match1[i][1] + ' - ' +match1[i][11],  match1[i][0], mainUrl+ match1[i][2], 'aaaa', 'None', True, False,'',match1[i][2])
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -142,9 +146,7 @@ class scs:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<div class="box_wide_header">(.*?)<div class="footer_links">', re.DOTALL).findall(link)
-        print match
         match1 = re.compile('<div class="serialBox2">\n                            <a title="(.*?)" class="serial_green" href="(.*?)">(.*?)</a><br/>\n                <a title="(.*?)" class="serial_gray" href="(.*?)">(.*?)</a><br/>\n', re.DOTALL).findall(match[0])
-        print match1
         if len(match1) > 0:
             for i in range(len(match1)):
                 self.add('scs', 'serial-menu', 'None', match1[i][2]+ ' / ' + match1[i][5], 'None', mainUrl+ match1[i][1], 'aaaa', 'None', True, False,'','')
@@ -173,12 +175,10 @@ class scs:
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
  
     def getMovieLinkFromXML(self, url):
-        print ("getMovieLinkFromXML:",url)
         HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
         query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match1 = re.compile('<div style="background: url\(\'/static/img/mirror_c_.png\'\) repeat scroll 0% 0% transparent;" class="switch_button_lang"><a href="(.*?)">(.*?)</a></div>', re.DOTALL).findall(link)
-        print ("Match1",match1)
         tab = []
         match4 = []
         for k in range(len(match1)):
@@ -206,8 +206,10 @@ class scs:
                     query_data = {'url': 'http://scs.pl/getVideo.html', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
                     data = self.cm.getURLRequestData(query_data, post_data)
                     match6 = re.compile("url: '(.*?)',", re.DOTALL).findall(data)
-                    tab.append(match1[k][1] + ' - ' + tmphost+' [COLOR=ffFFFF00] Premium ' + self.up.getHostName(match6[0]) + '[/COLOR]')
-                    match4.append(match6[0])
+                    if len(match6)>0:
+                        premium = match6[0]
+                        tab.append(match1[k][1] + ' - ' + tmphost+' [COLOR=ffFFFF00] Premium ' + self.up.getHostName(match6[0]) + '[/COLOR]')
+                        match4.append(match6[0])
         d = xbmcgui.Dialog()        
         video_menu = d.select("Wybór jakości video", tab)
         
@@ -240,7 +242,6 @@ class scs:
             
 
     def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon):
-        print ("videoUrl",videoUrl)
         ok=True
         if videoUrl == '':
                 d = xbmcgui.Dialog()

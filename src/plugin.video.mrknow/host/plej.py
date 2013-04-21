@@ -35,7 +35,7 @@ class plej:
         self.up = urlparser.urlparser()
         self.cm = pCommon.common()
         self.settings = settings.TVSettings()
-        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "pley.cookie"
+        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "plej.cookie"
         if ptv.getSetting('plej_login') == 'true':
             post_data = {'login': ptv.getSetting('plej_user'), 'pass': ptv.getSetting('plej_pass'), 'log_in2':'Zaloguj'}
             query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
@@ -45,10 +45,21 @@ class plej:
             #query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             #data = self.cm.getURLRequestData(query_data, post_data)
             #print ("Data2",data)
+            if self.isLoggedIn(data) == True:
+                xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('plej_user') + ", Zostales poprawnie zalogowany,4000)")
+            else:
+                xbmc.executebuiltin("XBMC.Notification(Blad logowania, uzywam Player z limitami,4000)")  
         else:
             log.info('Wyświetlam ustawienia')
-            self.settings.showSettings()
-
+            #self.settings.showSettings()
+            xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
+            
+    def isLoggedIn(self, data):
+        lStr = '<li><a class="play" href="index.php?p=logout" title="" >WYLOGUJ</a></li>'
+        if lStr in data:
+          return True
+        else:
+          return False
 
     def listsMainMenu(self, table):
         query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }

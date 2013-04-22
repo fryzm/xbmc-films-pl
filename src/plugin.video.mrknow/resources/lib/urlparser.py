@@ -162,26 +162,16 @@ class urlparser:
   def parseucaster(self,url,referer):
     print ("a",url,referer)
     req = urllib2.Request(url)
-#    req.add_header('Referer', 'http://'+referer)
-    req.add_header('Referer', 'http://livemecz.com/transmisja3.php')
-    #http://livemecz.com/transmisja3.php
-    #http://www.ucaster.eu:1935/loadbalancer
-    #C:\Users\domw\Downloads\rtmpdump-2.4-git-010913-windows>rtmpdump.exe -v -r "rtmp://play.aliez.com/aliezlive-live/streama14689?tstart=20130413081240&tend=20130414081440&ip
-    #=89.75.148.189&token=33bc467b6f19bdc285daf" --pageUrl=http://aliez.tv/live/mlb/ --swfUrl=http://player.longtailvideo.com/player.swf --app aliezlive-live -o test12.avi
+    req.add_header('Referer', 'http://'+referer)
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
-  
-    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link = self.cm.getURLRequestData(query_data)
     match = re.search('"file":      "(.*?)"',link)
     print ("ZZZZzzzz",link)
     
     if match:   
        link = urllib.unquote(match.group(1)) + ' pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
-       #link = 'rtmp://play.aliez.com/aliezlive-live/ playpath=streama14689?tstart=20130413084058&tend=20130414084258&ip=89.75.148.189&token=3b4d4e1f2af33a8b6a3d2  pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
-       #link = 'rtmp://play.aliez.com/aliezlive-live/streama14689?tstart=20130413084058&tend=20130414084258&ip=89.75.148.189&token=3b4d4e1f2af33a8b6a3d2 pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
        return link
     else: 
       return False
@@ -189,12 +179,11 @@ class urlparser:
   def parseraliez(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match = re.search('"file":      "(.*?)"',link)
-    print ("ZZZZzzzz",match)
+    match = re.search('"file":(.*?)"(.*?)"',link)
+    print ("ZZZZzzzz",match,link)
+    print match.group(2)
     if match:   
-       link = urllib.unquote(match.group(1)) + ' pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
-       #link = 'rtmp://play.aliez.com/aliezlive-live/ playpath=streama14689?tstart=20130413084058&tend=20130414084258&ip=89.75.148.189&token=3b4d4e1f2af33a8b6a3d2  pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
-       #link = 'rtmp://play.aliez.com/aliezlive-live/streama14689?tstart=20130413084058&tend=20130414084258&ip=89.75.148.189&token=3b4d4e1f2af33a8b6a3d2 pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
+       link = urllib.unquote(match.group(2)) + ' pageUrl=http://aliez.tv/live/mlb/ swfUrl=http://player.longtailvideo.com/player.swf app=aliezlive-live live=true tcUrl=rtmp://play.aliez.com/aliezlive-live'
        return link
     else: 
       return False

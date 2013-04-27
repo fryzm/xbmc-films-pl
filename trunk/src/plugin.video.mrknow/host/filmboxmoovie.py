@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser
+import pLog, pCommon, Parser,Player
 
 log = pLog.pLog()
 
@@ -32,7 +32,7 @@ class filmboxmoovie:
         self.cm = pCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-
+        self.p = Player.Player()
 
 
     def listsMainMenu(self, table):
@@ -69,7 +69,6 @@ class filmboxmoovie:
 
     def listsItems(self, category,strona='1'):
         
-        #page=1&package=UltimatePackage&genre=comedy&sort=title&records_per_page=30&live=0
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "filmboxmoovie.cookie"
         url = mainUrl + '/ajax/run_module/list_videos/ajax'
         query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
@@ -77,15 +76,9 @@ class filmboxmoovie:
         link = self.cm.getURLRequestData(query_data, postdata)
         #match1 = re.compile('<div class="movie-box">\r\n        <div>\r\n            <a href="(.*?)" class="play">\r\n            Odtw\xc3\xb3rz film</a>\r\n            <img src="(.*?)" alt="(.*?)" />\r\n', re.DOTALL).findall(link)
         match1 = re.compile('<div class="film">\r\n\t\t\t<div class="caption" onclick="location.href=\'(.*?)\'">(.*?)</div>\r\n\t\t\t\r\n            <img src="(.*?)" alt="(.*?)" />', re.DOTALL).findall(link)
-        #print ("match1",match1)
         if len(match1) > 0:
             for i in range(len(match1)):
-                print ("M",match1[i])
-                #/video/details/5539405/anioł-śmierci/auto
                 match2 = re.compile('/video/details/(.*?)/(.*?)/auto', re.DOTALL).findall(match1[i][0])
-                print match2
-        
-                    #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                 self.add('filmboxmoovie', 'playSelectedMovie', 'None', match1[i][1], match1[i][2], mainUrl + '/video/details/' +match2[0][0], 'aaaa', 'None', True, False)
        
         match4 = re.compile('<div id="pagination">(.*?)</div>', re.DOTALL).findall(link)
@@ -121,13 +114,13 @@ class filmboxmoovie:
 
 
     def getMovieLinkFromXML(self, url):
-#        print ("URL",url)
-#        url1 =  urllib.quote(url).replace('%3A',':')
-#        print ("URL1",url1)
+        VideoData = {}
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "filmboxmoovie.cookie"
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-
+        VideoData['year'] = self.getMovieYear(link)
+        VideoData['desc'] = self.getMovieDesc(link)
+        
         match = re.compile('<embed width="(.*?)" height="(.*?)" src="(.*?)" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="transparent" flashvars="(.*?)">', re.DOTALL).findall(link)
         matchswf = re.compile('<param value="(.*?)" name="movie">', re.DOTALL).findall(link)
         movieurl = url
@@ -136,6 +129,7 @@ class filmboxmoovie:
         movieid = self.parser.getParams(params)
         query_data = { 'url': params, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
+
         tree = ET.fromstring(link)
         p = tree.find('FlashVars').text
         params = self.parser.getParams(p)
@@ -171,18 +165,26 @@ class filmboxmoovie:
         linkses = self.cm.getURLRequestData(query_data,data)
         match5 = re.compile('<ume\:URL>(.*?)</ume\:URL>', re.DOTALL).findall(linkses)
         link = match5[0] + ' swfUrl=' + matchswf[0] + ' pageUrl='+movieurl+' swfVfy=true'
-        print link
-        return link
+        VideoData['link'] = link
+        return VideoData
 
+    def getMovieYear(self,link):
+        match = re.compile('<li><strong>Rok:</strong> (.*?)</li>', re.DOTALL).findall(link)
+        print match
+        return match[0]
+
+    def getMovieDesc(self,link):
+        match = re.compile('<h3 class="ttl-section">Opis</h3>\r\n(.*?)<ul class="list-lines">', re.DOTALL).findall(link)
+        print match
+        return match[0]
+    
+        
     def getpage(self,host,url,data, referer='http://cdn7.unicornapp.com/customer/nexeven/swf/UnicornOSMFPlayer-1.3.swf'):
         conn = httplib.HTTPConnection(host)
         headers = {"Content-Type": "text/xml","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","User-Agent": "Mozilla/5.0 (Windows NT 6.1; rv:19.0) Gecko/20100101 Firefox/19.0","Content-Length": "%d" % len(data),"Referer":referer}
         conn.request("POST", url, "", headers)
         conn.send(data)
         response = conn.getresponse()
-        print response.status, response.reason
- 
-        print response.read()
         conn.close()
         return response.read()
         
@@ -303,7 +305,8 @@ class filmboxmoovie:
             log.info('url: ' + str(url))
             self.listsItems(url,strona)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            data = self.getMovieLinkFromXML(url)
+            self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon,data['year'],data['desc'])
 
         
   

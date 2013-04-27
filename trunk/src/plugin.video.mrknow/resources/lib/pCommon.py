@@ -78,46 +78,29 @@ HISTORYFILE = xbmc.translatePath(ptv.getAddonInfo('profile') + "history.xml")
 #cj = cookielib.LWPCookieJar()
 cj = cookielib.MozillaCookieJar()
 
-CHARS = [
-    [ ' ', '_' ],
-    [ ',', '-' ],
-    [ '!', '_' ],
-    [ '?', '_' ],
-    [ ':', '_' ],
-    [ '/', '-' ],
-    [ '�?', 'a' ],
-    [ '�?', 'A' ],
-    [ '�?', 'e' ],
-    [ 'Ę', 'E' ],
-    [ '�?', 'c' ],
-    [ '�?', 'C' ],
-    [ '�?', 'l' ],
-    [ 'Ł', 'L' ],
-    [ '�?', 'n' ],
-    [ 'Ń', 'N' ],
-    [ 'ó', 'o' ],
-    [ '�?', 'O' ],
-    [ '�?', 's' ],
-    [ '�?', 'S' ],
-    [ 'ş', 'z' ],
-    [ 'ŝ', 'Z' ],
-    [ 'ź', 'z' ],
-    [ 'Ś', 'Z' ],
-]
-
-
-    
-
+ 
 class common:
     def __init__(self):
         pass
 
     def html_special_chars(self,txt):
+        print("TXT",txt)
         txt = txt.replace('#038;','')
         txt = txt.replace('&#8221;','"')
         txt = txt.replace('&#8222;','"')
         txt = txt.replace('&#8211;','-')
-        
+        txt = txt.replace('&quot;','"')
+        txt = txt.replace('&oacute;','ó')
+        txt = txt.replace('\u0105','ą').replace('\u0104','Ą')
+        txt = txt.replace('\u0107','ć').replace('\u0106','Ć')
+        txt = txt.replace('\u0119','ę').replace('\u0118','Ę')
+        txt = txt.replace('\u0142','ł').replace('\u0141','Ł')
+        txt = txt.replace('\u0144','ń').replace('\u0144','Ń')
+        txt = txt.replace('\u00f3','ó').replace('\u00d3','Ó')
+        txt = txt.replace('\u015b','ś').replace('\u015a','Ś')
+        txt = txt.replace('\u017a','ź').replace('\u0179','Ź')
+        txt = txt.replace('\u017c','ż').replace('\u017b','Ż')
+        print("TXT",txt)
         return txt
     
     def getCookieItem(self, cookiefile, item):

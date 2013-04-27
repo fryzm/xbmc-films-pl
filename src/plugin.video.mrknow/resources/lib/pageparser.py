@@ -84,17 +84,20 @@ class pageparser:
     if len(match1)>0:
         url = match1[0][1]
         print ("m",match1)
-        query_data = { 'url': match1[0][1], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        match=re.compile('file: "(.*?)"').findall(link)
-        match1=re.compile("file: '(.*?)'").findall(link)
-        print ("m",link)
-        print ("m",match)
-        print ("Match",url,match,link)
-        if len(match)>0:
-            return match[0]
-        elif len(match1)>0:
-            return match1[0]
+        nUrl =  self.up.getVideoLink(url)
+        print nUrl
+        return nUrl
+        #query_data = { 'url': match1[0][1], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        #link = self.cm.getURLRequestData(query_data)
+        #match=re.compile('file: "(.*?)"').findall(link)
+        #match1=re.compile("file: '(.*?)'").findall(link)
+        #print ("m",link)
+        #print ("m",match)
+        #print ("Match",url,match,link)
+        #if len(match)>0:
+        #    return match[0]
+        #elif len(match1)>0:
+        #    return match1[0]
         
     else:
         return self.pageanalyze(match1[0])
@@ -149,11 +152,12 @@ class pageparser:
   def pageanalyze(self,url,referer=''):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
+    print ("LINK",link)
     match=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
     match1=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=(.*?); v_height=(.*?);</script><script type='text/javascript' src='http://www.reyhq.com/player.js'></script>").findall(link)
     match2=re.compile("<script type='text/javascript' src='http://www.sawlive.tv/embed/(.*?)'>").findall(link)
     match3=re.compile("<script type='text/javascript' src='http://sawlive.tv/embed/(.*?)'>").findall(link)
-    match4=re.compile('<script type="text/javascript" src="http://www.ilive.to/embed/(.*?)&width=640&height=400&autoplay=true">').findall(link)
+    match4=re.compile('<script type="text/javascript" src="http://www.ilive.to/embed/(.*?)">').findall(link)
     match5=re.compile("<script type='text/javascript'> channel='(.*?)'; user='(.*?)'; width='640'; height='400';</script><script type='text/javascript' src='http://jimey.tv/player/jimeytv_embed.js'>").findall(link)
     match6=re.compile("<script type='text/javascript'> width=(.*?), height=(.*?), channel='(.*?)', e='(.*?)';</script><script type='text/javascript' src='http://www.mips.tv/content/scripts/mipsEmbed.js'>").findall(link)
     match7=re.compile('<script type="text/javascript">fid="(.*?)"; v_width=(.*?); v_height=(.*?);</script><script type="text/javascript" src="http://www.ukcast.tv/embed.js"></script>').findall(link)
@@ -164,6 +168,9 @@ class pageparser:
     match12=re.compile('<iframe frameborder=0 marginheight=0 marginwidth=0 scrolling=\'no\'src="(.*?)" width="(.*?)" height="(.*?)">').findall(link)
     match13=re.compile("<script type='text/javascript'> width=640, height=480, channel='(.*?)', g='(.*?)';</script><script type='text/javascript' src='http://www.ucaster.eu/static/scripts/ucaster.js'></script>").findall(link)
     match14=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=(.*?); v_height=(.*?);</script><script type='text/javascript' src='http://www.flashwiz.tv/player.js'></script>").findall(link)
+    match15=re.compile('<script type="text/javascript"> fid="(.*?)"; v_width=(.*?); v_height=(.*?);</script><script type="text/javascript" src="http://www.yycast.com/javascript/embedPlayer.js"></script>').findall(link)
+    
+    
     
     #print ("link",link)
     
@@ -207,6 +214,9 @@ class pageparser:
     elif len(match14) > 0:
         print ("Match14",match14)
         return self.up.getVideoLink('http://www.flashwiz.tv/embed.php?live='+match14[0][0]+'&vw='+match14[0][1]+'&vh='+match14[0][2],referer)
+    elif len(match15) > 0:
+        print ("Match15",match15)
+        return self.up.getVideoLink('http://www.yycast.com/embed.php?fileid='+match15[0][0]+'&vw='+match15[0][1]+'&vh='+match15[0][2],referer)
 
 
     else:

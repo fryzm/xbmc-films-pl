@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser
+import pLog, pCommon, Parser, Player
 
 log = pLog.pLog()
 
@@ -40,6 +40,7 @@ class vodpl:
         self.cm = pCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
+        self.p = Player.Player()
 
     def getpage(self,data,url=jsonurl):
         header = {"Content-Type": "application/json-rpc","Accept": "application/json","X-Onet-App": "vod.ios.mobile-apps.onetapi.pl","User-Agent": "pl.vod.onet.pl/1.1 (unknown, iPhone OS 6.1.2, iPhone, Scale/2.000000)"}
@@ -50,28 +51,6 @@ class vodpl:
         #print ("GetPage Response",response)
         return response
 
-    def getstring(self,data):
-        #Ą - \u0104 ą - \u0105
-        #Ć - \u0106 ć - \u0107
-        #Ę - \u0118 e - \u0119
-        #Ł - \u0141 ł - \u0142
-        #Ń - \u0143 ń - \u0144
-        #Ó - \u00d3 ó - \u00f3
-        #Ś - \u015a ś - \u015b
-        #Ź - \u0179 ź - \u017a
-        #Ż - \u017b ż - \u017c
-        data = data.replace('\u0105','a').replace('\u0104','Ą')
-        data = data.replace('\u0107','ć').replace('\u0106','Ć')
-        data = data.replace('\u0119','ę').replace('\u0118','Ę')
-        data = data.replace('\u0142','ł').replace('\u0141','Ł')
-        data = data.replace('\u0144','ń').replace('\u0144','Ń')
-        data = data.replace('\u00f3','ó').replace('\u00d3','Ó')
-        data = data.replace('\u015b','ś').replace('\u015a','Ś')
-        data = data.replace('\u017a','ź').replace('\u0179','Ź')
-        data = data.replace('\u017c','ż').replace('\u017b','Ż')
-        return data
-        
-        
 
     def listsMainMenu(self, table):
         for num, val in table.items():
@@ -92,7 +71,7 @@ class vodpl:
 
 #        print vod_filmy
         for e in vod_filmy["result"]["data"]:
-            strTab.append(self.getstring(e["seriesTitle"]))
+            strTab.append(self.cm.html_special_chars(e["seriesTitle"]))
             if 'poster' in e:
                 image = imgurl + e['poster']["imageId"] + ',10,1.jpg'
             else:
@@ -122,7 +101,7 @@ class vodpl:
         vod_filmy = eval(self.getpage(data))
 #        print ("VOD FILMY", vod_filmy["result"]["data"])
         for e in vod_filmy["result"]["data"][0]["items"]:
-            strTab.append(self.getstring(e["name"]))
+            strTab.append(self.cm.html_special_chars(e["name"]))
             strTab.append(e["value"])
             strTab.append(vod_filmy["id"])
             valTab.append(strTab)
@@ -150,12 +129,12 @@ class vodpl:
         vod_items = eval(self.getpage(vod_getitems))
 #        print ("vod_items",vod_items)
         for e in vod_items[0]["result"]["data"]:
-            title = self.getstring(e["title"])
+            title = self.cm.html_special_chars(e["title"])
             if 'poster' in e:
                 image = imgurl + e['poster']["imageId"] + ',10,1.jpg'
             else:
                 image = ''
-            strTab.append(self.getstring(e["title"]))
+            strTab.append(self.cm.html_special_chars(e["title"]))
             strTab.append(image)
             strTab.append(e["videoId"])
             strTab.append(e["ckmId"])
@@ -164,7 +143,7 @@ class vodpl:
             strTab = []
             valTab.sort(key = lambda x: x[0])
         for i in valTab:
-            self.add('vodpl', 'playSelectedMovie', 'None', i[0], i[1], 'None', 'None', 'None', False, False,i[2],i[3],i[4] )
+            self.add('vodpl', 'playSelectedMovie', 'None', i[0], i[1], 'None', 'None', 'None', False, False,str(i[2]),i[3],i[4] )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItems1(self, category,id1='',id2=''):
@@ -174,12 +153,12 @@ class vodpl:
             vod_getitems = '{"method":"cmsQuery","id":"8123F341-04FF-45D2-B16F-2DF5CB6801EA","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","noSeriesGroup":"True","payment":["-svod","-ppv"]},"context":"onet/bajki","range":[0,10000]}}'
             vod_items = eval(self.getpage(vod_getitems))
             for e in vod_items["result"]["data"]:
-                title = self.getstring(e["title"])
+                title = self.cm.html_special_chars(e["title"])
                 if 'poster' in e:
                     image = imgurl + e['poster']["imageId"] + ',10,1.jpg'
                 else:
                     image = ''
-                strTab.append(self.getstring(e["title"]))
+                strTab.append(self.cm.html_special_chars(e["title"]))
                 strTab.append(image)
                 strTab.append(e["videoId"])
                 strTab.append(e["ckmId"])
@@ -197,13 +176,13 @@ class vodpl:
 #                print e['poster']["imageId"]
 #                print e["videoId"]
 #                print e["ckmId"]
-                title = self.getstring(e["title"])
+                title = self.cm.html_special_chars(e["title"])
                 if 'poster' in e:
                     image = imgurl + e['poster']["imageId"] + ',10,1.jpg'
                 else:
                     image = ''
 #                print e
-                strTab.append(self.getstring(e["title"]))
+                strTab.append(self.cm.html_special_chars(e["title"]))
                 strTab.append(image)
                 strTab.append(str(e["videoId"]))
                 strTab.append(e["ckmId"])
@@ -215,7 +194,7 @@ class vodpl:
             vod_getitems = '{"method":"cmsQuery","id":"9EA24AB8-4896-4F2E-87BC-1F5C6D1EC4C7","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"episodes","args":{"withoutDRM":"True","device":"mobile","seriesId":"'+id1+'","payment":["-svod","-ppv"]},"context":"onet/vod","range":[0,10000]}}'
             vod_items = eval(self.getpage(vod_getitems))
             for e in vod_items["result"]["data"]:
-                title = 'odc. '+ str(e["episode"]) + " - " + self.getstring(e["title"])
+                title = 'odc. '+ str(e["episode"]) + " - " + self.cm.html_special_chars(e["title"])
                 if 'poster' in e:
                     image = imgurl + e['poster']["imageId"] + ',10,1.jpg'
                 else:
@@ -231,7 +210,7 @@ class vodpl:
             vod_getitems = '{"method":"cmsQuery","id":"9EA24AB8-4896-4F2E-87BC-1F5C6D1EC4C7","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"episodes","args":{"withoutDRM":"True","device":"mobile","seriesId":"'+id1+'","payment":["-svod","-ppv"]},"context":"onet/vod","range":[0,10000]}}'
             vod_items = eval(self.getpage(vod_getitems))
             for e in vod_items["result"]["data"]:
-                title = 'odc. '+ str(e["episode"]) + " - " + self.getstring(e["title"])
+                title = 'odc. '+ str(e["episode"]) + " - " + self.cm.html_special_chars(e["title"])
                 if 'poster' in e:
                     image = imgurl + e['poster']["imageId"] + ',10,1.jpg'
                 else:
@@ -375,15 +354,6 @@ class vodpl:
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=folder)
             
 
-    def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon,year):
-        if year == '': 
-            year='0'
-        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-        liz.setInfo( type="Video", infoLabels={ "Title": title, "Year": int(year) } )
-        xbmcPlayer = xbmc.Player()
-        xbmcPlayer.play(videoUrl, liz)
-        return True
-
 
     def handleService(self):
     	params = self.parser.getParams()
@@ -430,7 +400,7 @@ class vodpl:
         if name == 'playSelectedMovie':
             #self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon)
             #print self.getMovieLinkFromXML(id1,id2)
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon, year)
+            self.p.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon, year)
 
         
   

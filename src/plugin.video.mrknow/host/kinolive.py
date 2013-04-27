@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,pCommon
+import pLog, settings, Parser,pCommon, Player
 
 log = pLog.pLog()
 
@@ -44,16 +44,10 @@ class kinolive:
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
         self.cm = pCommon.common()
-        #noobroom_ip = ptv.getSetting('noobroom_ip')
-        #username=marian2013&password=westwest&submit_login=Zaloguj
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveserial.cookie"
         query_data = {'url': 'http://kinolive.pl/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
-        #if ptv.getSetting('kinolive_login') == 'true':
-        #    post_data = {'username': ptv.getSetting('kinolive_user'), 'password': ptv.getSetting('kinolive_pass'), 'submit_login': 'Zaloguj'}
-        #    query_data = {'url': 'http://kinolive.pl/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-        #    data = self.cm.getURLRequestData(query_data, post_data)
-        #    print ("JEEEESTS LOGIN")
+        self.p = Player.Player()
 
     def listsMainMenu(self, table):
         for num, val in table.items():
@@ -152,9 +146,12 @@ class kinolive:
 
 
     def getMovieLinkFromXML(self, url):
+        print ("ZZURRRA",url)
+        VideoData = {}
         HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
+        VideoData['year'] = str(self.getMovieYear(link))
         match1 = re.compile('<input type="hidden" name="currentmirrorload" value="(.*?)"', re.DOTALL).findall(link)
         match2 = re.compile('{ video: "(.*?)", source: (.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
         post_data = {'video': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
@@ -174,12 +171,19 @@ class kinolive:
             if marian["premium"] != None: 
                 linkVideo = marian["premium"].decode('utf8')
         if linkVideo !='':
-            return linkVideo
+            linkVideo = False
         else:
             linkVideo = self.up.getVideoLink(match3[0][0].decode('utf8'))
-            return linkVideo
+        VideoData['link'] = linkVideo
+        return VideoData
         
-
+    def getMovieYear(self,link):
+        match = re.compile('<h1 style="(.*?)" class="pl-round">(.*?)\((.*?)\)(.*?)</h1>', re.DOTALL).findall(link)
+        print match
+        if len(match) > 0:
+            return match[0][2]
+        else:
+            return False
 
     def getSizeAllItems(self, url):
         numItems = 0
@@ -327,7 +331,8 @@ class kinolive:
             log.info('url: ' + str(url))
             self.listsItems(url,strona,filtrowanie)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            data = self.getMovieLinkFromXML(url)
+            self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon, data['year'])
 
         
   

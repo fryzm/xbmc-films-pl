@@ -69,6 +69,7 @@ FILM_ONLINE_TABLE = {
              7500: ["Kinolive","kinolive"],
              7600: ["Iptak","iptak"],
              7700: ["Films-online.pl","filmsonline"],
+
 }
 
 class MrknowFilms:
@@ -130,7 +131,7 @@ class MrknowFilms:
     elif mode == 7700 or service == 'filmsonline':
         tv = filmsonline.filmsonline()
         tv.handleService()
-        
+
     elif mode == 2000 or service == 'iptak':
         tv = iptak.IPTAK()
         tv.handleService()

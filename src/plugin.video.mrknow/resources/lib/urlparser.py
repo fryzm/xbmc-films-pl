@@ -68,7 +68,7 @@ class urlparser:
   def getVideoLink(self, url,referer=''):
     nUrl=''
     host = self.getHostName(url)
-    log.info("video hosted by: " + host)
+    log.info("uvideo hosted by: " + host)
     log.info('URL: '+url + ' ' +referer)
     
     if host == 'www.putlocker.com':
@@ -137,8 +137,36 @@ class urlparser:
         nUrl = self.parseucaster(url,referer)   
     if host== 'www.flashwiz.tv':
         nUrl = self.parseflashwiz(url,referer)   
+    if host== 'goodcast.tv':
+        nUrl = self.parsegoodcast(url)   
+    if host== 'www.yycast.com':
+        nUrl = self.parseyycast(url,referer)   
+        
     return nUrl
-
+  def parseyycast(self,url,referer):
+    req = urllib2.Request(url)
+    req.add_header('Referer', 'http://'+referer)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match = re.search("'file': '(.*?)',",link)
+    match1 = re.search("'flashplayer': \"(.*?)\",",link)
+    link = 'rtmp://212.7.206.66:1935/live/_definst_ playpath='+match.group(1)+' swfUrl='+match1.group(1)+' pageUrl='+url
+    return link
+    
+  def parsegoodcast(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile("file: '(.*?)',", re.DOTALL).findall(link)
+    if len(match)>0:
+        linkVideo = match[0]
+        linkVideo = linkVideo + ' pageUrl='+url+' swfUrl=http://goodcast.tv/jwplayer/jwplayer.flash.swf'
+        return linkVideo
+    else:
+        return False
+    
+    
   def parserSTREAMO(self,url):
     return url
     
@@ -146,7 +174,7 @@ class urlparser:
     print ("Zaa",url,referer)
     req = urllib2.Request(url)
     req.add_header('Referer', 'http://'+referer)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
@@ -163,7 +191,7 @@ class urlparser:
     print ("a",url,referer)
     req = urllib2.Request(url)
     req.add_header('Referer', 'http://'+referer)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
@@ -192,7 +220,7 @@ class urlparser:
     print ("a",url,referer)
     req = urllib2.Request(url)
     req.add_header('Referer', 'http://'+referer)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
@@ -232,7 +260,7 @@ class urlparser:
     print url,referer
     req = urllib2.Request(url)
     req.add_header('Referer', referer)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
     response = urllib2.urlopen(req)
     link22=response.read()
     response.close()
@@ -278,13 +306,19 @@ class urlparser:
   def parserILIVE(self,url,referer):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link21 = self.cm.getURLRequestData(query_data)
+    print link21,
     match21=re.compile("<iframe src='(.*?)'").findall(link21)
-    req = urllib2.Request(match21[0])
-    req.add_header('Referer', referer)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-    response = urllib2.urlopen(req)
-    link22=response.read()
-    response.close()
+    print match21
+    #req = urllib2.Request(match21[0])
+    #req.add_header('Referer', referer)
+    #req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    #response = urllib2.urlopen(req)
+    #link22=response.read()
+    #response.close()
+    query_data = { 'url': match21[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link22 = self.cm.getURLRequestData(query_data)
+    
+    print ("ZZZ",link22)
     match22=re.compile("'file': '(.*?)',").findall(link22)
     if len(match22[1]) > 0:
         videolink = match22[1]
@@ -360,7 +394,7 @@ class urlparser:
 
   def parserliveleak(self,url):
     req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
@@ -629,6 +663,7 @@ class urlparser:
     apiVideoUrl = mainUrl + '/api/get_link.php'
     query = urlparse.urlparse(url)
     videoHash = query.path.replace('/embed/w/','')
+    videoHash = query.path.replace('/embed/p/','')
     print ("ZAW",query,videoHash)
     
     query_data = { 'url': apiVideoUrl, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }
@@ -640,7 +675,7 @@ class urlparser:
         videoUrl = ''
     else:
         videoUrl = result['ok'].encode('UTF-8')
-    return videoUrl
+    return videoUrl+'|Referer=http://maxvideo.pl/mediaplayer/player.swf'
     
       
   def parserVIDEOWEED(self, url):

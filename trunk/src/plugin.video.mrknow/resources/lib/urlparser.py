@@ -57,11 +57,19 @@ class urlparser:
   def getHostName(self, url, nameOnly = False):
     hostName = ''       
     match = re.search('http://(.+?)/',url)
+    match1 = re.search('https://(.+?)/',url)
+    
     if match:
       hostName = match.group(1)
       if (nameOnly):
         n = hostName.split('.')
         hostName = n[-2]
+    elif match1:
+      hostName = match1.group(1)
+      if (nameOnly):
+        n = hostName.split('.')
+        hostName = n[-2]
+        
     return hostName
 
 
@@ -141,9 +149,56 @@ class urlparser:
         nUrl = self.parsegoodcast(url)   
     if host== 'www.yycast.com':
         nUrl = self.parseyycast(url,referer)   
-        
+    if host== 'www.liveflash.tv':
+        nUrl = self.parseliveflash(url,referer)           
+    if host== 'ovcast.com':
+        nUrl = self.parseovcast(url,referer)           
+
     return nUrl
+
+  def parseovcast(self,url,referer):
+    query = urlparse.urlparse(url)
+    p = urlparse.parse_qs(query.query)
+    print p
+#    query_data = { 'url': 'http://www.liveflash.tv:1935/loadbalancer', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+#    link = self.cm.getURLRequestData(query_data)
+ #   rtmpsrv = link.replace('redirect=','')  
+ #   req = urllib2.Request(url)
+ #   req.add_header('Referer', 'http://'+referer)
+ #   req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+ #   response = urllib2.urlopen(req)
+ #   link=response.read()
+    print ("LINK",url)
+    #response.close()
+    #match = re.search("so.addParam\('FlashVars', '(.*?)'\);",link)
+    #match1 = re.search("'flashplayer': \"(.*?)\",",link)
+    link = 'rtmpe://217.23.4.120:443/liveedge1 playpath='+p['ch'][0]+' swfVfy=1 token=chupem_me_a_pissa live=true swfUrl=https://ovcast.com/jwplayer/jwplayer.flash.swf pageUrl='+url
+    print link
+    # -r rtmpe://217.23.4.120:443/liveedge1 -y Channel2658 -o test.avi -z -v -W https://ovcast.com/jwplayer/jwplayer.flash.swf -p "https://ovcast.com/gen.php?ch=Channel2658&width=728&height=420" -T chupem_me_a_pissa
+    return link
+    
+  def parseliveflash(self,url,referer):
+    query_data = { 'url': 'http://www.liveflash.tv:1935/loadbalancer', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    rtmpsrv = link.replace('redirect=','')  
+    req = urllib2.Request(url)
+    req.add_header('Referer', 'http://'+referer)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match = re.search("so.addParam\('FlashVars', '(.*?)'\);",link)
+    match1 = re.search("'flashplayer': \"(.*?)\",",link)
+    link = 'rtmp://'+rtmpsrv+':1935/stream/ playpath='+match.group(1)+' swfVfy=1 conn=S:OK live=true swfUrl=http://www.liveflash.tv/resources/scripts/eplayer.swf pageUrl='+url
+    print link
+    #C:\Users\domw\Downloads\rtmpdump-2.4-git-010913-windows>rtmpdump.exe -r rtmp://174.37.252.220:1935/stream/ --playpath="id=91677&s=x4537456754&g=1&a=1&l="  --swfUrl=http://www.liveflash.tv/resources/scripts/eplayer.swf --pageUrl=http://www.liveflash.tv/embedplayer/x4537456754/1/640/480 -z -v --conn=S:OK
+    return link
+    
+    
   def parseyycast(self,url,referer):
+
+    
+
     req = urllib2.Request(url)
     req.add_header('Referer', 'http://'+referer)
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')

@@ -18,7 +18,7 @@ import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, mil
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
 import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
-import iptak,goodcast
+import iptak,goodcast,streamon
 
 log = pLog.pLog()
 
@@ -39,6 +39,8 @@ TV_ONLINE_TABLE = {
              2400 : ["TVP Stream", 'tvpstream'],
              2500 : ["Netvi.tv [Testy]", 'netvi'],
              2600 : ["Goodcast.tv", 'goodcast'],
+             2700 : ["Streamon.pl", 'streamon'],
+             
              
              
              
@@ -50,9 +52,11 @@ FUN_ONLINE_TABLE = {
                5000: ["joemonster.org","joemonster"]
 }
 SPORT_ONLINE_TABLE = {
-               4000: ["meczyki.pl [dziala ok 20%]","meczyki"],
+               4000: ["meczyki.pl [dziala ok 40%]","meczyki"],
                4100: ["drhtv.com.pl","drhtvcompl"],
                2600 : ["Goodcast.tv", 'goodcast'],
+               2700 : ["Streamon.pl", 'streamon'],
+               
 }
 
 SERIALE_ONLINE_TABLE = {
@@ -152,6 +156,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 2600 or service == 'goodcast':
         tv = goodcast.goodcast()
+        tv.handleService()
+    elif mode == 2700 or service == 'streamon':
+        tv = streamon.streamon()
         tv.handleService()
     elif mode == 3000 or service == 'wykop':
         tv = wykop.WYKOP()

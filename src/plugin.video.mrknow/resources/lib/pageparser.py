@@ -53,9 +53,9 @@ class pageparser:
     log.info("video hosted by: " + host)
     log.info(url)
     
-    #if host == 'livemecz.com':
-    #    nUrl = self.livemecz(url)
-    #    print "Self",nUrl
+    if host == 'livemecz.com':
+        nUrl = self.livemecz(url)
+        print "Self",nUrl
     if host == 'www.drhtv.com.pl':
         nUrl = self.drhtv(url)
     elif host == 'www.realtv.com.pl':
@@ -87,17 +87,6 @@ class pageparser:
         nUrl =  self.up.getVideoLink(url)
         print nUrl
         return nUrl
-        #query_data = { 'url': match1[0][1], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        #link = self.cm.getURLRequestData(query_data)
-        #match=re.compile('file: "(.*?)"').findall(link)
-        #match1=re.compile("file: '(.*?)'").findall(link)
-        #print ("m",link)
-        #print ("m",match)
-        #print ("Match",url,match,link)
-        #if len(match)>0:
-        #    return match[0]
-        #elif len(match1)>0:
-        #    return match1[0]
         
     else:
         return self.pageanalyze(match1[0])
@@ -169,10 +158,10 @@ class pageparser:
     match13=re.compile("<script type='text/javascript'> width=640, height=480, channel='(.*?)', g='(.*?)';</script><script type='text/javascript' src='http://www.ucaster.eu/static/scripts/ucaster.js'></script>").findall(link)
     match14=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=(.*?); v_height=(.*?);</script><script type='text/javascript' src='http://www.flashwiz.tv/player.js'></script>").findall(link)
     match15=re.compile('<script type="text/javascript"> fid="(.*?)"; v_width=(.*?); v_height=(.*?);</script><script type="text/javascript" src="http://www.yycast.com/javascript/embedPlayer.js"></script>').findall(link)
-    
-    
-    
+    match16=re.compile("<script type='text/javascript'> width=(.*?), height=(.*?), channel='(.*?)', g='(.*?)';</script><script type='text/javascript' src='http://www.liveflash.tv/resources/scripts/liveFlashEmbed.js'></script>").findall(link)
+    match17=re.compile('<script type="text/javascript">ca="(.*?)";width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="https://ovcast.com/js/embed.js"></script>').findall(link)
     #print ("link",link)
+    #
     
     print ("Match",match8,match2,match1,match,match3,match4,match5)
     if len(match) > 0:
@@ -217,6 +206,12 @@ class pageparser:
     elif len(match15) > 0:
         print ("Match15",match15)
         return self.up.getVideoLink('http://www.yycast.com/embed.php?fileid='+match15[0][0]+'&vw='+match15[0][1]+'&vh='+match15[0][2],referer)
+    elif len(match16) > 0:
+        print ("Match16",match16)
+        return self.up.getVideoLink('http://www.liveflash.tv/embedplayer/'+match16[0][2]+'/'+match16[0][3]+'/'+match16[0][0]+'/'+match16[0][1],referer)
+    elif len(match17) > 0:
+        print ("Match17",match17)
+        return self.up.getVideoLink('https://ovcast.com/gen.php?ch='+match17[0][0]+'&width='+match17[0][1]+'&height='+match17[0][2],referer)
 
 
     else:

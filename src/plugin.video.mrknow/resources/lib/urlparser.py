@@ -364,20 +364,23 @@ class urlparser:
     print link21,
     match21=re.compile("<iframe src='(.*?)'").findall(link21)
     print match21
-    #req = urllib2.Request(match21[0])
-    #req.add_header('Referer', referer)
+    req = urllib2.Request(match21[0])
+    req.add_header('Referer', 'http://'+referer)
     #req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
-    #response = urllib2.urlopen(req)
-    #link22=response.read()
-    #response.close()
-    query_data = { 'url': match21[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link22 = self.cm.getURLRequestData(query_data)
+    response = urllib2.urlopen(req)
+    link22=response.read()
+    response.close()
+    #query_data = { 'url': match21[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    #link22 = self.cm.getURLRequestData(query_data)
     
     print ("ZZZ",link22)
-    match22=re.compile("'file': '(.*?)',").findall(link22)
-    if len(match22[1]) > 0:
-        videolink = match22[1]
-        return match22[1]
+    match22=re.compile("file: \"(.*?)\",").findall(link22)
+    match23=re.compile('streamer: "(.*?)",').findall(link22)
+    match24=re.compile("'flash', src: '(.*?)'").findall(link22)
+    print match22,match23,match24
+    if len(match22) > 0:
+        videolink = match23[0] + ' playpath=' +match22[0].replace('.flv','') + ' swfUrl=' + match24[0] + ' pageUrl='+ match21[0] +' live=true swfVfy=true live=true'
+        return videolink
     else:
         return False
 

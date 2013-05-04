@@ -13,7 +13,10 @@ class Player:
     def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon,year='',plot=''):
         print ("Player",title, icon,year,plot)
         liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-        liz.setInfo( type="Video", infoLabels={ "Title": title, "Plot": plot, "Year": int(year) } )
+        if year == '':
+            liz.setInfo( type="Video", infoLabels={ "Title": title} )
+        else:
+            liz.setInfo( type="Video", infoLabels={ "Title": title, "Plot": plot, "Year": int(year) } )
         xbmcPlayer = xbmc.Player()
         xbmcPlayer.play(videoUrl, liz)
         return True

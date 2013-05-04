@@ -172,7 +172,9 @@ class urlparser:
     #response.close()
     #match = re.search("so.addParam\('FlashVars', '(.*?)'\);",link)
     #match1 = re.search("'flashplayer': \"(.*?)\",",link)
-    link = 'rtmpe://217.23.4.120:443/liveedge1 playpath='+p['ch'][0]+' swfVfy=1 token=chupem_me_a_pissa live=true swfUrl=https://ovcast.com/jwplayer/jwplayer.flash.swf pageUrl='+url
+    #"rtmpe://199.195.199.188:443/liveedge1/Channel2658"
+#    link = 'rtmpe://199.195.199.188:443/liveedge1 playpath='+p['ch'][0]+' swfVfy=1 token=chupem_me_a_pissa live=true swfUrl=https://ovcast.com/jwplayer/jwplayer.flash.swf pageUrl='+url
+    link = 'rtmp://share.ovcast.com/live1 playpath='+p['ch'][0]+' token=chupem_me_a_pissa live=true'
     print link
     # -r rtmpe://217.23.4.120:443/liveedge1 -y Channel2658 -o test.avi -z -v -W https://ovcast.com/jwplayer/jwplayer.flash.swf -p "https://ovcast.com/gen.php?ch=Channel2658&width=728&height=420" -T chupem_me_a_pissa
     return link

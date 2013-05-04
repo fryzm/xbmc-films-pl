@@ -18,7 +18,7 @@ import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, mil
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
 import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
-import iptak,goodcast,streamon
+import iptak,goodcast,streamon,strefavod
 
 log = pLog.pLog()
 
@@ -73,6 +73,7 @@ FILM_ONLINE_TABLE = {
              7500: ["Kinolive","kinolive"],
              7600: ["Iptak","iptak"],
              7700: ["Films-online.pl","filmsonline"],
+             7800: ["StrefaVod.pl","strefavod"],
 
 }
 
@@ -134,6 +135,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 7700 or service == 'filmsonline':
         tv = filmsonline.filmsonline()
+        tv.handleService()
+    elif mode == 7800 or service == 'strefavod':
+        tv = strefavod.strefavod()
         tv.handleService()
 
     elif mode == 2000 or service == 'iptak':

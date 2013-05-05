@@ -68,6 +68,9 @@ class pageparser:
         nUrl = self.bbpolska(url)
     elif host == 'fotosend.pl':
         nUrl = self.azap(url)
+    elif host == 'typertv.com':
+        nUrl = self.typertv(url)
+        
         
     elif nUrl  == '':
         print "Jedziemy na ELSE - "+  nUrl
@@ -75,6 +78,18 @@ class pageparser:
     print ("Link:",nUrl)
     return nUrl
 
+    
+  def typertv(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match1=re.compile("<iframe src='(.*?)' width='640' height='410' frameborder='0' scrolling='no'></iframe>").findall(link)
+    if len(match1)>0:
+#        print ("m",match1)
+        nUrl = self.pageanalyze('http://'+self.getHostName(url)+'/'+match1[0],url)
+        return nUrl    
+    
+    
+    
     
   def azap(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }

@@ -20,6 +20,7 @@ class pageparser:
   def __init__(self):
     self.cm = pCommon.common()
     self.up = urlparser.urlparser()
+    self.settings = settings.TVSettings()
     
 
 
@@ -70,6 +71,8 @@ class pageparser:
         nUrl = self.azap(url)
     elif host == 'typertv.com':
         nUrl = self.typertv(url)
+    elif host == 'streamon.pl':
+        nUrl = self.streamon(url)
         
         
     elif nUrl  == '':
@@ -78,14 +81,39 @@ class pageparser:
     print ("Link:",nUrl)
     return nUrl
 
+  def streamon(self,url):
+    self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "streamon.cookie"
+    zalogowany = False
+    if ptv.getSetting('streamon_login') == 'true':
+        post_data = {'login': ptv.getSetting('streamon_user'), 'password': ptv.getSetting('streamon_pass')}
+        query_data = {'url': 'http://streamon.pl/user,login.htm', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+        data = self.cm.getURLRequestData(query_data, post_data)
+        lStr = '<div class="logout"><a href="user,login,logout.htm">Wyloguj'
+        if lStr in data:
+            print "ZAAAAAAAAAAAAAALOOOOGOWANy"
+            zalogowany = True
+    else:
+        xbmc.executebuiltin("XBMC.Notification(Blad logowania, Wpisz login i has³o w ustawieniach,8000)")  
+        log.info('Wyœwietlam ustawienia')
+        self.settings.showSettings()
+        return False
+
+    if zalogowany == True:
+        #xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('streamon_user') + ", Zostales poprawnie zalogowany,4000)")
+        nUrl = self.pageanalyze(url,url,self.COOKIEFILE)
+        return nUrl    
+    else:
+        xbmc.executebuiltin("XBMC.Notification(Blad logowania, popraw login i has³o w ustawieniach,8000)")  
+        self.settings.showSettings()   
     
   def typertv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match1=re.compile("<iframe src='(.*?)' width='640' height='410' frameborder='0' scrolling='no'></iframe>").findall(link)
+    match1=re.compile('<iframe src=\'(.*?)\' width=\'(.*?)\' height=\'(.*?)\' frameborder=\'(.*?)\' scrolling=\'no\'></iframe>').findall(link)
+    print ("AAAAA",match1,link)
     if len(match1)>0:
-#        print ("m",match1)
-        nUrl = self.pageanalyze('http://'+self.getHostName(url)+'/'+match1[0],url)
+        print ("Mam Iframe",match1)
+        nUrl = self.pageanalyze('http://'+self.getHostName(url)+'/'+match1[0][0],url)
         return nUrl    
     
     
@@ -153,10 +181,16 @@ class pageparser:
   def drhtv(self,url):
     return self.pageanalyze(url,url)
 
-  def pageanalyze(self,url,referer=''):
-    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link = self.cm.getURLRequestData(query_data)
-    print ("LINK",link)
+  def pageanalyze(self,url,referer='',cookie=''):
+    if cookie == '':
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        print ("LINK",link)
+    else:
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': cookie, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        print ("LINK",link)
+        
     match=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
     match1=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=(.*?); v_height=(.*?);</script><script type='text/javascript' src='http://www.reyhq.com/player.js'></script>").findall(link)
     match2=re.compile("<script type='text/javascript' src='http://www.sawlive.tv/embed/(.*?)'>").findall(link)
@@ -175,6 +209,7 @@ class pageparser:
     match15=re.compile('<script type="text/javascript"> fid="(.*?)"; v_width=(.*?); v_height=(.*?);</script><script type="text/javascript" src="http://www.yycast.com/javascript/embedPlayer.js"></script>').findall(link)
     match16=re.compile("<script type='text/javascript'> width=(.*?), height=(.*?), channel='(.*?)', g='(.*?)';</script><script type='text/javascript' src='http://www.liveflash.tv/resources/scripts/liveFlashEmbed.js'></script>").findall(link)
     match17=re.compile('<script type="text/javascript">ca="(.*?)";width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="https://ovcast.com/js/embed.js"></script>').findall(link)
+    match18=re.compile("<script type=\'text/javascript\'>id=\'(.*?)\'; width=\'(.*?)\'; height=\'(.*?)\';</script><script type=\'text/javascript\' src=\'http://stream4.tv/player.js\'>").findall(link)
     #print ("link",link)
     #
     
@@ -227,6 +262,9 @@ class pageparser:
     elif len(match17) > 0:
         print ("Match17",match17)
         return self.up.getVideoLink('https://ovcast.com/gen.php?ch='+match17[0][0]+'&width='+match17[0][1]+'&height='+match17[0][2],referer)
+    elif len(match18) > 0:
+        print ("Match18",match18)
+        return self.up.getVideoLink('http://stream4.tv/player.php?id='+match18[0][0]+'&width='+match18[0][1]+'&height='+match18[0][2],referer)
 
 
     else:

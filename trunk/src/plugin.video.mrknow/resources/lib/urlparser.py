@@ -153,21 +153,24 @@ class urlparser:
         nUrl = self.parseliveflash(url,referer)           
     if host== 'ovcast.com':
         nUrl = self.parseovcast(url,referer)           
+    if host== 'stream4.tv':
+        nUrl = self.stream4(url,referer)           
 
     return nUrl
 
+  def stream4(self,url,referer):
+    query = urlparse.urlparse(url)
+    p = urlparse.parse_qs(query.query)
+    print p
+    link = 'rtmp://199.19.95.106:443/liverepeater playpath='+p['id'][0]+' live=true swfUrl=http://static.stream4.tv/playerg.swf pageUrl=http://stream4.tv/player.php'
+    print link
+    return link
+    
+    
   def parseovcast(self,url,referer):
     query = urlparse.urlparse(url)
     p = urlparse.parse_qs(query.query)
     print p
-#    query_data = { 'url': 'http://www.liveflash.tv:1935/loadbalancer', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-#    link = self.cm.getURLRequestData(query_data)
- #   rtmpsrv = link.replace('redirect=','')  
- #   req = urllib2.Request(url)
- #   req.add_header('Referer', 'http://'+referer)
- #   req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
- #   response = urllib2.urlopen(req)
- #   link=response.read()
     print ("LINK",url)
     #response.close()
     #match = re.search("so.addParam\('FlashVars', '(.*?)'\);",link)

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<category label="noobroom.com">
-		<setting type="lsep" label="Adres ip ze strony www.noobroom.com" />
-		<setting id="noobroom_ip" type="text" label="Adres ip" default="noobroom1.com" />
-	</category>
 	<category label="kinolive.pl">
 		<setting type="lsep" label="zaloguj sie do serwisu"/>
 		<setting id="kinolive_login" type="bool" label="Zaloguj się" default="false" />
@@ -11,18 +7,9 @@
 		<setting type="lsep" label="Login i hasło" />
 		<setting id="kinolive_user" type="text" label="login" default="" />
 		<setting id="kinolive_pass" type="text" label="hasło" option="hidden"  default="" />
-
 	</category>
-		<category label="scs.pl">
-		<setting type="lsep" label="zaloguj sie do serwisu"/>
-		<setting id="scs.pl_login" type="bool" label="Zaloguj się" default="false" />
-		<setting type="sep"/>
-		<setting type="lsep" label="Login i hasło" />
-		<setting id="scs.pl_user" type="text" label="login" default="" />
-		<setting id="scs.pl_pass" type="text" label="hasło" option="hidden"  default="" />
 
-	</category>
-<category label="netvi.pl">
+	<category label="netvi.pl">
 		<setting type="lsep" label="zaloguj sie do serwisu"/>
 		<setting id="netvi.pl_login" type="bool" label="Zaloguj się" default="false" />
 		<setting type="sep"/>
@@ -31,7 +18,11 @@
 		<setting id="netvi.pl_pass" type="text" label="hasło" option="hidden"  default="" />
 
 	</category>
-
+	<category label="noobroom.com">
+		<setting type="lsep" label="Adres ip ze strony www.noobroom.com" />
+		<setting id="noobroom_ip" type="text" label="Adres ip" default="noobroom1.com" />
+	</category>
+	
 	<category label="plej.tv">
 		<setting type="lsep" label="zaloguj sie do serwisu"/>
 		<setting id="plej_login" type="bool" label="Zaloguj się" default="false" />
@@ -39,7 +30,30 @@
 		<setting type="lsep" label="Login i hasło" />
 		<setting id="plej_user" type="text" label="login" default="" />
 		<setting id="plej_pass" type="text" label="hasło" option="hidden"  default="" />
-
+	</category>
+		<category label="scs.pl">
+		<setting type="lsep" label="zaloguj sie do serwisu"/>
+		<setting id="scs.pl_login" type="bool" label="Zaloguj się" default="false" />
+		<setting type="sep"/>
+		<setting type="lsep" label="Login i hasło" />
+		<setting id="scs.pl_user" type="text" label="login" default="" />
+		<setting id="scs.pl_pass" type="text" label="hasło" option="hidden"  default="" />
+	</category>
+	<category label="streamon.pl">
+		<setting type="lsep" label="zaloguj sie do serwisu"/>
+		<setting id="streamon_login" type="bool" label="Zaloguj się" default="false" />
+		<setting type="sep"/>
+		<setting type="lsep" label="Login i hasło" />
+		<setting id="streamon_user" type="text" label="login" default="" />
+		<setting id="streamon_pass" type="text" label="hasło" option="hidden"  default="" />	
+	</category>	
+	<category label="wrzuta.pl">
+		<setting type="lsep" label="zaloguj sie do serwisu"/>
+		<setting id="wrzuta_login" type="bool" label="Zaloguj się" default="false" />
+		<setting type="sep"/>
+		<setting type="lsep" label="Login i hasło" />
+		<setting id="wrzuta_user" type="text" label="login" default="" />
+		<setting id="wrzuta_pass" type="text" label="hasło" option="hidden"  default="" />	
 	</category>
 
 </settings>

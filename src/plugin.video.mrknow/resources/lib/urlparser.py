@@ -161,9 +161,10 @@ class urlparser:
   def stream4(self,url,referer):
     query = urlparse.urlparse(url)
     p = urlparse.parse_qs(query.query)
-    print p
-    link = 'rtmp://199.19.95.106:443/liverepeater playpath='+p['id'][0]+' live=true swfUrl=http://static.stream4.tv/playerg.swf pageUrl=http://stream4.tv/player.php'
-    print link
+    query_data = { 'url': 'http://xbmcfilm.com/stream4.tv.txt', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    plink = self.cm.getURLRequestData(query_data)
+    plink = plink.replace('\n','')
+    link = plink+' playpath='+p['id'][0]+' live=true swfUrl=http://static.stream4.tv/playerg.swf pageUrl=http://stream4.tv/player.php'
     return link
     
     
@@ -172,14 +173,8 @@ class urlparser:
     p = urlparse.parse_qs(query.query)
     print p
     print ("LINK",url)
-    #response.close()
-    #match = re.search("so.addParam\('FlashVars', '(.*?)'\);",link)
-    #match1 = re.search("'flashplayer': \"(.*?)\",",link)
-    #"rtmpe://199.195.199.188:443/liveedge1/Channel2658"
-#    link = 'rtmpe://199.195.199.188:443/liveedge1 playpath='+p['ch'][0]+' swfVfy=1 token=chupem_me_a_pissa live=true swfUrl=https://ovcast.com/jwplayer/jwplayer.flash.swf pageUrl='+url
     link = 'rtmp://share.ovcast.com/live1 playpath='+p['ch'][0]+' token=chupem_me_a_pissa live=true'
-    print link
-    # -r rtmpe://217.23.4.120:443/liveedge1 -y Channel2658 -o test.avi -z -v -W https://ovcast.com/jwplayer/jwplayer.flash.swf -p "https://ovcast.com/gen.php?ch=Channel2658&width=728&height=420" -T chupem_me_a_pissa
+#    print link
     return link
     
   def parseliveflash(self,url,referer):

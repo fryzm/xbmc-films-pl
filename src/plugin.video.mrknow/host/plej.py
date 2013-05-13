@@ -145,13 +145,13 @@ class plej:
     def getMovieType(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('src: "(.*?)",', re.DOTALL).findall(link)
-        match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
-        #print ("ZZZZZZZZ",match,url,link)
+        match = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
+        #match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
+        print ("ZZZZZZZZ",match,url,link)
         if len(match)>0:
             return True
-        elif len(match1)>0:
-            return True
+        #elif len(match1)>0:
+        #    return True
         else:
             return False
         
@@ -159,16 +159,17 @@ class plej:
         #print ("URL",url)
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('src: "(.*?)",', re.DOTALL).findall(link)
-        match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
+        match = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
+        #match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
         #print ("AAAAAAAAAAAAAA",match,url,link)
         if len(match)>0:
             linkVideo = match[0]
             return linkVideo
-        if len(match1)>0:
-            match2 = re.compile('video     : \'(.*?)\',', re.DOTALL).findall(link)
-            linkVideo = match1[0] + '/'+match2[0]
-            return linkVideo
+        #if len(match1)>0:
+        #    match2 = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
+        #    print match2
+        #    linkVideo = match1[0] + '/'+match2[0]
+        #    return linkVideo
         
 
     
@@ -216,7 +217,7 @@ class plej:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
-        print(name,category,url,title)
+        print("aaa",name,category,url,title)
         if name == None:
             self.login()
             self.listsMainMenu(MENU_TAB)
@@ -232,6 +233,7 @@ class plej:
             self.listsItems(url)
         if name == 'playSelectedMovie':
             if self.getMovieType(url) == True:
+                print "JJJJJJJJJJJJEESSSSTTTT TRUE"
                 self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
             else:
                 self.listsItems(url)

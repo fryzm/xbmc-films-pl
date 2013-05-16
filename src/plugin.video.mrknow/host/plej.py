@@ -18,7 +18,8 @@ import pLog, pCommon, Parser, settings
 log = pLog.pLog()
 
 mainUrl = 'http://plej.tv/'
-chanels = 'http://plej.tv/index.php?p=kanal&id='
+#chanels = 'http://plej.tv/index.php?p=kanal'
+chanels = 'http://plej.tv/index.php?p=kanal&id=517711e9409d4'
 playerUrl = 'http://www.youtube.pl/'
 
 HOST = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:21.0) Gecko/20100101 Firefox/21.0'
@@ -47,14 +48,19 @@ class plej:
             #query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             #data = self.cm.getURLRequestData(query_data, post_data)
             #print ("Data2",data)
-            if self.isLoggedIn(data) == True:
-                xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('plej_user') + ", Zostales poprawnie zalogowany,4000)")
-            else:
-                xbmc.executebuiltin("XBMC.Notification(Blad logowania, uzywam Player z limitami,4000)")  
+            #if self.isLoggedIn(data) == True:
+                #xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('plej_user') + ", Zostales poprawnie zalogowany,4000)")
+            #else:
+                #xbmc.executebuiltin("XBMC.Notification(Blad logowania, uzywam Player z limitami,4000)")  
         else:
             log.info('Wyświetlam ustawienia')
             #self.settings.showSettings()
-            xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
+                    #http://plej.tv/ajax/alert.php
+	    query_data = { 'url': 'http://plej.tv/ajax/alert.php', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+	    link = self.cm.getURLRequestData(query_data)
+            #print ("Link",link)
+
+            #xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
             
     def isLoggedIn(self, data):
         lStr = '<li><a class="play" href="index.php?p=logout" title="" >WYLOGUJ</a></li>'
@@ -64,9 +70,9 @@ class plej:
           return False
 
     def listsMainMenu(self, table):
-        query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+        query_data = { 'url': chanels, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<table style="width:100%"><tr><td style="width:30%;vertical-align:middle;"><a href="(.*?)" title="(.*?)"><img style="width:50px;height:40px;" src="(.*?)" alt="" /></a></td>', re.DOTALL).findall(link)
+        match = re.compile('<table style="width:100%"><tr><td style="width:30%;vertical-align:middle;"><a href="(.*?)" title="(.*?)" rel="tooltip"><img style="width:50px;height:40px;" src="(.*?)" alt="" /></a></td>', re.DOTALL).findall(link)
         #print match
         for o in range(len(match)):
             #if self.getMovieType(mainUrl+match[o][0]) == True:
@@ -145,13 +151,13 @@ class plej:
     def getMovieType(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
-        #match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
-        print ("ZZZZZZZZ",match,url,link)
+        match = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
+        match1 = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
+        print ("ZZZZZZZZ",match,url)
         if len(match)>0:
             return True
-        #elif len(match1)>0:
-        #    return True
+        elif len(match1)>0:
+            return True
         else:
             return False
         
@@ -160,16 +166,17 @@ class plej:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
-        #match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
+        match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
         #print ("AAAAAAAAAAAAAA",match,url,link)
         if len(match)>0:
             linkVideo = match[0]
             return linkVideo
-        #if len(match1)>0:
-        #    match2 = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
-        #    print match2
-        #    linkVideo = match1[0] + '/'+match2[0]
-        #    return linkVideo
+        elif len(match1)>0:
+            match2 = re.compile('video     : \'(.*?)\',', re.DOTALL).findall(link)
+            print match2
+            linkVideo = match1[0] + '/'+match2[0]
+	    print linkVideo
+	    return linkVideo
         
 
     

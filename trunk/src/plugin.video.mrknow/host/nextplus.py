@@ -4,7 +4,6 @@ import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
 import urlparser
 import json
-import elementtree.ElementTree as ET
 
 
 

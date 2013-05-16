@@ -16,8 +16,8 @@ import pLog, settings, Parser,pCommon
 
 log = pLog.pLog()
 
-mainUrl = 'http://kinolive.pl/'
-catUrl = 'http://kinolive.pl/seriale_online/'
+mainUrl = 'http://alekino.tv/'
+catUrl = 'http://alekino.tv/seriale_online/'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
@@ -37,7 +37,7 @@ class kinoliveseriale:
         self.up = urlparser.urlparser()
         self.cm = pCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveseriale.cookie"
-        query_data = {'url': 'http://kinolive.pl/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
+        query_data = {'url': 'http://alekino.tv/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
 
     def getstring(self,data):
@@ -185,29 +185,13 @@ class kinoliveseriale:
         match2 = re.compile('{ serial: "(.*?)", source: (.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
         
         post_data = {'serial': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
-        query_data = {'url': 'http://kinolive.pl/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+        query_data = {'url': 'http://alekino.tv/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)
         marian = json.loads(data)
         match3 = re.compile('<iframe src="(.*?)" style="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(marian["player_code"])
-        linkVideo =''
-        if ptv.getSetting('kinoliveseriale_login') == 'true':
-            post_data = {'username': ptv.getSetting('kinoliveseriale_user'), 'password': ptv.getSetting('kinoliveseriale_pass'), 'submit_login': 'Zaloguj'}
-            query_data = {'url': 'http://kinoliveseriale.pl/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-            data = self.cm.getURLRequestData(query_data, post_data)
-            post_data = {'video': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
-            query_data = {'url': 'http://kinoliveseriale.pl/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-            data = self.cm.getURLRequestData(query_data, post_data)
-            marian = json.loads(data)
-            if marian["premium"] != None: 
-                linkVideo = marian["premium"].decode('utf8')
-        if linkVideo !='':
-            return linkVideo
-        else:
-            linkVideo = self.up.getVideoLink(match3[0][0].decode('utf8'))
-            return linkVideo
+        linkVideo = self.up.getVideoLink(match3[0][0].decode('utf8'))
+        return linkVideo
         
-
-
 
     def searchInputText(self):
         text = None

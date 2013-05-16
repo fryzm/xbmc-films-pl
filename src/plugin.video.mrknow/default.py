@@ -62,7 +62,7 @@ SPORT_ONLINE_TABLE = {
 }
 
 SERIALE_ONLINE_TABLE = {
-               8000: ["kinolive.pl","kinoliveseriale"],
+               8000: ["Alekino.tv","kinoliveseriale"],
                8100: ["scs.pl","scs"]
 }
 
@@ -72,7 +72,7 @@ FILM_ONLINE_TABLE = {
              7000: ["Vod Onet PL","vodpl"],
              7100: ["Filmbox Movie","filmboxmoovie"],
              7200: ["Filmmex","filmmex"],
-             7500: ["Kinolive","kinolive"],
+             7500: ["Alekino.tv","kinolive"],
              7600: ["Iptak","iptak"],
              7700: ["Films-online.pl","filmsonline"],
              7800: ["StrefaVod.pl","strefavod"],

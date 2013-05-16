@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<category label="kinolive.pl">
-		<setting type="lsep" label="zaloguj sie do serwisu"/>
-		<setting id="kinolive_login" type="bool" label="Zaloguj się" default="false" />
-		<setting type="sep"/>
-		<setting type="lsep" label="Login i hasło" />
-		<setting id="kinolive_user" type="text" label="login" default="" />
-		<setting id="kinolive_pass" type="text" label="hasło" option="hidden"  default="" />
-	</category>
 
 	<category label="netvi.pl">
 		<setting type="lsep" label="zaloguj sie do serwisu"/>

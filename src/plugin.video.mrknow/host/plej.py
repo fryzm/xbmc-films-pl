@@ -18,10 +18,10 @@ import pLog, pCommon, Parser, settings
 log = pLog.pLog()
 
 mainUrl = 'http://plej.tv/'
-chanels = 'http://plej.tv/index.php?p=kanal'
+chanels = 'http://plej.tv/index.php?p=kanal&id='
 playerUrl = 'http://www.youtube.pl/'
 
-HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
+HOST = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:21.0) Gecko/20100101 Firefox/21.0'
 
 MENU_TAB = {1: "Wszystkie",
             3: "Szukaj" }

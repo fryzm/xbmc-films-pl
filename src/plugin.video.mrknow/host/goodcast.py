@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser, settings
+import pLog, pCommon, Parser, settings, pageparser
 
 log = pLog.pLog()
 
@@ -36,31 +36,23 @@ class goodcast:
         self.cm = pCommon.common()
         self.settings = settings.TVSettings()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "goodcast.cookie"
+        self.pp = pageparser.pageparser()
 
 
     def listsMainMenu(self):
-        query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+        query_data = { 'url': mainUrl, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<tr><td>(.*?)</td><td><a href="(.*?)">(.*?)</a></td></tr>', re.DOTALL).findall(link)
+        match = re.compile('<a href="(.*?)" target="_blank">(.*?)</a>', re.DOTALL).findall(link)
         print match
         for o in range(len(match)):
-            self.add('goodcast', 'playSelectedMovie', 'None', match[o][0], 'None', match[o][1], 'None', 'None', True, False)
+            self.add('goodcast', 'playSelectedMovie', 'None', match[o][1], 'None', match[o][0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
        
     def getMovieLinkFromXML(self, url):
         #print ("URL",url)
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        match = re.compile("file: '(.*?)',", re.DOTALL).findall(link)
-        #print ("AAAAAAAAAAAAAA",match,url,link)
-        if len(match)>0:
-            linkVideo = match[0]
-            linkVideo = linkVideo + ' pageUrl='+url+' swfUrl=http://goodcast.tv/jwplayer/jwplayer.flash.swf'
-            return linkVideo
-        else:
-            return False
-        
+        linkVideo = self.pp.getVideoLink(url)
+        return linkVideo
 
     
 

@@ -65,11 +65,12 @@ class WYKOP:
         #readURL = openURL.read()
         
 
-    def listsItems(self, url):
+    def listsItemsAudio(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
+	print link
         #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
-        match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
+        match = re.compile('(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
         if len(match) > 0:
             for i in range(len(match)):
              if match[i][3].find('video') > -1:# 0
@@ -229,6 +230,9 @@ class WYKOP:
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
             self.listsItems(url)
+        elif name == 'items-audio' and category != 'None':
+            log.info('AUDIOAAAAAAAAAAAAAAAAAAurl: ' + str(url))
+            self.listsItemsAudio(url)
         if name == 'playSelectedMovie':
             self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
 

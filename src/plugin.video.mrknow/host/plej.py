@@ -116,11 +116,21 @@ class plej:
         print ("LINK",match)
         match1 = re.compile('{"file":"(.*?)"}],"title":"(.*?)"}', re.DOTALL).findall(match[0])
         print ("Match1",match1)
+        pl=xbmc.PlayList(1)
+        pl.clear()
+
         #linkVideo = self.up.getVideoLink(match[0])
         for i in range(len(match1)):
-            self.add('plej', 'playYoutube', 'None', str(i) +'. ' +match1[i][1], 'None', self.up.getVideoLink(match1[i][0].replace('\\','')), 'aaaa', 'None', True, True)
+ 	#           self.add('plej', 'playYoutube', 'None', str(i) +'. ' +match1[i][1], 'None', self.up.getVideoLink(match1[i][0].replace('\\','')), 'aaaa', 'None', True, True)
+		print ("ZZZZZZZ",self.up.getVideoLink(match1[i][0].replace('\\','')))
+		listitem = xbmcgui.ListItem(str(i) +'. ' +match1[i][1], thumbnailImage='None')
+		url = self.up.getVideoLink(match1[i][0].replace('\\',''))
+		xbmc.PlayList(1).add(url, listitem)
+	
 
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+	xbmc.Player().play(pl)
+	return True
+
 
 
     def listsItemsPage(self, url):
@@ -153,11 +163,15 @@ class plej:
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
         match1 = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
+        match2 = re.compile('file:\'(.*?)\',', re.DOTALL).findall(link)
+
         print ("ZZZZZZZZ",match,url)
         if len(match)>0:
             return True
         elif len(match1)>0:
             return True
+	elif len(match2)>0:
+	    return True
         else:
             return False
         
@@ -167,6 +181,7 @@ class plej:
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
         match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
+        match2 = re.compile('file:\'(.*?)\',', re.DOTALL).findall(link)
         #print ("AAAAAAAAAAAAAA",match,url,link)
         if len(match)>0:
             linkVideo = match[0]
@@ -177,7 +192,10 @@ class plej:
             linkVideo = match1[0] + '/'+match2[0]
 	    print linkVideo
 	    return linkVideo
-        
+        elif len(match2)>0:
+            linkVideo = match2[0]
+            return linkVideo
+ 
 
     
 
@@ -244,7 +262,5 @@ class plej:
                 self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
             else:
                 self.listsItems(url)
-        if name == 'playYoutube':
-                self.LOAD_AND_PLAY_VIDEO(url, title, icon)
         
   

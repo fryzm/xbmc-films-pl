@@ -35,9 +35,9 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
 TV_ONLINE_TABLE = {
 		     2100 : ["Film Box", 'filmbox'],
              2200 : ["Plej.tv", 'plej'],
-             2300 : ["Nextplus", 'nextplus'],
+             #2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
-             2500 : ["Netvi.tv [Testy]", 'netvi'],
+             2500 : ["Netvi.tv", 'netvi'],
              2600 : ["Goodcast.tv", 'goodcast'],
              2700 : ["Streamon.pl", 'streamon'],
              
@@ -50,7 +50,7 @@ FUN_ONLINE_TABLE = {
                6000: ["milanos.pl","milanos"],
                4500: ["tosiewytnie.pl","tosiewytnie"],               
                5000: ["joemonster.org","joemonster"],
-               #5100: ["Wrzuta.pl","wrzuta"]
+               5100: ["Wrzuta.pl [testy - nie działa]","wrzuta"]
                
 }
 SPORT_ONLINE_TABLE = {
@@ -76,6 +76,7 @@ FILM_ONLINE_TABLE = {
              7600: ["Iptak","iptak"],
              7700: ["Films-online.pl","filmsonline"],
              7800: ["StrefaVod.pl","strefavod"],
+             5100: ["Wrzuta.pl [testy - nie działa]","wrzuta"]
 
 }
 

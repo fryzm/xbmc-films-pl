@@ -24,9 +24,14 @@ loginUrl = 'https://ssl.wrzuta.pl/zaloguj'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-MENU_TAB = {1: "Wszystkie",
-            2: "Moje",
-            3: "Szukaj" }
+MENU_TAB = {1: ["Filmy",""],
+            2: ["Audio","http://www.wrzuta.pl/audio/popularne"],
+            3: ["Playlisty",""],
+            4: ["Foto",""],
+            5: ["Kanały",""],
+            10: ["Moje Konto",""],
+            30: ["Szukaj",""]
+ }
 
 
 class wrzuta:
@@ -65,24 +70,44 @@ class wrzuta:
             log.info('Wyświetlam ustawienia')
             #self.settings.showSettings()
             xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
+
+    #  def add(self, service, name,    category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
     def listsMainMenu(self, table):
         for num, val in table.items():
-            self.add('wrzuta', 'main-menu', val, val, 'None', 'None', 'None', 'None', True, False)
+            self.add('wrzuta', 'main-menu', val[0], val[0], 'None', val[1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
     def listsCategoriesMenu(self,url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
 
-        print link
-        
-        print len(match)
+        match = re.compile('<div class="music-menu">(.*?)</div>', re.DOTALL).findall(link)
+#        print ("link",link)
+#        print len(match)
         print match
         
         if len(match) > 0:
-            log.info('Listuje kategorie: ')
+#<a href="http://www.wrzuta.pl/audio/popularne" class="music-position top active">\n\t\t\t\t\t<i></i>\n\t\t\t\t\t<p>Top Wrzuty</p>\n\t\t\t\t</a>
+	        match1 = re.compile('<a href="(.*?)" class="(.*?)">\n\t\t\t\t\t<i></i>\n\t\t\t\t\t<p>(.*?)</p>', re.DOTALL).findall(match[0])
+ 		for i in range(len(match1)):
+			print match1[i]
+ 			url = match1[i][0]
+			self.add('wrzuta', 'items-audio', 'None', match1[i][2],  'None', url, 'None', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
+
+    def listsitemsAudio(self,url):
+	query_data = {'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+	link = self.cm.getURLRequestData(query_data)
+#<a href="http://raptuss.wrzuta.pl/audio/9ICwJ2ec2ze/ewelina_lisowska_-_jutra_nie_bedzie" class="file-music-title">Ewelina Lisowska - Jutra nie będzie</a>
+        match = re.compile('<a href="(.*?)" class="file-music-title">(.*?)</a>', re.DOTALL).findall(link)
+        if len(match) > 0:
+            log.info('Listuje pliki: ')
             for i in range(len(match)):
-                url = self.mainUrl + match[i][0]
-                self.add('noobroom', 'categories-menu', match[i][1].strip(), 'None', 'None', url, 'None', 'None', True, False)
+		print match[i]
+                url = match[i][0]
+                self.add('wrzuta', 'playSelectedMovie','None', match[i][1].strip(), 'None', url, 'None', 'None', True, False)
+
+    	print ("LINK",match)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))        
 
     def listsCategoriesMy(self):
@@ -162,15 +187,18 @@ class wrzuta:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
-        print(name,category,url,title)
+        print("MENU --------------- ",name,category,url,title)
         if name == None:
             self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Kategorie':
-            log.info('Jest Kategorie: ')
-            self.listsCategoriesMenu(catUrl)
+        elif name == 'main-menu' and category == 'Audio':
+            log.info('Jest Audio: ')
+            self.listsCategoriesMenu(url)
         elif name == 'main-menu' and category == 'Moje':
             log.info('Jest Moje: ')
             self.listsCategoriesMy()            
+        elif name == 'items-audio' and category == 'None':
+            log.info('Jest Audio: url')
+            self.listsitemsAudio(url)            
         if name == 'playSelectedMovie':
             self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
         

@@ -65,12 +65,13 @@ class WYKOP:
         #readURL = openURL.read()
         
 
-    def listsItemsAudio(self, url):
+    def listsItems(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-	print link
         #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
-        match = re.compile('(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
+        match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
+        print link
+        
         if len(match) > 0:
             for i in range(len(match)):
              if match[i][3].find('video') > -1:# 0

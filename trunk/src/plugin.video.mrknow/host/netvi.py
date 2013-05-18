@@ -40,6 +40,7 @@ class netvi:
             print ("Data2",data)
         else:
             log.info('Wyświetlam ustawienia')
+	    xbmc.executebuiltin("XBMC.Notification(Brak loginu i hasla, Wpisz login i haslo w ustawieniach,4000)") 
             self.settings.showSettings()
 
 

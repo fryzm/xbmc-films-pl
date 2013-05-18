@@ -517,7 +517,10 @@ class urlparser:
         if query.path == '/watch':
             p = urlparse.parse_qs(query.query)
             print p
-            return 'plugin://plugin.video.youtube/?action=play_video&videoid=' + p['v'][0]
+            if len(p) > 0:
+		return 'plugin://plugin.video.youtube/?action=play_video&videoid=' + p['v'][0]
+	    else:
+		return ''
         if query.path[:7] == '/embed/':
             print query
             print query.path.split('/')[2]

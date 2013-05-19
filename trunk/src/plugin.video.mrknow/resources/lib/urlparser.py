@@ -155,9 +155,30 @@ class urlparser:
         nUrl = self.parseovcast(url,referer)           
     if host== 'stream4.tv':
         nUrl = self.stream4(url,referer)           
+    if host.find("wrzuta.pl") > -1:
+        nUrl = self.wrzutapl(url)           
 
     return nUrl
-
+  def wrzutapl(self, url):
+    query = urlparse.urlparse(url)
+    url1 = query.path.split("/")
+    url = query.scheme + '://' + query.netloc+ '/xml/plik/' + url1[2] +'/wrzuta.pl/sa/963669'
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    #print ("Link",link)
+    match = re.compile('<fileId><!\[CDATA\[(.*?)\]\]></fileId>', re.DOTALL).findall(link)
+    match1 = re.compile('<fileId><!\[CDATA\[(.*?)\]\]></fileId>', re.DOTALL).findall(link)
+    match2 = re.compile('<fileId><!\[CDATA\[(.*?)\]\]></fileId>', re.DOTALL).findall(link)
+    #print ("AAAAAAAAAAAAAA",match)
+    if len(match)>0:
+        return match[0]
+    elif len(match1)>0:
+        return match1[0]
+    elif len(match2)>0:
+        return match2[0]
+    else:
+        return ''
+            
   def stream4(self,url,referer):
     query = urlparse.urlparse(url)
     p = urlparse.parse_qs(query.query)

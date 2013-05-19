@@ -4,6 +4,7 @@ import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
 import urlparser
 import json,hashlib
+import urlparse
 
 
 scriptID = 'plugin.video.mrknow'
@@ -24,14 +25,22 @@ loginUrl = 'https://ssl.wrzuta.pl/zaloguj'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-MENU_TAB = {1: ["Filmy",""],
-            2: ["Audio","http://www.wrzuta.pl/audio/popularne"],
-            3: ["Playlisty",""],
-            4: ["Foto",""],
-            5: ["Kanały",""],
-            10: ["Moje Konto",""],
-            30: ["Szukaj",""]
+MENU_TAB = {1: ["Audio - Najnowsze","http://www.wrzuta.pl/audio/najnowsze"],
+            2: ["Audio - Popularne","http://www.wrzuta.pl/audio/popularne"],
+            #3: ["Audio - Kategorie","http://www.wrzuta.pl/audio/popularne"],
+            4: ["Audio - Szukaj",""],
+            #4: ["Foto",""],
+            #5: ["Kanały",""],
+            #6: ["Zestawienia Audio","http://www.wrzuta.pl/zestawienia/audio/"],
+            #7: ["Zestawienia Filmy","http://www.wrzuta.pl/zestawienia/filmy"],
+            #8: ["Zestawienia Obrazy","http://www.wrzuta.pl/zestawienia/obrazy"],
+            #10: ["Moje Konto",""],
+            #30: ["Szukaj",""]
  }
+
+AUDIO_TAB = {
+ }
+
 
 
 class wrzuta:
@@ -77,69 +86,79 @@ class wrzuta:
             self.add('wrzuta', 'main-menu', val[0], val[0], 'None', val[1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
+     
     def listsCategoriesMenu(self,url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-
-        match = re.compile('<div class="music-menu">(.*?)</div>', re.DOTALL).findall(link)
-#        print ("link",link)
-#        print len(match)
-        print match
-        
+        print ("LINK",link)
+        match = re.compile('<div class="box-entry-file-thumb">\n\t\t\t\t\t\t<a href="(.*?)" class="box-file-link">\n\t\t\t\t\t\t\t<img src="(.*?)" height="(.*?)" width="(.*?)" alt="(.*?)" />', re.DOTALL).findall(link)
+        print ("match",match)
         if len(match) > 0:
-#<a href="http://www.wrzuta.pl/audio/popularne" class="music-position top active">\n\t\t\t\t\t<i></i>\n\t\t\t\t\t<p>Top Wrzuty</p>\n\t\t\t\t</a>
-	        match1 = re.compile('<a href="(.*?)" class="(.*?)">\n\t\t\t\t\t<i></i>\n\t\t\t\t\t<p>(.*?)</p>', re.DOTALL).findall(match[0])
- 		for i in range(len(match1)):
-			print match1[i]
- 			url = match1[i][0]
-			self.add('wrzuta', 'items-audio', 'None', match1[i][2],  'None', url, 'None', 'None', True, False)
+            for i in range(len(match)):
+                print match[i]
+                url = match[i][0]
+                #add(self, service, name,      category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('wrzuta', 'playSelectedMovie', 'None', match[i][4],   match[i][1], url, 'None', 'None', True, False)
+        match2 = re.compile('<a class="paging-next" rel="(.*?)"\n\t\t\thref="(.*?)">', re.DOTALL).findall(link)
+        if len(match2) > 0:  
+            self.add('wrzuta', 'main-menu', 'Audio - Najnowsze', 'Następna strona', os.path.join(ptv.getAddonInfo('path'), "images/") +'nastepna_strona.png', match2[0][1], 'None', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
+
+    def listsCategoriesSearch(self,url):
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+        link = self.cm.getURLRequestData(query_data)
+        print ("LINK",link)
+        match = re.compile('<li  class="(.*?)"  data-cat="(.*?)">\n\t\t\n\t\t\t\n\t\t\t\t<a href="(.*?)" target="_blank" class="image">\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t<img src="(.*?)" height="(.*?)" width="(.*?)" alt="(.*?)" />', re.DOTALL).findall(link)
+        print ("match",match)
+        if len(match) > 0:
+            for i in range(len(match)):
+                print match[i]
+                url = match[i][2]
+                #add(self, service, name,      category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('wrzuta', 'playSelectedMovie', 'None', match[i][6],   match[i][3], url, 'None', 'None', True, False)
+        match2 = re.compile('<a class="paging-next" rel="(.*?)"\n\t\t\thref="(.*?)">', re.DOTALL).findall(link)
+        if len(match2) > 0:  
+            self.add('wrzuta', 'main-menu', 'Audio - Najnowsze', 'Następna strona', os.path.join(ptv.getAddonInfo('path'), "images/") +'nastepna_strona.png', match2[0][1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))        
 
     def listsitemsAudio(self,url):
-	query_data = {'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-	link = self.cm.getURLRequestData(query_data)
-#<a href="http://raptuss.wrzuta.pl/audio/9ICwJ2ec2ze/ewelina_lisowska_-_jutra_nie_bedzie" class="file-music-title">Ewelina Lisowska - Jutra nie będzie</a>
-        match = re.compile('<a href="(.*?)" class="file-music-title">(.*?)</a>', re.DOTALL).findall(link)
+        query_data = {'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        print ("LINK",link)
+    #<a href="http://raptuss.wrzuta.pl/audio/9ICwJ2ec2ze/ewelina_lisowska_-_jutra_nie_bedzie" class="file-music-title">Ewelina Lisowska - Jutra nie będzie</a>
+        match = re.compile('<div class="file-info">\n\t\t\t\t<a href="(.*?)" class="file-music-title">(.*?)</a>', re.DOTALL).findall(link)
+        pl=xbmc.PlayList(1)
+        pl.clear()
         if len(match) > 0:
             log.info('Listuje pliki: ')
             for i in range(len(match)):
-		print match[i]
-                url = match[i][0]
-                self.add('wrzuta', 'playSelectedMovie','None', match[i][1].strip(), 'None', url, 'None', 'None', True, False)
+                print match[i]
+                listitem = xbmcgui.ListItem( match[i][1].strip(), thumbnailImage='None')
+                url = self.up.getVideoLink(match[i][0])
+                listitem.setInfo( type="Audio", infoLabels={ "Title": match[i][1].strip() } )
+                xbmc.PlayList(1).add(url, listitem)
+	
 
-    	print ("LINK",match)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
+	xbmc.Player().play(pl)
+	return True
 
-    def listsCategoriesMy(self):
-        self.login()
-        query_data = { 'url': mainUrl, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }        
+    def listsCategoriesMy(self,url):
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-
-        print ("Link",link)
-        match = re.compile('<p class="user-box-name"><a href="(.*?)">(.*?)</a></p>', re.DOTALL).findall(link)
-
-        print len(match)
-        print match
-        
+        match = re.compile('<div id="right" class="music">\n\n\t\n\t\t<div class="music-menu">(.*?)</div>', re.DOTALL).findall(link)
         if len(match) > 0:
-            log.info('Listuje kategorie: ')
-            for i in range(len(match)):
-                url = self.mainUrl + match[i][0]
-                self.add('noobroom', 'categories-menu', match[i][1].strip(), 'None', 'None', url, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1])) 
+            match1 = re.compile('<a href="(.*?)" class="music-position(.*?)">\n\t\t\t\t\t<i></i>\n\t\t\t\t\t<p>(.*?)</p>\n\t\t\t\t</a>', re.DOTALL).findall(match[0])
+            print ("match1",match1)
+            for i in range(len(match1)):
+                    url = match1[i][0]
+                    self.add('wrzuta', 'items-audio','None',  match1[i][2],'None', url, 'None', 'None', True, False)
+            xbmcplugin.endOfDirectory(int(sys.argv[1])) 
         
     def getMovieLinkFromXML(self, url):
-        #print ("URL",url)
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        match = re.compile("file: '(.*?)',", re.DOTALL).findall(link)
-        #print ("AAAAAAAAAAAAAA",match,url,link)
-        if len(match)>0:
-            linkVideo = match[0]
-            linkVideo = linkVideo + ' pageUrl='+url+' swfUrl=http://wrzuta.tv/jwplayer/jwplayer.flash.swf'
-            return linkVideo
-        else:
-            return False
+        linkVideo = self.up.getVideoLink(url)
+        print linkVideo 
+        
+        return linkVideo
         
 
     
@@ -148,7 +167,8 @@ class wrzuta:
         u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)
         #log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
-            title = category 
+            if title == 'None':
+                title = category 
         if iconimage == '':
             iconimage = "DefaultVideo.png"
         liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
@@ -178,7 +198,14 @@ class wrzuta:
             d = xbmcgui.Dialog()
             d.ok('Błąd przy przetwarzaniu.', 'Problem')        
         return ok
-
+        
+    def searchInputText(self):
+        text = None
+        k = xbmc.Keyboard()
+        k.doModal()
+        if (k.isConfirmed()):
+            text = k.getText()
+        return text
 
     def handleService(self):
     	params = self.parser.getParams()
@@ -190,9 +217,17 @@ class wrzuta:
         print("MENU --------------- ",name,category,url,title)
         if name == None:
             self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Audio':
+        elif name == 'main-menu' and category == 'Audio - Najnowsze':
             log.info('Jest Audio: ')
             self.listsCategoriesMenu(url)
+        elif name == 'main-menu' and category == "Audio - Szukaj":
+            key = self.searchInputText()
+            url = 'http://www.wrzuta.pl/szukaj/audio/'+urllib.quote_plus(key)
+            self.listsCategoriesSearch(url)
+            
+        elif name == 'main-menu' and category == 'Audio - Popularne':
+            log.info('Jest Audio - Popularne: '+url)
+            self.listsCategoriesMy(url)
         elif name == 'main-menu' and category == 'Moje':
             log.info('Jest Moje: ')
             self.listsCategoriesMy()            
@@ -200,6 +235,6 @@ class wrzuta:
             log.info('Jest Audio: url')
             self.listsitemsAudio(url)            
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            self.LOAD_AND_PLAY_VIDEO(self.up.getVideoLink(url), title, icon)
         
   

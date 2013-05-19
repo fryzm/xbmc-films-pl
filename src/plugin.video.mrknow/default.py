@@ -46,16 +46,16 @@ TV_ONLINE_TABLE = {
              
 }
 FUN_ONLINE_TABLE = {
-               3000: ["wykop.pl","wykop"],
-               6000: ["milanos.pl","milanos"],
-               4500: ["tosiewytnie.pl","tosiewytnie"],               
-               5000: ["joemonster.org","joemonster"],
-               5100: ["Wrzuta.pl [testy - nie działa]","wrzuta"]
+               3000: ["Wykop.pl","wykop"],
+               6000: ["Milanos.pl","milanos"],
+               4500: ["Tosiewytnie.pl","tosiewytnie"],               
+               5000: ["Joemonster.org","joemonster"],
+               5100: ["Wrzuta.pl [testy]","wrzuta"]
                
 }
 SPORT_ONLINE_TABLE = {
-               4000: ["meczyki.pl [dziala ok 40%]","meczyki"],
-               4100: ["drhtv.com.pl","drhtvcompl"],
+               4000: ["Meczyki.pl [dziala ok 40%]","meczyki"],
+               4100: ["Drhtv.com.pl","drhtvcompl"],
                2600 : ["Goodcast.tv", 'goodcast'],
                2700 : ["Streamon.pl", 'streamon'],
                
@@ -63,7 +63,7 @@ SPORT_ONLINE_TABLE = {
 
 SERIALE_ONLINE_TABLE = {
                8000: ["Alekino.tv","kinoliveseriale"],
-               8100: ["scs.pl","scs"]
+               8100: ["Scs.pl","scs"]
 }
 
 FILM_ONLINE_TABLE = {
@@ -76,7 +76,7 @@ FILM_ONLINE_TABLE = {
              7600: ["Iptak","iptak"],
              7700: ["Films-online.pl","filmsonline"],
              7800: ["StrefaVod.pl","strefavod"],
-             5100: ["Wrzuta.pl [testy - nie działa]","wrzuta"]
+             5100: ["Wrzuta.pl [testy]","wrzuta"]
 
 }
 

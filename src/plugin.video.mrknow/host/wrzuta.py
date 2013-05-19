@@ -28,13 +28,14 @@ HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, 
 MENU_TAB = {1: ["Audio - Najnowsze","http://www.wrzuta.pl/audio/najnowsze"],
             2: ["Audio - Popularne","http://www.wrzuta.pl/audio/popularne"],
             #3: ["Audio - Kategorie","http://www.wrzuta.pl/audio/popularne"],
-            4: ["Audio - Szukaj",""],
-            #4: ["Foto",""],
+            3: ["Audio - Szukaj","./"],
+            4: ["Filmy - Najnowsze","http://www.wrzuta.pl/filmy/najnowsze"],
+            5: ["Filmy - Szukaj","./"],
+            #6: ["Moje konto",""],
             #5: ["Kanały",""],
             #6: ["Zestawienia Audio","http://www.wrzuta.pl/zestawienia/audio/"],
             #7: ["Zestawienia Filmy","http://www.wrzuta.pl/zestawienia/filmy"],
             #8: ["Zestawienia Obrazy","http://www.wrzuta.pl/zestawienia/obrazy"],
-            #10: ["Moje Konto",""],
             #30: ["Szukaj",""]
  }
 
@@ -60,13 +61,13 @@ class wrzuta:
             tmplogin1 = hashlib.sha1(tmplogin+ptv.getSetting('wrzuta_user')).hexdigest()
             query_data = { 'url': loginUrl, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }        
             link = self.cm.getURLRequestData(query_data)
-            print ("L",link)
+            #print ("L",link)
             post_data = {'login': ptv.getSetting('wrzuta_user'), 'password': tmplogin1, 'user_remember':'','fbid': ''}
             #login=mrknow&password=ffcee7d644dab355cb9111ceb96c348786fe9a82&user_remember=&fbid=
             
             query_data = {'url': loginUrl, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             data = self.cm.getURLRequestData(query_data, post_data)
-            print ("Data1",data)
+            #print ("Data1",data)
             #post_data = {'login': ptv.getSetting('wrzuta_user'), 'pass': ptv.getSetting('wrzuta_pass'), 'log_in2':'Zaloguj'}
             #query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             #data = self.cm.getURLRequestData(query_data, post_data)
@@ -77,7 +78,7 @@ class wrzuta:
                 xbmc.executebuiltin("XBMC.Notification(Blad logowania,4000)")  
         else:
             log.info('Wyświetlam ustawienia')
-            #self.settings.showSettings()
+            self.settings.showSettings()
             xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
 
     #  def add(self, service, name,    category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
@@ -92,13 +93,13 @@ class wrzuta:
         link = self.cm.getURLRequestData(query_data)
         print ("LINK",link)
         match = re.compile('<div class="box-entry-file-thumb">\n\t\t\t\t\t\t<a href="(.*?)" class="box-file-link">\n\t\t\t\t\t\t\t<img src="(.*?)" height="(.*?)" width="(.*?)" alt="(.*?)" />', re.DOTALL).findall(link)
-        print ("match",match)
+        #print ("match",match)
         if len(match) > 0:
             for i in range(len(match)):
-                print match[i]
+                #print match[i]
                 url = match[i][0]
                 #add(self, service, name,      category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('wrzuta', 'playSelectedMovie', 'None', match[i][4],   match[i][1], url, 'None', 'None', True, False)
+                self.add('wrzuta', 'playSelectedMovie', 'None', self.cm.html_special_chars(match[i][4]),   match[i][1], url, 'None', 'None', True, False)
         match2 = re.compile('<a class="paging-next" rel="(.*?)"\n\t\t\thref="(.*?)">', re.DOTALL).findall(link)
         if len(match2) > 0:  
             self.add('wrzuta', 'main-menu', 'Audio - Najnowsze', 'Następna strona', os.path.join(ptv.getAddonInfo('path'), "images/") +'nastepna_strona.png', match2[0][1], 'None', 'None', True, False)
@@ -107,24 +108,59 @@ class wrzuta:
     def listsCategoriesSearch(self,url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        print ("LINK",link)
+        #print ("LINK",link)
         match = re.compile('<li  class="(.*?)"  data-cat="(.*?)">\n\t\t\n\t\t\t\n\t\t\t\t<a href="(.*?)" target="_blank" class="image">\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t<img src="(.*?)" height="(.*?)" width="(.*?)" alt="(.*?)" />', re.DOTALL).findall(link)
-        print ("match",match)
+        #print ("match",match)
         if len(match) > 0:
             for i in range(len(match)):
                 print match[i]
                 url = match[i][2]
                 #add(self, service, name,      category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('wrzuta', 'playSelectedMovie', 'None', match[i][6],   match[i][3], url, 'None', 'None', True, False)
+                self.add('wrzuta', 'playSelectedMovie', 'None', self.cm.html_special_chars(match[i][6]),   match[i][3], url, 'None', 'None', True, False)
         match2 = re.compile('<a class="paging-next" rel="(.*?)"\n\t\t\thref="(.*?)">', re.DOTALL).findall(link)
         if len(match2) > 0:  
-            self.add('wrzuta', 'main-menu', 'Audio - Najnowsze', 'Następna strona', os.path.join(ptv.getAddonInfo('path'), "images/") +'nastepna_strona.png', match2[0][1], 'None', 'None', True, False)
+            self.add('wrzuta', 'main-menu', 'Audio - Szukaj', 'Następna strona', os.path.join(ptv.getAddonInfo('path'), "images/") +'nastepna_strona.png', match2[0][1], 'None', 'None', True, False,'Następna')
         xbmcplugin.endOfDirectory(int(sys.argv[1]))        
 
+    def listsFilms(self,url):
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+        link = self.cm.getURLRequestData(query_data)
+        print ("LINK",link)
+        match = re.compile('<div class="left-area">\n\t\t\t\t\t\t\t<a href="(.*?)" class="position-img">\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t<img src="(.*?)" alt="(.*?)" height="(.*?)" width="(.*?)"/>', re.DOTALL).findall(link)
+        print ("match",match)
+        if len(match) > 0:
+            for i in range(len(match)):
+                #print match[i]
+                url = match[i][0]
+                #add(self, service, name,      category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('wrzuta', 'playSelectedMovie', 'None', self.cm.html_special_chars(match[i][2]),   match[i][1], url, 'None', 'None', True, False)
+        match2 = re.compile('<a class="paging-next" rel="(.*?)"\n\t\t\thref="(.*?)">', re.DOTALL).findall(link)
+        if len(match2) > 0:  
+            self.add('wrzuta', 'main-menu', 'Filmy - Najnowsze', 'Następna strona', os.path.join(ptv.getAddonInfo('path'), "images/") +'nastepna_strona.png', match2[0][1], 'None', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
+
+    def listsFilmsSearch(self,url):
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+        link = self.cm.getURLRequestData(query_data)
+        print ("LINK",link)
+        match = re.compile('<li  data-cat="(.*?)">\n\t\t\n\t\t\t\n\t\t\t\t<a href="(.*?)" target="_blank" class="image">\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t<img src="(.*?)" alt="(.*?)" width="(.*?)" height="(.*?)" class="image" />', re.DOTALL).findall(link)
+        print ("match",match)
+        if len(match) > 0:
+            for i in range(len(match)):
+                #print match[i]
+                url = match[i][1]
+                #add(self, service, name,      category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('wrzuta', 'playSelectedMovie', 'None', self.cm.html_special_chars(match[i][3]),   match[i][2], url, 'None', 'None', True, False)
+        match2 = re.compile('<a class="paging-next" rel="(.*?)"\n\t\t\thref="(.*?)">', re.DOTALL).findall(link)
+        if len(match2) > 0:  
+            self.add('wrzuta', 'main-menu', 'Filmy - Szukaj', 'Następna strona', os.path.join(ptv.getAddonInfo('path'), "images/") +'nastepna_strona.png', match2[0][1], 'None', 'None', True, False,'Nastepna')
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
+        
+        
     def listsitemsAudio(self,url):
         query_data = {'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        print ("LINK",link)
+        #print ("LINK",link)
     #<a href="http://raptuss.wrzuta.pl/audio/9ICwJ2ec2ze/ewelina_lisowska_-_jutra_nie_bedzie" class="file-music-title">Ewelina Lisowska - Jutra nie będzie</a>
         match = re.compile('<div class="file-info">\n\t\t\t\t<a href="(.*?)" class="file-music-title">(.*?)</a>', re.DOTALL).findall(link)
         pl=xbmc.PlayList(1)
@@ -132,7 +168,7 @@ class wrzuta:
         if len(match) > 0:
             log.info('Listuje pliki: ')
             for i in range(len(match)):
-                print match[i]
+                #print match[i]
                 listitem = xbmcgui.ListItem( match[i][1].strip(), thumbnailImage='None')
                 url = self.up.getVideoLink(match[i][0])
                 listitem.setInfo( type="Audio", infoLabels={ "Title": match[i][1].strip() } )
@@ -148,24 +184,24 @@ class wrzuta:
         match = re.compile('<div id="right" class="music">\n\n\t\n\t\t<div class="music-menu">(.*?)</div>', re.DOTALL).findall(link)
         if len(match) > 0:
             match1 = re.compile('<a href="(.*?)" class="music-position(.*?)">\n\t\t\t\t\t<i></i>\n\t\t\t\t\t<p>(.*?)</p>\n\t\t\t\t</a>', re.DOTALL).findall(match[0])
-            print ("match1",match1)
+            #print ("match1",match1)
             for i in range(len(match1)):
                     url = match1[i][0]
-                    self.add('wrzuta', 'items-audio','None',  match1[i][2],'None', url, 'None', 'None', True, False)
+                    self.add('wrzuta', 'items-audio','None',  self.cm.html_special_chars(match1[i][2]),'None', url, 'None', 'None', True, False)
             xbmcplugin.endOfDirectory(int(sys.argv[1])) 
         
     def getMovieLinkFromXML(self, url):
         linkVideo = self.up.getVideoLink(url)
-        print linkVideo 
+        #print linkVideo 
         
         return linkVideo
         
 
     
 
-    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
-        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)
-        #log.info(str(u))
+    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True,strona='None'):
+        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)+ "&strona=" + urllib.quote_plus(strona)
+        log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
             if title == 'None':
                 title = category 
@@ -214,22 +250,33 @@ class wrzuta:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
-        print("MENU --------------- ",name,category,url,title)
+        strona = self.parser.getParam(params, "strona")
+        print("MENU --------------- ",name,category,url,title,strona)
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Audio - Najnowsze':
-            log.info('Jest Audio: ')
+            log.info('Jest Audio Najnowsze: '+url)
             self.listsCategoriesMenu(url)
+        elif name == 'main-menu' and category == 'Filmy - Najnowsze':
+            log.info('Jest Filmy Najnowsze: '+url)
+            self.listsFilms(url)
         elif name == 'main-menu' and category == "Audio - Szukaj":
-            key = self.searchInputText()
-            url = 'http://www.wrzuta.pl/szukaj/audio/'+urllib.quote_plus(key)
+            if strona == 'None':
+                key = self.searchInputText()
+                url = 'http://www.wrzuta.pl/szukaj/audio/'+urllib.quote_plus(key)
             self.listsCategoriesSearch(url)
+        elif name == 'main-menu' and category == "Filmy - Szukaj":
+            if strona == 'None':
+                key = self.searchInputText()
+                url = 'http://www.wrzuta.pl/szukaj/filmow/'+urllib.quote_plus(key)
+            self.listsFilmsSearch(url)
             
         elif name == 'main-menu' and category == 'Audio - Popularne':
             log.info('Jest Audio - Popularne: '+url)
             self.listsCategoriesMy(url)
-        elif name == 'main-menu' and category == 'Moje':
-            log.info('Jest Moje: ')
+        elif name == 'main-menu' and category == 'Moje konto':
+            log.info('Jest Moje konto: ')
+            self.login()
             self.listsCategoriesMy()            
         elif name == 'items-audio' and category == 'None':
             log.info('Jest Audio: url')

@@ -86,6 +86,8 @@ class common:
     def html_special_chars(self,txt):
         print("TXT",txt)
         txt = txt.replace('#038;','')
+        txt = txt.replace('&#34;','"')
+        txt = txt.replace('&#39;','\'')
         txt = txt.replace('&#8221;','"')
         txt = txt.replace('&#8222;','"')
         txt = txt.replace('&#8211;','-')

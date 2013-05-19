@@ -160,15 +160,18 @@ class urlparser:
 
     return nUrl
   def wrzutapl(self, url):
+    HOST = "User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0"
     query = urlparse.urlparse(url)
     url1 = query.path.split("/")
     url = query.scheme + '://' + query.netloc+ '/xml/plik/' + url1[2] +'/wrzuta.pl/sa/963669'
-    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    #print ("Link",link)
-    match = re.compile('<fileId><!\[CDATA\[(.*?)\]\]></fileId>', re.DOTALL).findall(link)
-    match1 = re.compile('<fileId><!\[CDATA\[(.*?)\]\]></fileId>', re.DOTALL).findall(link)
-    match2 = re.compile('<fileId><!\[CDATA\[(.*?)\]\]></fileId>', re.DOTALL).findall(link)
+    print ("Link",link)
+    match = re.compile('<fileH264Id><!\[CDATA\[(.*?)\]\]></fileH264Id>', re.DOTALL).findall(link)
+    match1 = re.compile('<fileHQId><!\[CDATA\[(.*?)\]\]></fileHQId>', re.DOTALL).findall(link)
+    match2 = re.compile('<fileMQId><!\[CDATA\[(.*?)\]\]></fileMQId>', re.DOTALL).findall(link)
+    match3 = re.compile('<fileId><!\[CDATA\[(.*?)\]\]></fileId>', re.DOTALL).findall(link)
+    
     #print ("AAAAAAAAAAAAAA",match)
     if len(match)>0:
         return match[0]
@@ -176,6 +179,8 @@ class urlparser:
         return match1[0]
     elif len(match2)>0:
         return match2[0]
+    elif len(match3)>0:
+        return match3[0]
     else:
         return ''
             

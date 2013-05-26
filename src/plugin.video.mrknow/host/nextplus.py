@@ -40,9 +40,17 @@ class nextplus:
     def listsMainMenu(self, table):
         query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        doc = ET.fromstring(link)
-        for node in doc.findall('.//element/element'):
-            self.add('nextplus', 'playSelectedMovie', 'None', node[0].text, node[1].text, node[2].text, 'None', 'None', True, False)
+	#print ("LLL",link)
+	link = link.replace('<?xml version="1.0" encoding="utf-8"?>\n<root>\n<element id="1">\n<nazwa>','')
+	#print ("LLL",link)
+
+	#<element id="101">\n<nazwa>TVP 1</nazwa>\n<grafika>http://static.nextplus.pl/img/TVP1.jpg</grafika>\n<link>http://api.nextplus.pl/1/59.xml</link></element>
+        match = re.compile('<nazwa>(.*?)</nazwa>\n<grafika>(.*?)</grafika>\n<link>(.*?)</link>', re.DOTALL).findall(link)
+	if len(match) > 0:
+            log.info('Listuje kategorie: ')
+            for i in range(len(match)):
+	#	print ("ILE",len(match[i]),match[i])
+		self.add('nextplus', 'playSelectedMovie', 'None', match[i][0], match[i][1], match[i][2], 'None', 'None', True, False)
 
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -120,6 +128,7 @@ class nextplus:
     def getMovieLinkFromXML(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
+	print link
         match = re.compile('<link1>(.*?)</link1>', re.DOTALL).findall(link)
         linkVideo = match[0]
         return linkVideo

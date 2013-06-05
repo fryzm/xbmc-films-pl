@@ -210,6 +210,8 @@ class pageparser:
     match16=re.compile("<script type='text/javascript'> width=(.*?), height=(.*?), channel='(.*?)', g='(.*?)';</script><script type='text/javascript' src='http://www.liveflash.tv/resources/scripts/liveFlashEmbed.js'></script>").findall(link)
     match17=re.compile('<script type="text/javascript">ca="(.*?)";width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="https://ovcast.com/js/embed.js"></script>').findall(link)
     match18=re.compile("<script type=\'text/javascript\'>id=\'(.*?)\'; width=\'(.*?)\'; height=\'(.*?)\';</script><script type=\'text/javascript\' src=\'http://stream4.tv/player.js\'>").findall(link)
+    match19=re.compile("<script type='text/javascript'>id='(.*?)'; width='(.*?)'; height='(.*?)';</script><script type='text/javascript' src='http://goodcast.org/player.js'></script>").findall(link)
+#<script type='text/javascript'>id='46702'; width='640'; height='360';</script><script type='text/javascript' src='http://goodcast.org/player.js'></script>
     #print ("link",link)
     #
     
@@ -265,6 +267,9 @@ class pageparser:
     elif len(match18) > 0:
         print ("Match18",match18)
         return self.up.getVideoLink('http://stream4.tv/player.php?id='+match18[0][0]+'&width='+match18[0][1]+'&height='+match18[0][2],referer)
+    elif len(match19) > 0:
+        print ("Match19",match19)
+        return self.up.getVideoLink('http://goodcast.org/stream.php?id='+match19[0][0]+'&width='+match19[0][1]+'&height='+match19[0][2],referer)
 
 
     else:

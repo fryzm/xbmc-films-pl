@@ -18,7 +18,7 @@ import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, mil
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
 import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
-import iptak,goodcast,streamon,strefavod,wrzuta
+import iptak,goodcast,streamon,strefavod,wrzuta,mmtv
 
 log = pLog.pLog()
 
@@ -40,10 +40,7 @@ TV_ONLINE_TABLE = {
              2500 : ["Netvi.tv", 'netvi'],
              2600 : ["Goodcast.tv", 'goodcast'],
              2700 : ["Streamon.pl", 'streamon'],
-             
-             
-             
-             
+             2800 : ["MmTV.pl","mmtv"]
 }
 FUN_ONLINE_TABLE = {
                3000: ["Wykop.pl","wykop"],
@@ -167,6 +164,9 @@ class MrknowFilms:
     elif mode == 2700 or service == 'streamon':
         tv = streamon.streamon()
         tv.handleService()
+    elif mode == 2800 or service == 'mmtv':
+        tv = mmtv.mmtv()
+        tv.handleService()        
     elif mode == 3000 or service == 'wykop':
         tv = wykop.WYKOP()
         tv.handleService()

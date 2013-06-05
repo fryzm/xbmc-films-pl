@@ -182,11 +182,15 @@ class kinoliveseriale:
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match1 = re.compile('<input type="hidden" name="currentmirrorload" value="(.*?)"', re.DOTALL).findall(link)
-        match2 = re.compile('{ serial: "(.*?)", source: (.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
+        #match2 = re.compile('{ serial: "(.*?)", source: (.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
+        match2 = re.compile('{serial:"(.*?)",source:(.*?),token:"(.*?)",time:"(.*?)"}', re.DOTALL).findall(link)
+        #{serial:"54999",source:$('input[name=currentmirrorload]').val(),token:"3fc31a090e88126951d230552d982730",time:"1370467193"},function(data)
         
+        print ("M2",match2)
         post_data = {'serial': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
         query_data = {'url': 'http://alekino.tv/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)
+        print ("D",data)
         marian = json.loads(data)
         match3 = re.compile('<iframe src="(.*?)" style="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(marian["player_code"])
         linkVideo = self.up.getVideoLink(match3[0][0].decode('utf8'))

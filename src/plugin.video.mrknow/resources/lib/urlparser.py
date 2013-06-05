@@ -147,6 +147,9 @@ class urlparser:
         nUrl = self.parseflashwiz(url,referer)   
     if host== 'goodcast.tv':
         nUrl = self.parsegoodcast(url)   
+    if host== 'goodcast.org':
+        nUrl = self.parsegoodcastorg(url)   
+        
     if host== 'www.yycast.com':
         nUrl = self.parseyycast(url,referer)   
     if host== 'www.liveflash.tv':
@@ -236,6 +239,18 @@ class urlparser:
     link = 'rtmp://212.7.206.66:1935/live/_definst_ playpath='+match.group(1)+' swfUrl='+match1.group(1)+' pageUrl='+url
     return link
     
+  def parsegoodcastorg(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    print ("L",link)
+    match = re.compile('<embed id="player"\n\t\t\t\t\t\tsrc="(.*?)"\n\t\t\t\t\t\twidth="(.*?)"\n\t\t\t\t\t\theight="(.*?)"\n\t\t\t\t\t\tallowscriptaccess="always"\n\t\t\t\t\t\tallowfullscreen="true"\n\t\t\t\t\t\tflashvars="file=(.*?)&amp;streamer=(.*?)&amp;', re.DOTALL).findall(link)
+    print match
+    if len(match)>0:
+        linkVideo = match[0][4] + '/'+match[0][3]
+        linkVideo = linkVideo + ' pageUrl='+url+' swfUrl='+match[0][0]
+        return linkVideo
+    else:
+        return False
   def parsegoodcast(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)

@@ -41,6 +41,7 @@ class streamon:
     def listsMainMenu(self, table):
         query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
+        print ("L",link)
         match = re.compile('<div class="channel" rel="(.*?)"><div class="name">(.*?)</div><div class="schedule"><img src="(.*?)" /></div>', re.DOTALL).findall(link)
         for o in range(len(match)):
                 self.add('streamon', 'playSelectedMovie', 'None', match[o][1], mainUrl+match[o][2], mainUrl+match[o][0], 'None', 'None', True, False)

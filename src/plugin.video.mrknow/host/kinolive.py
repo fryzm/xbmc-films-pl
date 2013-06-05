@@ -110,8 +110,14 @@ class kinolive:
         urllink = url + '?' + filtrowanie +'&page='+ str(strona)
         query_data = { 'url': urllink, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<!-- Movie -->(.*?)<!-- END:Movie -->', re.DOTALL).findall(link)
-        match1 = re.compile('<h2><a href="(.*?)">(.*?)</a></h2>(.*?)<a href="(.*?)" title="(.*?)"><img src="(.*?)" width="100" height="133" alt="okladka" /></a>', re.DOTALL).findall(match[0])
+        print ("L",link)
+        match = re.compile('<div class="film-main round">(.*?)\n</div>\n', re.DOTALL).findall(link)
+        print match
+#        match1 = re.compile('<h2><a href="(.*?)">(.*?)</a></h2>(.*?)<a href="(.*?)" title="(.*?)"><img src="(.*?)" width="100" height="133" alt="okladka" /></a>', re.DOTALL).findall(match[0])
+        #<div class="film-main round">\n<div class="kategoria-filmu round">\n<div class="paddings" style="padding-bottom:0px">\n<h2><a href="/film_online/22006-mosquita-y-mari-2011-eng.html">Mosquita y Mari (2011) [ENG]</a></h2>\n<p>Wstawi\xc5\x82: <a href="/user/czarny59" class="pl-pink-white" title="Profil u\xc5\xbcytkownika czarny59">czarny59</a> | 2013-06-05 | Komentarze: 0 | Kategorie:\n<a class="pl-pink-white" href="/videos?kat=4">Dramat</a>\n</p>\n</div>\n</div>\n<div class="p10">\n<p class="opis">\n<div class="movie-cover">\n<a href="/film_online/22006-mosquita-y-mari-2011-eng.html" title="Mosquita y Mari"><img src="http://static.alekino.tv/okladki/100x133x211227d8f27907746e040a247f78a5ab_thumb.jpg.pagespeed.ic.3A9FSRvGqS.jpg" width="100" height="133" alt="okladka" pagespeed_url_hash="3930472592"/></a>
+        match2 = re.compile('<div class="film-main round">\n<div class="kategoria-filmu round">\n<div class="paddings" style="padding-bottom:0px">\n<h2><a href="(.*?)">(.*?)</a></h2>\n<p>Wstawi\xc5\x82: (.*?) | (.*?) | (.*?) | Kategorie:(.*?)\n</p>\n</div>\n</div>\n<div class="p10">\n<p class="opis">\n<div class="movie-cover">\n<a href="(.*?)" title="(.*?)"><img src="(.*?)" width="(.*?)" height="(.*?)" alt="(.*?)" pagespeed_url_hash="(.*?)"/></a>', re.DOTALL).findall(link)
+        print match2
+        
         if len(match1) > 0:
             for i in range(len(match1)):
                     self.add('kinolive', 'playSelectedMovie', 'None', match1[i][1],  match1[i][5], mainUrl+ match1[i][0], 'aaaa', 'None', True, False)

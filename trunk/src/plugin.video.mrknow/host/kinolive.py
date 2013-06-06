@@ -28,9 +28,9 @@ MENU_TAB = {0: "Filmy",
             3: "Filmy z dubbingiem",
             4: "Filmy polskie",
             5: "Filmy HD",
-            6: "Top 100 - najczęściej oglądane",
-            7: "Top 100 - ulubione",
-            8: "Top 100 - najwyżej ocenione",
+#            6: "Top 100 - najczęściej oglądane",
+#            7: "Top 100 - ulubione",
+#            8: "Top 100 - najwyżej ocenione",
 #            7: "Popularne z okresu",
 #            10: "Sortowanie",
             12: "Kategorie",
@@ -110,17 +110,19 @@ class kinolive:
         urllink = url + '?' + filtrowanie +'&page='+ str(strona)
         query_data = { 'url': urllink, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        print ("L",link)
-        match = re.compile('<div class="film-main round">(.*?)\n</div>\n', re.DOTALL).findall(link)
-        print match
-#        match1 = re.compile('<h2><a href="(.*?)">(.*?)</a></h2>(.*?)<a href="(.*?)" title="(.*?)"><img src="(.*?)" width="100" height="133" alt="okladka" /></a>', re.DOTALL).findall(match[0])
-        #<div class="film-main round">\n<div class="kategoria-filmu round">\n<div class="paddings" style="padding-bottom:0px">\n<h2><a href="/film_online/22006-mosquita-y-mari-2011-eng.html">Mosquita y Mari (2011) [ENG]</a></h2>\n<p>Wstawi\xc5\x82: <a href="/user/czarny59" class="pl-pink-white" title="Profil u\xc5\xbcytkownika czarny59">czarny59</a> | 2013-06-05 | Komentarze: 0 | Kategorie:\n<a class="pl-pink-white" href="/videos?kat=4">Dramat</a>\n</p>\n</div>\n</div>\n<div class="p10">\n<p class="opis">\n<div class="movie-cover">\n<a href="/film_online/22006-mosquita-y-mari-2011-eng.html" title="Mosquita y Mari"><img src="http://static.alekino.tv/okladki/100x133x211227d8f27907746e040a247f78a5ab_thumb.jpg.pagespeed.ic.3A9FSRvGqS.jpg" width="100" height="133" alt="okladka" pagespeed_url_hash="3930472592"/></a>
-        match2 = re.compile('<div class="film-main round">\n<div class="kategoria-filmu round">\n<div class="paddings" style="padding-bottom:0px">\n<h2><a href="(.*?)">(.*?)</a></h2>\n<p>Wstawi\xc5\x82: (.*?) | (.*?) | (.*?) | Kategorie:(.*?)\n</p>\n</div>\n</div>\n<div class="p10">\n<p class="opis">\n<div class="movie-cover">\n<a href="(.*?)" title="(.*?)"><img src="(.*?)" width="(.*?)" height="(.*?)" alt="(.*?)" pagespeed_url_hash="(.*?)"/></a>', re.DOTALL).findall(link)
-        print match2
-        
-        if len(match1) > 0:
-            for i in range(len(match1)):
-                    self.add('kinolive', 'playSelectedMovie', 'None', match1[i][1],  match1[i][5], mainUrl+ match1[i][0], 'aaaa', 'None', True, False)
+        #print ("L",link)
+        match = re.compile('<div class="film-main round">(.*?)<div class="tac">', re.DOTALL).findall(link)
+        if len(match) > 0:
+            for i in range(len(match)):
+                okladka = ''
+                match1 = re.compile('<h2><a href="(.*?)">(.*?)</a></h2>', re.DOTALL).findall(match[i])
+                match2 = re.compile('<img src="(.*?)" width="100" height="133" alt="okladka" pagespeed_url_hash="(.*?)"/></a>', re.DOTALL).findall(match[i])
+                match3 = re.compile('<img src="(.*?)" width="100" height="133" alt="okladka" /></a>', re.DOTALL).findall(match[i])
+                if len(match2) > 0:
+                    okladka = match2[0][0]
+                if len(match3) > 0:
+                    okladka = match3[0]
+                self.add('kinolive', 'playSelectedMovie', 'None', match1[0][1],  okladka, mainUrl+ match1[0][0], 'aaaa', 'None', True, False)
         log.info('Nastepna strona: '+  urllink)
         self.add('kinolive', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona) + 1), str(filtrowanie))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -160,7 +162,7 @@ class kinolive:
         link = self.cm.getURLRequestData(query_data)
         VideoData['year'] = str(self.getMovieYear(link))
         match1 = re.compile('<input type="hidden" name="currentmirrorload" value="(.*?)"', re.DOTALL).findall(link)
-        match2 = re.compile('{ video: "(.*?)", source: (.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
+        match2 = re.compile('{video:"(.*?)",source:(.*?),token:"(.*?)",time:"(.*?)"}', re.DOTALL).findall(link)
         post_data = {'video': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
         query_data = {'url': 'http://alekino.tv/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)
@@ -295,7 +297,7 @@ class kinolive:
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
         filtrowanie = self.parser.getParam(params, "filtrowanie")
-        
+        print ("D",category,url,strona,filtrowanie)
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Filmy z lektorem':

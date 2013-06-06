@@ -40,7 +40,7 @@ TV_ONLINE_TABLE = {
              2500 : ["Netvi.tv", 'netvi'],
              2600 : ["Goodcast.tv", 'goodcast'],
              2700 : ["Streamon.pl", 'streamon'],
-             2800 : ["MmTV.pl","mmtv"]
+             #2800 : ["MmTV.pl","mmtv"]
 }
 FUN_ONLINE_TABLE = {
                3000: ["Wykop.pl","wykop"],

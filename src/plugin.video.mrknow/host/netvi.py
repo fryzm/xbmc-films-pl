@@ -29,20 +29,33 @@ class netvi:
         self.up = urlparser.urlparser()
         self.cm = pCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "netvi.cookie"
+    def login(self):    
         if ptv.getSetting('netvi.pl_login') == 'true':
             post_data = {'login': ptv.getSetting('netvi.pl_user'), 'password': ptv.getSetting('netvi.pl_pass')}
             query_data = {'url': 'https://watch.netvi.tv/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             data = self.cm.getURLRequestData(query_data, post_data)
-            print ("Data1",data)
+            #print ("Data1",data)
             query_data = {'url': 'https://watch.netvi.tv/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             data = self.cm.getURLRequestData(query_data, post_data)
-            #<script type="text/javascript" src="https://support.netvi.tv/sso/n474o434e4s2g4l5l436e4t2z5z5/6f8993c277c26f92d6f3b7fa77b13151c8b95e2e0e6811399a7c3a658f5f5444/d4o4f4e4l4t4/d4o4f4e4l4t463p5f416a4p4o5e5z3k4r5/t213z2u213/o2"></script>
-            print ("Data2",data)
+            #print ("Data2",data)
+            if self.isLoggedIn(data) == True:
+                xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('netvi.pl_user') + ", Zostales poprawnie zalogowany,4000)")
+            else:
+                xbmc.executebuiltin("XBMC.Notification(Błędny login i hasło do serwisu, Wpisz poprawne dane w ustawieniach,4000)") 
+                self.settings.showSettings()
+                
         else:
             log.info('Wyświetlam ustawienia')
-	    xbmc.executebuiltin("XBMC.Notification(Brak loginu i hasla, Wpisz login i haslo w ustawieniach,4000)") 
+            xbmc.executebuiltin("XBMC.Notification(Brak loginu i hasla, Wpisz login i haslo w ustawieniach,4000)") 
             self.settings.showSettings()
-
+            
+    def isLoggedIn(self, data):
+        #print data
+        lStr = '<a href="/logout">Wyloguj</a>'
+        if lStr in data:
+          return True
+        else:
+          return False
 
 
     def listsCategoriesMenu(self):
@@ -150,6 +163,7 @@ class netvi:
         
         
         if name == None:
+            self.login()
             self.listsCategoriesMenu()
         elif name == 'main-menu' and category == 'Alfabetycznie':
             log.info('Jest Alfabetycznie: ')

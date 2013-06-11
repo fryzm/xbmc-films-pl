@@ -162,7 +162,8 @@ class kinolive:
         link = self.cm.getURLRequestData(query_data)
         VideoData['year'] = str(self.getMovieYear(link))
         match1 = re.compile('<input type="hidden" name="currentmirrorload" value="(.*?)"', re.DOTALL).findall(link)
-        match2 = re.compile('{video:"(.*?)",source:(.*?),token:"(.*?)",time:"(.*?)"}', re.DOTALL).findall(link)
+        #{ video: "21710", source: $('input[name=currentmirrorload]').val(), token:"d057f6157b594762b1b972cd48fe1861", time:"1370953147"}, function(data)
+        match2 = re.compile('{ video: "(.*?)", source:(.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
         post_data = {'video': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
         query_data = {'url': 'http://alekino.tv/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)

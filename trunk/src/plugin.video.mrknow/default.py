@@ -205,7 +205,7 @@ class MrknowFilms:
 
         self.addDir("Telewizja", 1, False, 'Telewizja', False)
         self.addDir("Filmy", 2, False, 'Filmy', False)
-        self.addDir("Seriale", 3, False, 'Filmy', False)
+        self.addDir("Seriale", 3, False, 'Seriale', False)
         self.addDir("Rozrywka", 4, False, 'Rozrywka', False)
         self.addDir('Sport', 19, False, 'Sport', False)
         self.addDir('Ustawienia', 20, True, 'Ustawienia', False)

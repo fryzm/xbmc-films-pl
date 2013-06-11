@@ -83,28 +83,29 @@ class pageparser:
 
   def streamon(self,url):
     self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "streamon.cookie"
-    zalogowany = False
-    if ptv.getSetting('streamon_login') == 'true':
-        post_data = {'login': ptv.getSetting('streamon_user'), 'password': ptv.getSetting('streamon_pass')}
-        query_data = {'url': 'http://streamon.pl/user,login.htm', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-        data = self.cm.getURLRequestData(query_data, post_data)
-        lStr = '<div class="logout"><a href="user,login,logout.htm">Wyloguj'
-        if lStr in data:
-            print "ZAAAAAAAAAAAAAALOOOOGOWANy"
-            zalogowany = True
-    else:
-        xbmc.executebuiltin("XBMC.Notification(Blad logowania, Wpisz login i has³o w ustawieniach,8000)")  
-        log.info('Wyœwietlam ustawienia')
-        self.settings.showSettings()
-        return False
+    #zalogowany = False
+    #if ptv.getSetting('streamon_login') == 'true':
+    #    post_data = {'login': ptv.getSetting('streamon_user'), 'password': ptv.getSetting('streamon_pass')}
+    #    query_data = {'url': 'http://streamon.pl/user,login.htm', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+    #    data = self.cm.getURLRequestData(query_data, post_data)
+    #    lStr = '<div class="logout"><a href="user,login,logout.htm">Wyloguj'
+    #    if lStr in data:
+    #        print "ZAAAAAAAAAAAAAALOOOOGOWANy"
+    #        zalogowany = True
+    #else:
+    #    xbmc.executebuiltin("XBMC.Notification(Blad logowania, Wpisz login i hasï¿½o w ustawieniach,8000)")  
+    #    log.info('Wyï¿½wietlam ustawienia')
+    #    self.settings.showSettings()
+    #    return False
 
-    if zalogowany == True:
+    #if zalogowany == True:
         #xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('streamon_user') + ", Zostales poprawnie zalogowany,4000)")
-        nUrl = self.pageanalyze(url,url,self.COOKIEFILE)
-        return nUrl    
-    else:
-        xbmc.executebuiltin("XBMC.Notification(Blad logowania, popraw login i has³o w ustawieniach,8000)")  
-        self.settings.showSettings()   
+    #nUrl = self.pageanalyze(url,url,self.COOKIEFILE)
+    nUrl = self.pageanalyze(url,url)
+    return nUrl    
+    #else:
+    #    xbmc.executebuiltin("XBMC.Notification(Blad logowania, popraw login i hasï¿½o w ustawieniach,8000)")  
+    #    self.settings.showSettings()   
     
   def typertv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }

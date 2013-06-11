@@ -77,30 +77,27 @@ class netvi:
         link = self.cm.getURLRequestData(query_data)
         json_object = json.loads(link)
         print json_object
+        if (ptv.getSetting('netvi.pl_quality') == 'HD'):
+            jakosc = 0
+        if (ptv.getSetting('netvi.pl_quality') == 'SD'):
+            jakosc = 1
+        if (ptv.getSetting('netvi.pl_quality') == 'LQ'):
+            jakosc = 2
+            
 
         if json_object['status'] == 'ok':
             url = json_object['stream_channel']['url_base']
             print ("url",url)
             query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
             link = self.cm.getURLRequestData(query_data)
-            print link
+            print ("Jakosc",jakosc)
             match = re.compile('<media url="(.*?)" bitrate="(.*?)"/>', re.DOTALL).findall(link)
             match1 = re.compile('<baseURL>(.*?)</baseURL>', re.DOTALL).findall(link)
-            #
-            
-            print "jest OK"
-            tab = []
-            for i in range(len(match)):
-                tab.append('Bitrate - '+match[i][1])
-            d = xbmcgui.Dialog()        
-            video_menu = d.select("Wybór jakości video", tab)
             #rtmpdump -r "rtmp://w-stream2.4vod.tv:1935/3/_definst_" -a "3/_definst_" -f "WIN 11,6,602,180" -W "https://watch.netvi.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf" -p "https://watch.netvi.tv/" --live -C S:a28777a987ae7d30e252fb07493e9054 -C S:Hxzqq96TqcvzFO61Kl2xq4RimcruUu3X -y "mp4:33.stream" -o mp4_33.stream.flv
 #            link = 'rtmp://w-stream3.4vod.tv:1935/3/_definst_ app=3/_definst_ swfUrl=https://watch.netvi.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf pageUrl=https://watch.netvi.tv/ live=true conn=S:'+json_object['stream_channel']['url_params'][1]+' conn=S:'+json_object['stream_channel']['url_params'][2]+' playpath='+match[0]
-            if video_menu > -1:
-                link = match1[0]+' app='+json_object['stream_channel']['channel_id']+'/_definst_ swfUrl=https://watch.netvi.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf pageUrl=https://watch.netvi.tv/ live=true conn=S:'+json_object['stream_channel']['url_params'][1]+' conn=S:'+json_object['stream_channel']['url_params'][2]+' playpath='+match[video_menu][0]
-                return link
-            else:
-                return False
+            #netvi.pl_quality
+            link = match1[0]+' app='+json_object['stream_channel']['channel_id']+'/_definst_ swfUrl=https://watch.netvi.tv/javascripts/libs/flowplayer/flowplayer.commercial-3.2.11.swf pageUrl=https://watch.netvi.tv/ live=true conn=S:'+json_object['stream_channel']['url_params'][1]+' conn=S:'+json_object['stream_channel']['url_params'][2]+' playpath='+match[jakosc][0]
+            return link
         else:
             return False 
  

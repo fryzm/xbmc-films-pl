@@ -31,14 +31,6 @@
 		<setting id="scs.pl_user" type="text" label="login" default="" />
 		<setting id="scs.pl_pass" type="text" label="hasło" option="hidden"  default="" />
 	</category>
-	<category label="streamon.pl">
-		<setting type="lsep" label="zaloguj sie do serwisu"/>
-		<setting id="streamon_login" type="bool" label="Zaloguj się" default="false" />
-		<setting type="sep"/>
-		<setting type="lsep" label="Login i hasło" />
-		<setting id="streamon_user" type="text" label="login" default="" />
-		<setting id="streamon_pass" type="text" label="hasło" option="hidden"  default="" />	
-	</category>	
 	<category label="wrzuta.pl">
 		<setting type="lsep" label="zaloguj sie do serwisu"/>
 		<setting id="wrzuta_login" type="bool" label="Zaloguj się" default="false" />

@@ -42,7 +42,6 @@ class goodcast:
     def listsMainMenu(self):
         query_data = { 'url': mainUrl, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        #print ("L",link)
         match = re.compile('<li id=\'(.*?)\'><a href=\'(.*?)\'>(.*?)</a></li>', re.DOTALL).findall(link)
         print match
         for o in range(len(match)):

@@ -1,3 +1,7 @@
+Wersja 1.6.40  
+ Nowe ikony dla serwisów 
+ Poprawiono plej.tv - dodano kategorie do serwsiu 
+
 Wersja 1.5.01  
  Nowe ikony dla serwisów 
  Poprawiono plej.tv - dodano logowanie do serwsiu 

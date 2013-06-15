@@ -20,12 +20,14 @@ log = pLog.pLog()
 mainUrl = 'http://plej.tv/'
 #chanels = 'http://plej.tv/index.php?p=kanal'
 chanels = 'http://plej.tv/index.php?p=kanal&id=517711e9409d4'
+categories = 'http://plej.tv/index.php?p=cats'
 playerUrl = 'http://www.youtube.pl/'
 
 HOST = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:21.0) Gecko/20100101 Firefox/21.0'
 
-MENU_TAB = {1: "Wszystkie",
-            3: "Szukaj" }
+MENU_TAB = {1: "Lista kanałów",
+            3: "Kategorie",
+            5: "Ustawienia" }
 
 
 class plej:
@@ -37,8 +39,11 @@ class plej:
         self.cm = pCommon.common()
         self.settings = settings.TVSettings()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "plej.cookie"
+        self.zalogowany = 0
         
     def login(self):    
+        print "Zalogowany--->", self.zalogowany
+        
         if ptv.getSetting('plej_login') == 'true':
             post_data = {'login': ptv.getSetting('plej_user'), 'pass': ptv.getSetting('plej_pass'), 'log_in2':'Zaloguj'}
             query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
@@ -48,26 +53,28 @@ class plej:
             #query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             #data = self.cm.getURLRequestData(query_data, post_data)
             #print ("Data2",data)
-            #if self.isLoggedIn(data) == True:
-                #xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('plej_user') + ", Zostales poprawnie zalogowany,4000)")
-            #else:
-                #xbmc.executebuiltin("XBMC.Notification(Blad logowania, uzywam Player z limitami,4000)")  
+            if self.isLoggedIn(data) == True:
+                xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('plej_user') + ", Zostales poprawnie zalogowany,4000)")
+                self.zalogowany = 2
+            else:
+                xbmc.executebuiltin("XBMC.Notification(Blad logowania, sprawdź login i hasło. Używam Player z limitami,4000)")  
         else:
-            log.info('Wyświetlam ustawienia')
-            #self.settings.showSettings()
-                    #http://plej.tv/ajax/alert.php
-	    query_data = { 'url': 'http://plej.tv/ajax/alert.php', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
-	    link = self.cm.getURLRequestData(query_data)
-            #print ("Link",link)
-
-            #xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
-            
+            query_data = { 'url': 'http://plej.tv/ajax/alert.php', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+            link = self.cm.getURLRequestData(query_data)
+            xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
+        
     def isLoggedIn(self, data):
         lStr = '<li><a class="play" href="index.php?p=logout" title="" >WYLOGUJ</a></li>'
         if lStr in data:
           return True
         else:
           return False
+
+    def listsMain(self, table):
+        for num, val in table.items():
+            self.add('plej', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
 
     def listsMainMenu(self, table):
         query_data = { 'url': chanels, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
@@ -83,20 +90,35 @@ class plej:
             #    self.add('plej', 'items-menu', 'None', match[o][1], mainUrl+match[o][2], mainUrl+match[o][0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
+    def listsCategoriesItems(self,url):
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile('<div class="left">(.*?)<div class="right">', re.DOTALL).findall(link)
+        if len(match) > 0:
+            match1 = re.compile('\n            \n          <a href="(.*?)" title="(.*?)"><img style="border: 3px solid green;" class="logo" src="(.*?)" alt="" /></a>\n          <h2><a class="play" href="(.*?)" title="(.*?)">(.*?)</a></h2>', re.DOTALL).findall(match[0])
+            for i in range(len(match1)):
+                url = mainUrl + match1[i][0] + '&online=1'
+                img = mainUrl + match1[i][2]
+                self.add('plej', 'playSelectedMovie', 'None', match1[i][1], img, url, 'None', 'None', True, False)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
 
     def listsCategoriesMenu(self):
-        req = urllib2.Request(mainUrl)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<table style="width:100%"><tr><td style="width:30%;vertical-align:middle;"><a href="(.*?)" title="(.*?)"><img style="width:50px;height:40px;" src="(.*?)" alt="" /></a></td>', re.DOTALL).findall(readURL)
+        query_data = { 'url': categories, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        #print ("Link",link)
+        match = re.compile('<div class="left">(.*?)<div class="right">', re.DOTALL).findall(link)
         #print match
         if len(match) > 0:
-            log.info('Listuje kategorie: ')
-            for i in range(len(match)):
-                url = mainUrl + match[i][1]
-                self.add('plej', 'categories-menu', match[i][2].strip(), 'None', 'None', url, 'None', 'None', True, False)
+            #<a href="index.php?p=kanaly&cat=10" title="Blogerzy i Vlogerzy"><img class="logo" src="images/tvtv.png" alt="" /></a>\n          <h2><a class="play" href="index.php?p=kanaly&cat=10" title="Blogerzy i Vlogerzy">Blogerzy i Vlogerzy (11)</a></h2>
+            match1 = re.compile('<a href="(.*?)" title="(.*?)"><img class="logo" src="(.*?)" alt="" /></a>\n          <h2><a class="play" href="(.*?)" title="(.*?)">(.*?)</a></h2>', re.DOTALL).findall(match[0])
+            print match1
+        #    log.info('Listuje kategorie: ')
+            for i in range(len(match1)):
+                url = mainUrl + match1[i][0] + '&online=1'
+                img = mainUrl + match1[i][2]
+                #    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
+                self.add('plej', 'categories-menu', match1[i][1].strip(), 'None', img, url, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -184,15 +206,18 @@ class plej:
         match2 = re.compile('file:\'(.*?)\',', re.DOTALL).findall(link)
         #print ("AAAAAAAAAAAAAA",match,url,link)
         if len(match)>0:
+            print "Match--->  0"
             linkVideo = match[0]
-            return linkVideo
+            return linkVideo + ' live=trueswfUrl=http://plej.tv/StrobeMediaPlayback.swf pageUrl='+url
         elif len(match1)>0:
+            print "Match--->  1"
             match2 = re.compile('video     : \'(.*?)\',', re.DOTALL).findall(link)
             print match2
             linkVideo = match1[0] + '/'+match2[0]
-	    print linkVideo
-	    return linkVideo
+            print linkVideo
+            return linkVideo
         elif len(match2)>0:
+            print "Match--->  2"
             linkVideo = match2[0]
             return linkVideo
  
@@ -245,17 +270,19 @@ class plej:
         print("aaa",name,category,url,title)
         if name == None:
             self.login()
-            self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Wszystkie':
-            log.info('Jest Wszystkie: ')
-            self.listsCategoriesMenu(chanels)
+            self.listsMain(MENU_TAB)
             
-        elif name == 'items-menu':
-            key = self.searchInputText()
-            self.listsItems(url)
+        elif name == 'main-menu' and category == 'Lista kanałów':
+            self.listsMainMenu(chanels)
+        elif name == 'main-menu' and category == 'Kategorie':
+            self.listsCategoriesMenu()
+        elif name == 'main-menu' and category == 'Ustawienia':
+            log.info('Wyświetlam ustawienia')
+            self.settings.showSettings()
+        
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
-            self.listsItems(url)
+            self.listsCategoriesItems(url)
         if name == 'playSelectedMovie':
             if self.getMovieType(url) == True:
                 print "JJJJJJJJJJJJEESSSSTTTT TRUE"

@@ -121,16 +121,6 @@ class plej:
                 self.add('plej', 'categories-menu', match1[i][1].strip(), 'None', img, url, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-
-    def getSearchURL(self, key):
-        url = mainUrl + 'search.php?phrase=' + urllib.quote_plus(key) 
-        return url
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', HOST)
-        #openURL = urllib2.urlopen(req)
-        #readURL = openURL.read()
-        
-
     def listsItems(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
@@ -199,16 +189,23 @@ class plej:
         
     def getMovieLinkFromXML(self, url):
         #print ("URL",url)
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        #query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('var asrc = "(.*?)";', re.DOTALL).findall(link)
         match1 = re.compile('streamer  : \'(.*?)\',', re.DOTALL).findall(link)
         match2 = re.compile('file:\'(.*?)\',', re.DOTALL).findall(link)
-        #print ("AAAAAAAAAAAAAA",match,url,link)
+        match10 = re.compile('jQuery.ajaxSetup\({async:true}\);\n  \n  \$.get\("(.*?)",', re.DOTALL).findall(link)
+        print "Match10",match10
+        if len(match10)>0:
+            query_data = { 'url': mainUrl+match10[0], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+            link = self.cm.getURLRequestData(query_data)
+        
+        print ("AAAAAAAAAAAAAA",link)
         if len(match)>0:
             print "Match--->  0"
             linkVideo = match[0]
-            return linkVideo + ' live=trueswfUrl=http://plej.tv/StrobeMediaPlayback.swf pageUrl='+url
+            return linkVideo + ' live=true swfUrl=http://plej.tv/StrobeMediaPlayback.swf pageUrl='+url
         elif len(match1)>0:
             print "Match--->  1"
             match2 = re.compile('video     : \'(.*?)\',', re.DOTALL).findall(link)

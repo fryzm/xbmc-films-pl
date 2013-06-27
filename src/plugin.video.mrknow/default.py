@@ -17,7 +17,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 import pLog, settings, Parser
 import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
-import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline
+import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
 import iptak,goodcast,streamon,strefavod,wrzuta
 

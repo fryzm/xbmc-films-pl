@@ -13,16 +13,16 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser
+import pLog, pCommon, Parser, settings
 
 log = pLog.pLog()
 
 mainUrl = 'http://www.mmtvliveapp.com/mobile/ios/pl/images/'
-redirUrl='https://redir.atmcdn.pl/https/mm/multimedia/' #live/rebel_tv/cover.png
-chanels = 'https://www.mmtv.pl/FrontOffice/LiveAvailability.go'
-playerUrl = 'https://www.mmtv.pl/FrontOffice/LivePlaylist.go?id='
+chanels = 'https://www.mmtv.pl/FrontOffice/ApiliveProductsList.go?platform=IOS&terminal=PHONE'
+playerUrl = 'https://www.mmtv.pl/FrontOffice/LiveAvailability.go'
+loginUrl = 'https://www.mmtv.pl/FrontOffice/ApisubscriberLogin.go'
 
-HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
+HOST = 'User-Agent: mm-ott/0.1 CFNetwork/609.1.4 Darwin/13.0.0'
 
 MENU_TAB = {1: "Wszystkie",
             3: "Szukaj" }
@@ -34,114 +34,75 @@ class mmtv:
         self.cm = pCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-
+        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "mmtv.cookie"
+        self.settings = settings.TVSettings()
+        
+    def login(self):    
+        if ptv.getSetting('mmtv_login') == 'true':
+            #username=mrknow&password=WestWest2009&deviceId=e7701cb8d47305ebdcd538f1bf890a0a8005a9e7&platform=IOS&terminal=PHONE&captcha=(null)
+            post_data = {'username': ptv.getSetting('mmtv_user'), 'password': ptv.getSetting('mmtv_pass'),'deviceId': ptv.getSetting('mmtv_deviceid'),'platform': ptv.getSetting('mmtv_platform'),'terminal': ptv.getSetting('mmtv_terminal'), 'captcha':'(null)'}
+            query_data = {'url': loginUrl, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+            data = self.cm.getURLRequestData(query_data, post_data)
+            print ("Data1",data)
+            #post_data = {'login': ptv.getSetting('mmtv_user'), 'pass': ptv.getSetting('mmtv_pass'), 'log_in2':'Zaloguj'}
+            #query_data = {'url': mainUrl+'index.php?p=login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+            #data = self.cm.getURLRequestData(query_data, post_data)
+            #print ("Data2",data)
+            if self.isLoggedIn(data) == True:
+                xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('mmtv_user') + ", Zostales poprawnie zalogowany,4000)")
+            else:
+                xbmc.executebuiltin("XBMC.Notification(Blad logowania, sprawdź login i hasło. Używam Player z limitami,4000)")  
+        else:
+            query_data = { 'url': playerUrl, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+            link = self.cm.getURLRequestData(query_data)
+            xbmc.executebuiltin("XBMC.Notification(Skonfiguruj konto w ustawieniach, obecnie uzywam Player z limitami,4000)")  
+        
+    def isLoggedIn(self, data):
+        objs = json.loads(data)
+        print objs['errorCode']
+        if objs['errorCode'] == 0:
+          return True
+        else:
+          return False
 
 
     def listsMainMenu(self, table):
-        query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         print ("L",link)
         objs = json.loads(link)
-        print objs 
-        for o in objs:
+        print objs['result']
+        for o in objs['result']:
             print o
-            nazwa = json.dumps(o["title"]).replace('"','')
+            nazwa = json.dumps(o["name"]).replace('"','')
         #    print nazwa
-        #    stream = json.dumps(o["stream"]).replace('"','')
-            image = redirUrl+ json.dumps(o["logo"]).replace('"','')
+            stream = json.dumps(o["live"]).replace('"','')
+            image = json.dumps(o["cover"]).replace('"','')
         #    image = ptv.getAddonInfo('path') + os.path.sep + "images" + os.path.sep  + nazwa +".png"
             
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
             #self.add('mmtv', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
-            self.add('mmtv', 'playSelectedMovie', 'None', nazwa,image, playerUrl+json.dumps(o["id"]), 'None', 'None', True, False)
+            self.add('mmtv', 'playSelectedMovie', 'None', nazwa,image, stream, 'None', 'None', True, False)
         
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-    def listsCategoriesMenu(self):
-        req = urllib2.Request(mainUrl)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<li data-theme="c">(.*?)<a href="(.*?)" data-transition="slide">(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        
-        if len(match) > 0:
-            log.info('Listuje kategorie: ')
-            for i in range(len(match)):
-                url = mainUrl + match[i][1]
-                self.add('mmtv', 'categories-menu', match[i][2].strip(), 'None', 'None', url, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-
-    def getSearchURL(self, key):
-        url = mainUrl + 'search.php?phrase=' + urllib.quote_plus(key) 
-        return url
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', HOST)
-        #openURL = urllib2.urlopen(req)
-        #readURL = openURL.read()
-        
-
-    def listsItems(self, url):
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
-        match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
-        if len(match) > 0:
-            for i in range(len(match)):
-             if match[i][3].find('video') > -1:# 0
-            
-                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('mmtv', 'playSelectedMovie', 'None', match[i][2], 'None', match[i][1], 'aaaa', 'None', True, False)
- 
-        match1 = re.compile(' <a href="(.*?)" class="inlblk tdnone vtop button" style="right: 0px">następna</a>').findall(link)
-        log.info('Nastepna strona: '+  match1[0])
-        self.add('mmtv', 'categories-menu', 'Następna', 'None', 'None', match1[0], 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-
-    def listsItemsPage(self, url):
-        if not url.startswith("http://"):
-            url = mainUrl + url
-        if self.getSizeAllItems(url) > 0  and self.getSizeItemsPerPage(url) > 0:
-            a = math.ceil(float(self.getSizeAllItems(url)) / float(self.getSizeItemsPerPage(url)))
-            for i in range(int(a)):
-                num = i + 1
-                title = 'Lista ' + str(num)
-                destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('mmtv', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
-
-
-    def listsItemsSerialPage(self, url, sizeOfSerialParts):
-        if not url.startswith("http://"):
-            url = mainUrl + url
-        if sizeOfSerialParts > 0  and self.getSizeItemsPerPage(url) > 0:
-            a = math.ceil(float(sizeOfSerialParts) / float(self.getSizeItemsPerPage(url)))
-            for i in range(int(a)):
-                num = i + 1
-                title = 'Lista ' + str(num)
-                destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('mmtv', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1])) 
 
 
     def getMovieLinkFromXML(self, url):
         print url
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        #url = "https://www.mmtv.pl/FrontOffice/ApiliveProductPlaylist.go?productId=39&platform=IOS&terminal=PHONE"
+        query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         print ("AL",link)
-        match = re.compile('<videoSD>(.*?)</videoSD>', re.DOTALL).findall(link)
-        print match
-#        linkVideo = match[0].replace('sss','hls').replace('manifest?type=.ism','playlist.m3u8?stream=5&sessionId=912E83490F6AD0CF8D9EE8A387DBBC9B.node0').replace('https','http')
-        linkVideo = match[0].replace('sss','hls').replace('manifest?type=.ism','playlist.m3u8|User-Agent=AppleCoreMedia%2F1.0.0.10B329%20(iPhone%3B%20U%3B%20CPU%20OS%206_1_3%20like%20Mac%20OS%20X%3B%20pl_pl)&X-Playback-Session-Id=8122A7C1-54B0-4FD4-9FF4-8D683010241D').replace('https','http')
-        print linkVideo
+        objs = json.loads(link)
+        print objs
+        session = self.cm.getCookieItem(self.COOKIEFILE, 'JSESSIONID')
+        linkVideo = json.dumps(objs['result']['livx']).replace('"','')
+#        linkVideo = match[0].replace('sss','hls').replace('manifest?type=.ism','playlist.m3u8').replace('https','http')
+        print ('Data',session,linkVideo)
+        return linkVideo + '&stream=2'
         
-        #X-Playback-Session-Id: 8122A7C1-54B0-4FD4-9FF4-8D683010241D
-        
-        #linkVideo = self.up.getVideoLink(match[0])
-        return linkVideo
 
 
     def getSizeAllItems(self, url):
@@ -245,6 +206,7 @@ class mmtv:
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
         if name == None:
+            self.login()
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Wszystkie':
             log.info('Jest Wszystkie: ')

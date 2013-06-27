@@ -107,7 +107,7 @@ class common:
     
     def getCookieItem(self, cookiefile, item):
 	ret = ''
-	cj = cookielib.LWPCookieJar()
+	cj = cookielib.MozillaCookieJar()
 	cj.load(cookiefile, ignore_discard = True)
 	for cookie in cj:
 	    if cookie.name == item: ret = cookie.value

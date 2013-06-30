@@ -19,7 +19,7 @@ import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, mil
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
 import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
-import iptak,goodcast,streamon,strefavod,wrzuta
+import iptak,goodcast,streamon,strefavod,wrzuta,tvppl
 
 log = pLog.pLog()
 
@@ -41,7 +41,7 @@ TV_ONLINE_TABLE = {
              2500 : ["Netvi.tv", 'netvi'],
              2600 : ["Goodcast.tv", 'goodcast'],
              2700 : ["Streamon.pl", 'streamon'],
-             #2800 : ["MmTV.pl","mmtv"]
+            # 2800 : ["MmTV.pl","mmtv"]
 }
 FUN_ONLINE_TABLE = {
                3000: ["Wykop.pl","wykop"],
@@ -74,7 +74,9 @@ FILM_ONLINE_TABLE = {
              7600: ["Iptak","iptak"],
              7700: ["Films-online.pl","filmsonline"],
              7800: ["StrefaVod.pl","strefavod"],
-             5100: ["Wrzuta.pl [testy]","wrzuta"]
+             5100: ["Wrzuta.pl [testy]","wrzuta"],
+             7900: ["Vod.tvpl.pl [testy]","tvppl"],
+             
 
 }
 
@@ -139,6 +141,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 7800 or service == 'strefavod':
         tv = strefavod.strefavod()
+        tv.handleService()
+    elif mode == 7900 or service == 'tvppl':
+        tv = tvppl.tvppl()
         tv.handleService()
 
     elif mode == 2000 or service == 'iptak':

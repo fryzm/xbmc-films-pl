@@ -140,7 +140,7 @@ class urlparser:
     if host== 'www.putlive.in':
         nUrl = self.parserputlive(url,referer)   
     if host== 'emb.aliez.tv':
-        nUrl = self.parseraliez(url)   
+        nUrl = self.parseraliez(url,referer)   
     if host== 'www.ucaster.eu':
         nUrl = self.parseucaster(url,referer)   
     if host== 'www.flashwiz.tv':
@@ -241,11 +241,12 @@ class urlparser:
     
   def parsegoodcastorg(self,url,referer):
     req = urllib2.Request(url)
-    req.add_header('Referer', 'http://'+referer)
+    req.add_header('Referer', referer)
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
+    print ('LINK',url,referer,link)
     match = re.compile('<embed id="player"\n\t\t\t\t\t\tsrc="(.*?)"\n\t\t\t\t\t\twidth="(.*?)"\n\t\t\t\t\t\theight="(.*?)"\n\t\t\t\t\t\tallowscriptaccess="always"\n\t\t\t\t\t\tallowfullscreen="true"\n\t\t\t\t\t\tflashvars="file=(.*?)&amp;streamer=(.*?)&amp;', re.DOTALL).findall(link)
     if len(match)>0:
         linkVideo = match[0][4] + '/'+match[0][3]
@@ -302,9 +303,13 @@ class urlparser:
     else: 
       return False
 
-  def parseraliez(self,url):
-    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link = self.cm.getURLRequestData(query_data)
+  def parseraliez(self,url,referer):
+    req = urllib2.Request(url)
+    req.add_header('Referer', referer)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
     match = re.search('"file":(.*?)"(.*?)"',link)
     print ("ZZZZzzzz",match,link)
     print match.group(2)

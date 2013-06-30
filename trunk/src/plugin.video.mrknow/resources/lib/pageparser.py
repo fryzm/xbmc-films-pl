@@ -15,7 +15,6 @@ import pLog, Parser, settings, pCommon, urlparser
 log = pLog.pLog()
 sets = settings.TVSettings()
 
-
 class pageparser:
   def __init__(self):
     self.cm = pCommon.common()
@@ -73,6 +72,8 @@ class pageparser:
         nUrl = self.typertv(url)
     elif host == 'streamon.pl':
         nUrl = self.streamon(url)
+    elif host == 'goodcast.tv':
+        nUrl = self.goodcasttv(url)
         
         
     elif nUrl  == '':
@@ -81,6 +82,17 @@ class pageparser:
     print ("Link:",nUrl)
     return nUrl
 
+  def goodcasttv(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match1=re.compile('<iframe frameborder="(.*?)" height="(.*?)" marginheight="(.*?)" marginwidth="(.*?)" name="www.goodcast.tv" scrolling="(.*?)" src="(.*?)" width="(.*?)"></iframe>').findall(link)
+    print ("AAAAA",match1,link)
+    if len(match1)>0:
+        print ("Mam Iframe",match1)
+        nUrl = self.pageanalyze(match1[0][5],match1[0][5])
+        return nUrl    
+    
+    
   def streamon(self,url):
     self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "streamon.cookie"
     #zalogowany = False
@@ -180,17 +192,26 @@ class pageparser:
     return videolink
 
   def drhtv(self,url):
-    return self.pageanalyze(url,url)
+    self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "streamon.cookie"
+    return self.pageanalyze(url,url,'','Accept-Encoding: gzip, deflate')
 
-  def pageanalyze(self,url,referer='',cookie=''):
-    if cookie == '':
+  def pageanalyze(self,url,referer='',cookie='',headers=''):
+    print ('DANE',url,referer,cookie,headers)
+   
+    if cookie != '':
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': cookie, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        print ("LINK cookie",link)
+    elif headers != '':
+        query_data = { 'url': url, 'use_host': True, 'host': headers, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        print ("LINK headers",link)
+    
+    else:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         print ("LINK",link)
-    else:
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': cookie, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        print ("LINK",link)
+
         
     match=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
     match1=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=(.*?); v_height=(.*?);</script><script type='text/javascript' src='http://www.reyhq.com/player.js'></script>").findall(link)
@@ -249,7 +270,7 @@ class pageparser:
         return self.up.getVideoLink('http://www.putlive.in/'+match11[0],referer)
     elif len(match12) > 0:
         print ("Match12",match12)
-        return self.up.getVideoLink(match12[0][0])
+        return self.up.getVideoLink(match12[0][0],referer)
     elif len(match13) > 0:
         print ("Match13",match13)
         return self.up.getVideoLink('http://www.ucaster.eu/embedded/'+match13[0][0]+'/'+match13[0][1]+'/400/480',referer)

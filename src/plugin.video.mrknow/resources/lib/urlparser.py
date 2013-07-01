@@ -158,8 +158,12 @@ class urlparser:
         nUrl = self.parseovcast(url,referer)           
     if host== 'stream4.tv':
         nUrl = self.stream4(url,referer)           
+    if host== 'jjcast.com':
+        nUrl = self.jjcast(url,referer)           
     if host.find("wrzuta.pl") > -1:
         nUrl = self.wrzutapl(url)           
+        
+        
 
     return nUrl
   def wrzutapl(self, url):
@@ -186,7 +190,34 @@ class urlparser:
         return match3[0]
     else:
         return ''
-            
+  def jjcast(self,url,referer):
+    req = urllib2.Request(url)
+    req.add_header('Referer', 'http://jjcast.com/')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match2 = re.compile("}}return p}\('(.*?)\(\);", re.DOTALL).findall(link)
+    match = re.compile(match2[0][2]+".2\((.*?)\);", re.DOTALL).findall(link)
+    match1 = re.compile(match2[0][2]+".5\((.*?)\);", re.DOTALL).findall(link)    
+    match3 = re.compile(match2[0][2]+".6\((.*?)\);", re.DOTALL).findall(link)    
+    file = ''
+    if len(match) > 0:
+            for i in range(len(match)):
+                print match[i].replace('\\','').replace("'","")
+                file += match[i].replace('\\','').replace("'","")
+    elif len(match1) > 0:
+            for i in range(len(match1)):
+                print match1[i].replace('\\','').replace("'","")
+                file += match1[i].replace('\\','').replace("'","")
+    elif len(match3) > 0:
+            for i in range(len(match3)):
+                print match3[i].replace('\\','').replace("'","")
+                file += match3[i].replace('\\','').replace("'","")
+    #rtmpdump -r "rtmp://streamspot.jjcast.com/redirect" -a "redirect" -f "WIN 11,6,602,180" -W "http://jjcast.com/jplayer.swf" -p "http://jjcast.com/player.php?stream=4janpxr2hf634&width=640&height=360" -y "mjg8jqspviimvs3" -o mjg8jqspviimvs3.f
+    link = 'rtmp://31.204.153.133:1935/live playpath='+file+' live=true swfUrl=http://jjcast.com/jplayer.swf pageUrl='+url
+    return link
+        
   def stream4(self,url,referer):
     query = urlparse.urlparse(url)
     p = urlparse.parse_qs(query.query)

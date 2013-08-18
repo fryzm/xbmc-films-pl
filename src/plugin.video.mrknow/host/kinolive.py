@@ -298,7 +298,7 @@ class kinolive:
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
         filtrowanie = self.parser.getParam(params, "filtrowanie")
-        print ("D",category,url,strona,filtrowanie)
+        print ("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZD",category,url,strona,filtrowanie,name)
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Filmy z lektorem':
@@ -342,6 +342,10 @@ class kinolive:
             log.info('url: ' + str(url))
             self.listsItems(url,strona,filtrowanie)
         if name == 'playSelectedMovie':
+            data = self.getMovieLinkFromXML(url)
+            self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon, data['year'])
+        if name == 'playselectedmovie':
+            print "GGGGGGGGGGGGGGGGGGGGGGGGGGGRRRRRRRRRRRRAAAAAAAAAA"
             data = self.getMovieLinkFromXML(url)
             self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon, data['year'])
 

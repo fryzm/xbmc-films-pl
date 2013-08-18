@@ -131,6 +131,7 @@ class MrknowFilms:
         tv = cdapl.cdapl()
         tv.handleService()
     elif mode == 7500 or service == 'kinolive':
+        print("KKKKKKKKKKKKKKKKKKKK", sys.argv[1], sys.argv[2], sys.argv[0] )
         tv = kinolive.kinolive()
         tv.handleService()
     elif mode == 7600 or service == 'iptak':

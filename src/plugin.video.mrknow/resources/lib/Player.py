@@ -11,7 +11,7 @@ class Player:
         pass
     
     def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon,year='',plot=''):
-        print ("Player",title, icon,year,plot)
+        print ("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",title, icon,year,plot)
         liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
         if year == '':
             liz.setInfo( type="Video", infoLabels={ "Title": title} )

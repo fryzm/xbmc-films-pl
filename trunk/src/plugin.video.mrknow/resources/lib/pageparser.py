@@ -85,11 +85,14 @@ class pageparser:
   def goodcasttv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match1=re.compile('<iframe frameborder="(.*?)" height="(.*?)" marginheight="(.*?)" marginwidth="(.*?)" name="www.goodcast.tv" scrolling="(.*?)" src="(.*?)" width="(.*?)"></iframe>').findall(link)
-    print ("AAAAA",match1,link)
-    if len(match1)>0:
-        print ("Mam Iframe",match1)
-        nUrl = self.pageanalyze(match1[0][5],match1[0][5])
+    match1=re.compile('flashvars="(.*?)"').findall(link)
+    #print ("AAAAA",match1[0])
+    if len(match1[0])>0:
+    #    plik = match1[0].split(';')
+    #    nurl 
+    #    print ("plik",plik)
+    #    print ("Mam Iframe",match1)
+        nUrl = self.up.getVideoLink(url,url)
         return nUrl    
     
     

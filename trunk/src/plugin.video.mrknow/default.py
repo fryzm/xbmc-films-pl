@@ -39,7 +39,7 @@ TV_ONLINE_TABLE = {
          #    2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
              2500 : ["Netvi.tv", 'netvi'],
-         #    2600 : ["Goodcast.tv", 'goodcast'],
+             2600 : ["Goodcast.tv", 'goodcast'],
          #    2700 : ["Streamon.pl", 'streamon'],
              2800 : ["MmTV.pl","mmtv"]
 }

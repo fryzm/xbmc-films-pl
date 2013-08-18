@@ -67,7 +67,7 @@ class xbmcfilm:
             
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
             #self.add('mmtv', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
-            self.add('xbmcfilm', 'playSelectedMovie', 'None', nazwa.decode('utf-8'),image, stream, 'None', 'None', True, False)
+            self.add('xbmcfilm', 'playSelectedMovie', 'None', self.cm.html_special_chars(nazwa),image, stream, 'None', 'None', True, False)
         
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
        

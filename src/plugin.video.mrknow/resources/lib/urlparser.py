@@ -288,10 +288,16 @@ class urlparser:
   def parsegoodcast(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match = re.compile("file: '(.*?)',", re.DOTALL).findall(link)
-    if len(match)>0:
-        linkVideo = match[0]
-        linkVideo = linkVideo + ' pageUrl='+url+' swfUrl=http://goodcast.tv/jwplayer/jwplayer.flash.swf'
+    match1=re.compile('flashvars="(.*?)"').findall(link)
+    if len(match1[0])>0:
+        plik = match1[0].split(';')
+        plik_1 = plik[0].replace('&amp','').replace('file=','')
+        plik_2 = plik[1].replace('&amp','').replace('streamer=','')
+        print("Pliki", plik_1,plik_2, plik)
+        linkVideo =  plik_2 + plik_1 +' live=true pageUrl='+url+' swfUrl=http://goodcast.tv/jwplayer/player.swf'
+        #linkVideo = "rtmp://95.211.186.67:1936/live/tvn24?token=ezf129U0OsDwPnbdrRAmAg pageUrl=http://goodcast.tv/tvn24.php swfUrl=http://goodcast.tv/jwplayer/player.swf"
+        # rtmpdump -r "rtmp://95.211.186.67:1936/live/" -a "live/" -f "LNX 11,2,202,297" -W "http://goodcast.tv/jwplayer/player.swf" -p "http://goodcast.tv" -y "tvn24?token=ezf129U0OsDwPnbdrRAmAg"
+        print ("LinkVideo", linkVideo)
         return linkVideo
     else:
         return False

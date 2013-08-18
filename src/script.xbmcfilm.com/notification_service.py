@@ -78,7 +78,7 @@ class NotificationService:
         tmppath = xbmc.getInfoLabel('ListItem.FileNameAndPath')
         if tmppath != '' and tmppath != self.xbmcpath:
             self.xbmcpath = tmppath
-            print ("TTTTTTTTTTTTTTTT",tmppath,self.xbmcpath)         
+            Debug ("[Notification] GetPath"+ tmppath)         
            
     def run(self):
         Debug("[Notification] Starting")
@@ -142,7 +142,7 @@ class traktPlayer(xbmc.Player):
     def __init__(self, *args, **kwargs):
         xbmc.Player.__init__(self)
         self.action = kwargs["action"]
-        Debug("[traktPlayer] Initalized")
+        Debug("[xbmcfilmPlayer] Initalized")
         self.tmp1 = args
         self.tmp2 = kwargs
     # called when xbmc starts playing a file
@@ -155,12 +155,12 @@ class traktPlayer(xbmc.Player):
         if self.isPlayingVideo():
             # get item data from json rpc
             result = xbmcJsonRequest({"jsonrpc": "2.0", "method": "Player.GetItem", "params": {"playerid": 1}, "id": 1})
-            Debug("[traktPlayer] onPlayBackStarted() - %s" % result)
+            Debug("[xbmcfilmPlayer] onPlayBackStarted() - %s" % result)
             
             # check for exclusion
             _filename = self.getPlayingFile()
             #if checkScrobblingExclusion(_filename):
-            #    Debug("[traktPlayer] onPlayBackStarted() - '%s' is in exclusion settings, ignoring." % _filename)
+            #    Debug("[xbmcfilmPlayer] onPlayBackStarted() - '%s' is in exclusion settings, ignoring." % _filename)
             #    return
             
             self.type = result["item"]["type"]
@@ -170,13 +170,13 @@ class traktPlayer(xbmc.Player):
             # check type of item
             if self.type == "unknown":
                 # do a deeper check to see if we have enough data to perform scrobbles
-                Debug("[traktPlayer] onPlayBackStarted() - Started playing a non-library file, checking available data.")
+                Debug("[xbmcfilmPlayer] onPlayBackStarted() - Started playing a non-library file, checking available data.")
                 season = xbmc.getInfoLabel("VideoPlayer.Season")
                 episode = xbmc.getInfoLabel("VideoPlayer.Episode")
                 showtitle = xbmc.getInfoLabel("VideoPlayer.TVShowTitle")
                 year = xbmc.getInfoLabel("VideoPlayer.Year")
                 title = xbmc.getInfoLabel("VideoPlayer.Title")
-                print ("XBMC",season,episode,showtitle,year,title)
+                Debug ("[xbmcfilmPlayer]  season:" + season + " Episode:"+ episode + " showtitle:"+ showtitle +" Year:"+ year +" Title:"+ title)
                 
                 if season and episode and showtitle:
                     # we have season, episode and show title, can scrobble this as an episode
@@ -187,7 +187,7 @@ class traktPlayer(xbmc.Player):
                     data["showtitle"] = showtitle
                     data["title"] = xbmc.getInfoLabel("VideoPlayer.Title")
                     result1 = xbmcJsonRequest({"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["title", "album", "artist", "season", "episode", "duration", "showtitle", "tvshowid", "thumbnail", "file", "fanart", "streamdetails"], "playerid": 1 }, "id": "VideoGetItem"})
-                    Debug("[traktPlayer] onPlayBackStarted() - Playing a non-library 'episode' - %s - S%02dE%02d - %s." % (data["title"], data["season"], data["episode"]))
+                    Debug("[xbmcfilmPlayer] onPlayBackStarted() - Playing a non-library 'episode' - %s - S%02dE%02d - %s." % (data["title"], data["season"], data["episode"]))
                 elif year and not season and not showtitle:
                     # we have a year and no season/showtitle info, enough for a movie
                     self.type = "movie"
@@ -200,11 +200,11 @@ class traktPlayer(xbmc.Player):
                     data["thumbnail"] =  result1['item']['thumbnail']
                     tmpdata = {'type':'movie','title':data["title"],'year': year}
                     data["imdbnumber"] = globals.xbmcfilmapi.getIMDB(tmpdata)
-                    Debug("[traktPlayer] onPlayBackStarted() Result- %s" % result1)
+                    Debug("[xbmcfilmPlayer] onPlayBackStarted() Result- %s" % result1)
                 else:
-                    Debug("[traktPlayer] onPlayBackStarted() - Non-library file, not enough data for scrobbling, skipping.")
+                    Debug("[xbmcfilmPlayer] onPlayBackStarted() - Non-library file, not enough data for scrobbling, skipping.")
                     result = xbmcJsonRequest({"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["title", "album", "artist", "season", "episode", "duration", "showtitle", "tvshowid", "thumbnail", "file", "fanart", "streamdetails"], "playerid": 1 }, "id": "VideoGetItem"})
-                    Debug("[traktPlayer] onPlayBackStarted() Result- %s" % result)
+                    Debug("[xbmcfilmPlayer] onPlayBackStarted() Result- %s" % result)
                     return
             
             elif self.type == "episode" or self.type == "movie":
@@ -217,10 +217,10 @@ class traktPlayer(xbmc.Player):
                 globals.xbmcfilmapi.getIMDB(tmpdata)
             
                 if self.type == "episode":
-                    Debug("[traktPlayer] onPlayBackStarted() - Doing multi-part episode check.")
+                    Debug("[xbmcfilmPlayer] onPlayBackStarted() - Doing multi-part episode check.")
                     #result = xbmcJsonRequest({"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"episodeid": self.id, "properties": ["tvshowid", "season","episode"]}, "id": 1})
                     if result:
-                        #Debug("[traktPlayer] onPlayBackStarted() - %s" % result)
+                        #Debug("[xbmcfilmPlayer] onPlayBackStarted() - %s" % result)
                         #tvshowid = int(result["episodedetails"]["tvshowid"])
                         #season = int(result["episodedetails"]["season"])
                         #episode = int(result["episodedetails"]["episode"])
@@ -228,7 +228,7 @@ class traktPlayer(xbmc.Player):
                         
                         #result = xbmcJsonRequest({"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {"tvshowid": tvshowid, "season": season, "properties": ["episode", "file"], "sort": {"method": "episode"}}, "id": 1})
                         if result:
-                            Debug("[traktPlayer] onPlayBackStarted() - %s" % result)
+                            Debug("[xbmcfilmPlayer] onPlayBackStarted() - %s" % result)
                             # make sure episodes array exists in results
                             if result.has_key("episodes"):
                                 multi = []
@@ -240,19 +240,13 @@ class traktPlayer(xbmc.Player):
                                 if len(multi) > 1:
                                     data["multi_episode_data"] = multi
                                     data["multi_episode_count"] = len(multi)
-                                    Debug("[traktPlayer] onPlayBackStarted() - This episode is part of a multi-part episode.")
+                                    Debug("[xbmcfilmPlayer] onPlayBackStarted() - This episode is part of a multi-part episode.")
 
             elif self.type == None:
-                Debug("[traktPlayer] onPlayBackStarted() - MAM Video type '%s' unrecognized, skipping." % self.type)
-                print ("Filename",_filename)
-                print ("Filename1",vars(self))
-                
-                result = xbmcJsonRequest({"jsonrpc": "2.0", "method": "Player.GetItem", "params": {"playerid": 1}, "id": 1})
-                Debug("[traktPlayer] onPlayBackStarted() - %s" % result)
                 result = xbmcJsonRequest({"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["title", "album", "artist", "season", "episode", "duration", "showtitle", "tvshowid", "thumbnail", "file", "fanart", "streamdetails"], "playerid": 1 }, "id": "VideoGetItem"})
-                Debug("[traktPlayer] onPlayBackStarted() Result- %s" % result)
+                Debug("[xbmcfilmPlayer] onPlayBackStarted() Result- %s" % result)
             else:
-                Debug("[traktPlayer] onPlayBackStarted() - Video type '%s' unrecognized, skipping." % self.type)
+                Debug("[xbmcfilmPlayer] onPlayBackStarted() - Video type '%s' unrecognized, skipping." % self.type)
                 return
 
             self._playing = True
@@ -264,7 +258,7 @@ class traktPlayer(xbmc.Player):
     # called when xbmc stops playing a file
     def onPlayBackEnded(self):
         if self._playing:
-            Debug("[traktPlayer] onPlayBackEnded() - %s" % self.isPlayingVideo())
+            Debug("[xbmcfilmPlayer] onPlayBackEnded() - %s" % self.isPlayingVideo())
             self._playing = False
             data = {"action": "ended"}
             self.action(data)
@@ -272,7 +266,7 @@ class traktPlayer(xbmc.Player):
     # called when user stops xbmc playing a file
     def onPlayBackStopped(self):
         if self._playing:
-            Debug("[traktPlayer] onPlayBackStopped() - %s" % self.isPlayingVideo())
+            Debug("[xbmcfilmPlayer] onPlayBackStopped() - %s" % self.isPlayingVideo())
             self._playing = False
             data = {"action": "stopped"}
             self.action(data)
@@ -280,37 +274,37 @@ class traktPlayer(xbmc.Player):
     # called when user pauses a playing file
     def onPlayBackPaused(self):
         if self._playing:
-            Debug("[traktPlayer] onPlayBackPaused() - %s" % self.isPlayingVideo())
+            Debug("[xbmcfilmPlayer] onPlayBackPaused() - %s" % self.isPlayingVideo())
             data = {"action": "paused"}
             self.action(data)
 
     # called when user resumes a paused file
     def onPlayBackResumed(self):
         if self._playing:
-            Debug("[traktPlayer] onPlayBackResumed() - %s" % self.isPlayingVideo())
+            Debug("[xbmcfilmPlayer] onPlayBackResumed() - %s" % self.isPlayingVideo())
             data = {"action": "resumed"}
             self.action(data)
 
     # called when user queues the next item
     def onQueueNextItem(self):
         if self._playing:
-            Debug("[traktPlayer] onQueueNextItem() - %s" % self.isPlayingVideo())
+            Debug("[xbmcfilmPlayer] onQueueNextItem() - %s" % self.isPlayingVideo())
 
     # called when players speed changes. (eg. user FF/RW)
     def onPlayBackSpeedChanged(self, speed):
         if self._playing:
-            Debug("[traktPlayer] onPlayBackSpeedChanged(speed: %s) - %s" % (str(speed), self.isPlayingVideo()))
+            Debug("[xbmcfilmPlayer] onPlayBackSpeedChanged(speed: %s) - %s" % (str(speed), self.isPlayingVideo()))
 
     # called when user seeks to a time
     def onPlayBackSeek(self, time, offset):
         if self._playing:
-            Debug("[traktPlayer] onPlayBackSeek(time: %s, offset: %s) - %s" % (str(time), str(offset), self.isPlayingVideo()))
+            Debug("[xbmcfilmPlayer] onPlayBackSeek(time: %s, offset: %s) - %s" % (str(time), str(offset), self.isPlayingVideo()))
             data = {"action": "seek"}
             self.action(data)
 
     # called when user performs a chapter seek
     def onPlayBackSeekChapter(self, chapter):
         if self._playing:
-            Debug("[traktPlayer] onPlayBackSeekChapter(chapter: %s) - %s" % (str(chapter), self.isPlayingVideo()))
+            Debug("[xbmcfilmPlayer] onPlayBackSeekChapter(chapter: %s) - %s" % (str(chapter), self.isPlayingVideo()))
             data = {"action": "seekchapter"}
             self.action(data)

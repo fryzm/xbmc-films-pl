@@ -5,6 +5,7 @@ import os, time, base64, logging, calendar
 import xbmcaddon
 
 
+
 scriptID = 'plugin.video.xbmcfilm'
 scriptname = "Films online"
 ptv = xbmcaddon.Addon(scriptID)
@@ -52,7 +53,9 @@ class xbmcfilm:
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         #print ("L",link)
-        objs = json.loads(link)
+        #objs = json.loads(link)
+        objs = json.loads(link)    
+
         for o in objs[0]:
             #print o
             nazwa = json.dumps(o["title"]).replace('"','')
@@ -64,7 +67,7 @@ class xbmcfilm:
             
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
             #self.add('mmtv', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
-            self.add('xbmcfilm', 'playSelectedMovie', 'None', nazwa,image, stream, 'None', 'None', True, False)
+            self.add('xbmcfilm', 'playSelectedMovie', 'None', nazwa.decode('utf-8'),image, stream, 'None', 'None', True, False)
         
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
        

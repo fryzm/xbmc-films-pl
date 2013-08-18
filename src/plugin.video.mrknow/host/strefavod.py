@@ -90,7 +90,7 @@ class strefavod:
         print ("vod_items",vod_items)
         for e in vod_items["Result"]["Movies"]:
             strTab.append(e["Title"])
-            strTab.append(e["ImageUrl"])
+            strTab.append(e["ImageUrl"]) #Poster
             strTab.append(e["Id"])
             valTab.append(strTab)
             strTab = []
@@ -104,15 +104,23 @@ class strefavod:
     def getMovieLinkFromXML(self, id1):
         url = 'http://www.strefavod.pl/api/GetMovie?Id='+id1
         vod_items = eval(self.getpage(url,None))
-        print ("vod_items",vod_items)
+#       print ("vod_items",vod_items)
         for e in vod_items["Result"]["Movie"]["MediaFiles"]:
             if e["MediaFileRole"] == "Main":
                 print "mamy to"
-                url = e["MediaFileFormats"][0]["Url"]
-                print ("u",url)
-        return url
-            
-          
+                if len(e["MediaFileFormats"])>0:
+                    url = e["MediaFileFormats"][0]["Url"]
+                    print ("u",url)
+        if len(url) > 0:
+            return url
+        else:
+            return ''
+    def getMovieYear(self, id1):
+        url = 'http://www.strefavod.pl/api/GetMovie?Id='+id1
+        vod_items = eval(self.getpage(url,None))
+        print ("vod_items",vod_items["Result"]["Movie"]["Year"])
+        if len(str(vod_items["Result"]["Movie"]["Year"])) > 0:
+            return str(vod_items["Result"]["Movie"]["Year"])
 
 
     def getSearchURL(self):
@@ -155,7 +163,7 @@ class strefavod:
         id1 = self.parser.getParam(params, "id1")
         id2 = self.parser.getParam(params, "id2")
         year = self.parser.getParam(params, "year")
-        print ("ID",category,id1,id2, params,year)
+        print ("ID",category,id1,id2, icon,year)
         
         if name == None:
             self.listsMainMenu(MENU_TAB)
@@ -173,7 +181,9 @@ class strefavod:
             self.listsItems(id1)
 
         if name == 'playSelectedMovie':
-            self.p.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1), title, icon,)
+            self.p.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1), title, icon,self.getMovieYear(id1))
+        if name == 'playselectedmovie':
+            self.p.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1), title, icon,self.getMovieYear(id1))
 
         
   

@@ -92,16 +92,16 @@ class common:
         txt = txt.replace('&#8222;','"')
         txt = txt.replace('&#8211;','-')
         txt = txt.replace('&quot;','"')
-        txt = txt.replace('&oacute;','ó')
-        txt = txt.replace('\u0105','ą').replace('\u0104','Ą')
-        txt = txt.replace('\u0107','ć').replace('\u0106','Ć')
-        txt = txt.replace('\u0119','ę').replace('\u0118','Ę')
-        txt = txt.replace('\u0142','ł').replace('\u0141','Ł')
-        txt = txt.replace('\u0144','ń').replace('\u0144','Ń')
-        txt = txt.replace('\u00f3','ó').replace('\u00d3','Ó')
-        txt = txt.replace('\u015b','ś').replace('\u015a','Ś')
-        txt = txt.replace('\u017a','ź').replace('\u0179','Ź')
-        txt = txt.replace('\u017c','ż').replace('\u017b','Ż')
+        txt = txt.replace('&oacute;','Ã³')
+        txt = txt.replace('\u0105','Ä…').replace('\u0104','Ä„')
+        txt = txt.replace('\u0107','Ä‡').replace('\u0106','Ä†')
+        txt = txt.replace('\u0119','Ä™').replace('\u0118','Ä˜')
+        txt = txt.replace('\u0142','Å‚').replace('\u0141','Å')
+        txt = txt.replace('\u0144','Å„').replace('\u0144','Åƒ')
+        txt = txt.replace('\u00f3','Ã³').replace('\u00d3','Ã“')
+        txt = txt.replace('\u015b','Å›').replace('\u015a','Åš')
+        txt = txt.replace('\u017a','Åº').replace('\u0179','Å¹')
+        txt = txt.replace('\u017c','Å¼').replace('\u017b','Å»')
         print("TXT",txt)
         return txt
     
@@ -210,7 +210,7 @@ class common:
     def LOAD_AND_PLAY_VIDEO(self, url, title, player = True):
         if url == '':
             d = xbmcgui.Dialog()
-            d.ok('Nie znaleziono streamingu', 'Moşe to chwilowa awaria.', 'Spróbuj ponownie za jaki�? czas')
+            d.ok('Nie znaleziono streamingu', 'MoÅŸe to chwilowa awaria.', 'SprÃ³buj ponownie za jakiÅ? czas')
             return False
         thumbnail = xbmc.getInfoImage("ListItem.Thumb")
         liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail)
@@ -225,7 +225,7 @@ class common:
             xbmcPlayer.play(url, liz)
         except:
             d = xbmcgui.Dialog()
-	    d.ok('B�?�?d przy przetwarzaniu, lub wyczerpany limit czasowy ogl�?dania.', 'Zarejestruj si�? i op�?a�? abonament.', 'Aby ogl�?da�? za darmo spróbuj ponownie za jaki�? czas')        
+	    d.ok('BÅ?Ä?d przy przetwarzaniu, lub wyczerpany limit czasowy oglÄ?dania.', 'Zarejestruj siÄ? i opÅ?aÄ? abonament.', 'Aby oglÄ?daÄ? za darmo sprÃ³buj ponownie za jakiÅ? czas')        
 	    return False
 	return True
 	    

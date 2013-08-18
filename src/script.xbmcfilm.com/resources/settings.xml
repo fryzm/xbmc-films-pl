@@ -21,23 +21,7 @@
 		<setting id="ExcludePathOption3" type="bool" label="1053" default="false" visible= "eq(-2,true)" enable="eq(-2,true)" />
 		<setting id="ExcludePath3" type="folder" source="video" label="1054" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
 	</category>
-	<category label="1400"><!-- Synchronize -->
-		<setting label="1410" type="lsep"/><!-- Service -->
-		<setting id="sync_on_update" type="bool" label="1411" default="false"/>
-		<setting id="show_sync_notifications" type="bool" label="1412" default="false"/>
-		<setting type="sep"/>
-		<setting label="1402" type="lsep"/><!-- Movies -->
-		<setting id="add_movies_to_trakt" type="bool" label="1403" default="true"/>
-		<setting id="trakt_movie_playcount" type="bool" label="1404" default="true"/>
-		<setting id="xbmc_movie_playcount" type="bool" label="1405" default="true"/>
-		<setting id="clean_trakt_movies" type="bool" label="1413" default="false"/>
-		<setting type="sep"/>
-		<setting label="1406" type="lsep"/><!-- Episodes -->
-		<setting id="add_episodes_to_trakt" type="bool" label="1407" default="true"/>
-		<setting id="trakt_episode_playcount" type="bool" label="1408" default="true"/>
-		<setting id="xbmc_episode_playcount" type="bool" label="1409" default="true"/>
-		<setting id="clean_trakt_episodes" type="bool" label="1414" default="false"/>
-	</category>
+
 	<category label="1030"><!-- Rating -->
 		<setting id="rate_movie" type="bool" label="1031" default="true"/>
 		<setting id="rate_episode" type="bool" label="1032" default="true"/>

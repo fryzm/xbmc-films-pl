@@ -53,43 +53,43 @@ class xbmcfilmAPI(object):
     def __init__(self):
         #self.__username = get_string_setting("username")
         #self.__password = sha1(get_string_setting("password")).hexdigest()
-        Debug("[traktAPI] Initializing")
-        #Debug("[traktAPI] Testing account '%s'" % self.__username)
+        Debug("[xbmcfilmAPI] Initializing")
+        #Debug("[xbmcfilmAPI] Testing account '%s'" % self.__username)
         self.settings = None
         #if self.testAccount():
-        #    Debug("[traktAPI] Account '%s' is valid." % self.__username)
-        #    Debug("[traktAPI] Getting account settings for '%s'" % self.__username)
+        #    Debug("[xbmcfilmAPI] Account '%s' is valid." % self.__username)
+        #    Debug("[xbmcfilmAPI] Getting account settings for '%s'" % self.__username)
         #    self.getAccountSettings()
         #else:
-        #    Debug("[traktAPI] Account '%s' is not valid." % self.__username)
+        #    Debug("[xbmcfilmAPI] Account '%s' is not valid." % self.__username)
 
     def __getData(self, url, args):
         data = None
         try:
-            Debug("[traktAPI] __getData(): urllib2.Request(%s)" % url)
+            Debug("[xbmcfilmAPI] __getData(): urllib2.Request(%s)" % url)
 
             if args == None:
                 req = Request(url)
             else:
                 req = Request(url, args)
 
-            Debug("[traktAPI] __getData(): urllib2.urlopen()")
+            Debug("[xbmcfilmAPI] __getData(): urllib2.urlopen()")
             t1 = time.time()
             response = urlopen(req, timeout=self.__timeout)
             t2 = time.time()
 
-            Debug("[traktAPI] __getData(): response.read()")
+            Debug("[xbmcfilmAPI] __getData(): response.read()")
             data = response.read()
 
-            Debug("[traktAPI] __getData(): Response Code: %i" % response.getcode())
-            Debug("[traktAPI] __getData(): Response Time: %0.2f ms" % ((t2 - t1) * 1000))
-            Debug("[traktAPI] __getData(): Response Headers: %s" % str(response.info().dict))
-            Debug("[traktAPI] __getData(): Response data: %s" % str(data))
+            Debug("[xbmcfilmAPI] __getData(): Response Code: %i" % response.getcode())
+            Debug("[xbmcfilmAPI] __getData(): Response Time: %0.2f ms" % ((t2 - t1) * 1000))
+            Debug("[xbmcfilmAPI] __getData(): Response Headers: %s" % str(response.info().dict))
+            Debug("[xbmcfilmAPI] __getData(): Response data: %s" % str(data))
             
 
         except IOError, e:
             if hasattr(e, "code"): # error 401 or 503, possibly others
-                Debug("[traktAPI] __getData(): Error Code: %s" % str(e.code))
+                Debug("[xbmcfilmAPI] __getData(): Error Code: %s" % str(e.code))
                 
                 error = {}
 
@@ -100,7 +100,7 @@ class xbmcfilmAPI(object):
                 try:
                     error = json.loads(error_data)
                 except ValueError:
-                    Debug("[traktAPI] __getData(): Error data is not JSON format - %s" % error_data)
+                    Debug("[xbmcfilmAPI] __getData(): Error data is not JSON format - %s" % error_data)
                     # manually add status, and the page data returned.
                     error["status"] = "failure"
                     error["error"] = error_data
@@ -111,20 +111,20 @@ class xbmcfilmAPI(object):
 
                 if e.code == 401: # authentication problem
                     # {"status":"failure","error":"failed authentication"}
-                    Debug("[traktAPI] __getData(): Authentication Failure (%s)" % error_data)
+                    Debug("[xbmcfilmAPI] __getData(): Authentication Failure (%s)" % error_data)
                     # reset internal valid user
                     self.validUser = False
 
                 elif e.code == 503: # server busy problem
                     # {"status":"failure","error":"server is over capacity"}
-                    Debug("[traktAPI] __getData(): Server Busy (%s)" % error_data)
+                    Debug("[xbmcfilmAPI] __getData(): Server Busy (%s)" % error_data)
 
                 else:
-                    Debug("[traktAPI] __getData(): Other problem (%s)" % error_data)
+                    Debug("[xbmcfilmAPI] __getData(): Other problem (%s)" % error_data)
 
                 return json.dumps(error)
             elif hasattr(e, "reason"): # usually a read timeout, or unable to reach host
-                Debug("[traktAPI] __getData(): Network error: %s" % str(e.reason))
+                Debug("[xbmcfilmAPI] __getData(): Network error: %s" % str(e.reason))
                 if isinstance(e.reason, socket.timeout):
                     notification("trakt", __language__(1108).encode( "utf-8", "ignore" ) + " (timeout)") # can't connect to trakt
                 return '{"status":"failure","error":"%s","type":"network"}' % e.reason
@@ -152,12 +152,12 @@ class xbmcfilmAPI(object):
             args = {}
 
         if not (method == 'POST' or method == 'GET'):
-            Debug("[traktAPI] traktRequest(): Unknown method '%s'" % method)
+            Debug("[xbmcfilmAPI] traktRequest(): Unknown method '%s'" % method)
             return None
         
         if method == 'POST':
             # debug log before username and sha1hash are injected
-            Debug("[traktAPI] traktRequest(): Request data: '%s'" % str(json.dumps(args)))
+            Debug("[xbmcfilmAPI] traktRequest(): Request data: '%s'" % str(json.dumps(args)))
             
             # inject username/pass into json data
             #args["username"] = self.__username
@@ -172,23 +172,23 @@ class xbmcfilmAPI(object):
             # convert to json data
             jdata = json.dumps(args)
 
-        Debug("[traktAPI] traktRequest(): Starting retry loop, maximum %i retries." % retries)
+        Debug("[xbmcfilmAPI] traktRequest(): Starting retry loop, maximum %i retries." % retries)
         
         # start retry loop
         for i in range(retries):    
-            Debug("[traktAPI] traktRequest(): (%i) Request URL '%s'" % (i, url))
+            Debug("[xbmcfilmAPI] traktRequest(): (%i) Request URL '%s'" % (i, url))
             
             # get data from trakt.tv
             raw = self.__getData(url, jdata)
             
             # check if we are closing
             if xbmc.abortRequested:
-                Debug("[traktAPI] traktRequest(): (%i) xbmc.abortRequested" % i)
+                Debug("[xbmcfilmAPI] traktRequest(): (%i) xbmc.abortRequested" % i)
                 break
 
             # check that returned data is not empty
             if not raw:
-                Debug("[traktAPI] traktRequest(): (%i) JSON Response empty" % i)
+                Debug("[xbmcfilmAPI] traktRequest(): (%i) JSON Response empty" % i)
                 xbmc.sleep(1000)
                 continue
 
@@ -196,12 +196,12 @@ class xbmcfilmAPI(object):
                 # get json formatted data    
                 data = json.loads(raw)
                 if hideResponse:
-                    Debug("[traktAPI] traktRequest(): (%i) JSON response recieved, response not logged" % i)
+                    Debug("[xbmcfilmAPI] traktRequest(): (%i) JSON response recieved, response not logged" % i)
                 else:
-                    Debug("[traktAPI] traktRequest(): (%i) JSON response: '%s'" % (i, str(data)))
+                    Debug("[xbmcfilmAPI] traktRequest(): (%i) JSON response: '%s'" % (i, str(data)))
             except ValueError:
                 # malformed json response
-                Debug("[traktAPI] traktRequest(): (%i) Bad JSON response: '%s'", (i, raw))
+                Debug("[xbmcfilmAPI] traktRequest(): (%i) Bad JSON response: '%s'", (i, raw))
                 if not silent:
                     notification("trakt", __language__(1109).encode( "utf-8", "ignore" ) + ": Bad response from trakt") # Error
                 
@@ -210,7 +210,7 @@ class xbmcfilmAPI(object):
                 if data['status'] == 'success':
                     break
                 else:
-                    Debug("[traktAPI] traktRequest(): (%i) JSON Error '%s' -> '%s'" % (i, data['status'], data['error']))
+                    Debug("[xbmcfilmAPI] traktRequest(): (%i) JSON Error '%s' -> '%s'" % (i, data['status'], data['error']))
                     if data.has_key("type"):
                         if data["type"] == "protocol":
                             # protocol error, so a 4xx or 5xx
@@ -234,26 +234,26 @@ class xbmcfilmAPI(object):
             
             # check to see if we have data
             if data:
-                Debug("[traktAPI] traktRequest(): Have JSON data, breaking retry.")
+                Debug("[xbmcfilmAPI] traktRequest(): Have JSON data, breaking retry.")
                 break
 
             xbmc.sleep(500)
         
         # handle scenario where all retries fail
         if not data:
-            Debug("[traktAPI] traktRequest(): JSON Request failed, data is still empty after retries.")
+            Debug("[xbmcfilmAPI] traktRequest(): JSON Request failed, data is still empty after retries.")
             return None
         
         if 'status' in data:
             if data['status'] == 'failure':
-                Debug("[traktAPI] traktRequest(): Error: %s" % str(data['error']))
+                Debug("[xbmcfilmAPI] traktRequest(): Error: %s" % str(data['error']))
                 if returnStatus:
                     return data
                 if not silent:
                     notification("trakt", __language__(1109).encode( "utf-8", "ignore" ) + ": " + str(data['error'])) # Error
                 return None
             elif data['status'] == 'success':
-                Debug("[traktAPI] traktRequest(): JSON request was successful.")
+                Debug("[xbmcfilmAPI] traktRequest(): JSON request was successful.")
 
         return data
 
@@ -281,7 +281,7 @@ class xbmcfilmAPI(object):
 
         if not self.validUser or force:
             url = "%s/account/test/%s" % (self.__baseURL, self.__apikey)
-            Debug("[traktAPI] testAccount(url: %s)" % url)
+            Debug("[xbmcfilmAPI] testAccount(url: %s)" % url)
             response = self.traktRequest("POST", url)
             if response:
                 if response.has_key("status"):
@@ -299,7 +299,7 @@ class xbmcfilmAPI(object):
     def getAccountSettings(self):
         if self.testAccount():
             url = "%s/account/settings/%s" % (self.__baseURL, self.__apikey)
-            Debug("[traktAPI] getAccountSettings(url: %s)" % url)
+            Debug("[xbmcfilmAPI] getAccountSettings(url: %s)" % url)
             response = self.traktRequest("POST", url, hideResponse=True)
             if response:
                 if response.has_key("status"):
@@ -311,7 +311,7 @@ class xbmcfilmAPI(object):
     def watching(self, type, data):
         #if self.testAccount():
             url = "%s/%s/watching/%s" % (self.__baseURL, self.__apikey, type)
-            Debug("[traktAPI] watching(url: %s, data: %s)" % (url, str(data)))
+            Debug("[xbmcfilmAPI] watching(url: %s, data: %s)" % (url, str(data)))
             return self.traktRequest("POST", url, data, passVersions=True)
     
     def watchingEpisode(self, tvdb_id, title, year, season, episode, uniqueid, duration, percent):
@@ -326,7 +326,7 @@ class xbmcfilmAPI(object):
     def scrobble(self, type, data):
     #    if self.testAccount():
             url = "%s/%s/scrobble/%s" % (self.__baseURL, self.__apikey, type)
-            Debug("[traktAPI] scrobble(url: %s, data: %s)" % (url, str(data)))
+            Debug("[xbmcfilmAPI] scrobble(url: %s, data: %s)" % (url, str(data)))
             return self.traktRequest("POST", url, data, passVersions=True)
 
     def scrobbleEpisode(self, tvdb_id, title, year, season, episode, uniqueid, duration, percent, sessionid):
@@ -341,7 +341,7 @@ class xbmcfilmAPI(object):
     def cancelWatching(self, type):
         #if self.testAccount():
             url = "%s/%s/cancelwatching/%s" % (self.__baseURL, type, self.__apikey)
-            Debug("[traktAPI] cancelWatching(url: %s)" % url)
+            Debug("[xbmcfilmAPI] cancelWatching(url: %s)" % url)
             return self.traktRequest("POST", url)
         
     def cancelWatchingEpisode(self):
@@ -355,7 +355,7 @@ class xbmcfilmAPI(object):
     def getLibrary(self, type):
         #if self.testAccount():
             url = "%s/user/library/%s/collection.json/%s/%s/min" % (self.__baseURL, type, self.__apikey, self.__username)
-            Debug("[traktAPI] getLibrary(url: %s)" % url)
+            Debug("[xbmcfilmAPI] getLibrary(url: %s)" % url)
             return self.traktRequest("POST", url)
 
     def getShowLibrary(self):
@@ -369,7 +369,7 @@ class xbmcfilmAPI(object):
     def getWatchedLibrary(self, type):
         #if self.testAccount():
             url = "%s/user/library/%s/watched.json/%s/%s/min" % (self.__baseURL, type, self.__apikey, self.__username)
-            Debug("[traktAPI] getWatchedLibrary(url: %s)" % url)
+            Debug("[xbmcfilmAPI] getWatchedLibrary(url: %s)" % url)
             return self.traktRequest("POST", url)
 
     def getWatchedEpisodeLibrary(self,):
@@ -382,7 +382,7 @@ class xbmcfilmAPI(object):
     def addToLibrary(self, type, data):
         #if self.testAccount():
             url = "%s/%s/library/%s" % (self.__baseURL, type, self.__apikey)
-            Debug("[traktAPI] addToLibrary(url: %s, data: %s)" % (url, str(data)))
+            Debug("[xbmcfilmAPI] addToLibrary(url: %s, data: %s)" % (url, str(data)))
             return self.traktRequest("POST", url, data)
 
     def addEpisode(self, data):
@@ -395,7 +395,7 @@ class xbmcfilmAPI(object):
     def removeFromLibrary(self, type, data):
         #if self.testAccount():
             url = "%s/%s/unlibrary/%s" % (self.__baseURL, type, self.__apikey)
-            Debug("[traktAPI] removeFromLibrary(url: %s, data: %s)" % (url, str(data)))
+            Debug("[xbmcfilmAPI] removeFromLibrary(url: %s, data: %s)" % (url, str(data)))
             return self.traktRequest("POST", url, data)
 
     def removeEpisode(self, data):
@@ -408,7 +408,7 @@ class xbmcfilmAPI(object):
     def updateSeenInLibrary(self, type, data):
         #if self.testAccount():
             url = "%s/%s/seen/%s" % (self.__baseURL, type, self.__apikey)
-            Debug("[traktAPI] updateSeenInLibrary(url: %s, data: %s)" % (url, str(data)))
+            Debug("[xbmcfilmAPI] updateSeenInLibrary(url: %s, data: %s)" % (url, str(data)))
             return self.traktRequest("POST", url, data)
 
     def updateSeenEpisode(self, data):
@@ -421,7 +421,7 @@ class xbmcfilmAPI(object):
     def getSummary(self, type, data):
         #if self.testAccount():
             url = "%s/%s/summary.json/%s/%s" % (self.__baseURL, type, self.__apikey, data)
-            Debug("[traktAPI] getSummary(url: %s)" % url)
+            Debug("[xbmcfilmAPI] getSummary(url: %s)" % url)
             return self.traktRequest("POST", url)
 
     def getShowSummary(self, imdb_id, season, episode):
@@ -436,7 +436,7 @@ class xbmcfilmAPI(object):
     def rate(self, type, data):
         #if self.testAccount():
             url = "%s/%s/rate/%s" % (self.__baseURL,  self.__apikey,type)
-            Debug("[traktAPI] rate(url: %s, data: %s)" % (url, str(data)))
+            Debug("[xbmcfilmAPI] rate(url: %s, data: %s)" % (url, str(data)))
             return self.traktRequest("POST", url, data, passVersions=True)
 
     def rateEpisode(self, data):
@@ -447,12 +447,12 @@ class xbmcfilmAPI(object):
     def getSession(self, type):
         #if self.testAccount():
             url = "%s/%s/session/%s" % (self.__baseURL, self.__apikey, type)
-            Debug("[traktAPI] getSession(url: %s)" % url)
+            Debug("[xbmcfilmAPI] getSession(url: %s)" % url)
             data = self.traktRequest("POST", url,passVersions=True)
             return data["message"].encode('utf-8')
     def getIMDB(self, data):
         #if self.testAccount():
             url = "%s/%s/imdb/%s" % (self.__baseURL, self.__apikey, data['type'])
-            Debug("[traktAPI] getSession(url: %s)" % url)
+            Debug("[xbmcfilmAPI] getSession(url: %s)" % url)
             data = self.traktRequest("POST", url,data,passVersions=False)
             return data["message"].encode('utf-8')

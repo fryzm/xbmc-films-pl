@@ -22,7 +22,7 @@
 
 <addon id="plugin.video.xbmcfilm"
        name="xbmcfilm.com"
-       version="0.1.0"
+       version="0.1.1"
        provider-name="mrknow">
   <requires>
     <import addon="xbmc.python" version="1.0"/>

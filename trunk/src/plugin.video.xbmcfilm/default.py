@@ -5,94 +5,133 @@ import os, time, base64, logging, calendar
 import xbmcaddon
 
 
-scriptID = 'plugin.video.mrknow'
+scriptID = 'plugin.video.xbmcfilm'
 scriptname = "Films online"
 ptv = xbmcaddon.Addon(scriptID)
 
 #BASE_RESOURCE_PATH = os.path.join( os.getcwd(), "resources" )
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
+#sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
-import pLog, settings, Parser
-import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
-import filmboxmoovie,filmmex,plej,cdapl,nextplus
-import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv
-#import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
-import iptak,goodcast,streamon,strefavod,wrzuta,tvppl
+import pLog, settings, Parser, pCommon
+import json
 
 log = pLog.pLog()
 
 
-MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
-               
-               2100: "xbmcfilm.com"
-}
+mainUrl = 'http://xbmcfilm.com/'
 
-class MrknowFilms:
-  def __init__(self):
-    log.info('xbmcfilm.com')
-    self.settings = settings.TVSettings()
-    self.parser = Parser.Parser()
+HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
-  def showListOptions(self):
-    params = self.parser.getParams()
-    mode = self.parser.getIntParam(params, "mode")
-    name = self.parser.getParam(params, "name")
-    service = self.parser.getParam(params, 'service')    
-    if mode == None and name == None and service == None:
-        log.info('Wyświetlam kategorie')
-        self.CATEGORIES()
+MENU_TAB = {1: "Aktualnie oglądane",
+            2: "Najczęściej oglądane - 7 dni",
+            3: "Najczęściej oglądane - 30 dni",
+            4: "Najczęściej oglądane"
 
-        
-    elif mode == 1 or service == 'xbmcfilm.com':
-        tv = xbmcfilm.xbmcfilm()
-        tv.handleService()
 
-    elif mode == 20:
-        log.info('Wyświetlam ustawienia')
-        self.settings.showSettings()
-        
-  def CATEGORIES(self):
+            }
 
-        self.addDir("xbmcfilm.com", 1, False, 'xbmcfilm.com', False)
+
+class xbmcfilm:
+    def __init__(self):
+        log.info('Starting xbmcfilm.pl')
+        self.cm = pCommon.common()
+        self.parser = Parser.Parser()
+        self.cm = pCommon.common()
+        self.settings = settings.TVSettings()
+
+
+    def listsMainMenu(self, table):
+        for num, val in table.items():
+            self.add('cdapl', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
+
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    
+    def listsItems(self, url):
+        query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        #print ("L",link)
+        objs = json.loads(link)
+        for o in objs[0]:
+            #print o
+            nazwa = json.dumps(o["title"]).replace('"','')
+        #    print nazwa
+            stream = json.dumps(o["xbmcpath"]).replace('"','')
+            image = json.dumps(o["image"]).replace('"','')
 
-  def listsTable(self, table):
-    for num, val in table.items():
-      nTab.append(val)
-    return nTab
+        #    image = ptv.getAddonInfo('path') + os.path.sep + "images" + os.path.sep  + nazwa +".png"
+            
+            #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
+            #self.add('mmtv', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
+            self.add('xbmcfilm', 'playSelectedMovie', 'None', nazwa,image, stream, 'None', 'None', True, False)
+        
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+       
+    
+
+    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
+        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)
+        #log.info(str(u))
+        if name == 'main-menu' or name == 'categories-menu':
+            title = category 
+        if iconimage == '':
+            iconimage = "DefaultVideo.png"
+        liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        if isPlayable:
+            liz.setProperty("IsPlayable", "true")
+        liz.setInfo( type="Video", infoLabels={ "Title": title } )
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=folder)
+            
+
+    def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon):
+        print ("videurl", videoUrl)
+        print ("videurl", videoUrl)
+ 
+        ok=True
+        if videoUrl == '':
+                d = xbmcgui.Dialog()
+                d.ok('Nie znaleziono streamingu.', 'Może to chwilowa awaria.', 'Spróbuj ponownie za jakiś czas')
+                return False
+        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
+        liz.setInfo( type="Video", infoLabels={ "Title": title, } )
+        try:
+            xbmcPlayer = xbmc.Player()
+            xbmcPlayer.play(videoUrl, liz)
+            
+           # if not xbmc.Player().isPlaying():
+           #     xbmc.sleep( 10000 )
+                #xbmcPlayer.play(url, liz)
+            
+        except:
+            d = xbmcgui.Dialog()
+            d.ok('Błąd przy przetwarzaniu.', 'Problem')        
+        return ok
 
 
-  def LIST(self, table = {}):
-      valTab = []
-      strTab = []
-      for num, tab in table.items():
-          strTab.append(num)
-          strTab.append(tab[0])
-	  strTab.append(tab[1])
-          valTab.append(strTab)
-          strTab = []
-      valTab.sort(key = lambda x: x[1])      
-      for i in range(len(valTab)):
-          if valTab[i][2] == '': icon = False
-          else: icon = valTab[i][2]
-          self.addDir(valTab[i][1], valTab[i][0], False, icon, False)
-      xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    def handleService(self):
+    	params = self.parser.getParams()
+        name = self.parser.getParam(params, "name")
+        category = self.parser.getParam(params, "category")
+        url = self.parser.getParam(params, "url")
+        title = self.parser.getParam(params, "title")
+        icon = self.parser.getParam(params, "icon")
+        print(name,category,url,title)
+        if name == None:
+            self.listsMainMenu(MENU_TAB)
+        elif name == 'main-menu' and category == 'Aktualnie oglądane':
+            self.listsItems('http://xbmcfilm.com/index.php/xbmc/')
+        elif name == 'main-menu' and category == 'Najczęściej oglądane':
+            self.listsItems('http://xbmcfilm.com/index.php/xbmc/mostwatched')
+        elif name == 'main-menu' and category == 'Najczęściej oglądane - 30 dni':
+            self.listsItems('http://xbmcfilm.com/index.php/xbmc/mostwatched/30')
+        elif name == 'main-menu' and category == 'Najczęściej oglądane - 7 dni':
+            self.listsItems('http://xbmcfilm.com/index.php/xbmc/mostwatched/7')
+        
 
-
-  def addDir(self, name, mode, autoplay, icon, isPlayable = True):
-    #print("Dane",name, mode, autoplay, icon, isPlayable)
-    u=sys.argv[0] + "?mode=" + str(mode)
-    if icon != False:
-      icon = os.path.join(ptv.getAddonInfo('path'), "images/") + icon + '.png'
-    else:
-      icon = "DefaultVideoPlaylists.png"
-    liz=xbmcgui.ListItem(name, iconImage=icon, thumbnailImage='')
-    if autoplay and isPlayable:
-      liz.setProperty("IsPlayable", "true")
-    liz.setInfo( type="Video", infoLabels={ "Title": name } )
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,listitem=liz, isFolder= not autoplay)
-
-init = MrknowFilms()
-init.showListOptions()
+        if name == 'playSelectedMovie':
+            self.LOAD_AND_PLAY_VIDEO(url, title, icon)
+        
+  
+init = xbmcfilm()
+init.handleService()

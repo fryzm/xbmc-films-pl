@@ -11,9 +11,7 @@
 	<extension point="xbmc.addon.metadata" name="trakt.metadata">
 		<language></language>
 		<summary lang="en">TV and movie scrobbler for trakt.tv</summary>
-		<description lang="en">Automatically scrobble all TV episodes and movies you are watching to trakt.tv!
-
-		see these talented developers.
+		<description lang="en">Automatically scrobble all  movies you are watching to xbmcfilm.com!
 		</description>
 		<platform>all</platform>
 	</extension>

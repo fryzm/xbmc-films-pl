@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.xbmcfilm"
+       name="xbmcfilm.com"
+       version="0.1.0"
+       provider-name="mrknow">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.xbmcfilm.com" version="0.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Wtyczka MRKNOW</summary>
+    <description>Plugin pozwala nam ogladac popularne filmy na podstawie statystyk zbieranych na stronie www.xbmcfilm.com
+    </description>
+    <platform>all</platform>
+  </extension>
+</addon>

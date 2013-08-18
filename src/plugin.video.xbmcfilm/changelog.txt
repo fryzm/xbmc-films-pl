@@ -1,0 +1,56 @@
+Wersja 1.6.41
+ Poprawiono plej.tv - dodano kategorie do serwsiu 
+ na razie weryfikujemy czy dzia³a 
+
+Wersja 1.6.40  
+ Nowe ikony dla serwisów 
+
+Wersja 1.5.01  
+ Nowe ikony dla serwisów 
+ Poprawiono plej.tv - dodano logowanie do serwsiu 
+ Dodano netvi.pl
+
+Wersja 1.4.82  - Nowe ikony dla serwisu dostarczy³ Micha³. Dziêki 
+ Poprawiono noobroom.com - dodano 2 nowe ukryte serwery
+
+Wersja 1.4.8  - dodano kinolive
+
+Wersja 1.4.61 - dodano filmmex.pl
+
+Wersja 1.4.6 - poprawiono meczyki.pl
+
+Wersja 1.4.5 - dodano wersjê alpha serwisu VOD ONET PL, coœ zaczyna dzia³aæ 
+
+Wersja 1.4.4 - dodano:
+ FilmBox Extra
+ FilmBox Basic
+ FightBox
+ DocuBox
+ FashionBox
+ KinoPolska
+ Kino Polska Muzyka
+
+
+Wersja 1.4.3 - sewis milanos.pl
+ 
+Wersja 1.4.2 - poprawki do meczyki.pl nowe streamy
+
+Wersja 1.4.0
+- serwis meczyki.pl
+- serwis drhtv.com.pl
+
+Wersja 1.3.0
+- serwis noobroom.com
+- serwis wykop.pl
+- serwis joemonster.org
+
+
+Wersja 1.0.1
+Initial release
+.....
+
+
+
+
+
+

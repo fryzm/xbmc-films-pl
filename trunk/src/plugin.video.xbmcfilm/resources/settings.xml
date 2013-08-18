@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	
+	<category label="xbmcfilm.com">
+		<setting type="lsep" label="zaloguj sie do serwisu"/>
+		<setting id="xbmcfilm_login" type="bool" label="Zaloguj się" default="false" />
+		<setting type="sep"/>
+		<setting type="lsep" label="Login i hasło" />
+		<setting id="xbmcfilm_user" type="text" label="login" default="" />
+		<setting id="xbmcfilm_pass" type="text" label="hasło" option="hidden"  default="" />
+	</category>
+
+</settings>

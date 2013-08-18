@@ -398,8 +398,8 @@ class vodpl:
             self.listsItems1(category,id1,id2)
 
         if name == 'playSelectedMovie':
-            #self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon)
-            #print self.getMovieLinkFromXML(id1,id2)
+            self.p.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon, year)
+        if name == 'playselectedmovie':
             self.p.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(id1,id2), title, icon, year)
 
         

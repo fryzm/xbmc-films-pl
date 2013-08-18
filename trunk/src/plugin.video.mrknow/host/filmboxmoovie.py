@@ -307,6 +307,9 @@ class filmboxmoovie:
         if name == 'playSelectedMovie':
             data = self.getMovieLinkFromXML(url)
             self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon,data['year'],data['desc'])
+        if name == 'playselectedmovie':
+            data = self.getMovieLinkFromXML(url)
+            self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon,data['year'],data['desc'])
 
         
   

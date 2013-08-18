@@ -12,6 +12,8 @@ class Player:
     
     def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon,year='',plot=''):
         print ("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",title, icon,year,plot)
+        if icon == '' or 'None':
+            icon = "DefaultVideo.png"
         liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
         if year == '':
             liz.setInfo( type="Video", infoLabels={ "Title": title} )

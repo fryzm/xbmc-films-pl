@@ -171,12 +171,13 @@ class Scrobbler(threading.Thread):
             match = None
             if 'id' in self.curVideo:
                 match = utilities.getMovieDetailsFromXbmc(self.curVideo['id'], ['imdbnumber', 'title', 'year'])
+                print ("Match",match)
                 match['file'] = self.chkdic('file',self.curVideo)
                 match['thumbnail'] = self.chkdic('thumbnail',self.curVideo)
             elif 'title' in self.curVideo and 'year' in self.curVideo:
                 match = {}
-
-                match['imdbnumber'] = self.curVideo['imdbnumber']
+                print ("Match",self.curVideo)
+                match['imdb_id'] = self.curVideo['imdb_id']
                 match['title'] = self.curVideo['title']
                 match['year'] = self.curVideo['year']
                 match['file'] = self.chkdic('file',self.curVideo)
@@ -187,7 +188,7 @@ class Scrobbler(threading.Thread):
             
             duration = self.totalTime / 60
             watchedPercent = int((self.watchedTime / self.totalTime) * 100)
-            response = self.xbmcfilm.watchingMovie(match['imdbnumber'], match['title'], match['year'], duration, watchedPercent, match['file'], match['thumbnail'],self.sessionid,self.xbmcpath)
+            response = self.xbmcfilm.watchingMovie(match['imdb_id'], match['title'], match['year'], duration, watchedPercent, match['file'], match['thumbnail'],self.sessionid,self.xbmcpath)
             response =''
             if response != None:
                 Debug("[Scrobbler] Watch response: "+str(response))
@@ -254,7 +255,7 @@ class Scrobbler(threading.Thread):
                 match['thumbnail'] = self.chkdic('thumbnail',self.curVideo)
             elif 'title' in self.curVideo and 'year' in self.curVideo:
                 match = {}
-                match['imdbnumber'] = self.curVideo['imdbnumber']
+                match['imdb_id'] = self.curVideo['imdb_id']
                 match['title'] = self.curVideo['title']
                 match['year'] = self.curVideo['year']
                 match['file'] = self.chkdic('file',self.curVideo)
@@ -265,7 +266,7 @@ class Scrobbler(threading.Thread):
 
             duration = self.totalTime / 60
             watchedPercent = int((self.watchedTime / self.totalTime) * 100)
-            response = self.xbmcfilm.scrobbleMovie(match['imdbnumber'], match['title'], match['year'], duration, watchedPercent,match['file'], match['thumbnail'],self.sessionid,self.xbmcpath)
+            response = self.xbmcfilm.scrobbleMovie(match['imdb_id'], match['title'], match['year'], duration, watchedPercent,match['file'], match['thumbnail'],self.sessionid,self.xbmcpath)
             response = ''
             if response != None:
                 Debug("[Scrobbler] Scrobble response: "+str(response))

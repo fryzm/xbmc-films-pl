@@ -159,9 +159,9 @@ class traktPlayer(xbmc.Player):
             
             # check for exclusion
             _filename = self.getPlayingFile()
-            #if checkScrobblingExclusion(_filename):
-            #    Debug("[xbmcfilmPlayer] onPlayBackStarted() - '%s' is in exclusion settings, ignoring." % _filename)
-            #    return
+            if checkScrobblingExclusion(_filename):
+                Debug("[xbmcfilmPlayer] onPlayBackStarted() - '%s' is in exclusion settings, ignoring." % _filename)
+                return
             
             self.type = result["item"]["type"]
 
@@ -198,8 +198,7 @@ class traktPlayer(xbmc.Player):
                     data["title"]
                     data["file"] = result1['item']['file']
                     data["thumbnail"] =  result1['item']['thumbnail']
-                    tmpdata = {'type':'movie','title':data["title"],'year': year}
-                    data["imdbnumber"] = globals.xbmcfilmapi.getIMDB(tmpdata)
+                    data["imdb_id"] = globals.xbmcfilmapi.getIMDB(data)
                     Debug("[xbmcfilmPlayer] onPlayBackStarted() Result- %s" % result1)
                 else:
                     Debug("[xbmcfilmPlayer] onPlayBackStarted() - Non-library file, not enough data for scrobbling, skipping.")
@@ -213,8 +212,7 @@ class traktPlayer(xbmc.Player):
                 data["id"] = self.id
                 data["type"] = self.type
                 match = utilities.getMovieDetailsFromXbmc(self.id, ['imdbnumber', 'title', 'year'])
-                tmpdata = {'type':'movie','title':match["title"],'year': match["year"],'imdbnumber': match["imdbnumber"]}
-                globals.xbmcfilmapi.getIMDB(tmpdata)
+                globals.xbmcfilmapi.getIMDB(data)
             
                 if self.type == "episode":
                     Debug("[xbmcfilmPlayer] onPlayBackStarted() - Doing multi-part episode check.")

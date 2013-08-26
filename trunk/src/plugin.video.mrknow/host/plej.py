@@ -17,10 +17,10 @@ import pLog, pCommon, Parser, settings
 
 log = pLog.pLog()
 
-mainUrl = 'http://plej.tv/'
+mainUrl = 'http://plejer.tv/'
 #chanels = 'http://plej.tv/index.php?p=kanal'
-chanels = 'http://plej.tv/index.php?p=kanal&id=517711e9409d4'
-categories = 'http://plej.tv/index.php?p=cats'
+chanels = 'http://plejer.tv/index.php?p=kanal&id=517711e9409d4'
+categories = 'http://plejer.tv/index.php?p=cats'
 playerUrl = 'http://www.youtube.pl/'
 
 HOST = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:21.0) Gecko/20100101 Firefox/21.0'
@@ -205,7 +205,9 @@ class plej:
         if len(match)>0:
             print "Match--->  0"
             linkVideo = match[0]
-            return linkVideo + ' live=true swfUrl=http://plej.tv/StrobeMediaPlayback.swf pageUrl='+url
+            #return linkVideo + ' live=true swfUrl=http://plej.tv/StrobeMediaPlayback.swf pageUrl='+url
+            return linkVideo 
+            
         elif len(match1)>0:
             print "Match--->  1"
             match2 = re.compile('video     : \'(.*?)\',', re.DOTALL).findall(link)

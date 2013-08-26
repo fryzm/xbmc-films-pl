@@ -35,7 +35,7 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
 }
 TV_ONLINE_TABLE = {
 		     2100 : ["Film Box", 'filmbox'],
-         #    2200 : ["Plej.tv", 'plej'],
+             2200 : ["Plejer.tv", 'plej'],
          #    2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
              2500 : ["Netvi.tv", 'netvi'],

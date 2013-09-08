@@ -137,6 +137,8 @@ class urlparser:
         nUrl = self.parserLIVEVIEW365(url,referer)   
     if host== 'www.jokerupload.com':
         nUrl = self.parserjokerupload(url)   
+    if host== 'www.topupload.tv':
+        nUrl = self.parsertopupload(url)   
     if host== 'www.putlive.in':
         nUrl = self.parserputlive(url,referer)   
     if host== 'emb.aliez.tv':
@@ -375,6 +377,17 @@ class urlparser:
         print ("Link",match2)
         print ("Link",match3)
         return match2[0] + match3[0] + ' pageUrl='+ match1[0]+' swfUrl='+ match1[0]
+#parsertopupload
+        
+  def parsertopupload(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.search("'file': '(.*?)'",link)
+
+    if match:   
+      return match.group(1)
+    else: 
+      return False
   def parserjokerupload(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)

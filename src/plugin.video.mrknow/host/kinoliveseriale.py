@@ -17,14 +17,14 @@ import pLog, settings, Parser,pCommon
 log = pLog.pLog()
 
 mainUrl = 'http://alekino.tv/'
-catUrl = 'http://alekino.tv/seriale_online/'
+catUrl = 'http://alekino.tv/seriale/'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
 MENU_TAB = {0: "Alfabetycznie",
-            1: "Top 30",
-            2: "Ostatnie dodane seriale",
-            3: "Ostatnie dodane odcinki"
+#            1: "Top 30",
+#            2: "Ostatnie dodane seriale",
+#            3: "Ostatnie dodane odcinki"
 #            12: "Kategorie",
 #            15: "Szukaj"
             }
@@ -37,7 +37,7 @@ class kinoliveseriale:
         self.up = urlparser.urlparser()
         self.cm = pCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveseriale.cookie"
-        query_data = {'url': 'http://alekino.tv/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
+        query_data = {'url': 'http://alekino.tv/auth/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
 
     def getstring(self,data):
@@ -91,27 +91,21 @@ class kinoliveseriale:
     def listsItems(self, url,strona):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<span class="pl-titleblock">Sezon'+strona+'</span>(.*?)</ul>', re.DOTALL).findall(link)
-        match2 = re.compile('<meta property="og:image" content="(.*?)" />', re.DOTALL).findall(link)
-        match1 = re.compile('<li>\n\t\t\t\t\t<a href="(.*?)"(.*?)><span>(.*?)</span>(.*?)\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t</li>', re.DOTALL).findall(match[0])
-#        match3 = re.compile('<li>\n\t\t\t\t\t<a href="/seriale_online/(.*?)" style="background:#616161;"><span>(.*?)</span>(.*?)\n\t\t\t\t\t\t\t\t\t\t<span style="color:red;position:absolute;margin-top:-0px;margin-left:2px;">new</span>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t</li>', re.DOTALL).findall(match[0])
-        print ("Link",link)
-        print ("Link",match1)
-        
+        match = re.compile('<div class="row-fluid bgb pull-right" style="width:680px;padding:10px;margin-top:10px;" id="'+strona+'">(.*?)<div class="p10"></div>', re.DOTALL).findall(link)
+        match2 = re.compile('<div class="span2">\n               <img src="(.*?)" alt=""/>\n               \n            </div>', re.DOTALL).findall(link)
+        match1 = re.compile('<td class="episode" style="width:90px;">\n               <span class="w">(.*?)</span>\n            </td>\n            <td class="episode">\n               \n               <a class="o" href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[0])
         if len(match1) > 0:
             for i in range(len(match1)):
-                title = match1[i][2]+match1[i][3].replace('<span style="color:red;position:absolute;margin-top:-0px;margin-left:2px;">new</span>',' - [NOWY]')
-                self.add('kinoliveseriale', 'playSelectedMovie', 'None', title.replace('\n',''), match2[0], mainUrl+ match1[i][0], 'aaaa', 'None', True, False)
-#        if len(match3) > 0:
-#            for i in range(len(match3)):
-#                    self.add('kinoliveseriale', 'playSelectedMovie', 'None', match3[i][1] + match3[i][2], match2[0], mainUrl+ match3[i][0], 'aaaa', 'None', True, False)
-        
+                title = match1[i][0]+ ' ' + match1[i][2]
+                self.add('kinoliveseriale', 'playSelectedMovie', 'None', title.replace('\n',''), match2[0], mainUrl[:-1]+ match1[i][1], 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItemsA(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<div class="pl-module" id="letter_(.*?)">', re.DOTALL).findall(link)
+        print ("link",link)
+        match = re.compile('<h2 class="w cfr">\n               <i class="icon-facetime-video o"></i>(.*?)\n           </h2>', re.DOTALL).findall(link)
+        print match
         for i in range(len(match)):
             self.add('kinoliveseriale', 'page-menu', 'None',  match[i].decode('iso-8859-2'),  'None', mainUrl, 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -119,13 +113,18 @@ class kinoliveseriale:
     def listsItemsS(self, url, strona):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<div class="pl-module" id="letter_'+str.lower(strona)+'">(.*?)</ul>', re.DOTALL).findall(link)
-        match1 = re.compile('<li><a href="(.*?)" class="pl-corners">(.*?)</a></li>', re.DOTALL).findall(match[0])
+        match = re.compile('<h2 class="w cfr">\n               <i class="icon-facetime-video o"></i>'+ strona +'\n           </h2>(.*?)</ul>', re.DOTALL).findall(link)
+        print ("Match",match)
+        match1 = re.compile('<a href="(.*?)" class="pl-corners">(.*?)<span class="(.*?)">(.*?)</span></a>', re.DOTALL).findall(match[0])
         print match1
         if len(match1) > 0:
             for i in range(len(match1)):
-                title = match1[i][1].replace('<span style="color:red;position:absolute;margin-top:-0px;margin-left:2px;">new</span>','')
-                self.add('kinoliveseriale', 'serial-menu', 'None', title,  'None', mainUrl+ match1[i][0], 'aaaa', 'None', True, False)
+                if len(match1[i][3]) > 0:
+                    title = match1[i][1] + ' / ' + match1[i][3] 
+                else:
+                    title = match1[i][1] 
+                
+                self.add('kinoliveseriale', 'serial-menu', 'None', title,  'None', mainUrl[:-1]+ match1[i][0].strip(), 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
     def listsItemsTop(self, url,str1,str2):
@@ -169,32 +168,30 @@ class kinoliveseriale:
     def listsSeasons(self, url,img):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<span class="pl-titleblock">Sezon(.*?)</span>', re.DOTALL).findall(link)
+        match = re.compile('<button data-action="scrollTo" data-scroll="(.*?)" class="btn btn-new cf sezonDirect" style="width:85px; font-size:13px;margin: 3px;" href="#" rel="1">(.*?)</button>', re.DOTALL).findall(link)
         print match
         if img == '' or img ==None:
             img = 'None'
         for i in range(len(match)):
-            self.add('kinoliveseriale', 'items-menu', 'None',  'Sezon'+match[i],  img, url, 'None', 'None', True, False,match[i])
+            self.add('kinoliveseriale', 'items-menu', 'None', match[i][1],  img, url, 'None', 'None', True, False,match[i][0])
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
  
     def getMovieLinkFromXML(self, url):
-        HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
+        VideoData = {}
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match1 = re.compile('<input type="hidden" name="currentmirrorload" value="(.*?)"', re.DOTALL).findall(link)
-        #match2 = re.compile('{ serial: "(.*?)", source: (.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
-        match2 = re.compile('{ serial: "(.*?)", source:(.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
-        #{serial:"54999",source:$('input[name=currentmirrorload]').val(),token:"3fc31a090e88126951d230552d982730",time:"1370467193"},function(data)
-        #        #{ video: "21710", source: $('input[name=currentmirrorload]').val(), token:"d057f6157b594762b1b972cd48fe1861", time:"1370953147"}, function(data)
-
-        print ("M2",match2)
-        post_data = {'serial': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
-        query_data = {'url': 'http://alekino.tv/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+        #VideoData['year'] = str(self.getMovieYear(link))
+        match1 = re.compile('<a href="#" data-type="player" data-version="standard" data-id="(.*?)">', re.DOTALL).findall(link)
+        url1 = "http://alekino.tv/players/init/" + match1[0] + "?mobile=false"
+        query_data = { 'url': url1, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match15 = re.compile('"data":"(.*?)"', re.DOTALL).findall(link)
+        hash = match15[0].replace('\\','')
+        post_data = {'hash': hash}
+        query_data = {'url': 'http://alekino.tv/players/get', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)
-        print ("D",data)
-        marian = json.loads(data)
-        match3 = re.compile('<iframe src="(.*?)" style="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(marian["player_code"])
-        linkVideo = self.up.getVideoLink(match3[0][0].decode('utf8'))
+        match16 = re.compile('<iframe src="(.*?)" width="989" height="535" scrolling="no" frameborder="0">', re.DOTALL).findall(data)
+        linkVideo = self.up.getVideoLink(match16[0].decode('utf8'))
         return linkVideo
         
 

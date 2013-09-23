@@ -18,9 +18,9 @@ log = pLog.pLog()
 
 #mainUrl = 'http://kinolive.pl/'
 mainUrl = 'http://alekino.tv/'
-catUrl = 'http://alekino.tv/filmy_online/'
+catUrl = 'http://alekino.tv/filmy/'
 
-HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
+HOST = 'Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0'
 
 MENU_TAB = {0: "Filmy",
             1: "Filmy z lektorem",
@@ -34,7 +34,7 @@ MENU_TAB = {0: "Filmy",
 #            7: "Popularne z okresu",
 #            10: "Sortowanie",
             12: "Kategorie",
-            15: "Szukaj"
+#            15: "Szukaj"
             }
 
 
@@ -46,7 +46,7 @@ class kinolive:
         self.up = urlparser.urlparser()
         self.cm = pCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveserial.cookie"
-        query_data = {'url': 'http://kinolive.pl/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
+        query_data = {'url': 'http://alekino.tv/auth/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
         self.p = Player.Player()
 
@@ -60,13 +60,14 @@ class kinolive:
         query_data = { 'url': catUrl, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<ul class="select-movie-type movie-kat-selection">(.*?)</ul>', re.DOTALL).findall(link)
-        match1 = re.compile('<a href="#" rel="filter" type="kat" value="(.*?)" >&#9632; (.*?)</a>', re.DOTALL).findall(match[0])
-        
+        print match
+        match1 = re.compile('<li class="filterParent"><a href="#" data-type="filter" data-value="(.*?)" data-filter="genres\[\]">(.*?)</a> <span class="w">(.*?)</span></li>', re.DOTALL).findall(match[0])
+        print match1
         if len(match1) > 0:
             log.info('Listuje kategorie: ')
             for i in range(len(match1)):
                 url = mainUrl + match1[i][0].replace('.html','')
-                self.add('kinolive', 'categories-menu', match1[i][1].strip(), 'None', 'None', catUrl, 'None', 'None', True, False,'1','kat='+match1[i][0])
+                self.add('kinolive', 'categories-menu', match1[i][1].strip() + ' ' + match1[i][2].strip(), 'None', 'None', catUrl, 'None', 'None', True, False,'1','genres[0]='+match1[i][0])
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -107,22 +108,24 @@ class kinolive:
     def listsItems(self, url, strona='0', filtrowanie=''):
         if filtrowanie == None:
             filtrowanie = ''
-        urllink = url + '?' + filtrowanie +'&page='+ str(strona)
+        urllink = url + '?' + filtrowanie +'&p='+ str(strona)
         query_data = { 'url': urllink, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         #print ("L",link)
-        match = re.compile('<div class="film-main round">(.*?)<div class="tac">', re.DOTALL).findall(link)
+        #match = re.compile('<div class="film-main round">(.*?)<div class="tac">', re.DOTALL).findall(link)
+        match = re.compile('<div class="row-fluid span12 movie-item">(.*?)<div class="clearfix">', re.DOTALL).findall(link)
+        print ("Match",match)
+        
         if len(match) > 0:
             for i in range(len(match)):
                 okladka = ''
-                match1 = re.compile('<h2><a href="(.*?)">(.*?)</a></h2>', re.DOTALL).findall(match[i])
-                match2 = re.compile('<img src="(.*?)" width="100" height="133" alt="okladka" pagespeed_url_hash="(.*?)"/></a>', re.DOTALL).findall(match[i])
-                match3 = re.compile('<img src="(.*?)" width="100" height="133" alt="okladka" /></a>', re.DOTALL).findall(match[i])
+                match1 = re.compile('<a class="title" href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[i])
+                tytul = match1[0][1].replace('<small>','').replace('</small>','')
+                match2 = re.compile('<div class="pull-left thumb" style="background-image:url\((.*?)\);">', re.DOTALL).findall(match[i])
+                print match2
                 if len(match2) > 0:
-                    okladka = match2[0][0]
-                if len(match3) > 0:
-                    okladka = match3[0]
-                self.add('kinolive', 'playSelectedMovie', 'None', match1[0][1],  okladka, mainUrl+ match1[0][0], 'aaaa', 'None', True, False)
+                    okladka = match2[0]
+                self.add('kinolive', 'playSelectedMovie', 'None', tytul,  okladka, mainUrl[:-1]+ match1[0][0], 'aaaa', 'None', True, False)
         log.info('Nastepna strona: '+  urllink)
         self.add('kinolive', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona) + 1), str(filtrowanie))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -155,44 +158,28 @@ class kinolive:
 
 
     def getMovieLinkFromXML(self, url):
-        print ("ZZURRRA",url)
         VideoData = {}
-        HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         VideoData['year'] = str(self.getMovieYear(link))
-        match1 = re.compile('<input type="hidden" name="currentmirrorload" value="(.*?)"', re.DOTALL).findall(link)
-        #{ video: "21710", source: $('input[name=currentmirrorload]').val(), token:"d057f6157b594762b1b972cd48fe1861", time:"1370953147"}, function(data)
-        match2 = re.compile('{ video: "(.*?)", source:(.*?), token:"(.*?)", time:"(.*?)"}', re.DOTALL).findall(link)
-        post_data = {'video': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
-        query_data = {'url': 'http://alekino.tv/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
+        match1 = re.compile('<a href="#" data-type="player" data-version="standard" data-id="(.*?)">', re.DOTALL).findall(link)
+        url1 = "http://alekino.tv/players/init/" + match1[0] + "?mobile=false"
+        query_data = { 'url': url1, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match15 = re.compile('"data":"(.*?)"', re.DOTALL).findall(link)
+        hash = match15[0].replace('\\','')
+        post_data = {'hash': hash}
+        query_data = {'url': 'http://alekino.tv/players/get', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)
-        marian = json.loads(data)
-	print ("MMMMMMMMMMMMAAA",data)
-        match3 = re.compile('<iframe src="(.*?)" style="(.*?)" frameborder="0" scrolling="no"></iframe>', re.DOTALL).findall(marian["player_code"])
-        linkVideo =''
-        #if ptv.getSetting('kinolive_login') == 'true':
-        #    post_data = {'username': ptv.getSetting('kinolive_user'), 'password': ptv.getSetting('kinolive_pass'), 'submit_login': 'Zaloguj'}
-        #    query_data = {'url': 'http://kinolive.pl/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-        #    data = self.cm.getURLRequestData(query_data, post_data)
-        #    post_data = {'video': match2[0][0], 'source': match1[0], 'token': match2[0][2], 'time': match2[0][3]}
-        #    query_data = {'url': 'http://kinolive.pl/players?timer='+match2[0][3], 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-        #    data = self.cm.getURLRequestData(query_data, post_data)
-        #    marian = json.loads(data)
-        #    if marian["premium"] != None: 
-        #        linkVideo = marian["premium"].decode('utf8')
-        #if linkVideo !='':
-        #    linkVideo = False
-        #else:
-        linkVideo = self.up.getVideoLink(match3[0][0].decode('utf8'))
+        match16 = re.compile('<iframe src="(.*?)" width="989" height="535" scrolling="no" frameborder="0">', re.DOTALL).findall(data)
+        linkVideo = self.up.getVideoLink(match16[0].decode('utf8'))
         VideoData['link'] = linkVideo
         return VideoData
         
     def getMovieYear(self,link):
-        match = re.compile('<h1 style="(.*?)" class="pl-round">(.*?)\((.*?)\)(.*?)</h1>', re.DOTALL).findall(link)
-        print match
+        match = re.compile('<h1 class="movie-title">(.*?)\((.*?)\)(.*?)</h1>', re.DOTALL).findall(link)
         if len(match) > 0:
-            return match[0][2]
+            return match[0][1]
         else:
             return False
 
@@ -303,22 +290,22 @@ class kinolive:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Filmy z lektorem':
             log.info('Jest Filmy z lektorem: ')
-            self.listsItems('http://kinolive.pl/filmy_online',1,'type=lektor')
+            self.listsItems('http://kinolive.pl/filmy',1,'types[0]=1')
         elif name == 'main-menu' and category == 'Filmy z napisami':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy_online',1,'type=napisy')
+            self.listsItems('http://kinolive.pl/filmy',1,'types[0]=3')
         elif name == 'main-menu' and category == 'Filmy z dubbingiem':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy_online',1,'type=dubbing')
+            self.listsItems('http://kinolive.pl/filmy',1,'types[0]=2')
         elif name == 'main-menu' and category == 'Filmy polskie':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy_online',1,'type=polskie')
+            self.listsItems('http://kinolive.pl/filmy',1,'types[0]=4')
         elif name == 'main-menu' and category == 'Filmy HD':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy_online',1,'type=hd')
+            self.listsItems('http://kinolive.pl/filmy/hd',1,'')
         elif name == 'main-menu' and category == 'Filmy':
-            log.info('Jest Gorące: ')
-            self.listsItems('http://kinolive.pl/filmy_online',1,'')
+            log.info('Jest F: ')
+            self.listsItems('http://kinolive.pl/filmy',1,'')
         elif name == 'main-menu' and category == 'Kategorie':
             log.info('Jest Gorące: ')
             self.listsCategoriesMenu()

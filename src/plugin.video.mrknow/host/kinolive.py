@@ -17,7 +17,7 @@ import pLog, settings, Parser,pCommon, Player
 log = pLog.pLog()
 
 #mainUrl = 'http://kinolive.pl/'
-mainUrl = 'http://alekino.tv/'
+mainUrl = 'http://alekino.tv'
 catUrl = 'http://alekino.tv/filmy/'
 
 HOST = 'Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0'
@@ -34,7 +34,7 @@ MENU_TAB = {0: "Filmy",
 #            7: "Popularne z okresu",
 #            10: "Sortowanie",
             12: "Kategorie",
-#            15: "Szukaj"
+            15: "Szukaj"
             }
 
 
@@ -73,7 +73,7 @@ class kinolive:
 
     def getSearchURL(self, key):
         if key != None:
-            url = mainUrl + '/search?search_query='+ urllib.quote_plus(key)+'&x=0&y=0'  
+            url = mainUrl + '/szukaj?query='+ urllib.quote_plus(key)+'&x=0&y=0#movies'  
             return url
         else:
             return False
@@ -85,12 +85,15 @@ class kinolive:
     def listsItemsOther(self, url):
             query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
             link = self.cm.getURLRequestData(query_data)
-            match = re.compile('<!-- Filmy start -->(.*?)<!-- Filmy koniec -->', re.DOTALL).findall(link)
-            match1 = re.compile('<img src="(.*?)" alt="film online" title="(.*?)" height="133" width="100"></a>\n                            <a href="(.*?)" class="en pl-white">(.*?)</a>', re.DOTALL).findall(match[0])
+            match = re.compile('<!-- Znalezione filmy -->(.*?)<!-- Znalezione seriale -->', re.DOTALL).findall(link)
+            print ("Match",match)
+            match1 = re.compile('<div class="result box pl-round" style="margin-bottom:10px;">\n                            <a href="(.*?)"><img src="(.*?)" alt="" title="" height="133" width="100"></a>\n                            <a href="(.*?)" class="en pl-white">(.*?)</a>\n                            <span class="small-bread">', re.DOTALL).findall(match[0])
             if len(match1) > 0:
                 for i in range(len(match1)):
+                        print ("Match1",match1[i])
+            
                         #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                        self.add('kinolive', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0], mainUrl+ match1[i][2], 'aaaa', 'None', True, False)
+                        self.add('kinolive', 'playSelectedMovie', 'None', match1[i][3],  match1[i][1], mainUrl+ match1[i][0], 'aaaa', 'None', True, False)
 
             xbmcplugin.endOfDirectory(int(sys.argv[1]))
     def listsItemsTop(self, url):
@@ -125,7 +128,7 @@ class kinolive:
                 print match2
                 if len(match2) > 0:
                     okladka = match2[0]
-                self.add('kinolive', 'playSelectedMovie', 'None', tytul,  okladka, mainUrl[:-1]+ match1[0][0], 'aaaa', 'None', True, False)
+                self.add('kinolive', 'playSelectedMovie', 'None', tytul,  okladka, mainUrl+ match1[0][0], 'aaaa', 'None', True, False)
         log.info('Nastepna strona: '+  urllink)
         self.add('kinolive', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona) + 1), str(filtrowanie))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -158,6 +161,7 @@ class kinolive:
 
 
     def getMovieLinkFromXML(self, url):
+        print ("URL",url)
         VideoData = {}
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)

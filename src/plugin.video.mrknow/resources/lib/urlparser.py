@@ -380,10 +380,9 @@ class urlparser:
 #parsertopupload
         
   def parsertopupload(self,url):
-    query_data = { 'url': url, 'use_host': True, 'host':'Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0', 'use_cookie': False, 'use_post': False, 'return_data': True }
-    #Mozilla/5.0 (Windows NT 6.1; rv:23.0) Gecko/20100101 Firefox/23.0
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    #print ("Link",url,link)
+    print ("Url parser Link",url,link)
     match = re.search("'file': '(.*?)'",link)
 
     if match:   

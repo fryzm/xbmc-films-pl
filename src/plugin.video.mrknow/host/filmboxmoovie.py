@@ -4,6 +4,7 @@ import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
 import urlparser,httplib
 import xml.etree.ElementTree as ET
+import json
 
 scriptID = 'plugin.video.mrknow'
 scriptname = "Filmy online www.mrknow.pl - filmboxmoovie"
@@ -17,6 +18,7 @@ import pLog, pCommon, Parser,Player
 log = pLog.pLog()
 
 mainUrl = 'http://pl.filmboxlive.com/'
+catUrl = 'http://api.invideous.com/plugin/get_package_videos?package_id=12&publisher_id=5842&records_per_page=50&filter_by_live=0&custom_order_by_order_priority=asc&custom_filter_by_genre='
 #chanels = 'http://www.filmboxliveapp.com/channel/channels_pl.json'
 #playerUrl = 'http://www.youtube.pl/'
 
@@ -43,18 +45,34 @@ class filmboxmoovie:
 
 
     def listsCategoriesMenu(self):
-        req = urllib2.Request(mainUrl+'/browse')
+        req = urllib2.Request('http://www.filmboxliveapp.net/mobilev2/ios/AppConfig_pl.xml')
         req.add_header('User-Agent', HOST)
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<select id="filter-genre" class="input-medium">(.*?)</select>', re.DOTALL).findall(readURL)
+        match = re.compile('<el name="Kategorie">(.*?)</el>', re.DOTALL).findall(readURL)
+        match1 = re.compile('<el name="(.*?)" type="movie" action="custom_filter_by_genre" value="(.*?)" package="(.*?)"/>', re.DOTALL).findall(match[0])
+
+        #Niestandardowe Kategorie
+        self.add('filmboxmoovie', 'categories-menu', 'Wszystkie Filmy', 'None', 'None', 'http://api.invideous.com/plugin/get_package_videos?package_id=12&publisher_id=5842&records_per_page=50&filter_by_live=0&custom_order_by_order_priority=asc&custom_filter_by_genre=Action%7CDrama%7CComedy%7CRomance%7CHorror%7CThriller%7CFamily', 'None', 'None', True, False)
+        self.add('filmboxmoovie', 'categories-menu', 'Polecane', 'None', 'None', 'http://api.invideous.com/plugin/get_package_videos?package_id=12&publisher_id=5842&records_per_page=30&filter_by_live=0&custom_order_by_order_priority=asc&custom_filter_by_genre=recommended', 'None', 'None', True, False)
+        query_data = { 'url': 'http://admin.filmboxliveapp.com/GetList?ctr=poland', 'use_host': False, 'use_cookie': False,  'use_post': False,'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match11 = re.compile('"latestvideos":\[(.*?)\]', re.DOTALL).findall(link)
+        match12 = re.compile('"mostwatched":\[(.*?)\]', re.DOTALL).findall(link)
+        self.add('filmboxmoovie', 'categories-menu', 'Nowości', 'None', 'None', 'http://api.invideous.com/plugin/get_videos_details?videos='+match11[0]+'&publisher_id=5842', 'None', 'None', True, False)
+        self.add('filmboxmoovie', 'categories-menu', 'Wybór redakcji', 'None', 'None', 'http://api.invideous.com/plugin/get_videos_details?videos='+match12[0]+'&publisher_id=5842', 'None', 'None', True, False)
         
-        if len(match) > 0:
+        #Szukaj
+        self.add('filmboxmoovie', 'main-menu', 'Szukaj', 'None', 'None', 'http://api.invideous.com/plugin/get_package_videos?package_id=12&publisher_id=5842&filter_by_live=0&records_per_page=50&filter_by_title=', 'None', 'None', True, False)
+        
+        if len(match1) > 0:
             log.info('Listuje kategorie: ')
-            match1 = re.compile('<option label="(.*?)" value="(.*?)">(.*?)</option>', re.DOTALL).findall(match[0])
+            match2 = re.compile('<option label="(.*?)" value="(.*?)">(.*?)</option>', re.DOTALL).findall(match[0])
             for i in range(len(match1)):
-                self.add('filmboxmoovie', 'categories-menu', match1[i][0].strip(), 'None', 'None', match1[i][1], 'None', 'None', True, False)
+            #http://api.invideous.com/plugin/get_package_videos?package_id=12&publisher_id=5842&records_per_page=30&page=1&filter_by_live=0&custom_order_by_order_priority=asc&custom_filter_by_genre=Comedy
+
+                self.add('filmboxmoovie', 'categories-menu', match1[i][0].strip(), 'None', 'None', catUrl+match1[i][1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -67,22 +85,27 @@ class filmboxmoovie:
         #readURL = openURL.read()
         
 
-    def listsItems(self, category,strona='1'):
+    def listsItems(self, url,strona='1'):
         
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "filmboxmoovie.cookie"
-        url = mainUrl + '/ajax/run_module/list_videos/ajax'
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
-        postdata = {'page' : strona, 'package' : 'UltimatePackage', 'genre' : category, 'sort' : 'created_at', 'records_per_page' : '30', 'live' : '0',}
-        link = self.cm.getURLRequestData(query_data, postdata)
+        print ("Strona",strona)
+        url1 = url + '&page=' + strona
+        query_data = { 'url': url1, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
+        #postdata = {'page' : strona, 'package' : 'UltimatePackage', 'genre' : category, 'sort' : 'created_at', 'records_per_page' : '30', 'live' : '0',}
+        link = self.cm.getURLRequestData(query_data)
+        objs = json.loads(link)
+        #print ("Link",objs)
         #match1 = re.compile('<div class="movie-box">\r\n        <div>\r\n            <a href="(.*?)" class="play">\r\n            Odtw\xc3\xb3rz film</a>\r\n            <img src="(.*?)" alt="(.*?)" />\r\n', re.DOTALL).findall(link)
-        match1 = re.compile('<div class="film">\r\n\t\t\t<div class="caption" onclick="location.href=\'(.*?)\'">(.*?)</div>\r\n\t\t\t\r\n            <img src="(.*?)" alt="(.*?)" />', re.DOTALL).findall(link)
-        if len(match1) > 0:
-            for i in range(len(match1)):
-                match2 = re.compile('/video/details/(.*?)/(.*?)/auto', re.DOTALL).findall(match1[i][0])
-                self.add('filmboxmoovie', 'playSelectedMovie', 'None', match1[i][1], match1[i][2], mainUrl + '/video/details/' +match2[0][0], 'aaaa', 'None', True, False)
-       
-        match4 = re.compile('<div id="pagination">(.*?)</div>', re.DOTALL).findall(link)
-        self.add('filmboxmoovie', 'categories-menu', 'Następna', 'None', 'None', category, 'None', 'None', True, False,str(int(strona)+1))
+        #match1 = re.compile('<div class="film">\r\n\t\t\t<div class="caption" onclick="location.href=\'(.*?)\'">(.*?)</div>\r\n\t\t\t\r\n            <img src="(.*?)" alt="(.*?)" />', re.DOTALL).findall(link)
+        #if len(match1) > 0:
+        #    for i in range(len(match1)):
+        #        match2 = re.compile('/video/details/(.*?)/(.*?)/auto', re.DOTALL).findall(match1[i][0])
+        #        self.add('filmboxmoovie', 'playSelectedMovie', 'None', match1[i][1], match1[i][2], mainUrl + '/video/details/' +match2[0][0], 'aaaa', 'None', True, False)
+        for o in objs['response']['result']['videos']:
+            #print ("O",o)
+            self.add('filmboxmoovie', 'playSelectedMovie', 'None', o['title'], o['custom_attributes']['largeImage'], o['source_url'], 'aaaa', 'None', True, False)
+
+        self.add('filmboxmoovie', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona)+1))
         
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -289,6 +312,7 @@ class filmboxmoovie:
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
+        print("Dane",url)
         
         if name == None:
             #self.listsMainMenu(MENU_TAB)
@@ -296,17 +320,18 @@ class filmboxmoovie:
             
         elif name == 'main-menu' and category == 'Wszystkie':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://pl.filmboxlive.com/browse')
-            
+            self.listsItems('http://www.filmboxliveapp.net/mobilev2/ios/AppConfig_pl.xml')         
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()
-            self.listsItems(self.getSearchURL(key))
+            self.listsItems(url +key)
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
             self.listsItems(url,strona)
         if name == 'playSelectedMovie':
-            data = self.getMovieLinkFromXML(url)
-            self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon,data['year'],data['desc'])
+            #data = self.getMovieLinkFromXML(url)
+            #self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon,data['year'],data['desc'])
+            self.LOAD_AND_PLAY_VIDEO(url,title,icon)
+            
         if name == 'playselectedmovie':
             data = self.getMovieLinkFromXML(url)
             self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon,data['year'],data['desc'])

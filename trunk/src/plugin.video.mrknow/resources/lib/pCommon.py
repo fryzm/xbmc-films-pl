@@ -45,6 +45,7 @@ import urllib, urllib2, re, sys, math
 #import elementtree.ElementTree as ET
 import xbmcaddon, xbmc, xbmcgui
 import simplejson as json
+import gzip, StringIO
 
 import pLog
 
@@ -162,7 +163,18 @@ class common:
 	        except:
 	        	out_data = response
         if params['return_data']:
-            out_data = response.read()
+            #
+            if params['use_cookie'] == False:
+                print ("ENC",response.headers.get('content-encoding', ''),params)
+                if response.info().get('Content-Encoding') == 'gzip':
+                    buf = StringIO.StringIO( response.read())
+                    f = gzip.GzipFile(fileobj=buf)
+                    out_data = f.read()
+                else:
+                    out_data = response.read()
+            else:
+                out_data = response.read()
+            
             response.close()
         if params['use_cookie'] and params['save_cookie']:
         	cj.save(params['cookiefile'], ignore_discard = True)

@@ -40,32 +40,15 @@ class tvpstream:
     def listsMainMenu(self, table):
         query_data = { 'url': mainUrl, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        #print link 
-        #<video id="myVideo" width="100%" height="100%" src="http://195.245.213.201/token/video/live/9991248/20130330/1498125501/e0d27edb-5d6a-4bba-a648-cb0f6670da04/warszawa.m3u8" autoplay="true" controls="false" ></video>
-        match = re.compile("<div id='landscape'>(.*?)<div id='portrait'>", re.DOTALL).findall(link)
-        #print match
-        match1 = re.compile('<div style="background-image:url\(\'(.*?)\'\);" id="(.*?)" class="button"></div>', re.DOTALL).findall(match[0])
-        match2 = re.compile('<div class="button" id="(.*?)" style="background-image:url\(\'(.*?)\'\);background-color:yellow;"></div>', re.DOTALL).findall(match[0])
-        match3 = re.compile('<video id="myVideo" width="100%" height="100%" src="(.*?)" autoplay="true" controls="false" ></video>', re.DOTALL).findall(link)
-        print match2
-        print match3
-        self.add('tvpstream', 'playSelectedMovie1', 'None', 'Tvp Info', 'TVP INFO',match3[0], 'aaaa', 'None', True, False)
-        
-        if len(match1) > 0:
-            for i in range(len(match1)):    
-                linkid = match1[i][1].replace('l','')
-                query_data = { 'url': chanel1+linkid, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
-                link = self.cm.getURLRequestData(query_data)
-                #print link
-                data = json.loads(link)
-                #print data["title"].encode('utf8')
-                #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('tvpstream', 'playSelectedMovie', 'None', data["title"].encode('utf8'), match1[i][0], linkid, 'aaaa', 'None', True, False)
+        match1 = re.compile("<div id='portrait'>(.*?)</body>", re.DOTALL).findall(link)
+        match = re.compile('<div style="background-image:url\(\'(.*?)\'\);(.*?)" id="(.*?)" data-channel="(.*?)" data-name=\'(.*?)\' class="button"></div>', re.DOTALL).findall(match1[0])
+        if len(match) > 0:
+            for i in range(len(match)):    
+                self.add('tvpstream', 'playSelectedMovie', 'None', match[i][4], match[i][0], match[i][3], 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
     def getMovieLinkFromXML(self, url):
-        print "Url"+url
         newurl = 'http://tvpstream.tvp.pl/sess/vplayer.php?object_id='+url.replace('l','')+'&platform=sdt-v3-mobile&template=vplayer/tvpstream.html'
         req = urllib2.Request(newurl)
         req.add_header('Referer', 'http://tvpstream.tvp.pl/')
@@ -73,13 +56,9 @@ class tvpstream:
         response = urllib2.urlopen(req)
         link22=response.read()
         response.close()        
-        print link22
         match = re.compile('<video id="myVideo" width="100%" height="100%" src="(.*?)" autoplay="true" controls="false" ></video>', re.DOTALL).findall(link22)
-        print match
         linkVideo = match[0]
         return linkVideo
-
-    
 
     def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
         u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)

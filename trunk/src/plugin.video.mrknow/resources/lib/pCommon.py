@@ -85,7 +85,6 @@ class common:
         pass
 
     def html_special_chars(self,txt):
-        print("TXT",txt)
         txt = txt.replace('#038;','')
         txt = txt.replace('&#34;','"')
         txt = txt.replace('&#39;','\'')
@@ -94,6 +93,7 @@ class common:
         txt = txt.replace('&#8211;','-')
         txt = txt.replace('&quot;','"')
         txt = txt.replace('&oacute;','ó')
+        txt = txt.replace('&amp;','&')
         txt = txt.replace('\u0105','ą').replace('\u0104','Ą')
         txt = txt.replace('\u0107','ć').replace('\u0106','Ć')
         txt = txt.replace('\u0119','ę').replace('\u0118','Ę')
@@ -103,7 +103,6 @@ class common:
         txt = txt.replace('\u015b','ś').replace('\u015a','Ś')
         txt = txt.replace('\u017a','ź').replace('\u0179','Ź')
         txt = txt.replace('\u017c','ż').replace('\u017b','Ż')
-        print("TXT",txt)
         return txt
     
     def getCookieItem(self, cookiefile, item):
@@ -165,7 +164,7 @@ class common:
         if params['return_data']:
             #
             if params['use_cookie'] == False:
-                print ("ENC",response.headers.get('content-encoding', ''),params)
+                #print ("ENC",response.headers.get('content-encoding', ''),params)
                 if response.info().get('Content-Encoding') == 'gzip':
                     buf = StringIO.StringIO( response.read())
                     f = gzip.GzipFile(fileobj=buf)

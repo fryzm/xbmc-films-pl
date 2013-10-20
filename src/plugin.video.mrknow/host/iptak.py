@@ -77,7 +77,8 @@ class IPTAK:
     def listsItems(self, url,page):
         query_data = { 'url': url+page, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         readURL = self.cm.getURLRequestData(query_data)
-        match1 = re.compile('<div id="item"(.*?)><a title="(.*?)" href="(.*?)"><img src="(.*?)" height="(.*?)" width="(.*?)" alt="(.*?)"/><h6>(.*?)</h6></a>',re.DOTALL).findall(readURL)
+        match1 = re.compile('<div id="item" (.*?)><a title="(.*?)" href="(.*?)"><img src="(.*?)" height="193" width="145" alt="(.*?)" /><h6>(.*?)</h6></a>',re.DOTALL).findall(readURL)
+        print match1
         if len(match1) > 0:
             for i in range(len(match1)):
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
@@ -96,11 +97,14 @@ class IPTAK:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         readURL = self.cm.getURLRequestData(query_data)
         match = re.compile('ci</h3>(.*?)<div id="footer">',re.DOTALL).findall(readURL)
+        print("Match",match)
         if len(match) > 0:
-            match1 = re.compile('<a href="(.*?)" title="(.*?)"><img height="(.*?)" width="(.*?)" alt="(.*?)" src="(.*?)"/><h6>(.*?)</h6></a>',re.DOTALL).findall(match[0])
+            match1 = re.compile('<div id="item"><a href="(.*?)" title="(.*?)"><img height="80" width="80" alt="(.*?)" src="(.*?)" /><h6>(.*?)</h6></a></div>',re.DOTALL).findall(match[0])
+            print("Match1",match1)
+         
             if len(match1) > 0:
                 for i in range(len(match1)):
-                    okladka = match1[i][5].replace('mala','srednia').replace('../../..','')
+                    okladka = match1[i][3].replace('mala','srednia').replace('../../..','')
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                     self.add('iptak', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][1]), mainUrl+okladka, match1[i][0], 'aaaa', 'None', True, False)
 
@@ -112,7 +116,9 @@ class IPTAK:
         VideoData = {}
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('{playMovie\("(.*?)","(.*?)"\)', re.DOTALL).findall(link)
+        #match = re.compile('playMovie\("(.*?)","(.*?)"\)', re.DOTALL).findall(link)
+        match = re.compile("playMovie\('(.*?)','(.*?)'\)", re.DOTALL).findall(link)
+        
         VideoData['year'] = str(self.getMovieYear(link))
         if len(match) > 0:
             if match[0][1] == 'cda':
@@ -124,6 +130,7 @@ class IPTAK:
         else:
             linkVideo = False
         VideoData['link'] = linkVideo
+        print ("VideoData",VideoData)
         return VideoData
         
 

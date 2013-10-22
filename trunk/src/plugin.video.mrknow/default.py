@@ -65,8 +65,8 @@ SERIALE_ONLINE_TABLE = {
 }
 
 FILM_ONLINE_TABLE = {
-		     #7400 : ["Cda.pl", 'cdapl'],
-             #7300: ["Noobroom.com","noobroom"],
+		     7400 : ["Cda.pl", 'cdapl'],
+             7300: ["Noobroom.com","noobroom"],
              7000: ["Vod Onet PL","vodpl"],
              7100: ["Filmbox Movie","filmboxmoovie"],
              #7200: ["Filmmex","filmmex"],

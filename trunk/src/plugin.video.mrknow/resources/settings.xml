@@ -25,7 +25,10 @@
         </category>
         <category label="noobroom.com">
                 <setting type="lsep" label="Adres ip ze strony www.noobroom.com" />
-                <setting id="noobroom_ip" type="text" label="Adres ip" default="noobroom1.com" />
+                <setting id="noobroom_ip" type="text" label="Adres ip" default="noobroom5.com" />
+                <setting type="lsep" label="Login i hasło" />
+                <setting id="noobroom_user" type="text" label="login" default="" />
+                <setting id="noobroom_pass" type="text" label="hasło" option="hidden"  default="" />				
         </category>
        
         <category label="plejer.tv">

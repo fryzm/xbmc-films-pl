@@ -85,16 +85,12 @@ class pageparser:
   def goodcasttv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match1=re.compile('flashvars="(.*?)"').findall(link)
-    #print ("AAAAA",match1[0])
+    match1=re.compile('<iframe src="(.*?)" width="(.*?)" height="(.*?)" frameborder="0" scrolling="no">').findall(link)
+    print ("AAAAA",match1)
     if len(match1[0])>0:
-    #    plik = match1[0].split(';')
-    #    nurl 
-    #    print ("plik",plik)
-    #    print ("Mam Iframe",match1)
-        nUrl = self.up.getVideoLink(url,url)
-        return nUrl    
-    
+        nUrl = self.pageanalyze('http://goodcast.tv/' + match1[0][0], 'http://goodcast.tv/' + match1[0][0])
+        return nUrl
+        
     
   def streamon(self,url):
     self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "streamon.cookie"
@@ -237,12 +233,8 @@ class pageparser:
     match18=re.compile("<script type=\'text/javascript\'>id=\'(.*?)\'; width=\'(.*?)\'; height=\'(.*?)\';</script><script type=\'text/javascript\' src=\'http://stream4.tv/player.js\'>").findall(link)
     match19=re.compile("<script type='text/javascript'>id='(.*?)'; width='(.*?)'; height='(.*?)';</script><script type='text/javascript' src='http://goodcast.org/player.js'></script>").findall(link)
     match20=re.compile('<script type="text/javascript" src="http://(.*?)jjcast.com/(.*?)">').findall(link)
-#<script type='text/javascript'>id='46702'; width='640'; height='360';</script><script type='text/javascript' src='http://goodcast.org/player.js'></script>
-#<script type="text/javascript" src="http://jjcast.com/embed.php?stream=xfwqsm4rx5bauck&width=640&height=360"></script>
-
-    #print ("link",link)
-    #
-    
+    match21=re.compile('<script type="text/javascript" language="JavaScript" src="http://hqstream.tv/pl?(.*?)"></script>').findall(link)
+    #<script type="text/javascript" language="JavaScript" src="http://hqstream.tv/pl?streampage=dqewdfdewd&width=640&height=360"></script>
     print ("Match",match8,match2,match1,match,match3,match4,match5)
     if len(match) > 0:
         return self.up.getVideoLink('http://yukons.net/'+match[0][0])
@@ -301,6 +293,10 @@ class pageparser:
     elif len(match20) > 0:
         print ("Match20",match20)
         return self.up.getVideoLink('http://jjcast.com/'+match20[0][1].replace('embed','player'),referer)
+        #http://jjcast.com/player.php?stream=xfwqsm4rx5bauck&amp;width=650&amp;height=450"
+    elif len(match21) > 0:
+        print ("Match21",match21)
+        return self.up.getVideoLink('http://hqstream.tv/player.php'+match21[0],referer)
         #http://jjcast.com/player.php?stream=xfwqsm4rx5bauck&amp;width=650&amp;height=450"
         
 

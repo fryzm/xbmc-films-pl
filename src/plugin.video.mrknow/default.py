@@ -19,7 +19,7 @@ import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, mil
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
 import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
-import iptak,goodcast,streamon,strefavod,wrzuta,tvppl
+import iptak,goodcast,streamon,strefavod,wrzuta,tvppl, interia
 
 log = pLog.pLog()
 
@@ -48,7 +48,9 @@ FUN_ONLINE_TABLE = {
                6000: ["Milanos.pl","milanos"],
                4500: ["Tosiewytnie.pl","tosiewytnie"],               
                5000: ["Joemonster.org","joemonster"],
-               5100: ["Wrzuta.pl [testy]","wrzuta"]
+               5100: ["Wrzuta.pl","wrzuta"],
+               5200: ["interia.tv [testy]","interia"]
+               
                
 }
 SPORT_ONLINE_TABLE = {
@@ -193,6 +195,9 @@ class MrknowFilms:
         tv.handleService()
     elif mode == 5100 or service == 'wrzuta':
         tv = wrzuta.wrzuta()
+        tv.handleService()
+    elif mode == 5200 or service == 'interia':
+        tv = interia.interia()
         tv.handleService()
     elif mode == 9000 or service == 'noobroom':
         tv = noobroom.Noobroom()

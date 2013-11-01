@@ -163,11 +163,12 @@ class urlparser:
     if host== 'jjcast.com':
         nUrl = self.jjcast(url,referer)           
     if host.find("wrzuta.pl") > -1:
-        nUrl = self.wrzutapl(url)           
-        
-        
-
+        nUrl = self.wrzutapl(url)  
+    if host== 'hqstream.tv':
+        nUrl = self.hqstream(url,referer)           
+            
     return nUrl
+    
   def wrzutapl(self, url):
     HOST = "User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0"
     query = urlparse.urlparse(url)
@@ -192,6 +193,27 @@ class urlparser:
         return match3[0]
     else:
         return ''
+  def hqstream(self,url,referer):
+    req = urllib2.Request(url)
+    req.add_header('Referer', 'http://jjcast.com/')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match1 = re.compile("<script language=\'javascript\'>\n    var a = (.*?);\nvar b = (.*?);\nvar c = (.*?);\nvar d = (.*?);\nvar f = (.*?);\nvar v_part = \'(.*?)\';\n</script>", re.DOTALL).findall(link)
+    
+    print("Matc",link)
+    print("Matc",match1)
+    if len(match1) > 0:
+        ip0 = str(int(match1[0][0]) / int(match1[0][4]))
+        ip1 = str(int(match1[0][1]) / int(match1[0][4]))
+        ip2 = str(int(match1[0][2]) / int(match1[0][4]))
+        ip3 = str(int(match1[0][3]) / int(match1[0][4]))
+        nUrl = 'rtmp://' + ip0 + '.' + ip1 + '.' + ip2 + '.' + ip3 + match1[0][5] + ' live=true swfUrl=http://filo.hqstream.tv/jwp6/jwplayer.flash.swf pageUrl='+url
+        print nUrl
+        return nUrl
+    
+        
   def jjcast(self,url,referer):
     req = urllib2.Request(url)
     req.add_header('Referer', 'http://jjcast.com/')
@@ -281,9 +303,12 @@ class urlparser:
     response.close()
     print ('LINK',url,referer,link)
     match = re.compile('<embed id="player"\n\t\t\t\t\t\tsrc="(.*?)"\n\t\t\t\t\t\twidth="(.*?)"\n\t\t\t\t\t\theight="(.*?)"\n\t\t\t\t\t\tallowscriptaccess="always"\n\t\t\t\t\t\tallowfullscreen="true"\n\t\t\t\t\t\tflashvars="file=(.*?)&amp;streamer=(.*?)&amp;', re.DOTALL).findall(link)
+    print ('MATCH',match)
+    
     if len(match)>0:
         linkVideo = match[0][4] + '/'+match[0][3]
         linkVideo = linkVideo + ' pageUrl='+url+' swfUrl='+match[0][0]
+        print ("linkVideo",linkVideo)
         return linkVideo
     else:
         return False

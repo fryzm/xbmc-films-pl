@@ -18,7 +18,7 @@ import pLog, pCommon, Parser, settings, pageparser
 log = pLog.pLog()
 
 mainUrl = 'http://goodcast.tv/'
-chanels = 'http://goodcast.tv/index.html'
+chanels = 'http://goodcast.tv/lista.html'
 playerUrl = 'http://www.youtube.pl/'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
@@ -40,16 +40,16 @@ class goodcast:
 
 
     def listsMainMenu(self):
-        query_data = { 'url': mainUrl, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+        query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         #match = re.compile('<li id=\'(.*?)\'><a href=\'(.*?)\'>(.*?)</a></li>', re.DOTALL).findall(link)
-        match = re.compile('<li><a href="(.*?)" onClick="return loadPage\(\'(.*?)\'\);">(.*?)</a></li>', re.DOTALL).findall(link)
+        match = re.compile(' <a href="(.*?)" TARGET="_blank"><font color="white">(.*?)</font></a>', re.DOTALL).findall(link)
+        print ("match",match)
         
 
         print match
         for o in range(len(match)):
-            if match[o][2]!='Home':
-                self.add('goodcast', 'playSelectedMovie', 'None', match[o][2], 'None', mainUrl+ match[o][1], 'None', 'None', True, False)
+            self.add('goodcast', 'playSelectedMovie', 'None', match[o][1], 'None', mainUrl+ match[o][0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
        

@@ -60,9 +60,9 @@ class kinolive:
         query_data = { 'url': catUrl, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<ul class="select-movie-type movie-kat-selection">(.*?)</ul>', re.DOTALL).findall(link)
-        print match
+        #print match
         match1 = re.compile('<li class="filterParent"><a href="#" data-type="filter" data-value="(.*?)" data-filter="genres\[\]">(.*?)</a> <span class="w">(.*?)</span></li>', re.DOTALL).findall(match[0])
-        print match1
+        #print match1
         if len(match1) > 0:
             log.info('Listuje kategorie: ')
             for i in range(len(match1)):
@@ -77,21 +77,14 @@ class kinolive:
             return url
         else:
             return False
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', HOST)
-        #openURL = urllib2.urlopen(req)
-        #readURL = openURL.read()
         
     def listsItemsOther(self, url):
             query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
             link = self.cm.getURLRequestData(query_data)
             match = re.compile('<!-- Znalezione filmy -->(.*?)<!-- Znalezione seriale -->', re.DOTALL).findall(link)
-            print ("Match",match)
             match1 = re.compile('<div class="result box pl-round" style="margin-bottom:10px;">\n                            <a href="(.*?)"><img src="(.*?)" alt="" title="" height="133" width="100"></a>\n                            <a href="(.*?)" class="en pl-white">(.*?)</a>\n                            <span class="small-bread">', re.DOTALL).findall(match[0])
             if len(match1) > 0:
                 for i in range(len(match1)):
-                        print ("Match1",match1[i])
-            
                         #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                         self.add('kinolive', 'playSelectedMovie', 'None', match1[i][3],  match1[i][1], mainUrl+ match1[i][0], 'aaaa', 'None', True, False)
 
@@ -117,7 +110,7 @@ class kinolive:
         #print ("L",link)
         #match = re.compile('<div class="film-main round">(.*?)<div class="tac">', re.DOTALL).findall(link)
         match = re.compile('<div class="row-fluid span12 movie-item">(.*?)<div class="clearfix">', re.DOTALL).findall(link)
-        print ("Match",match)
+        #print ("Match",match)
         
         if len(match) > 0:
             for i in range(len(match)):
@@ -125,7 +118,7 @@ class kinolive:
                 match1 = re.compile('<a class="title" href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[i])
                 tytul = match1[0][1].replace('<small>','').replace('</small>','')
                 match2 = re.compile('<div class="pull-left thumb" style="background-image:url\((.*?)\);">', re.DOTALL).findall(match[i])
-                print match2
+                #print match2
                 if len(match2) > 0:
                     okladka = match2[0]
                 self.add('kinolive', 'playSelectedMovie', 'None', tytul,  okladka, mainUrl+ match1[0][0], 'aaaa', 'None', True, False)
@@ -161,7 +154,6 @@ class kinolive:
 
 
     def getMovieLinkFromXML(self, url):
-        print ("URL",url)
         VideoData = {}
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
@@ -294,22 +286,22 @@ class kinolive:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == 'Filmy z lektorem':
             log.info('Jest Filmy z lektorem: ')
-            self.listsItems('http://kinolive.pl/filmy',1,'types[0]=1')
+            self.listsItems(catUrl,1,'types[0]=1')
         elif name == 'main-menu' and category == 'Filmy z napisami':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy',1,'types[0]=3')
+            self.listsItems(catUrl,1,'types[0]=3')
         elif name == 'main-menu' and category == 'Filmy z dubbingiem':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy',1,'types[0]=2')
+            self.listsItems(catUrl,1,'types[0]=2')
         elif name == 'main-menu' and category == 'Filmy polskie':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy',1,'types[0]=4')
+            self.listsItems(catUrl,1,'types[0]=4')
         elif name == 'main-menu' and category == 'Filmy HD':
             log.info('Jest Wszystkie: ')
             self.listsItems('http://kinolive.pl/filmy/hd',1,'')
         elif name == 'main-menu' and category == 'Filmy':
             log.info('Jest F: ')
-            self.listsItems('http://kinolive.pl/filmy',1,'')
+            self.listsItems(catUrl,1,'')
         elif name == 'main-menu' and category == 'Kategorie':
             log.info('Jest Gorące: ')
             self.listsCategoriesMenu()
@@ -336,7 +328,7 @@ class kinolive:
             data = self.getMovieLinkFromXML(url)
             self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon, data['year'])
         if name == 'playselectedmovie':
-            print "GGGGGGGGGGGGGGGGGGGGGGGGGGGRRRRRRRRRRRRAAAAAAAAAA"
+            #print "GGGGGGGGGGGGGGGGGGGGGGGGGGGRRRRRRRRRRRRAAAAAAAAAA"
             data = self.getMovieLinkFromXML(url)
             self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon, data['year'])
 

@@ -43,8 +43,11 @@ class goodcast:
         query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         #match = re.compile('<li id=\'(.*?)\'><a href=\'(.*?)\'>(.*?)</a></li>', re.DOTALL).findall(link)
-        match = re.compile(' <a href="(.*?)" TARGET="_blank"><font color="white">(.*?)</font></a>', re.DOTALL).findall(link)
+        #<a href="tvp1.html" TARGET="_blank"><font color="white">TVP1</font></a> 
+        #<a href="tvp2.html" TARGET="_blank"><font color="white">TVP2</font></a>
+        match = re.compile('<a href="(.*?)" TARGET="_blank"><font color="white">(.*?)</font></a>', re.DOTALL).findall(link)
         print ("match",match)
+        print ("match",link)
         
 
         print match

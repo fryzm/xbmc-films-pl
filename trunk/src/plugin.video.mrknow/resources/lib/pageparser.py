@@ -74,13 +74,40 @@ class pageparser:
         nUrl = self.streamon(url)
     elif host == 'goodcast.tv':
         nUrl = self.goodcasttv(url)
-        
+    elif host == 'mecz.tv':
+        nUrl = self.mecztv(url)        
         
     elif nUrl  == '':
         print "Jedziemy na ELSE - "+  nUrl
         nUrl = self.pageanalyze(url,host)
     print ("Link:",nUrl)
     return nUrl
+
+  def mecztv(self,url):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match1=re.compile('<iframe frameborder="0" height="480" marginheight="0px" marginwidth="0px" name="livemecz.com" scrolling="no" src="(.*?)" width="640"></iframe>').findall(link)
+    print ("AAAAA",match1)
+    if len(match1[0])>0:
+        query_data = { 'url': match1[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        print ("Link",link)
+        match2=re.compile('<iframe marginheight="0" marginwidth="0" name="mecz.tv" src="(.*?)" frameborder="0" height="480" scrolling="no" width="640"></iframe>').findall(link)
+        print ("Link",match2)
+        if len(match2[0])>0:
+            query_data = { 'url': match2[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+            link = self.cm.getURLRequestData(query_data)
+            print ("Link",link)
+            match3=re.compile('<iframe(.*?)src="(.*?)"(.*?)>').findall(link)
+            if len(match3)>0:
+                print ("Match3",match3)
+                nUrl = self.pageanalyze(match3[0][1],url)
+            else:
+                nUrl = self.pageanalyze(match2[0],url)
+        #nUrl = self.pageanalyze('http://goodcast.tv/' + match1[0][0], 'http://goodcast.tv/' + match1[0][0])
+        
+        #return nUrl
+        return False
 
   def goodcasttv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
@@ -89,34 +116,13 @@ class pageparser:
     print ("AAAAA",match1)
     if len(match1[0])>0:
         nUrl = self.pageanalyze('http://goodcast.tv/' + match1[0][0], 'http://goodcast.tv/' + match1[0][0])
-        return nUrl
-        
+        return nUrl        
     
   def streamon(self,url):
     self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "streamon.cookie"
-    #zalogowany = False
-    #if ptv.getSetting('streamon_login') == 'true':
-    #    post_data = {'login': ptv.getSetting('streamon_user'), 'password': ptv.getSetting('streamon_pass')}
-    #    query_data = {'url': 'http://streamon.pl/user,login.htm', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-    #    data = self.cm.getURLRequestData(query_data, post_data)
-    #    lStr = '<div class="logout"><a href="user,login,logout.htm">Wyloguj'
-    #    if lStr in data:
-    #        print "ZAAAAAAAAAAAAAALOOOOGOWANy"
-    #        zalogowany = True
-    #else:
-    #    xbmc.executebuiltin("XBMC.Notification(Blad logowania, Wpisz login i has�o w ustawieniach,8000)")  
-    #    log.info('Wy�wietlam ustawienia')
-    #    self.settings.showSettings()
-    #    return False
-
-    #if zalogowany == True:
-        #xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('streamon_user') + ", Zostales poprawnie zalogowany,4000)")
-    #nUrl = self.pageanalyze(url,url,self.COOKIEFILE)
     nUrl = self.pageanalyze(url,url)
     return nUrl    
-    #else:
-    #    xbmc.executebuiltin("XBMC.Notification(Blad logowania, popraw login i has�o w ustawieniach,8000)")  
-    #    self.settings.showSettings()   
+
     
   def typertv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
@@ -234,6 +240,8 @@ class pageparser:
     match19=re.compile("<script type='text/javascript'>id='(.*?)'; width='(.*?)'; height='(.*?)';</script><script type='text/javascript' src='http://goodcast.org/player.js'></script>").findall(link)
     match20=re.compile('<script type="text/javascript" src="http://(.*?)jjcast.com/(.*?)">').findall(link)
     match21=re.compile('<script type="text/javascript" language="JavaScript" src="http://hqstream.tv/pl?(.*?)"></script>').findall(link)
+    match22=re.compile("<script type='text/javascript'>(.*?)</script><script type='text/javascript' src='http://cdn.tiv.pw/stream(.*?).js'></script>").findall(link)
+    
     #<script type="text/javascript" language="JavaScript" src="http://hqstream.tv/pl?streampage=dqewdfdewd&width=640&height=360"></script>
     print ("Match",match8,match2,match1,match,match3,match4,match5)
     if len(match) > 0:
@@ -293,12 +301,13 @@ class pageparser:
     elif len(match20) > 0:
         print ("Match20",match20)
         return self.up.getVideoLink('http://jjcast.com/'+match20[0][1].replace('embed','player'),referer)
-        #http://jjcast.com/player.php?stream=xfwqsm4rx5bauck&amp;width=650&amp;height=450"
     elif len(match21) > 0:
         print ("Match21",match21)
         return self.up.getVideoLink('http://hqstream.tv/player.php'+match21[0],referer)
-        #http://jjcast.com/player.php?stream=xfwqsm4rx5bauck&amp;width=650&amp;height=450"
-        
+    elif len(match22) > 0:
+        print ("Match22",match22)
+        return self.up.getVideoLink('http://cdn.tiv.pw/stream'++match22[0] +'.html',referer)
+        #return self.up.getVideoLink('http://hqstream.tv/player.php'+match21[0],referer)
 
 
     else:

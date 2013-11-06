@@ -3,7 +3,7 @@ import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
 import urlparser
-
+import json
 
 scriptID = 'plugin.video.mrknow'
 scriptname = "Filmy online www.mrknow.pl - wykop"
@@ -13,6 +13,7 @@ BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 import pLog, pCommon, Parser
+pluginhandle = int(sys.argv[1])
 
 log = pLog.pLog()
 
@@ -65,57 +66,39 @@ class WYKOP:
         #readURL = openURL.read()
         
 
-    def listsItems(self, url):
+    def listsItems(self, url, page):
+        page2 = str(int(page)+1)
+        url = 'http://a.wykop.pl/links/promoted/day/appkey,SI8sP6KDk1/page/'+page 
+        url2 = 'http://a.wykop.pl/links/promoted/day/appkey,SI8sP6KDk1/page/'+page2 
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
-        match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
-        print link
-        
-        if len(match) > 0:
-            for i in range(len(match)):
-             if match[i][3].find('video') > -1:# 0
-            
+        objs = json.loads(link)
+        for o in objs:
+            print ("OO",o)
+            if o['type']== 'video':
+                image = o['preview'].replace(',w104h74.jpg',',w173h114.jpg')
+                print image
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('wykop', 'playSelectedMovie', 'None', match[i][2], 'None', match[i][1], 'aaaa', 'None', True, False)
+                self.add('wykop', 'playSelectedMovie', 'None', '[COLOR yellow]'+o['title'] +' [/COLOR] Wykopow:'+str(o['vote_count']),image, o['source_url'], o['description'], 'None', True, False)
+            #else:
+            #    self.add('wykop', 'SelectedMovie', 'None', o['title'] +' Wykopow:'+str(o['vote_count']),o['preview'], o['source_url'], o['description'], 'None', True, False)
  
-        match1 = re.compile(' <a href="(.*?)" class="inlblk tdnone vtop button" style="right: 0px">następna</a>').findall(link)
-        log.info('Nastepna strona: '+  match1[0])
-        self.add('wykop', 'categories-menu', 'Następna', 'None', 'None', match1[0], 'None', 'None', True, False)
+        #match1 = re.compile(' <a href="(.*?)" class="inlblk tdnone vtop button" style="right: 0px">następna</a>').findall(link)
+        #log.info('Nastepna strona: '+  match1[0])
+        self.add('wykop', 'categories-menu', 'Następna', 'None', 'None', url2, 'None', page2, True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-
-    def listsItemsPage(self, url):
-        if not url.startswith("http://"):
-            url = mainUrl + url
-        if self.getSizeAllItems(url) > 0  and self.getSizeItemsPerPage(url) > 0:
-            a = math.ceil(float(self.getSizeAllItems(url)) / float(self.getSizeItemsPerPage(url)))
-            for i in range(int(a)):
-                num = i + 1
-                title = 'Lista ' + str(num)
-                destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('wykop', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))        
+        xbmcplugin.setContent(int(sys.argv[1]),'tvshows')
+        xbmc.executebuiltin("Container.SetViewMode(515)")
 
 
-    def listsItemsSerialPage(self, url, sizeOfSerialParts):
-        if not url.startswith("http://"):
-            url = mainUrl + url
-        if sizeOfSerialParts > 0  and self.getSizeItemsPerPage(url) > 0:
-            a = math.ceil(float(sizeOfSerialParts) / float(self.getSizeItemsPerPage(url)))
-            for i in range(int(a)):
-                num = i + 1
-                title = 'Lista ' + str(num)
-                destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('wykop', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
-        xbmcplugin.endOfDirectory(int(sys.argv[1])) 
 
 
     def getMovieLinkFromXML(self, url):
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<blockquote cite="(.*?)"', re.DOTALL).findall(link)
-        linkVideo = self.up.getVideoLink(match[0])
+        #query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        #link = self.cm.getURLRequestData(query_data)
+        #match = re.compile('<blockquote cite="(.*?)"', re.DOTALL).findall(link)
+        linkVideo = self.up.getVideoLink(url)
         return linkVideo
 
 
@@ -130,63 +113,21 @@ class WYKOP:
         if len(match) == 1:
             numItems = match[0]
         return numItems
-    
-    
-    def getSizeItemsPerPage(self, url):
-        numItemsPerPage = 0
-        openURL = urllib.urlopen(url)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<div class="movie-(.+?)>').findall(readURL)
-        if len(match) > 0:
-            numItemsPerPage = len(match)
-        return numItemsPerPage        
-
-    def getMovieID(self, url):
-        id = 0
-        tabID = url.split(',')
-        if len(tabID) > 0:
-            id = tabID[1]
-        return id
 
 
-    def getItemTitles(self, table):
-        out = []
-        for i in range(len(table)):
-            value = table[i]
-            out.append(value[1])
-        return out
 
-    def getItemURL(self, table, key):
-        link = ''
-        for i in range(len(table)):
-            value = table[i]
-            if key in value[0]:
-                link = value[2]
-                break
-        return link
-
-
-    def searchInputText(self):
-        text = None
-        k = xbmc.Keyboard()
-        k.doModal()
-        if (k.isConfirmed()):
-            text = k.getText()
-        return text
-    
-
-    def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True):
-        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)
+    def add(self, service, name, category, title, iconimage, url, desc, page, folder = True, isPlayable = True):
+        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage) + "&page=" + urllib.quote_plus(page)
         #log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
             title = category 
         if iconimage == '':
             iconimage = "DefaultVideo.png"
-        liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=iconimage )
+        liz.setProperty('fanart_image',iconimage)
         if isPlayable:
             liz.setProperty("IsPlayable", "true")
-        liz.setInfo( type="Video", infoLabels={ "Title": title } )
+        liz.setInfo( type="Video", infoLabels={ "Title": title, "Plot": desc, "Episode" : "AAA", "Year" : "2000", "Genre" : "bbb" } )
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=folder)
             
 
@@ -219,23 +160,30 @@ class WYKOP:
         url = self.parser.getParam(params, "url")
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
+        page = self.parser.getParam(params, "page")
+        
+        print("DANE",url,page)
+        if page == None:
+            page = '1'
+        print("DANE",url,page)
         if name == None:
-            self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Wszystkie':
-            log.info('Jest Wszystkie: ')
-            self.listsItems(mainUrl)
+ #           self.listsMainMenu(MENU_TAB)
+ #       elif name == 'main-menu' and category == 'Wszystkie':
+ #           log.info('Jest Wszystkie: ')
+            self.listsItems(mainUrl,page)
             
-        elif name == 'main-menu' and category == "Szukaj":
-            key = self.searchInputText()
-            self.listsItems(self.getSearchURL(key))
+
         elif name == 'categories-menu' and category != 'None':
             log.info('url: ' + str(url))
-            self.listsItems(url)
+            self.listsItems(url,page)
         elif name == 'items-audio' and category != 'None':
             log.info('AUDIOAAAAAAAAAAAAAAAAAAurl: ' + str(url))
             self.listsItemsAudio(url)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            if url != 'None':
+                self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+        if name == 'SelectedMovie':
+                xbmc.executebuiltin('XBMC.RunAddon(script.web.viewer '+url+')')
 
         
   

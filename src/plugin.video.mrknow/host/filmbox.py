@@ -46,6 +46,7 @@ class filmbox:
             nazwa = json.dumps(o["name"]).replace('"','')
             print nazwa
             stream = json.dumps(o["stream"]).replace('"','')
+            print stream
             image = o["images"][0]["image"]
             image = ptv.getAddonInfo('path') + os.path.sep + "images" + os.path.sep  + nazwa +".png"
             
@@ -86,6 +87,7 @@ class filmbox:
         link = self.cm.getURLRequestData(query_data)
         #match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>\s(.*?)[video](.*?)</strong>', re.DOTALL).findall(readURL)
         match = re.compile('<strong>\s(.*?)<a href="(.*?)">(.*?)</a>(.*?)</strong>', re.DOTALL).findall(link)
+        prin
         if len(match) > 0:
             for i in range(len(match)):
              if match[i][3].find('video') > -1:# 0

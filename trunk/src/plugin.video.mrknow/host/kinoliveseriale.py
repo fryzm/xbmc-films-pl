@@ -192,7 +192,7 @@ class kinoliveseriale:
         data = self.cm.getURLRequestData(query_data, post_data)
         match16 = re.compile('<iframe src="(.*?)" width="989" height="535" scrolling="no" frameborder="0">', re.DOTALL).findall(data)
         linkVideo = self.up.getVideoLink(match16[0].decode('utf8'))
-        return linkVideo
+        return linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
         
 
     def searchInputText(self):
@@ -228,7 +228,7 @@ class kinoliveseriale:
         liz.setInfo( type = "Video", infoLabels={ "Title": title, } )
         try:
             xbmcPlayer = xbmc.Player()
-            xbmcPlayer.play(videoUrl+'|Referer=http://kinolive.pl/media/player.swf', liz)
+            xbmcPlayer.play(videoUrl, liz)
             
             if not xbmc.Player().isPlaying():
                 xbmc.sleep( 10000 )

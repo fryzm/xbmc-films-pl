@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,pCommon, Player
+import pLog, settings, Parser,libCommon, Player
 
 log = pLog.pLog()
 
@@ -44,7 +44,7 @@ class kinolive:
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveserial.cookie"
         query_data = {'url': 'http://alekino.tv/auth/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
@@ -86,7 +86,7 @@ class kinolive:
             if len(match1) > 0:
                 for i in range(len(match1)):
                         #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                        self.add('kinolive', 'playSelectedMovie', 'None', match1[i][3],  match1[i][1], mainUrl+ match1[i][0], 'aaaa', 'None', True, False)
+                        self.add('kinolive', 'playSelectedMovie', 'None', match1[i][3],  match1[i][1], mainUrl+ match1[i][0], 'aaaa', 'None', False, False)
 
             xbmcplugin.endOfDirectory(int(sys.argv[1]))
     def listsItemsTop(self, url):
@@ -97,7 +97,7 @@ class kinolive:
                 for i in range(len(match)):
                         match1 = re.compile('<a href="(.*?)"><img src="(.*?)" width="107" height="142" title="(.*?)" alt="(.*?)" /></a>', re.DOTALL).findall(match[i])
                         #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                        self.add('kinolive', 'playSelectedMovie', 'None', match1[0][2],  match1[0][1], mainUrl+ match1[0][0], 'aaaa', 'None', True, False)
+                        self.add('kinolive', 'playSelectedMovie', 'None', match1[0][2],  match1[0][1], mainUrl+ match1[0][0], 'aaaa', 'None', False, False)
 
             xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
@@ -121,7 +121,7 @@ class kinolive:
                 #print match2
                 if len(match2) > 0:
                     okladka = match2[0]
-                self.add('kinolive', 'playSelectedMovie', 'None', tytul,  okladka, mainUrl+ match1[0][0], 'aaaa', 'None', True, False)
+                self.add('kinolive', 'playSelectedMovie', 'None', tytul,  okladka, mainUrl+ match1[0][0], 'aaaa', 'None', False, False)
         log.info('Nastepna strona: '+  urllink)
         self.add('kinolive', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona) + 1), str(filtrowanie))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))

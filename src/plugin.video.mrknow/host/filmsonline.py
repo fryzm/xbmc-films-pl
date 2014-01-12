@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,pCommon
+import pLog, settings, Parser,libCommon, Player
 
 log = pLog.pLog()
 
@@ -37,7 +37,8 @@ class filmsonline:
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
+        self.p = Player.Player()
 
 
 
@@ -86,7 +87,7 @@ class filmsonline:
                 data = self.cm.getURLRequestData({ 'url': mainUrl+ match1[i][1], 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True })
                 if (data.find('http://filmsonline.pl/static/img/niedostepny.jpg')) == -1:
                     #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                    self.add('filmsonline', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0].replace('_small',''), mainUrl+ match1[i][1], 'aaaa', 'None', True, False)
+                    self.add('filmsonline', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0].replace('_small',''), mainUrl+ match1[i][1], 'aaaa', 'None', False, False)
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -107,7 +108,7 @@ class filmsonline:
         if len(match1) > 0:
             for i in range(len(match1)):
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('filmsonline', 'playSelectedMovie', 'None', match1[i][6],   mainUrl+match1[i][3].replace('_small',''), mainUrl+ match1[i][1], 'aaaa', 'None', True, False)
+                self.add('filmsonline', 'playSelectedMovie', 'None', match1[i][6],   mainUrl+match1[i][3].replace('_small',''), mainUrl+ match1[i][1], 'aaaa', 'None', False, False)
         #urllink = url + ',' + str((int(strona)+1)) + ',wszystkie,wszystkie,1900-2013,.html?' + filtrowanie
         log.info('Nastepna strona: '+  urllink)
         self.add('filmsonline', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona) + 1))
@@ -223,27 +224,6 @@ class filmsonline:
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=folder)
             
 
-    def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon):
-        ok=True
-        if videoUrl == '':
-                d = xbmcgui.Dialog()
-                d.ok('Nie znaleziono streamingu.', 'Może to chwilowa awaria.', 'Spróbuj ponownie za jakiś czas')
-                return False
-        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-        liz.setInfo( type="Video", infoLabels={ "Title": title, } )
-        try:
-            xbmcPlayer = xbmc.Player()
-            xbmcPlayer.play(videoUrl, liz)
-            
-            if not xbmc.Player().isPlaying():
-                xbmc.sleep( 10000 )
-                #xbmcPlayer.play(url, liz)
-            
-        except:
-            d = xbmcgui.Dialog()
-            d.ok('Błąd przy przetwarzaniu.', 'Problem')        
-        return ok
-
 
     def handleService(self):
     	params = self.parser.getParams()
@@ -289,7 +269,12 @@ class filmsonline:
             log.info('url: ' + str(url))
             self.listsItems(url,strona,filtrowanie)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            log.info('Jest playSelectedMovie: ')
+            p = self.p.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            log.info('Po playSelectedMovie: ')
+            log.info(p)
+            
+            
 
         
   

@@ -9,7 +9,7 @@ scriptID = 'plugin.video.mrknow'
 scriptname = "Wtyczka XBMC www.mrknow.pl"
 ptv = xbmcaddon.Addon(scriptID)
 
-import pLog, Parser, settings, pCommon, urlparser
+import pLog, Parser, settings, libCommon, urlparser
 
 
 log = pLog.pLog()
@@ -17,7 +17,7 @@ sets = settings.TVSettings()
 
 class pageparser:
   def __init__(self):
-    self.cm = pCommon.common()
+    self.cm = libCommon.common()
     self.up = urlparser.urlparser()
     self.settings = settings.TVSettings()
     
@@ -112,11 +112,20 @@ class pageparser:
   def goodcasttv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match1=re.compile('<iframe src="(.*?)" width="(.*?)" height="(.*?)" frameborder="0" scrolling="no">').findall(link)
-    print ("AAAAA",match1)
-    if len(match1[0])>0:
-        nUrl = self.pageanalyze('http://goodcast.tv/' + match1[0][0], 'http://goodcast.tv/' + match1[0][0])
-        return nUrl        
+    match1=re.compile('<iframe frameborder="0" width="630" height="360" margin="0px" name="goodcast.tv" scrolling="no" src="(.*?)"></iframe>').findall(link)
+    query_data = { 'url': match1[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    print ("link-1",link)
+    match2=re.compile('<iframe width="630px" height="350px" scrolling="no" frameborder="0" src="(.*?)"></iframe>').findall(link)
+    match3=re.compile("file: '(.*?)',").findall(link)
+    print ("AAAAA",match2,match3)
+    if len(match2)>0:
+        nUrl = self.up.getVideoLink(match2[0], url)
+        return nUrl
+    if len(match3)>0:
+        nUrl = self.up.getVideoLink(match1[0], url)
+        return nUrl
+    
     
   def streamon(self,url):
     self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "streamon.cookie"

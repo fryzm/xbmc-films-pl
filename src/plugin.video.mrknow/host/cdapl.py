@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser
+import pLog, libCommon, Parser
 
 log = pLog.pLog()
 
@@ -47,7 +47,7 @@ max_stron = 0
 class cdapl:
     def __init__(self):
         log.info('Starting cdapl.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
         
@@ -82,12 +82,18 @@ class cdapl:
         print ("URL",url)
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<label  title="(.*?)"> (.*?)</label>', re.DOTALL).findall(link)
+        #match = re.compile('<label  title="(.*?)"> (.*?)</label>', re.DOTALL).findall(link)
+        match = re.compile('<div class="thumbElem video_(.*?)">(.*?)</label>', re.DOTALL).findall(link)
+        #<div class="videoElem">
+        
         print ("Match",match)
         if len(match) > 0:
             for i in range(len(match)):
-                match1 = re.compile('<img height="90" width="120" src="(.*?)" \r\n    alt="(.*?)">\r\n     \r\n    <span class="timeElem">\r\n      (.*?)    </span>\r\n    </a>\r\n  <div class="text"> \r\n    <a class="titleElem" href="(.*?)">(.*?)</a>\r\n  </div>', re.DOTALL).findall(link)
-                self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][4]) +' - ' + match1[i][2], match1[i][0], mainUrl+match1[i][3], 'aaaa', 'None', True, False)
+                print ("Match ->I",match[i])
+            
+                match1 = re.compile('<img height="90" width="120" src="(.*?)" alt="(.*?)">\n<span class="timeElem">\n(.*?) </span>\n</a>\n<div class="text">\n<a class="titleElem" href="(.*?)">(.*?)</a>', re.DOTALL).findall(link)
+                print (match1)
+                self.add('cdapl', 'playSelectedMovie', 'None', match1[i][4] +' - ' + match1[i][2], match1[i][0], mainUrl+match1[i][3], 'aaaa', 'None', True, False)
         else:
             match2 = re.compile('<div class="block upload" id="dodane_video">(.*?)<div class="paginationControl">', re.DOTALL).findall(link)
             match3 = re.compile('<div class="videoElem">\n                  <a href="(.*?)" style="position:relative;width:120px;height:90px" title="(.*?)">\n                    <img width="120" height="90" src="(.*?)" title="(.*?)" alt="(.*?)" />\n ', re.DOTALL).findall(match2[0])
@@ -104,11 +110,17 @@ class cdapl:
         print ("URL",url)
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<div class="videoElem"> <a class="aBoxVideoElement" style="position: relative; relative" href="(.*?)" title="(.*?)"  style="position: relative;width: 120px; height: 90px;"> <img width="120" height="90" src="(.*?)" class="block"/>', re.DOTALL).findall(link)
+        #match = re.compile('<div class="videoElem"> <a class="aBoxVideoElement" style="position: relative; relative" href="(.*?)" title="(.*?)"  style="position: relative;width: 120px; height: 90px;"> <img width="120" height="90" src="(.*?)" class="block"/>', re.DOTALL).findall(link)
+        #<div class="videoElem"> <a class="aBoxVideoElement" style="position: relative; relative" href="/video/107593a9/GTA-6-Rosja" title="GTA 6: Rosja" style="position: relative;width: 120px; height: 90px;"> <img width="120" height="90" src="http://img3.cda.pl/f529e45c402508f7ab115db346c559b0/13883673668120-01.jpg" class="block"/>
+        match = re.compile('<div class="videoElem"> <a class="aBoxVideoElement" style="(.*?)" href="(.*?)" title="(.*?)" style="(.*?)"> <img width="120" height="90" src="(.*?)" class="block"/>', re.DOTALL).findall(link)
+        
         print ("Match",match)
+        print ("Match",self.cm.html_special_chars("ALAL"))
+        
         if len(match) > 0:
             for i in range(len(match)):
-                self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match[i][1]) , match[i][2], mainUrl+match[i][0], 'aaaa', 'None', True, False)
+                #self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match[i][2]) , match[i][4], mainUrl+match[i][1], 'aaaa', 'None', True, False)
+                self.add('cdapl', 'playSelectedMovie', 'None', match[i][2] , match[i][4], mainUrl+match[i][1], 'aaaa', 'None', True, False)
 
         match10 = re.compile('<span class="next-wrapper"><a onclick="javascript:changePage\((.*?)\);return false;" class="sbmBigNext btn-my btn-large fiximg" href="(.*?)">(.*?)></a></span>', re.DOTALL).findall(link)
         if len(match10) > 0:

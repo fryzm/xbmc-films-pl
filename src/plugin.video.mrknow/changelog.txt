@@ -1,3 +1,6 @@
+Wersja 1.7.01
+ Poprawiono wersjê dla xbmc 13.0
+
 Wersja 1.6.41
  Poprawiono plej.tv - dodano kategorie do serwsiu 
  na razie weryfikujemy czy dzia³a 

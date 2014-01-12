@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser, settings, pageparser
+import pLog, libCommon, Parser, settings, pageparser, Player
 
 log = pLog.pLog()
 
@@ -30,14 +30,14 @@ MENU_TAB = {1: "Wszystkie",
 class goodcast:
     def __init__(self):
         log.info('Starting goodcast.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.settings = settings.TVSettings()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "goodcast.cookie"
         self.pp = pageparser.pageparser()
-
+        self.p = Player.Player()
 
     def listsMainMenu(self):
         query_data = { 'url': chanels, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
@@ -45,14 +45,12 @@ class goodcast:
         #match = re.compile('<li id=\'(.*?)\'><a href=\'(.*?)\'>(.*?)</a></li>', re.DOTALL).findall(link)
         #<a href="tvp1.html" TARGET="_blank"><font color="white">TVP1</font></a> 
         #<a href="tvp2.html" TARGET="_blank"><font color="white">TVP2</font></a>
-        match = re.compile('<a href="(.*?)" TARGET="_blank"><font color="white">(.*?)</font></a>', re.DOTALL).findall(link)
+        match = re.compile('<a href="(.*?)" TARGET="_blank"><font color="(.*?)">(.*?)</font></a>', re.DOTALL).findall(link)
         print ("match",match)
-        print ("match",link)
-        
-
         print match
         for o in range(len(match)):
-            self.add('goodcast', 'playSelectedMovie', 'None', match[o][1], 'None', mainUrl+ match[o][0], 'None', 'None', True, False)
+            if match[o][1] == "white":
+                self.add('goodcast', 'playSelectedMovie', 'None', match[o][2], 'None', mainUrl+ match[o][0], 'None', 'None', False, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
        

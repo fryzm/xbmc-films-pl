@@ -14,7 +14,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser
+import pLog, libCommon, Parser
 
 log = pLog.pLog()
 
@@ -31,7 +31,7 @@ MENU_TAB = {1: "Wszystkie",
 class tvpstream:
     def __init__(self):
         log.info('Starting tvpstream.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
 
@@ -44,7 +44,7 @@ class tvpstream:
         match = re.compile('<div style="background-image:url\(\'(.*?)\'\);(.*?)" id="(.*?)" data-channel="(.*?)" data-name=\'(.*?)\' class="button"></div>', re.DOTALL).findall(match1[0])
         if len(match) > 0:
             for i in range(len(match)):    
-                self.add('tvpstream', 'playSelectedMovie', 'None', match[i][4], match[i][0], match[i][3], 'aaaa', 'None', True, False)
+                self.add('tvpstream', 'playSelectedMovie', 'None', match[i][4], match[i][0], match[i][3], 'aaaa', 'None', False, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 

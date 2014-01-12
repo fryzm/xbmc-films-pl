@@ -1,3 +1,7 @@
-#LWP-Cookies-2.0
-Set-Cookie3: PHPSESSID=46skim01b3lq5cib2pa4odfb34; path="/"; domain="www.putlocker.com"; path_spec; discard; version=0
-Set-Cookie3: SERVERID=w2x; path="/"; domain="www.putlocker.com"; path_spec; discard; version=0
+# Netscape HTTP Cookie File
+# http://www.netscape.com/newsref/std/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+.putlocker.com	TRUE	/	FALSE	1577145000	__cfduid	d8ddd757c08fb14e8830f1eee053f21991389489724623
+www.putlocker.com	FALSE	/	FALSE		PHPSESSID	7ku3j68u3usisk76fssor85oq0
+www.putlocker.com	FALSE	/	FALSE		SERVERID	w1x

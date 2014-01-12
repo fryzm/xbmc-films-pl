@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,pCommon
+import pLog, settings, Parser,libCommon
 
 log = pLog.pLog()
 
@@ -36,7 +36,7 @@ class filmmex:
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
 
 
 

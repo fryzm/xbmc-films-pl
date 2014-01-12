@@ -6,11 +6,11 @@ import xbmcaddon, xbmc, xbmcgui, simplejson
 import urlparse
 import httplib 
 
-scriptID = 'plugin.video.polishtv.live'
+scriptID = 'plugin.video.mrknow'
 scriptname = "Polish Live TV"
 ptv = xbmcaddon.Addon(scriptID)
 
-import pLog, parser, settings, pCommon,xppod
+import pLog, parser, settings, libCommon,xppod
 #import maxvideo, anyfiles
 
 log = pLog.pLog()
@@ -38,7 +38,7 @@ CHARS = [
 
 class urlparser:
   def __init__(self):
-    self.cm = pCommon.common()
+    self.cm = libCommon.common()
 
 
   def hostSelect(self, v):
@@ -151,7 +151,8 @@ class urlparser:
         nUrl = self.parsegoodcast(url)   
     if host== 'goodcast.org':
         nUrl = self.parsegoodcastorg(url,referer)   
-        
+    if host== 'sharecast.to':
+        nUrl = self.sharecastto(url,referer)   
     if host== 'www.yycast.com':
         nUrl = self.parseyycast(url,referer)   
     if host== 'www.liveflash.tv':
@@ -278,7 +279,22 @@ class urlparser:
     #C:\Users\domw\Downloads\rtmpdump-2.4-git-010913-windows>rtmpdump.exe -r rtmp://174.37.252.220:1935/stream/ --playpath="id=91677&s=x4537456754&g=1&a=1&l="  --swfUrl=http://www.liveflash.tv/resources/scripts/eplayer.swf --pageUrl=http://www.liveflash.tv/embedplayer/x4537456754/1/640/480 -z -v --conn=S:OK
     return link
     
-    
+
+  def sharecastto(self,url,referer):
+    req = urllib2.Request(url)
+    req.add_header('Referer', referer)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match = re.search('file: "(.*?)",',link)
+    match1 = re.search('flashplayer: "(.*?)",',link)
+    print ("Link-3",referer,match1,link)
+    link = match.group(1)+' swfUrl='+match1.group(1)+' pageUrl='+url
+
+    return link
+  
+  
   def parseyycast(self,url,referer):
 
     
@@ -313,15 +329,12 @@ class urlparser:
     else:
         return False
   def parsegoodcast(self,url):
+  
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
-    match1=re.compile('flashvars="(.*?)"').findall(link)
-    if len(match1[0])>0:
-        plik = match1[0].split(';')
-        plik_1 = plik[0].replace('&amp','').replace('file=','')
-        plik_2 = plik[1].replace('&amp','').replace('streamer=','')
-        print("Pliki", plik_1,plik_2, plik)
-        linkVideo =  plik_2 + plik_1 +' live=true pageUrl='+url+' swfUrl=http://goodcast.tv/jwplayer/player.swf'
+    match1=re.compile("file: '(.*?)',").findall(link)
+    if len(match1)>0:
+        linkVideo =  match1[0] +' live=true pageUrl='+url+' swfUrl=http://goodcast.tv/jwplayer/player.swf'
         #linkVideo = "rtmp://95.211.186.67:1936/live/tvn24?token=ezf129U0OsDwPnbdrRAmAg pageUrl=http://goodcast.tv/tvn24.php swfUrl=http://goodcast.tv/jwplayer/player.swf"
         # rtmpdump -r "rtmp://95.211.186.67:1936/live/" -a "live/" -f "LNX 11,2,202,297" -W "http://goodcast.tv/jwplayer/player.swf" -p "http://goodcast.tv" -y "tvn24?token=ezf129U0OsDwPnbdrRAmAg"
         print ("LinkVideo", linkVideo)
@@ -845,13 +858,11 @@ class urlparser:
 
   def parserMAXVIDEO(self, url):
     mainUrl = 'http://maxvideo.pl'
-    apiVideoUrl = mainUrl + '/api/get_link.php'
-    query = urlparse.urlparse(url)
-    videoHash = query.path.replace('/embed/w/','')
-    videoHash = query.path.replace('/embed/p/','')
-    print ("ZAW",query,videoHash)
+    apiVideoUrl = mainUrl + '/api/get_link.php?key=8d00321f70b85a4fb0203a63d8c94f97&v='
+    videoHash = url.split('/')[-1]
+    print ("ZAW",videoHash)
     
-    query_data = { 'url': apiVideoUrl, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }
+    query_data = { 'url': apiVideoUrl + videoHash, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     data = self.cm.getURLRequestData(query_data, {'v' : videoHash})
     result = simplejson.loads(data)
     print result

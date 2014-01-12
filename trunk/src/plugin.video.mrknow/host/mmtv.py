@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser, settings
+import pLog, libCommon, Parser, settings
 
 log = pLog.pLog()
 
@@ -31,7 +31,7 @@ MENU_TAB = {1: "Wszystkie",
 class mmtv:
     def __init__(self):
         log.info('Starting mmtv.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "mmtv.cookie"
@@ -40,7 +40,7 @@ class mmtv:
     def login(self):    
         if ptv.getSetting('mmtv_login') == 'true':
             #username=mrknow&password=WestWest2009&deviceId=e7701cb8d47305ebdcd538f1bf890a0a8005a9e7&platform=IOS&terminal=PHONE&captcha=(null)
-            post_data = {'username': ptv.getSetting('mmtv_user'), 'password': ptv.getSetting('mmtv_pass'),'deviceId': ptv.getSetting('mmtv_deviceid'),'platform': ptv.getSetting('mmtv_platform'),'terminal': ptv.getSetting('mmtv_terminal'), 'captcha':'(null)'}
+            post_data = {'username': ptv.getSetting('mmtv_user'), 'password': ptv.getSetting('mmtv_pass'),'deviceId': ptv.getSetting('mmtv_deviceid'),'platform': ptv.getSetting('mmtv_platform'),'terminal': ptv.getSetting('mmtv_terminal'), 'captcha':''}
             query_data = {'url': loginUrl, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
             data = self.cm.getURLRequestData(query_data, post_data)
             print ("Data1",data)
@@ -82,7 +82,7 @@ class mmtv:
             
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
             #self.add('mmtv', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
-            self.add('mmtv', 'playSelectedMovie', 'None', nazwa,image, stream, 'None', 'None', True, False)
+            self.add('mmtv', 'playSelectedMovie', 'None', nazwa,image, stream, 'None', 'None', False, False)
         
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

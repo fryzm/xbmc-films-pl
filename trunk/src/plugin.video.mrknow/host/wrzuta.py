@@ -14,7 +14,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser, settings
+import pLog, libCommon, Parser, settings
 
 log = pLog.pLog()
 
@@ -47,10 +47,10 @@ AUDIO_TAB = {
 class wrzuta:
     def __init__(self):
         log.info('Starting wrzuta.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.settings = settings.TVSettings()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "wrzuta.cookie"
 

@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,pCommon
+import pLog, settings, Parser,libCommon
 
 log = pLog.pLog()
 
@@ -35,7 +35,7 @@ class kinoliveseriale:
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveseriale.cookie"
         query_data = {'url': 'http://alekino.tv/auth/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
         data = self.cm.getURLRequestData(query_data)
@@ -84,7 +84,7 @@ class kinoliveseriale:
             if len(match1) > 0:
                 for i in range(len(match1)):
                         #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                        self.add('kinoliveseriale', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0], mainUrl+ match1[i][2], 'aaaa', 'None', True, False)
+                        self.add('kinoliveseriale', 'playSelectedMovie', 'None', match1[i][3],  match1[i][0], mainUrl+ match1[i][2], 'aaaa', 'None', False, False)
 
             xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
@@ -97,7 +97,7 @@ class kinoliveseriale:
         if len(match1) > 0:
             for i in range(len(match1)):
                 title = match1[i][0]+ ' ' + match1[i][2]
-                self.add('kinoliveseriale', 'playSelectedMovie', 'None', title.replace('\n',''), match2[0], mainUrl[:-1]+ match1[i][1], 'aaaa', 'None', True, False)
+                self.add('kinoliveseriale', 'playSelectedMovie', 'None', title.replace('\n',''), match2[0], mainUrl[:-1]+ match1[i][1], 'aaaa', 'None', False, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItemsA(self, url):
@@ -190,9 +190,15 @@ class kinoliveseriale:
         post_data = {'hash': hash}
         query_data = {'url': 'http://alekino.tv/players/get', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)
+        print("Data",data)
         match16 = re.compile('<iframe src="(.*?)" width="989" height="535" scrolling="no" frameborder="0">', re.DOTALL).findall(data)
-        linkVideo = self.up.getVideoLink(match16[0].decode('utf8'))
-        return linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
+        match17 = re.compile('<iframe src="(.*?)" style="border:0px; width: 630px; height: 430px;" scrolling="no"></iframe>', re.DOTALL).findall(data)
+        if len(match16) > 0:
+            linkVideo = self.up.getVideoLink(match16[0].decode('utf8'))
+            return linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
+        if len(match17) > 0:
+            linkVideo = self.up.getVideoLink(match17[0].decode('utf8'))
+            return linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
         
 
     def searchInputText(self):

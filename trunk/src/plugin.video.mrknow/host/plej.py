@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser, settings
+import pLog, libCommon, Parser, settings
 
 log = pLog.pLog()
 
@@ -33,10 +33,10 @@ MENU_TAB = {1: "Lista kanałów",
 class plej:
     def __init__(self):
         log.info('Starting plej.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.settings = settings.TVSettings()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "plej.cookie"
         self.zalogowany = 0
@@ -85,7 +85,7 @@ class plej:
             #if self.getMovieType(mainUrl+match[o][0]) == True:
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
                 #self.add('plej', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
-                self.add('plej', 'playSelectedMovie', 'None', match[o][1], mainUrl+match[o][2], mainUrl+match[o][0], 'None', 'None', True, False)
+                self.add('plej', 'playSelectedMovie', 'None', match[o][1], mainUrl+match[o][2], mainUrl+match[o][0], 'None', 'None', False, False)
             #else:
             #    self.add('plej', 'items-menu', 'None', match[o][1], mainUrl+match[o][2], mainUrl+match[o][0], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -99,7 +99,7 @@ class plej:
             for i in range(len(match1)):
                 url = mainUrl + match1[i][0] + '&online=1'
                 img = mainUrl + match1[i][2]
-                self.add('plej', 'playSelectedMovie', 'None', match1[i][1], img, url, 'None', 'None', True, False)
+                self.add('plej', 'playSelectedMovie', 'None', match1[i][1], img, url, 'None', 'None', False, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 

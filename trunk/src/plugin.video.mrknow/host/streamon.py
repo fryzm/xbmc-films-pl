@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser, settings,pageparser
+import pLog, libCommon, Parser, settings,pageparser
 
 log = pLog.pLog()
 
@@ -30,10 +30,10 @@ MENU_TAB = {1: "Wszystkie",
 class streamon:
     def __init__(self):
         log.info('Starting streamon.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.settings = settings.TVSettings()
         self.pp = pageparser.pageparser()
 

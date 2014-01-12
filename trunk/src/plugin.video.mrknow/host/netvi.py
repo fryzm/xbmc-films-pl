@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,pCommon,settings
+import pLog, settings, Parser,libCommon,settings
 
 log = pLog.pLog()
 
@@ -27,7 +27,7 @@ class netvi:
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "netvi.cookie"
     def login(self):    
         if ptv.getSetting('netvi.pl_login') == 'true':
@@ -69,7 +69,7 @@ class netvi:
         for chanel in json_object['channels']:   
             print chanel['name']
             log.info('Listuje kanały: ')
-            self.add('netvi', 'playSelectedMovie', 'None', chanel['name'],chanel['thumbnail'], 'https://watch.netvi.tv/api/channels/get/'+chanel['id']+'?format_id=1', 'None', 'None', True, False)
+            self.add('netvi', 'playSelectedMovie', 'None', chanel['name'],chanel['thumbnail'], 'https://watch.netvi.tv/api/channels/get/'+chanel['id']+'?format_id=1', 'None', 'None', False, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def getMovieLinkFromXML(self, url):

@@ -67,7 +67,7 @@ SERIALE_ONLINE_TABLE = {
 }
 
 FILM_ONLINE_TABLE = {
-		     7400 : ["Cda.pl", 'cdapl'],
+		     #7400 : ["Cda.pl", 'cdapl'],
              7300: ["Noobroom.com","noobroom"],
              7000: ["Vod Onet PL","vodpl"],
              7100: ["Filmbox Movie","filmboxmoovie"],
@@ -218,7 +218,7 @@ class MrknowFilms:
         self.addDir("Filmy", 2, False, 'Filmy', False)
         self.addDir("Seriale", 3, False, 'Seriale', False)
         self.addDir("Rozrywka", 4, False, 'Rozrywka', False)
-        self.addDir('Sport', 19, False, 'Sport', False)
+        #self.addDir('Sport', 19, False, 'Sport', False)
         self.addDir('Ustawienia', 20, True, 'Ustawienia', False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser
+import pLog, libCommon, Parser, Player
 
 log = pLog.pLog()
 
@@ -30,10 +30,10 @@ MENU_TAB = {1: "Wszystkie",
 class filmbox:
     def __init__(self):
         log.info('Starting filmbox.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-
+        self.p = Player.Player()        
 
 
     def listsMainMenu(self, table):
@@ -52,7 +52,7 @@ class filmbox:
             
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
             #self.add('filmbox', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
-            self.add('filmbox', 'playSelectedMovie', 'None', nazwa, image, stream, 'None', 'None', True, False)
+            self.add('filmbox', 'playSelectedMovie', 'None', nazwa, image, stream, 'None', 'None', False, False)
         
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -248,7 +248,7 @@ class filmbox:
             log.info('url: ' + str(url))
             self.listsItems(url)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(url, title, icon)
+            self.p.LOAD_AND_PLAY_VIDEO(url, title, icon)
 
         
   

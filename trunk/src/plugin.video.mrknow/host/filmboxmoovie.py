@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, pCommon, Parser,Player
+import pLog, libCommon, Parser,Player
 
 log = pLog.pLog()
 
@@ -31,7 +31,7 @@ MENU_TAB = {1: "Wszystkie",
 class filmboxmoovie:
     def __init__(self):
         log.info('Starting filmboxmoovie.pl')
-        self.cm = pCommon.common()
+        self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
         self.p = Player.Player()

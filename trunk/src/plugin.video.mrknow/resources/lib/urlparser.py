@@ -672,6 +672,7 @@ class urlparser:
   def parserPUTLOCKER(self,url):
     query_data = { 'url': url.replace('file', 'embed'), 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)    
+
     r = re.search('value="(.+?)" name="fuck_you"', link)
     if r:
       self.cm.checkDir(ptv.getAddonInfo('path') + os.path.sep + "cookies")
@@ -682,6 +683,7 @@ class urlparser:
       match = re.compile("playlist: '(.+?)'").findall(link)
 
       if len(match) > 0:
+        print ("PDATA",match)
         url = "http://www.putlocker.com" + match[0]
         query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
@@ -695,8 +697,8 @@ class urlparser:
 #          return False
 #      else:
 #        return False
-#    else:
-#      return False
+    else:
+      return ''
 
   def parserMEGUSTAVID(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }

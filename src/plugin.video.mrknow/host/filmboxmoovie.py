@@ -95,8 +95,9 @@ class filmboxmoovie:
         turl = '|User-Agent=XBMC%2F12.1%20Git%3A20130317-0d373cc%20(Windows%20NT%206.1%3B%20http%3A%2F%2Fwww.xbmc.org)'
 
         for o in objs['response']['result']['videos']:
+            print ("AAAAAAAA",o)
             #self.add('filmboxmoovie', 'playSelectedMovie', 'None', o['title'], o['custom_attributes']['largeImage'], o['source_url'], 'aaaa', 'None', True, False,'0',o['custom_attributes']['year_of_production'])
-            self.add('filmboxmoovie', 'playSelectedMovie', 'None', o['title'], o['custom_attributes']['largeImage'], o['source_url']+turl, 'aaaa', 'None', True, False,'0',o['custom_attributes']['year_of_production'])
+            self.add('filmboxmoovie', 'playSelectedMovie', 'None', o['title'], o['custom_attributes']['largeImage'], o['custom_attributes']['sony_source_url']+turl, 'aaaa', 'None', False, False,'0',o['custom_attributes']['year_of_production'])
         self.add('filmboxmoovie', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona)+1))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

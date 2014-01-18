@@ -2,7 +2,7 @@
 import urllib, urllib2, re, os, sys, math,  time
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
-import urlparser
+import urlparser, cookielib
 
 
 scriptID = 'plugin.video.mrknow'
@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,libCommon
+import pLog, settings, Parser,libCommon, Player
 
 log = pLog.pLog()
 
@@ -63,6 +63,7 @@ class Noobroom:
         self.settings = settings.TVSettings()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "noobroom.cookie"
         self.zalogowany = 0
+        self.p = Player.Player()
         
     def login(self):    
         print "Zalogowany--->", self.zalogowany
@@ -182,59 +183,30 @@ class Noobroom:
 
 
     def getMovieLinkFromXML(self, url):
+        #noobroom9.com/?2798
+        query_data = { 'url': 'http://noobroom9.com/?'+url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile('"streamer": "(.*?)",', re.DOTALL).findall(link)
+        print ("Match",match, self.cm.getCookieItem(self.COOKIEFILE,'auth'))
         urlLink = 'None'
         stream_url = ''
-        stream_url =  'http://85.12.8.89/index.php?start=0&hd=0&auth=0&type=flv&tv=0&file='+url
-        return stream_url
-        
-
-    def getSizeAllItems(self, url):
-        numItems = 0
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', HOST)
-        openURL = urllib2.urlopen(req)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<li data-theme="c" action="watch">(.*?)<a href="(.*?)" data-transition="slide">(.*?)<img src="(.*?)" height="90px" width="90px" title="(.*?)" />(.*?)</a>(.*?)</li>', re.DOTALL).findall(readURL)
-        if len(match) == 1:
-            numItems = match[0]
-        return numItems
-    
-    
-    def getSizeItemsPerPage(self, url):
-        numItemsPerPage = 0
-        openURL = urllib.urlopen(url)
-        readURL = openURL.read()
-        openURL.close()
-        match = re.compile('<div class="movie-(.+?)>').findall(readURL)
-        if len(match) > 0:
-            numItemsPerPage = len(match)
-        return numItemsPerPage        
-
-    def getMovieID(self, url):
-        id = 0
-        tabID = url.split(',')
-        if len(tabID) > 0:
-            id = tabID[1]
-        return id
-
-
-    def getItemTitles(self, table):
-        out = []
-        for i in range(len(table)):
-            value = table[i]
-            out.append(value[1])
-        return out
-
-    def getItemURL(self, table, key):
-        link = ''
-        for i in range(len(table)):
-            value = table[i]
-            if key in value[0]:
-                link = value[2]
-                break
-        return link
-
+        wybierz = ['Server 1','Serwer 2']
+        d = xbmcgui.Dialog()
+        item = d.select("Choose Server", wybierz)
+        if item == 0:
+            stream_url =  match[0]
+        if item == 0:
+            stream_url =  match[0].replace('loc=22','loc=15')
+        mycookie = 'auth=' + self.cm.getCookieItem(self.COOKIEFILE,'auth') + '&noob=' + self.cm.getCookieItem(self.COOKIEFILE,'noob') +'&place=' + self.cm.getCookieItem(self.COOKIEFILE,'place') 
+        #+ Cookie: place=1; noob=MzA2Nw%3D%3D; auth=NDMzYzAwYzUwZDc4NDA0OWRmZjY5NmVhMWEwZjlhNzU2YmI3YzdhZg%3D%3D; __PPU_CHECK=1; lvca_unique_user=1; __PPU_SESSION_c-f=Xde073,1390069022,1,1390067282X
+        cj = cookielib.MozillaCookieJar()
+        cj.load(self.COOKIEFILE, ignore_discard=True)
+        cookiestr = ''
+        for cookie in cj:
+            cookiestr += '%s=%s;' % (cookie.name, cookie.value)
+        fullvid = ('%s|Cookie="%s"' % (stream_url, cookiestr + "__PPU_CHECK=1; lvca_unique_user=1"))
+        return fullvid
+ 
 
     def searchInputText(self):
         text = None
@@ -258,23 +230,7 @@ class Noobroom:
         liz.setInfo( type="Video", infoLabels={ "Title": title } )
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=folder)
             
-
-    def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon):
-        ok=True
-        if videoUrl == '':
-                d = xbmcgui.Dialog()
-                d.ok('Nie znaleziono streamingu.', 'Może to chwilowa awaria.', 'Spróbuj ponownie za jakiś czas')
-                return False
-        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-        liz.setInfo( type="Video", infoLabels={ "Title": title, } )
-        try:
-            xbmcPlayer = xbmc.Player()
-            xbmcPlayer.play(videoUrl+'|Referer=http://noobroom1.com/player.swf', liz )
-            
-        except:
-            d = xbmcgui.Dialog()
-            d.ok('Błąd przy przetwarzaniu.', 'Problem')        
-        return ok
+ 
 
     def seekhack(self,player, url, item):
         print ("*** SEEK *** " )
@@ -383,7 +339,7 @@ class Noobroom:
             log.info('url: ' + str(url))
             self.listsItems(url)
         if name == 'playSelectedMovie':
-            self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
+            self.p.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
             #self.play(self.getMovieLinkFromXML(url), title, icon)
 
         

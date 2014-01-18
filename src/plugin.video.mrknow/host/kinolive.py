@@ -167,9 +167,17 @@ class kinolive:
         post_data = {'hash': hash}
         query_data = {'url': 'http://alekino.tv/players/get', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)
-        match16 = re.compile('<iframe src="(.*?)" width="989" height="535" scrolling="no" frameborder="0">', re.DOTALL).findall(data)
-        linkVideo = self.up.getVideoLink(match16[0].decode('utf8'))
-        VideoData['link'] = linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
+        match16 = re.compile('<iframe src="(.*?)" (.*?)', re.DOTALL).findall(data)
+        #<iframe src="http://www.putlocker.com/embed/57870E83A986112B" width="989" height="535" frameborder="0" scrolling="no"></iframe>
+        print ("match16",match16,data)
+        linkVideo = ''
+        if len(match16) > 0:
+            linkVideo = self.up.getVideoLink(match16[0][0].decode('utf8'))
+            if len(linkVideo) > 0:
+                VideoData['link'] = linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
+            else:
+                VideoData['link'] = ''
+                
         return VideoData
         
     def getMovieYear(self,link):

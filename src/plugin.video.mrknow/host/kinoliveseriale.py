@@ -22,9 +22,9 @@ catUrl = 'http://alekino.tv/seriale/'
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
 MENU_TAB = {0: "Alfabetycznie",
-#            1: "Top 30",
+            1: "Top dzisiaj",
 #            2: "Ostatnie dodane seriale",
-#            3: "Ostatnie dodane odcinki"
+            3: "Ostatnio dodane odcinki"
 #            12: "Kategorie",
 #            15: "Szukaj"
             }
@@ -127,31 +127,30 @@ class kinoliveseriale:
                 self.add('kinoliveseriale', 'serial-menu', 'None', title,  'None', mainUrl[:-1]+ match1[i][0].strip(), 'aaaa', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
-    def listsItemsTop(self, url,str1,str2):
-        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
-        link = self.cm.getURLRequestData(query_data)
-        match = re.compile(str1+'(.*?)'+str2, re.DOTALL).findall(link)
-        match1 = re.compile('<a href="(.*?)" title="(.*?)" class="useTooltip" style="width:180px;"><img src="(.*?)" alt=""(.*?)/></a>', re.DOTALL).findall(match[0])
-        if len(match1) > 0:
-            for i in range(len(match1)):
-                title = match1[i][1].replace('<span style="color:red;position:absolute;margin-top:-0px;margin-left:2px;">new</span>','')
-                self.add('kinoliveseriale', 'serial-menu', 'None', title,  match1[i][2], mainUrl+ match1[i][0], 'aaaa', 'None', True, False,'',match1[i][2])
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItemsOst(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('Ostatnie dodane odcinki(.*?)Najwyżej oceniane seriale', re.DOTALL).findall(link)
-        match1 = re.compile('<div class="pl-serial-mini-module">(.*?)</ul>', re.DOTALL).findall(match[0])
+        match = re.compile('<!-- ostatnio dodane odcinki -->\n(.*?)<!-- /ostatnio dodane odcinki -->\n', re.DOTALL).findall(link)
+        match1 = re.compile('<td class="title" style="width:200px;"><a href="(.*?)">(.*?)</a></td>\n               <td class="episode">\n                  <a href="(.*?)"><span class="w">(.*?)</span>\n(.*?)</a>\n               </td>\n', re.DOTALL).findall(match[0])
         if len(match1) > 0:
             for i in range(len(match1)):
-                match2 = re.compile('<div class="serial-title">(.*?)</div>', re.DOTALL).findall(match1[i])
-                match3 = re.compile('<div class="serial-image"><img src="(.*?)" width="68" height="90" alt="" /></div>', re.DOTALL).findall(match1[i])
-                match4 = re.compile('<li><a href="(.*?)">(.*?)</a></li>', re.DOTALL).findall(match1[i])
-                for j in range(len(match4)):
-                    self.add('kinoliveseriale', 'playSelectedMovie', 'None', match2[0] + match4[j][1],  match3[0], mainUrl+ match4[j][0], 'aaaa', 'None', True, False,'',match1[i][2])
+                self.add('kinoliveseriale', 'playSelectedMovie', 'None', match1[i][1].strip() + ' ' + match1[i][3].strip() + ' ' + match1[i][4].strip(),  'None', mainUrl[:-1]+ match1[i][2], 'aaaa', 'None', False, False,'')
+            print ("M",match1)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    def listsItemsTop(self, url):
+        query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
+        link = self.cm.getURLRequestData(query_data)
+        match = re.compile('<!-- popularne dzisiaj -->\n(.*?)<!-- /popularne dzisiaj -->', re.DOTALL).findall(link)
+        print match
+        match1 = re.compile('<td class="title" tyle="width:200px;"><a href="(.*?)">(.*?)</a></td>\n               <td class="episode">\n                  <a href="(.*?)"><span class="w">(.*?)</span>(.*?)</a>\n               </td>', re.DOTALL).findall(match[0])
+        if len(match1) > 0:
+            for i in range(len(match1)):
+                print ("M",match1[i])
+                self.add('kinoliveseriale', 'playSelectedMovie', 'None', match1[i][1].strip() + ' ' + match1[i][3].strip() + ' ' + match1[i][4].strip(),  'None', mainUrl[:-1]+ match1[i][2], 'aaaa', 'None', False, False,'')
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
+        
     def listsItemsPage(self, url):
         if not url.startswith("http://"):
             url = mainUrl + url
@@ -272,12 +271,12 @@ class kinoliveseriale:
         elif name == 'items-menu' and category == 'None':
             log.info('Jest Sezon: '+strona)
             self.listsItems(url,strona)
-        elif name == 'main-menu' and category == 'Top 30':
+        elif name == 'main-menu' and category == 'Top dzisiaj':
             log.info('Jest Top 30: ')
-            self.listsItemsTop(catUrl,'TOP 30','Ostatnie dodane seriale')
-        elif name == 'main-menu' and category == 'Ostatnie dodane seriale':
-            self.listsItemsTop(catUrl,'Ostatnie dodane seriale', 'Ostatnie dodane odcinki')
-        elif name == 'main-menu' and category == 'Ostatnie dodane odcinki':
+            self.listsItemsTop(catUrl)
+#        elif name == 'main-menu' and category == 'Ostatnie dodane seriale':
+#            self.listsItemsTop(catUrl,'Ostatnie dodane seriale', 'Ostatnie dodane odcinki')
+        elif name == 'main-menu' and category == 'Ostatnio dodane odcinki':
             log.info('Jest Gorące: ')
             self.listsItemsOst(catUrl)
         elif name == 'main-menu' and category == "Szukaj":

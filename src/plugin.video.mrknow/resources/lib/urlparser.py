@@ -167,8 +167,43 @@ class urlparser:
         nUrl = self.wrzutapl(url)  
     if host== 'hqstream.tv':
         nUrl = self.hqstream(url,referer)           
+    if host== 'maxupload.tv':
+        nUrl = self.maxuploadtv(url,referer)           
             
     return nUrl
+
+
+  def maxuploadtv(self,url,referer):
+    query_data = { 'url': url.replace('file', 'embed'), 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)    
+
+    #r = re.search('value="(.+?)" name="fuck_you"', link)
+    #if r:
+   
+    #self.cm.checkDir(ptv.getAddonInfo('path') + os.path.sep + "cookies")
+    self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "maxuploadtv.cookie"
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
+    postdata = {'ok':'yes', 'Close Ad and Watch as Free User':'confirm', 'true': 'submited'}
+    link = self.cm.getURLRequestData(query_data, postdata)
+    match = re.compile("url: \'(.*?)\'\r\n").findall(link)
+    #print("Link",match,link)
+    if len(match) > 0:
+    #    print ("PDATA",match)
+    #    url = "http://www.putlocker.com" + match[0]
+    #    query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
+    #    link = self.cm.getURLRequestData(query_data)
+    #    match = re.compile('</link><media:content url="(.+?)" type="video').findall(link)
+    #    print match
+    #    if len(match) > 0:
+    #      url = match[0].replace('&amp;','&')
+    #      print url
+    #      return url
+#        else:
+#          return False
+#      else:
+        return match[0]
+    else:
+      return ''
     
   def wrzutapl(self, url):
     HOST = "User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0"

@@ -171,22 +171,24 @@ class kinoliveseriale:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<!-- ostatnio dodane odcinki -->\n(.*?)<!-- /ostatnio dodane odcinki -->\n', re.DOTALL).findall(link)
-        match1 = re.compile('<td class="title" style="width:200px;"><a href="(.*?)">(.*?)</a></td>\n               <td class="episode">\n                  <a href="(.*?)"><span class="w">(.*?)</span>\n(.*?)</a>\n               </td>\n', re.DOTALL).findall(match[0])
+        #                    <td class="title" tyle="width:200px;"><a href="     ">     </a></td>\n                       <td class="episode">\n                          <a href="     "><span class="w">     </span>     </a>\n                       </td>
+        match1 = re.compile('<td class="title" style="width:200px;"><a href="(.*?)">(.*?)</a></td>\n                       <td class="episode">\n                          <a href="(.*?)"><span class="w">(.*?)</span>(.*?)</a>\n                       </td>', re.DOTALL).findall(match[0])
         if len(match1) > 0:
             for i in range(len(match1)):
-                self.add('kinoliveseriale', 'playSelectedMovie', 'None', match1[i][1].strip() + ' ' + match1[i][3].strip() + ' ' + match1[i][4].strip(),  'None', mainUrl[:-1]+ match1[i][2], 'aaaa', 'None', False, False,'')
+                self.add('kinoliveseriale', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][1].strip() + ' ' + match1[i][3].strip() + ' ' + match1[i][4].strip()),  'None', mainUrl[:-1]+ match1[i][2], 'aaaa', 'None', False, False,'')
             print ("M",match1)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
     def listsItemsTop(self, url):
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<!-- popularne dzisiaj -->\n(.*?)<!-- /popularne dzisiaj -->', re.DOTALL).findall(link)
-        #print match
-        match1 = re.compile('<td class="title" tyle="width:200px;"><a href="(.*?)">(.*?)</a></td>\n               <td class="episode">\n                  <a href="(.*?)"><span class="w">(.*?)</span>(.*?)</a>\n               </td>', re.DOTALL).findall(match[0])
+        print match
+        #                    <td class="title" tyle="width:200px;"><a href="     ">     </a></td>\n                       <td class="episode">\n                          <a href="     "><span class="w">     </span>     </a>\n                       </td>
+        match1 = re.compile('<td class="title" tyle="width:200px;"><a href="(.*?)">(.*?)</a></td>\n                       <td class="episode">\n                          <a href="(.*?)"><span class="w">(.*?)</span>(.*?)</a>\n                       </td>', re.DOTALL).findall(match[0])
         if len(match1) > 0:
             for i in range(len(match1)):
                 #print ("M",match1[i])
-                self.add('kinoliveseriale', 'playSelectedMovie', 'None', match1[i][1].strip() + ' ' + match1[i][3].strip() + ' ' + match1[i][4].strip(),  'None', mainUrl[:-1]+ match1[i][2], 'aaaa', 'None', False, False,'')
+                self.add('kinoliveseriale', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][1].strip() + ' ' + match1[i][3].strip() + ' ' + match1[i][4].strip()),  'None', mainUrl[:-1]+ match1[i][2], 'aaaa', 'None', False, False,'')
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
         

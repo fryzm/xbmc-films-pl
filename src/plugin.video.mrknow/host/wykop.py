@@ -32,7 +32,7 @@ class WYKOP:
         self.cm = libCommon.common()
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
-
+        
 
 
     def listsMainMenu(self, table):
@@ -74,12 +74,12 @@ class WYKOP:
         link = self.cm.getURLRequestData(query_data)
         objs = json.loads(link)
         for o in objs:
-            print ("OO",o)
+            #print ("OO",o)
             if o['type']== 'video':
                 image = o['preview'].replace(',w104h74.jpg',',w173h114.jpg')
-                print image
+                #print image
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('wykop', 'playSelectedMovie', 'None', '[COLOR yellow]'+o['title'] +' [/COLOR] Wykopow:'+str(o['vote_count']),image, o['source_url'], o['description'], 'None', True, False)
+                self.add('wykop', 'playSelectedMovie', 'None', '[COLOR yellow]'+self.cm.html_special_chars(o['title'].encode('utf-8')) +' [/COLOR] Wykopow:'+str(o['vote_count']),image, o['source_url'], o['description'], 'None', False, False)
             #else:
             #    self.add('wykop', 'SelectedMovie', 'None', o['title'] +' Wykopow:'+str(o['vote_count']),o['preview'], o['source_url'], o['description'], 'None', True, False)
  
@@ -87,9 +87,11 @@ class WYKOP:
         #log.info('Nastepna strona: '+  match1[0])
         self.add('wykop', 'categories-menu', 'Następna', 'None', 'None', url2, 'None', page2, True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-        xbmcplugin.setContent(int(sys.argv[1]),'tvshows')
-        xbmc.executebuiltin("Container.SetViewMode(515)")
+        #xbmc.executebuiltin("Container.SetViewMode(515)")
+        #xbmcplugin.setContent(int(sys.argv[1]),'tvshows')
+        xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+        xbmc.executebuiltin("Container.SetViewMode('tvshows-view')")
+        
 
 
 

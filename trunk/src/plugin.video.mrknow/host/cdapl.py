@@ -74,7 +74,7 @@ class cdapl:
 
 
     def getSearchURL(self, key):
-        url = 'http://www.cda.pl/video/show/' + urllib.quote_plus(key) +'//p1?s=best'
+        url = 'http://www.cda.pl/video/show/' + urllib.quote_plus(key) +'/p1?s=best'
         #http://www.cda.pl/video/show/xxx/p2?s=best
         return url
 

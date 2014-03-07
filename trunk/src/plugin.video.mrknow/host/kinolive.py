@@ -38,6 +38,7 @@ MENU_TAB = {0: "Filmy",
             }
 
 
+
 class kinolive:
     def __init__(self):
         log.info('Starting kinolive.pl')

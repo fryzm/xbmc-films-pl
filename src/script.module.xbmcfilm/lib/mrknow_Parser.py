@@ -5,7 +5,7 @@ import urllib, urllib2
 scriptID = sys.modules[ "__main__" ].scriptID
 scriptname = "mrknow Polish films online"
 
-class Parser:
+class mrknow_Parser:
     def __init__(self):
         pass
     

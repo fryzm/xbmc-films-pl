@@ -8,6 +8,7 @@
 		<setting type="lsep" label="Login i hasło" />
 		<setting id="xbmcfilm_user" type="text" label="login" default="" />
 		<setting id="xbmcfilm_pass" type="text" label="hasło" option="hidden"  default="" />
+		<setting id="retries" type="slider" label="1017" range="1,1,10" default="5" option="int"/>
 	</category>
 
 </settings>

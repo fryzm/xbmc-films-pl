@@ -863,8 +863,10 @@ class mrknow_urlparser:
             match1 = re.search("""'captionUrl': '(http[^']+?srt)'""",data)
 
             if match:
-                print ("Match",match1.group())
-                return [match.group(1),match1.group(1)]
+                if match1:
+                    return [match.group(1),match1.group(1)]
+                else:
+                    return match.group(1)
             else:
                 match = re.search("""'url':'api:([^']+?)'""",data)
                 if match:

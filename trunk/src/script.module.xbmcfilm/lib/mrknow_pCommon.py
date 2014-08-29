@@ -80,6 +80,9 @@ cj = cookielib.MozillaCookieJar()
 
  
 class common:
+    HOST = HOST
+    HEADER = None
+	
     def __init__(self):
         pass
 
@@ -106,66 +109,110 @@ class common:
         return txt
     
     def getCookieItem(self, cookiefile, item):
-	ret = ''
-	cj = cookielib.MozillaCookieJar()
-	cj.load(cookiefile, ignore_discard = True)
-	for cookie in cj:
-	    if cookie.name == item: ret = cookie.value
-	return ret
+        ret = ''
+        cj = cookielib.MozillaCookieJar()
+        cj.load(cookiefile, ignore_discard = True)
+        for cookie in cj:
+            if cookie.name == item: ret = cookie.value
+        return ret
     
     #item = {'name': 'xxx', 'value': 'yyy', 'domain': 'zzz'}
     def addCookieItem(self, cookiefile, item, load_cookie=True):
-	if load_cookie==True and os.path.isfile(cookiefile):
-	    cj.load(cookiefile, ignore_discard = True)
-	c = cookielib.Cookie(0, item['name'], item['value'], None, False, item['domain'], False, False, '/', True, False, None, True, None, None, {})
-	cj.set_cookie(c)
-	cj.save(cookiefile, ignore_discard = True)
+        if load_cookie==True and os.path.isfile(cookiefile):
+            cj.load(cookiefile, ignore_discard = True)
+        c = cookielib.Cookie(0, item['name'], item['value'], None, False, item['domain'], False, False, '/', True, False, None, True, None, None, {})
+        cj.set_cookie(c)
+        cj.save(cookiefile, ignore_discard = True)
 
-    def getURLRequestData(self, params = {}, post_data = {}):
-    	host = HOST
-    	response = None
-    	req = None
-    	out_data = None
-    	opener = None
-    	headers = { 'User-Agent' : host }
-        if 'use_xml' in params:
-            headers = { 'User-Agent' : host, 'Content-Type': 'text/xml' }
-    	if dbg == 'true':
-    		log.info('pCommon - getURLRequestData() -> params: ' + str(params))
-        if params['use_host']:
-        	host = params['host']
-        if params['use_cookie']:
-			opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-			if params['load_cookie']:
-				cj.load(params['cookiefile'], ignore_discard = True)
-        if params['use_post']:
-            #headers = {'User-Agent' : host}
-            #log.info('pCommon - getURLRequestData() -> post data: ' + str(post_data))
-            if 'use_xml' in params:
+    def getURLRequestData(self, params = {}, post_data = None):
+        
+        def urlOpen(req, customOpeners):
+            if len(customOpeners) > 0:
+                opener = urllib2.build_opener( *customOpeners )
+                response = opener.open(req)
+            else:
+                response = urllib2.urlopen(req)
+            return response
+        
+        cj = cookielib.MozillaCookieJar()
+
+        response = None
+        req      = None
+        out_data = None
+        opener   = None
+        
+        if 'host' in params:
+            host = params['host']
+        else:
+            host = self.HOST
+
+        if 'header' in params:
+            headers = params['header']
+        elif None != self.HEADER:
+            headers = self.HEADER
+        else:
+            headers = { 'User-Agent' : host }
+
+        if dbg == 'true':
+                log.info('pCommon - getURLRequestData() -> params: ' + str(params))
+                log.info('pCommon - getURLRequestData() -> params: ' + str(headers))
+
+        customOpeners = []
+        #cookie support
+        if 'use_cookie' not in params and 'cookiefile' in params and ('load_cookie' in params or 'save_cookie' in params):
+            params['use_cookie'] = True 
+        
+        if params.get('use_cookie', False):
+            customOpeners.append( urllib2.HTTPCookieProcessor(cj) )
+            if params.get('load_cookie', False):
+                cj.load(params['cookiefile'], ignore_discard = True)
+
+        if None != post_data:
+            if dbg == 'true': log.info('pCommon - getURLRequestData() -> post data: ' + str(post_data))
+            if params.get('raw_post_data', False):
                 dataPost = post_data
             else:
                 dataPost = urllib.urlencode(post_data)
             req = urllib2.Request(params['url'], dataPost, headers)
-        if not params['use_post']:
-            req = urllib2.Request(params['url'])
-            req.add_header('User-Agent', host)
-        if params['use_cookie']:
-            response = opener.open(req)
         else:
-            response = urllib2.urlopen(req)
-        if not params['return_data']:
-        	try:
-	            if params['read_data']:
-	            	out_data = response.read()
-	            else:
-	            	out_data = response
-	        except:
-	        	out_data = response
-        if params['return_data']:
-            out_data = response.read()
-            response.close()
-        if params['use_cookie'] and params['save_cookie']:
-        	cj.save(params['cookiefile'], ignore_discard = True)
+            req = urllib2.Request(params['url'], None, headers)
+
+        if not params.get('return_data', False):
+            out_data = urlOpen(req, customOpeners)
+        else:
+            gzip_encoding = False
+            try:
+                response = urlOpen(req, customOpeners)
+                if response.info().get('Content-Encoding') == 'gzip':
+                    gzip_encoding = True
+                data = response.read()
+                response.close()
+            except urllib2.HTTPError, e:
+                if e.code == 404:
+                    if dbg == 'true': log.info('pCommon - getURLRequestData() -> !!!!!!!! 404 - page not found handled')
+                    if e.fp.info().get('Content-Encoding') == 'gzip':
+                        gzip_encoding = True
+                    data = e.fp.read()
+                    #e.msg
+                    #e.headers
+                else:
+                    #printExc()
+                    raise 
+    
+            try:
+                if gzip_encoding:
+                    if dbg == 'true': log.info('pCommon - getURLRequestData() -> Content-Encoding == gzip')
+                    buf = StringIO(data)
+                    f = gzip.GzipFile(fileobj=buf)
+                    out_data = f.read()
+                else:
+                    out_data = data
+            except:
+                out_data = data
+ 
+        if params.get('use_cookie', False) and params.get('save_cookie', False):
+            cj.save(params['cookiefile'], ignore_discard = True)
+
         return out_data 
                
     def makeABCList(self):

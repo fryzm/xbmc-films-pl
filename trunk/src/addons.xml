@@ -20,11 +20,11 @@
 
 <addon id="plugin.video.mrknow"
        name="Filmy Online - mrknow.pl"
-       version="1.7.07"
+       version="1.7.08"
        provider-name="mrknow">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-
+    <import addon="script.module.xbmcfilm" version="0.1.2"/>
 
   </requires>
   <extension point="xbmc.python.pluginsource"
@@ -40,11 +40,11 @@
 
 <addon id="plugin.video.xbmcfilm"
        name="xbmcfilm.com"
-       version="0.2.2"
+       version="0.2.3"
        provider-name="mrknow">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.xbmcfilm" version="0.1.0"/>
+    <import addon="script.module.xbmcfilm" version="0.1.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
@@ -52,13 +52,13 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary>Wtyczka MRKNOW</summary>
-    <description>Plugin pozwala nam ogladac filmy na stronie www.xbmcfilm.com
+    <description>Plugin pozwala nam ogladac popularne filmy na podstawie statystyk zbieranych na stronie www.xbmcfilm.com
     </description>
     <platform>all</platform>
   </extension>
 </addon>
 
-<addon id="script.module.xbmcfilm" name="lib-xbmcfilm" provider-name="Mrknow" version="0.1.0">
+<addon id="script.module.xbmcfilm" name="lib-xbmcfilm" provider-name="Mrknow" version="0.1.2">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>

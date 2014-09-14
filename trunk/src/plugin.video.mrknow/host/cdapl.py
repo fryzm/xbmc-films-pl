@@ -13,12 +13,13 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, libCommon, Parser
+import pLog, libCommon, Parser, mrknow_urlparser
 
 log = pLog.pLog()
 
 mainUrl = 'http://cda.pl/'
-movies = 'http://www.cda.pl/video/show/ca%C5%82e_filmy_or_ca%C5%82y_film_or_lektor_or_dubbing_or_napisy/p3?'
+mainUrlb = 'http://cda.pl'
+movies = 'http://www.cda.pl/video/show/ca%C5%82e_filmy_or_ca%C5%82y_film_or_lektor_or_dubbing_or_napisy/p1?'
 
 HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
@@ -49,7 +50,8 @@ class cdapl:
         log.info('Starting cdapl.pl')
         self.cm = libCommon.common()
         self.parser = Parser.Parser()
-        self.up = urlparser.urlparser()
+        #self.up = urlparser.urlparser()
+        self.up = mrknow_urlparser.mrknow_urlparser()
         
     def listsMainMenu(self, table):
         for num, val in table.items():
@@ -86,17 +88,18 @@ class cdapl:
             for i in range(len(match)):
                 match1 = re.compile('<img height="90" width="120" src="(.*?)" (.*?)>(.*?)<span class="timeElem">(.*?)</span>(.*?)</a>(.*?)<a class="titleElem" href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[i][1])
                 if len(match1) > 0:
-                    self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[0][7]) + ' - '+ match1[0][3].strip(), match1[0][0], mainUrl+match1[0][6], 'aaaa', 'None', False, False)
+                    self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[0][7]) + ' - '+ match1[0][3].strip(), match1[0][0], mainUrlb+match1[0][6], 'aaaa', 'None', False, False)
         else:
             match2 = re.compile('<div class="block upload" id="dodane_video">(.*?)<div class="paginationControl">', re.DOTALL).findall(link)
             match3 = re.compile('<div class="videoElem">\n                  <a href="(.*?)" style="position:relative;width:120px;height:90px" title="(.*?)">\n                    <img width="120" height="90" src="(.*?)" title="(.*?)" alt="(.*?)" />\n ', re.DOTALL).findall(match2[0])
             if len(match3) > 0:
                 for i in range(len(match3)):
-                    self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match3[i][1]) , match3[i][2], mainUrl+match3[i][0], 'aaaa', 'None', True, False)
-
+                    self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match3[i][1]) , match3[i][2], mainUrlb+match3[i][0], 'aaaa', 'None', True, False)
+        #                     <span class="next-wrapper"><a onclick="javascript:changePage(2);return false;"       class="sbmBigNext btn-my btn-large fiximg" href="     "> &nbsp;Następna strona ></a></span>
         match10 = re.compile('<span class="next-wrapper"><a onclick="javascript:changePage\((.*?)\);return false;" class="sbmBigNext btn-my btn-large fiximg" href="(.*?)">(.*?)></a></span>', re.DOTALL).findall(link)
+        print("M10000",match10)
         if len(match10) > 0:
-            self.add('cdapl', 'categories-menu', 'Następna strona', 'None', 'None', mainUrl+match10[0][1], 'None', 'None', True, False)
+            self.add('cdapl', 'categories-menu', 'Następna strona', 'None', 'None', mainUrlb+match10[0][1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItems2(self, url):
@@ -106,11 +109,13 @@ class cdapl:
         if len(match) > 0:
             for i in range(len(match)):
                 match1 = re.compile('<div class="videoElem"> <a class="aBoxVideoElement" style="(.*?)" href="(.*?)" alt="(.*?)"  style="(.*?)"> <img width="120" height="90" src="(.*?)" class="block"/>', re.DOTALL).findall(match[i][1])
-                self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[0][2]) , match1[0][4], mainUrl+match1[0][1], 'aaaa', 'None', False, False)
+                if len(match1) > 0:
+                  self.add('cdapl', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[0][2]) , match1[0][4], mainUrlb+match1[0][1], 'aaaa', 'None', False, False)
 
         match10 = re.compile('<span class="next-wrapper"><a onclick="javascript:changePage\((.*?)\);return false;" class="sbmBigNext btn-my btn-large fiximg" href="(.*?)">(.*?)></a></span>', re.DOTALL).findall(link)
+        print ("m10",match10)
         if len(match10) > 0:
-            self.add('cdapl', 'main-menu', 'Następna strona', 'None', 'None', mainUrl+match10[0][1], 'None', 'None', True, False)
+            self.add('cdapl', 'main-menu', 'Następna strona', 'None', 'None', mainUr+match10[0][1], 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -197,7 +202,7 @@ class cdapl:
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
-        print ("Dane",name,category,title)
+        print ("Dane",url,name,category,title)
         
         if name == None:
             self.listsMainMenu(MENU_TAB)

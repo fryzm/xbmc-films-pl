@@ -79,6 +79,8 @@ class mrknow_urlparser:
     self.log.info("uvideo hosted by: " + host)
     self.log.info('URL: '+url + ' ' +referer)
     
+    if host == 'panel.erstream.com':
+        nUrl = self.parsererstream(url)
     if host == 'www.putlocker.com':
         nUrl = self.parserPUTLOCKER(url)
     if host == 'www.sockshare.com':
@@ -93,7 +95,7 @@ class mrknow_urlparser:
         nUrl = self.parserODSIEBIE(url) 
     if host == 'www.wgrane.pl':
         nUrl = self.parserWGRANE(url)
-    if host == 'www.cda.pl' or host == 'ebd.cda.pl' or host =='cda.pl':
+    if host == 'www.cda.pl' or host == 'ebd.cda.pl' or host == 'm.cda.pl' or host =='cda.pl':
         nUrl = self.parserCDA(url)
     if host == 'maxvideo.pl' or host == 'nextvideo.pl':
         nUrl = self.parserMAXVIDEO(url)
@@ -172,7 +174,17 @@ class mrknow_urlparser:
             
     return nUrl
 
-
+  def parsererstream(self,url):
+    req = urllib2.Request(url)
+    res = urllib2.urlopen(req)
+    finalurl = res.geturl()
+    if finalurl:   
+      print finalurl
+      return finalurl
+    else: 
+      return False
+  
+  
   def maxuploadtv(self,url,referer):
     query_data = { 'url': url.replace('file', 'embed'), 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)    
@@ -808,11 +820,11 @@ class mrknow_urlparser:
       return False
 
   def parserCDA(self,url):
-    HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
-    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    HOST = 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
+    query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match = re.search("""file: ['"](.+?)['"],""",link)
-    print ("Match",match)
+    print ("Match_1",match)
     if match:   
       linkVideo = match.group(1) + '|Cookie="PHPSESSID=1&Referer=http://static.cda.pl/player5.9/player.swf'
       print linkVideo

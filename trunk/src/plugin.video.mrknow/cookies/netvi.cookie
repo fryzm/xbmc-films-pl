@@ -2,6 +2,5 @@
 # http://www.netscape.com/newsref/std/cookie_spec.html
 # This is a generated file!  Do not edit.
 
-watch.netvi.tv	FALSE	/	FALSE		PHPSESSID	o66gt9l4m1vjg45vuqodnkv801
-watch.netvi.tv	FALSE	/	TRUE		netviapisessid	c054a6052a18a748ed0775cc531e2c2c
-watch.netvi.tv	FALSE	/	FALSE		sso_redirect	0
+videostar.pl	FALSE	/	FALSE		PHPSESSID	68m997l070m6742f1tviph7bh4
+videostar.pl	FALSE	/	TRUE		netviapisessid	86e5d7e480407036f435198de487dac1

@@ -2,7 +2,7 @@
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
-import urlparser,httplib
+import httplib
 import xml.etree.ElementTree as ET
 import json
 
@@ -13,7 +13,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, libCommon, Parser,Player
+import pLog, libCommon, Parser,Player, mrknow_urlparser
 
 log = pLog.pLog()
 
@@ -33,7 +33,8 @@ class filmboxmoovie:
         log.info('Starting filmboxmoovie.pl')
         self.cm = libCommon.common()
         self.parser = Parser.Parser()
-        self.up = urlparser.urlparser()
+        #self.up = urlparser.urlparser()
+        self.up = mrknow_urlparser.mrknow_urlparser()
         self.p = Player.Player()
 
 
@@ -97,7 +98,7 @@ class filmboxmoovie:
         for o in objs['response']['result']['videos']:
             print ("AAAAAAAA",o)
             #self.add('filmboxmoovie', 'playSelectedMovie', 'None', o['title'], o['custom_attributes']['largeImage'], o['source_url'], 'aaaa', 'None', True, False,'0',o['custom_attributes']['year_of_production'])
-            self.add('filmboxmoovie', 'playSelectedMovie', 'None', o['title'], o['custom_attributes']['largeImage'], o['custom_attributes']['sony_source_url']+turl, 'aaaa', 'None', False, False,'0',o['custom_attributes']['year_of_production'])
+            self.add('filmboxmoovie', 'playSelectedMovie', 'None', o['title'], o['custom_attributes']['largeImage'], o['custom_attributes']['sony_source_url'], 'aaaa', 'None', False, False,'0',o['custom_attributes']['year_of_production'])
         self.add('filmboxmoovie', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona)+1))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -167,9 +168,9 @@ class filmboxmoovie:
             log.info('url: ' + str(url))
             self.listsItems(url,strona)
         if name == 'playSelectedMovie':
-            self.p.LOAD_AND_PLAY_VIDEO(url,title,icon,year,'')
+            self.p.LOAD_AND_PLAY_VIDEO(url+'|User-Agent=Mozilla%2f5.0+(iPad%3b+CPU+OS+6_0+like+Mac+OS+X)+AppleWebKit%2f536.26+(KHTML%2c+​like+Gecko)+Version%2f6.0+Mobile%2f10A5355d+Safari%2f8536.25',title,icon,year,'')
         if name == 'playselectedmovie':
-            self.p.LOAD_AND_PLAY_VIDEO(url,title,icon,year,'')
+            self.p.LOAD_AND_PLAY_VIDEO(url+'|User-Agent=Mozilla%2f5.0+(iPad%3b+CPU+OS+6_0+like+Mac+OS+X)+AppleWebKit%2f536.26+(KHTML%2c+​like+Gecko)+Version%2f6.0+Mobile%2f10A5355d+Safari%2f8536.25',title,icon,year,'')
 
         
   

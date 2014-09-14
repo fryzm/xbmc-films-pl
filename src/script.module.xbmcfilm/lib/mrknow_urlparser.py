@@ -821,7 +821,7 @@ class mrknow_urlparser:
 
   def parserCDA(self,url):
     HOST = 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
-    query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    query_data = { 'url': url.replace('m.cda.pl','www.cda.pl'), 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match = re.search("""file: ['"](.+?)['"],""",link)
     print ("Match_1",match)

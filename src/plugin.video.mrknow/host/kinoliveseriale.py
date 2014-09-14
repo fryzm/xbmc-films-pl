@@ -19,7 +19,7 @@ log = pLog.pLog()
 mainUrl = 'http://alekino.tv/'
 catUrl = 'http://alekino.tv/seriale/'
 
-HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
+HOST = 'Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/30.0'
 
 MENU_TAB = {0: "Alfabetycznie",
             1: "Top dzisiaj",
@@ -221,6 +221,7 @@ class kinoliveseriale:
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         #VideoData['year'] = str(self.getMovieYear(link))
+        #                   #<a href="#" data-type="player" data-version="standard" data-id="54368">
         match1 = re.compile('<a href="#" data-type="player" data-version="standard" data-id="(.*?)">', re.DOTALL).findall(link)
         url1 = "http://alekino.tv/players/init/" + match1[0] + "?mobile=false"
         query_data = { 'url': url1, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }

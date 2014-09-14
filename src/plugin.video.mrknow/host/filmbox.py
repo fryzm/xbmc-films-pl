@@ -248,7 +248,7 @@ class filmbox:
             log.info('url: ' + str(url))
             self.listsItems(url)
         if name == 'playSelectedMovie':
-            self.p.LOAD_AND_PLAY_VIDEO(url, title, icon)
+            self.p.LOAD_AND_PLAY_VIDEO(url+'|User-Agent=Mozilla%2f5.0+(iPad%3b+CPU+OS+6_0+like+Mac+OS+X)+AppleWebKit%2f536.26+(KHTML%2c+​like+Gecko)+Version%2f6.0+Mobile%2f10A5355d+Safari%2f8536.25', title, icon)
 
         
   

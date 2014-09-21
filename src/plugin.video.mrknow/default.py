@@ -19,7 +19,7 @@ import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, mil
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
 import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
-import iptak,goodcast,streamon,strefavod,wrzuta,tvppl, interia
+import iptak,radio81,streamon,strefavod,wrzuta,tvppl, interia
 
 log = pLog.pLog()
 
@@ -34,12 +34,12 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
                9000: "noobroom.com"
 }
 TV_ONLINE_TABLE = {
-		     2100 : ["Film Box", 'filmbox'],
-             2200 : ["Plejer.tv", 'plej'],
+		#     2100 : ["Film Box", 'filmbox'],
+        #     2200 : ["Plejer.tv", 'plej'],
          #    2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
-             2500 : ["Netvi.tv", 'netvi'],
-             2600 : ["Goodcast.tv", 'goodcast'],
+        #     2500 : ["Netvi.tv", 'netvi'],
+             2600 : ["Radio81.pl [testy nic nie dziala]", 'radio81'],
          #    2700 : ["Streamon.pl", 'streamon'],
              2800 : ["MmTV.pl","mmtv"]
 }
@@ -167,8 +167,8 @@ class MrknowFilms:
     elif mode == 2500 or service == 'netvi':
         tv = netvi.netvi()
         tv.handleService()
-    elif mode == 2600 or service == 'goodcast':
-        tv = goodcast.goodcast()
+    elif mode == 2600 or service == 'radio81':
+        tv = radio81.radio81()
         tv.handleService()
     elif mode == 2700 or service == 'streamon':
         tv = streamon.streamon()

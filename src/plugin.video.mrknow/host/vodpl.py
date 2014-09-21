@@ -61,11 +61,13 @@ class vodpl:
         valTab = [] 
         strTab = [] 
         if category == "seriale":
-            data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
+            #data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
+            data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"False","device":"mobile","payment":["svod","ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
             vod_filmy = eval(self.getpage(data))
             vod_filmy = eval(self.getpage(data))
         elif category == "tv":
-            data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"tv"},"context":"onet/vod","range":[0,10000]}}'
+            #data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"tv"},"context":"onet/vod","range":[0,10000]}}'
+            data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"False","device":"mobile","payment":["svod","ppv"],"channel":"tv"},"context":"onet/vod","range":[0,10000]}}'
             vod_filmy = eval(self.getpage(data))
 
 
@@ -90,16 +92,18 @@ class vodpl:
         valTab = [] 
         strTab = [] 
         if category == 'filmy':
-            data = '{"method":"cmsQuery","id":"A564F3E3-9074-4847-9C2A-8902B2B43B76","jsonrpc":"2.0","params":{"sort":"TITLE_ASC","method":"aggregates","args":{"withoutDRM":"True","device":"mobile","names":"genres","payment":["-svod","-ppv"],"channel":"filmy"},"context":"onet/vod"}}'
+            #data = '{"method":"cmsQuery","id":"A564F3E3-9074-4847-9C2A-8902B2B43B76","jsonrpc":"2.0","params":{"sort":"TITLE_ASC","method":"aggregates","args":{"withoutDRM":"True","device":"mobile","names":"genres","payment":["-svod","-ppv"],"channel":"filmy"},"context":"onet/vod"}}'
+            data = '{"method":"cmsQuery","id":"A564F3E3-9074-4847-9C2A-8902B2B43B76","jsonrpc":"2.0","params":{"sort":"TITLE_ASC","method":"aggregates","args":{"withoutDRM":"False","device":"mobile","names":"genres","payment":["svod","ppv"],"channel":"filmy"},"context":"onet/vod"}}'
             vod_filmy = eval(self.getpage(data))
         elif category == "dokumenty":
-            data = '{"method":"cmsQuery","id":"CD01FEB2-201B-42F2-AB21-E380491F2AA6","jsonrpc":"2.0","params":{"sort":"TITLE_ASC","method":"aggregates","args":{"withoutDRM":"True","device":"mobile","names":"genres","payment":["-svod","-ppv"],"channel":"dokumenty"},"context":"onet/vod"}}'
+            #data = '{"method":"cmsQuery","id":"CD01FEB2-201B-42F2-AB21-E380491F2AA6","jsonrpc":"2.0","params":{"sort":"TITLE_ASC","method":"aggregates","args":{"withoutDRM":"True","device":"mobile","names":"genres","payment":["-svod","-ppv"],"channel":"dokumenty"},"context":"onet/vod"}}'
+            data = '{"method":"cmsQuery","id":"CD01FEB2-201B-42F2-AB21-E380491F2AA6","jsonrpc":"2.0","params":{"sort":"TITLE_ASC","method":"aggregates","args":{"withoutDRM":"False","device":"mobile","names":"genres","payment":["svod","ppv"],"channel":"dokumenty"},"context":"onet/vod"}}'
             vod_filmy = eval(self.getpage(data))
         elif category == "seriale":
-            data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
+            data = '{"method":"cmsQuery","id":"F165C38A-C2B7-4800-9D2D-4E5B30489639","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"False","device":"mobile","payment":["svod","ppv"],"channel":"seriale"},"context":"onet/vod","range":[0,10000]}}'
             vod_filmy = eval(self.getpage(data))
         vod_filmy = eval(self.getpage(data))
-#        print ("VOD FILMY", vod_filmy["result"]["data"])
+        print ("VOD FILMY", vod_filmy["result"]["data"])
         for e in vod_filmy["result"]["data"][0]["items"]:
             strTab.append(self.cm.html_special_chars(e["name"]))
             strTab.append(e["value"])
@@ -123,11 +127,11 @@ class vodpl:
     def listsItems(self, category, title,id1='',id2=''):
         valTab = [] 
         strTab = [] 
-        vod_getitems = '[{"method":"cmsQuery","id":"'+id2+'","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"True","device":"mobile","payment":["-svod","-ppv"],"genre":"'+title+'","channel":"'+category+'"},"context":"onet/vod","range":[0,10000]}}]'
+        vod_getitems = '[{"method":"cmsQuery","id":"'+id2+'","jsonrpc":"2.0","params":{"sort":"DATE_DESC","method":"search","args":{"withoutDRM":"False","device":"mobile","payment":["svod","ppv"],"genre":"'+title+'","channel":"'+category+'"},"context":"onet/vod","range":[0,10000]}}]'
         if category == 'seriale':
             vod_getitems = ''
         vod_items = eval(self.getpage(vod_getitems))
-#        print ("vod_items",vod_items)
+        print ("vod_items",vod_items)
         for e in vod_items[0]["result"]["data"]:
             title = self.cm.html_special_chars(e["title"])
             if 'poster' in e:
@@ -138,7 +142,10 @@ class vodpl:
             strTab.append(image)
             strTab.append(e["videoId"])
             strTab.append(e["ckmId"])
-            strTab.append(str(e["year"]))
+            if 'year' in e.keys():
+                strTab.append(str(e["year"]))
+            else:
+                strTab.append("1900")
             valTab.append(strTab)
             strTab = []
             valTab.sort(key = lambda x: x[0])

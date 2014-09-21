@@ -1,2069 +1,2088 @@
 ﻿1
-00:00:00,300 --> 00:00:02,000
-/W poprzednim odcinku...
+00:00:00,000 --> 00:00:01,900
+.:: GrupaHatak.pl ::.
 
 2
-00:00:02,000 --> 00:00:04,000
-/- To St. Louis?
-/- Kiedyś tak.
+00:00:01,900 --> 00:00:06,500
+SZPITAL PSYCHIATRYCZNY RAVENSCAR
+Północna Anglia
 
 3
-00:00:04,000 --> 00:00:06,000
-/Teraz nazywamy je
-/Defiance - oporem.
+00:00:08,600 --> 00:00:12,200
+Naprawdę mocno, skarbie.
 
 4
-00:00:06,000 --> 00:00:10,100
-/- To dobre miejsce do życia.
-/- Wszyscy mi to mówią.
+00:00:31,900 --> 00:00:35,850
+www.NapiProjekt.pl - nowa jakość napisów.
+Napisy zostały specjalnie dopasowane do Twojej wersji filmu.
 
 5
-00:00:10,400 --> 00:00:15,000
-/Stróż prawa powiedział,
-/że znalazł was na Pustkowiach.
+00:00:35,900 --> 00:00:39,300
+/Możecie mi wierzyć lub nie,
+/ale przybyłem tu z własnej woli.
 
 6
-00:00:15,000 --> 00:00:17,200
-- To moja córka.
-- Córka?
+00:00:39,300 --> 00:00:44,300
+/Nazywam się John Constantine
+/i jestem egzorcystą.
 
 7
-00:00:17,600 --> 00:00:20,100
-Muszę podziękować właścicielowi
-kopalni McCawleya,
+00:00:44,700 --> 00:00:49,600
+/W mojej pracy bywają dni,
+/o których chce się zapomnieć.
 
 8
-00:00:20,100 --> 00:00:21,900
-Rafe'owi McCawleyowi
-i jego dzieciom:
+00:00:53,200 --> 00:00:56,100
+/Lecz czasami nie można.
 
 9
-00:00:21,900 --> 00:00:24,300
-Luke'owi, Quentinowi i Christie.
+00:00:58,800 --> 00:01:02,100
+{y:u}{c:$aaeeff}Tłumaczenie:
+Igloo666
 
 10
-00:00:25,600 --> 00:00:29,100
-/Zorganizuję kilku zbirów
-/i złożę McCawleyowi wizytę.
+00:01:02,100 --> 00:01:05,000
+{y:u}{c:$aaeeff}Korekta:
+SQuall
 
 11
-00:00:29,100 --> 00:00:32,000
-/Nasz syn kocha
-/córkę McCawleya.
+00:01:05,300 --> 00:01:07,200
+Byłeś świadkiem
+morderstwa dziewczyny.
 
 12
-00:00:32,000 --> 00:00:33,500
-Czy nie byłoby pięknie,
+00:01:07,300 --> 00:01:09,800
+Rozmowa może ci pomóc
+w zrozumieniu, że to nie twoja wina.
 
 13
-00:00:33,500 --> 00:00:36,200
-/gdyby Alak i Christie
-/faktycznie się pobrali?
+00:01:09,800 --> 00:01:15,400
+- Świetnie, przejdźmy do tego.
+- Opowiedz, co stało się w Newcastle.
 
 14
-00:00:36,500 --> 00:00:39,100
-Co jest grane, Luke?
-Co ty kombinujesz?
+00:01:15,400 --> 00:01:16,600
+Pamiętasz mordercę?
 
 15
-00:00:39,100 --> 00:00:40,600
-Wrócę na kolację.
+00:01:16,700 --> 00:01:19,200
+Widzę tego demona zawsze,
+gdy zamykam oczy.
 
 16
-00:00:42,700 --> 00:00:45,700
-- Luke został zamordowany?
-- Znajdziemy sprawcę.
+00:01:19,300 --> 00:01:24,300
+- Demon? Masz na myśli mordercę?
+- Mam na myśli cholernego demona.
 
 17
-00:00:46,400 --> 00:00:48,200
-Zabiłeś mojego syna!
+00:01:24,400 --> 00:01:28,300
+Ohydna istota.
+Trąciła rzeźnią.
 
 18
-00:00:48,200 --> 00:00:51,100
-Wszyscy muszą uciekać.
+00:01:28,400 --> 00:01:32,100
+I widzisz? Czujesz się winny tego,
+że nie mogłeś jej ochronić,
 
 19
-00:00:51,400 --> 00:00:54,000
-/Oni nadchodzą.
-/Chcą zaatakować po zmroku.
+00:01:32,200 --> 00:01:35,900
+więc wyobrażasz sobie jej zabójcę
+jako wcielenie zła.
 
 20
-00:00:55,700 --> 00:00:57,300
-Ognia!
+00:01:35,900 --> 00:01:40,100
+- Jesteśmy bezsilni wobec demonów.
+- Nie wszyscy, wodzu.
 
 21
-00:01:12,500 --> 00:01:15,400
-- Ilu poległo?
-- 41.
+00:01:40,200 --> 00:01:46,500
+No tak. Zanim przyjechałeś tutaj
+trzy miesiące temu, byłeś egzorcystą,
 
 22
-00:01:24,300 --> 00:01:27,200
-24 GODZINY WCZEŚNIEJ
+00:01:46,600 --> 00:01:50,900
+demonologiem i...
+mistrzem czarnej magii?
 
 23
-00:01:59,500 --> 00:02:01,400
-Ty shtako tchórzu!
+00:01:50,900 --> 00:01:56,900
+Tak jest tam napisane?
+Powinienem zmienić na "amatora".
 
 24
-00:02:35,900 --> 00:02:41,500
-{Y:b}.:: GrupaHatak.pl ::.
->> Release24.pl <<
+00:01:57,100 --> 00:02:00,000
+Tak czy siak nie mógłbyś
+zapobiec śmierci tej dziewczyny.
 
 25
-00:02:41,500 --> 00:02:46,300
-{Y:b}Tłumaczenie: k-rol
+00:02:00,100 --> 00:02:02,400
+Astry!
 
 26
-00:02:46,300 --> 00:02:51,500
-{Y:b}Korekta: dzidek9216
+00:02:02,400 --> 00:02:07,900
+Miała na imię Astra.
+I poradzę sobie z jej śmiercią.
 
 27
-00:02:51,900 --> 00:02:58,400
-{Y:b}facebook.com/GrupaHatak
-facebook.com/Release24
+00:02:08,100 --> 00:02:11,600
+Lecz jej potępienie nie daje mi spokoju.
+Została zaciągnięta do piekła.
 
 28
-00:02:58,400 --> 00:03:05,700
-{Y:b}DEFIANCE 1x02
-Down in the Ground Where the Dead Men Go
+00:02:11,600 --> 00:02:13,800
+- John, spójrz prawdziwe w oczy.
+- Miała 9 lat,
 
 29
-00:03:36,800 --> 00:03:39,000
-Elahu Bandiku z liro Yuke...
+00:02:13,900 --> 00:02:17,000
+ - a będzie cierpieć całą wieczność.
+- Jedynym cierpiącym jesteś ty.
 
 30
-00:03:39,000 --> 00:03:42,600
-szacowny Datak Tarr
-z liro Shange
+00:02:17,000 --> 00:02:18,700
+- To moja sprawa.
+- Demony nie istnieją.
 
 31
-00:03:42,600 --> 00:03:45,500
-oskarża cię o tchórzostwo.
+00:02:18,800 --> 00:02:22,200
+Cały czas mi to powtarzasz!
 
 32
-00:03:45,900 --> 00:03:50,400
-- Zaprzeczasz tym zarzutom?
-- Nie.
+00:02:22,300 --> 00:02:28,600
+A teraz spraw, bym w to uwierzył.
+Za to wam płacę, prawda?
 
 33
-00:03:50,400 --> 00:03:52,600
-Taka jest prawda.
+00:02:30,200 --> 00:02:36,200
+Postanowiłem dziś zerwać
+z moimi nałogowymi rytuałami.
 
 34
-00:03:53,100 --> 00:03:59,300
-Mój liro jest postrzegany
-według mojego zachowania.
+00:02:36,400 --> 00:02:39,700
+Na przykład gdy robię sobie herbatę,
+muszę ją zamieszać 9 razy,
 
 35
-00:04:00,700 --> 00:04:05,900
-Zatem niech rozpocznie się
-twój rytuał oczyszczający.
+00:02:39,800 --> 00:02:44,800
+a potem mam 9 minut
+na wypicie jej w 9 łykach.
 
 36
-00:04:09,400 --> 00:04:11,000
-Co oni robią?
+00:02:45,300 --> 00:02:49,100
+Każda kombinacja z liczbą dziewięć
+odstrasza złe rzeczy.
 
 37
-00:04:11,000 --> 00:04:13,500
-To castitiański
-rytuał oczyszczający.
+00:02:49,100 --> 00:02:55,300
+Ale dzisiaj postanowiłem
+zaniechać owych rytuałów
 
 38
-00:04:14,100 --> 00:04:16,700
-Przypomina tortury.
+00:02:55,700 --> 00:03:00,500
+i nie stało się nic strasznego.
+Zamieszałem ją tylko raz.
 
 39
-00:04:16,700 --> 00:04:21,500
-Myślałem, że zostawiliśmy to
-za sobą na Pustkowiach.
+00:03:31,000 --> 00:03:35,700
+Panienko?
+Cokolwiek tam bazgrzesz, przestań.
 
 40
-00:04:33,200 --> 00:04:35,200
-Dość tego.
+00:03:39,900 --> 00:03:42,100
+Panienko?
 
 41
-00:04:35,800 --> 00:04:38,900
-Zabawiliście się,
-a teraz go odetnijcie.
+00:03:42,200 --> 00:03:46,000
+Nie.
+Nie, nie, nie.
 
 42
-00:04:48,300 --> 00:04:50,100
-To dezerter.
+00:03:46,500 --> 00:03:49,700
+To nie mój problem.
 
 43
-00:04:50,100 --> 00:04:52,200
-Rzucił broń
-i zbiegł przed Volgami.
+00:03:52,300 --> 00:03:55,000
+Cholera jasna.
 
 44
-00:04:52,200 --> 00:04:56,000
-Ale miał dość odwagi,
-by w ogóle stanąć do walki.
+00:03:55,800 --> 00:04:00,400
+Zwracam się do istoty wewnątrz.
+Zdradź mi swoje imię.
 
 45
-00:04:56,000 --> 00:04:58,700
-Wielu traci zimną krew
-w swojej pierwszej bitwie.
+00:04:01,400 --> 00:04:04,100
+Usłysz moje słowa!
 
 46
-00:04:58,700 --> 00:05:02,700
-Nie Castitianie.
-Zgodnie z prawem naszego boga, Rayetso,
+00:04:06,500 --> 00:04:10,600
+W imieniu Stwórcy
+nakazuję ci opuścić to miejsce.
 
 47
-00:05:02,700 --> 00:05:04,600
-ucieczka z pola walki
-odbija się na reputacji
+00:04:10,600 --> 00:04:15,300
+Zaklinając cię na krew człowieka,
+opuść to miejsce!
 
 48
-00:05:04,600 --> 00:05:06,200
-braci z twojego liro lub kasty.
+00:04:45,600 --> 00:04:49,500
+Nie martw się, skarbie.
+To tylko farba.
 
 49
-00:05:06,200 --> 00:05:11,600
-Elah Bandik okrył hańbą
-Castitian z Defiance.
+00:04:49,800 --> 00:04:54,600
+- Co się stało?
+- Zły duch pożyczył twoje ciało.
 
 50
-00:05:11,600 --> 00:05:17,700
-Ten mały człowieczek?
+00:04:54,900 --> 00:04:57,000
+LIV/ŚMIERĆ
 
 51
-00:05:17,700 --> 00:05:20,800
-Mój lud nie musi
-tłumaczyć swojej religii,
+00:04:59,000 --> 00:05:02,900
+I chyba po to,
+by wysłać mi wiadomość.
 
 52
-00:05:21,000 --> 00:05:23,200
-ale robimy to dla dobra Bandika.
+00:05:03,000 --> 00:05:07,500
+- Co ona oznacza?
+- Że straciłem tu czas.
 
 53
-00:05:23,200 --> 00:05:25,700
-- Z pewnością.
-- Bez tego rytuału
+00:05:09,700 --> 00:05:12,700
+Robota czeka.
 
 54
-00:05:25,700 --> 00:05:28,600
-jego fesho nie będzie mogła przejść
-do wiecznego życia.
+00:05:19,700 --> 00:05:22,300
+To jej sprawka.
 
 55
-00:05:28,600 --> 00:05:31,000
-Nie interesuje mnie to.
-Koniec z tym.
+00:05:25,600 --> 00:05:30,600
+Kogo czeka lepsza przyszłość?
+Mnie czy tenorkę z supermarketu?
 
 56
-00:05:31,000 --> 00:05:33,800
-Proszę, nie.
-Nie mam wyboru.
+00:05:30,600 --> 00:05:31,900
+- Tenorkę.
+- Co?
 
 57
-00:05:34,100 --> 00:05:37,600
-Muszę to zrobić dla rodziny.
+00:05:31,900 --> 00:05:37,100
+Przynajmniej opłaci kredyt studencki.
+Rzuć ciasteczko z wróżbą.
 
 58
-00:05:38,900 --> 00:05:42,200
-Odetnij go albo was przymknę.
+00:05:37,100 --> 00:05:39,500
+Nie zwracasz uwagi na to,
+że nasi klienci
 
 59
-00:05:42,200 --> 00:05:45,400
-- Zacznę od ciebie.
-- Co tu się dzieje?
+00:05:39,600 --> 00:05:42,000
+przeżywali przygody
+w wypożyczonych samochodach?
 
 60
-00:05:45,500 --> 00:05:49,500
-Mam nadzieję, że przyszła pani
-założyć kaganiec swojemu stróżowi prawa.
+00:05:42,000 --> 00:05:46,700
+A my myjemy okna i szukamy wgnieceń.
+Chcę poznać historię tych wgnieceń.
 
 61
-00:05:52,300 --> 00:05:54,200
-Nasze porozumienie
-z pani poprzedniczką
+00:05:46,700 --> 00:05:49,900
+"Porażka to okazja do tego,
+by następnym razem postarać się lepiej".
 
 62
-00:05:54,200 --> 00:05:56,200
-sięga czasów
-założenia tego miasta.
+00:05:49,900 --> 00:05:52,200
+W łóżku.
 
 63
-00:05:56,200 --> 00:06:01,400
-Zamierza pani je rozwiązać
-trzy tygodnie po objęciu tej funkcji?
+00:05:52,200 --> 00:05:55,700
+- Zawsze to dodajesz na koniec.
+- Serio?
 
 64
-00:06:08,500 --> 00:06:14,800
-Szanuję castitiańską tradycję
-równie mocno jak burmistrz Nicky.
+00:05:55,800 --> 00:05:58,800
+Sprawdź swoją wróżbę.
 
 65
-00:06:18,100 --> 00:06:22,100
-Ograniczcie ten rytuał do Dziupl.
+00:05:59,400 --> 00:06:03,800
+Pusta karteczka.
+Świetnie, nie mam przyszłości.
 
 66
-00:06:22,100 --> 00:06:25,000
-Naturalnie, Amando.
+00:06:04,900 --> 00:06:08,700
+- Weź jedno na drogę.
+- Dzięki.
 
 67
-00:06:25,000 --> 00:06:27,700
-Proszę się do mnie zwracać
-"pani burmistrz".
+00:06:09,200 --> 00:06:11,300
+Widzimy się rano.
+Nie zapomnij pozamykać.
 
 68
-00:06:30,200 --> 00:06:33,100
-Schowaj broń.
+00:06:11,300 --> 00:06:15,500
+- Dobranoc, Liv.
+- Do później.
 
 69
-00:06:35,200 --> 00:06:37,800
-Chodź ze mną.
+00:06:31,600 --> 00:06:34,400
+ALARM WŁĄCZONY
 
 70
-00:06:48,300 --> 00:06:51,700
-Przepraszam.
-Wyglądałaś na zdenerwowaną.
+00:06:56,500 --> 00:06:58,900
+WYKRYTO PRZESZKODĘ
 
 71
-00:06:52,200 --> 00:06:55,000
-Widziałam gorsze rzeczy.
+00:07:30,100 --> 00:07:32,400
+O Boże!
 
 72
-00:07:01,800 --> 00:07:05,400
-Nie sprzeczają się o cenę łazika,
-tylko chcą zabić kogoś torturami.
+00:08:36,000 --> 00:08:40,600
+Czołem. Co my tu mamy?
+Wpadłaś w tarapaty, skarbie?
 
 73
-00:07:05,400 --> 00:07:08,200
-Nie jesteś stąd.
-Wiem, jak to dla ciebie wygląda.
+00:08:40,600 --> 00:08:44,400
+- Nie zbliżaj się!
+- Nazywam się John Constantine.
 
 74
-00:07:08,200 --> 00:07:09,400
-Wątpię.
+00:08:44,400 --> 00:08:47,900
+Mierzysz tym w siebie.
 
 75
-00:07:09,800 --> 00:07:12,500
-Zastanawiałeś się, czemu w Defiance
-jest tak niewielu Irathienian?
+00:08:47,900 --> 00:08:52,600
+- Słowo, że to nie ja na ciebie poluję.
+- Co? Kto na mnie poluje?
 
 76
-00:07:12,500 --> 00:07:15,300
-- Co ma piernik do wiatraka?
-- Osiem lat temu,
+00:08:52,600 --> 00:08:55,700
+- Bardziej "coś".
+- Nie zbliżaj się!
 
 77
-00:07:15,300 --> 00:07:18,100
-gdy założono Defiance,
-był ich ponad tysiąc.
+00:08:55,700 --> 00:08:59,400
+Nie podchodź!
+Nie zbliżaj się do mnie.
 
 78
-00:07:18,100 --> 00:07:21,100
-Z jakiegoś powodu
-nie dawali wiary szczepieniom dzieci.
+00:08:59,500 --> 00:09:02,200
+Łatwiej nie wierzyć w zagrożenie,
+niż się z nim zmierzyć.
 
 79
-00:07:21,100 --> 00:07:22,200
-Burmistrz Nicky widziała,
+00:09:02,300 --> 00:09:04,700
+Ale jeśli mnie nie podsłuchasz,
+do rana będziesz martwa.
 
 80
-00:07:22,200 --> 00:07:24,600
-jak irathieńskie dzieci
-umierają bez przyczyny.
+00:09:04,700 --> 00:09:07,400
+Dzwonię na policję.
 
 81
-00:07:24,600 --> 00:07:27,600
-Wpisali więc przymusowe szczepienia
-do praw miejskich.
+00:09:07,400 --> 00:09:12,100
+Skoro tak ci na tym zależy,
+to tutaj mogą mnie znaleźć.
 
 82
-00:07:28,400 --> 00:07:32,500
-Zastępcy chodzili po domach,
-na siłę szczepiąc irathieńskie dzieci.
+00:09:12,100 --> 00:09:15,800
+Albo ty możesz,
+jeśli jesteś fanką oddychania.
 
 83
-00:07:32,500 --> 00:07:35,000
-Irathienianie chwycili za broń
-i doszło do powstania.
+00:09:18,100 --> 00:09:23,500
+- "Mistrz czarnej magii"?
+- Zamówiłem już nowe.
 
 84
-00:07:35,000 --> 00:07:36,000
-Co się stało?
+00:09:40,700 --> 00:09:43,900
+Kimkolwiek jesteś, pamiętaj,
+że ze mną nie ma przelewek!
 
 85
-00:07:37,200 --> 00:07:40,700
-A jak myślisz? Mieli pałki,
-a my votańskie miotacze.
+00:09:44,000 --> 00:09:46,600
+Zapytaj kogokolwiek!
 
 86
-00:07:42,700 --> 00:07:46,500
-Część zginęła,
-pozostali odeszli.
+00:09:52,500 --> 00:09:56,400
+- Nie powinieneś tu być.
+- Ty również.
 
 87
-00:07:46,600 --> 00:07:49,300
-Rada miejska nieformalnie
-wówczas zdecydowała,
+00:09:56,700 --> 00:10:00,900
+- Podziwiasz swój wyczyn?
+- To nie moja sprawka.
 
 88
-00:07:49,300 --> 00:07:53,300
-by pozwolić wszystkim ośmiu rasom
-honorować ich tradycyjne wartości.
+00:10:00,900 --> 00:10:06,300
+- Dlaczego znów tu jesteś, John?
+- Przez młodą kobietę, rzecz jasna.
 
 89
-00:07:55,500 --> 00:07:59,600
-Spójrz mi w oczy i powiedz,
-że to, co się tam działo, było słuszne.
+00:10:06,500 --> 00:10:09,500
+- Na prośbę starego znajomego.
+- Pewnie martwego znajomego.
 
 90
-00:08:00,200 --> 00:08:02,900
-To konieczność.
+00:10:09,600 --> 00:10:12,600
+Musiał kogoś opętać,
+ale przykuło to moją uwagę.
 
 91
-00:08:19,300 --> 00:08:23,400
-- Nie powstrzymasz tego?
-- Nie.
+00:10:12,600 --> 00:10:16,300
+- Kim jesteś?
+- Możesz mówić mi Manny.
 
 92
-00:08:24,500 --> 00:08:26,200
-Nie jestem gotowy
-wystrzelać całe miasto,
+00:10:16,400 --> 00:10:19,500
+- Poproszono mi, bym nad tobą czuwał.
+- Czuwał?
 
 93
-00:08:26,200 --> 00:08:29,600
-żeby uratować mężczyznę,
-który sam tego nie chce.
+00:10:19,500 --> 00:10:22,800
+Bez obrazy, mój ty paziu,
+ale nie lubię towarzystwa aniołów.
 
 94
-00:08:29,600 --> 00:08:33,000
-Pani burmistrz obiecała,
-że postara się to naprawić.
+00:10:22,800 --> 00:10:26,300
+- Załatwiłbyś moją reputację.
+- Podobnie czyni szpital psychiatryczny.
 
 95
-00:08:33,000 --> 00:08:37,100
-- Obietnice są shtako warte.
-- Zależy, kto je składa.
+00:10:26,400 --> 00:10:29,900
+Już się wypisałem.
+Polepszyło mi się.
 
 96
-00:08:38,100 --> 00:08:41,700
-Przekonajmy się,
-ile warte jest jej słowo.
+00:10:29,900 --> 00:10:33,700
+Słyszysz?
+Nic mi nie jest!
 
 97
-00:09:06,700 --> 00:09:09,800
-Pobudka, Ben.
+00:10:35,400 --> 00:10:40,100
+- Możesz już odfrunąć.
+- Nie jest z tobą dobrze, John.
 
 98
-00:09:24,500 --> 00:09:28,400
-Vritex?
-Mogłeś mnie tym zabić.
+00:10:40,100 --> 00:10:44,700
+Wysłałeś dziewczynkę do piekła.
+A wraz z nią własną duszę.
 
 99
-00:09:28,400 --> 00:09:31,300
-Najważniejsze było,
-żebyś się nie wygadał.
+00:10:44,700 --> 00:10:49,700
+Nie mogę zmienić twojego losu,
+ale mogę złagodzić twoje cierpienie.
 
 100
-00:09:31,300 --> 00:09:33,800
-Nie zdradziłbym was.
+00:10:50,300 --> 00:10:55,200
+- Idź pożywić się stratą kogoś innego.
+- Twoja jest wyśmienita.
 
 101
-00:09:33,800 --> 00:09:39,100
-To świetnie, biorąc pod uwagę,
-co w takim wypadku spotkałoby twoją rodzinę.
+00:10:55,200 --> 00:10:58,500
+O mnie się nie martw, koleżko.
+Poradzę sobie z każdym demonem.
 
 102
-00:09:42,000 --> 00:09:45,500
-Lub co się stanie,
-jeśli po raz drugi mnie zawiedziesz.
+00:10:58,600 --> 00:11:02,000
+Nie byłbym taki pewny.
+Nie robiłeś tego przez długi czas.
 
 103
-00:09:52,000 --> 00:09:55,000
-Jak to?
-Zrobiłem, co mi kazałeś.
+00:11:02,000 --> 00:11:06,700
+A tutaj mamy sporą panikę.
+Ludzie czują, że coś nadchodzi.
 
 104
-00:09:55,000 --> 00:09:56,700
-Wysadziłem sieć.
+00:11:07,600 --> 00:11:10,500
+A co niby nadchodzi?
 
 105
-00:09:56,700 --> 00:10:00,400
-Mimo to Volgowie zostali pokonani,
-a miasto nadal istnieje.
+00:11:12,500 --> 00:11:15,200
+Powinniśmy stąd zniknąć.
 
 106
-00:10:01,800 --> 00:10:03,800
-Pokonali Volgów?
+00:11:17,900 --> 00:11:20,100
+Zaczekaj!
 
 107
-00:10:03,800 --> 00:10:05,400
-- Jak?
-- To bez znaczenia.
+00:11:20,700 --> 00:11:23,600
+Co nadchodzi?!
 
 108
-00:10:05,400 --> 00:10:09,700
-- Pamiętasz pierwotny plan?
-- Kopalnie.
+00:11:24,500 --> 00:11:27,900
+- Uratowałaś mi życie.
+- Bez obaw, pracujemy obok siebie.
 
 109
-00:10:10,000 --> 00:10:13,700
-Ale czy to nie zniszczy
-obiektu waszych poszukiwań?
+00:11:27,900 --> 00:11:31,200
+Dzięki za podwózkę, Talia.
 
 110
-00:10:13,800 --> 00:10:15,400
-Mam wiarę.
+00:11:31,300 --> 00:11:34,600
+Dobrze, że pozbyłaś się tamtego dziwaka.
+Pewnie jakiś gwałciciel.
 
 111
-00:10:15,400 --> 00:10:18,000
-Rób, co ci kazano.
+00:11:34,700 --> 00:11:39,000
+- No, wystraszył mnie.
+- Na pewno wszystko gra?
 
 112
-00:10:18,000 --> 00:10:20,800
-Nie mogę znów
-przez to przechodzić.
+00:11:39,200 --> 00:11:42,300
+Tak, dzięki.
 
 113
-00:10:20,800 --> 00:10:25,300
-- Nie pisałem się na to.
-- Pisałeś się na wszystko, co konieczne, Ben.
+00:11:42,400 --> 00:11:46,000
+Pewnie nici z zaśnięcia.
 
 114
-00:11:01,800 --> 00:11:03,100
-Cześć, tato.
+00:11:47,600 --> 00:11:51,400
+- Śpij spokojnie.
+- Ty też, dobranoc.
 
 115
-00:11:03,100 --> 00:11:06,100
-Postanowiłaś
-wrócić do domu?
+00:12:13,800 --> 00:12:16,300
+ZAUFAJ MU
 
 116
-00:11:08,700 --> 00:11:12,900
-Widziałam cię wczoraj
-na nabożeństwie za Luke'a.
+00:13:18,500 --> 00:13:21,100
+- Proszę zostać w mieszkaniu.
+- Co się dzieje?
 
 117
-00:11:13,400 --> 00:11:16,400
-Unikałam cię,
-bo nie wiedziałam, co powiedzieć.
+00:13:21,200 --> 00:13:26,600
+- To miejsce zbrodni.
+- O mój Boże, to Talia.
 
 118
-00:11:16,400 --> 00:11:19,100
-To był błąd.
+00:13:27,300 --> 00:13:29,700
+Talia...
 
 119
-00:11:20,400 --> 00:11:24,100
-Bez Luke'a musimy dać sobie spokój
-z drobnostkami i trzymać się razem.
+00:13:59,100 --> 00:14:01,800
+Co jest?
 
 120
-00:11:24,100 --> 00:11:29,900
-Twój ślub z dzieciakiem Dataka
-to taka drobnostka?
+00:14:24,500 --> 00:14:29,500
+Zaczekaj!
+Zaraz cię wydostanę!
 
 121
-00:11:30,000 --> 00:11:30,900
-Daj spokój, tato.
+00:14:39,800 --> 00:14:42,200
+KORONER
 
 122
-00:11:30,900 --> 00:11:33,300
-Przyjmij gałązkę oliwną
-i jedzmy.
+00:14:53,300 --> 00:14:56,300
+Dzięki za podwózkę.
 
 123
-00:11:33,300 --> 00:11:35,300
-Jak mam jeść,
-gdy widzę, jak ten duszek...
+00:15:00,300 --> 00:15:04,000
+Zawsze dojeżdżasz do pracy
+z gliniarzami?
 
 124
-00:11:35,300 --> 00:11:38,900
-- Nie mów tak o nim.
-- Ten Castitianin cię obmacuje.
+00:15:05,400 --> 00:15:10,900
+- Wczoraj zginęła moja przyjaciółka.
+- Przykro mi.
 
 125
-00:11:39,200 --> 00:11:41,700
-Myślisz, że tego
-chciałby twój zmarły brat?
+00:15:14,400 --> 00:15:19,500
+- To coś było na moich drzwiach. Co to?
+- Oko Horusa. Egipski symbol ochrony.
 
 126
-00:11:41,700 --> 00:11:45,000
-To już nie ma znaczenia.
+00:15:19,500 --> 00:15:22,700
+- A przynajmniej tak powiadają.
+- Ktoś wtedy był w moim bloku.
 
 127
-00:11:45,000 --> 00:11:46,700
-Liczy się to,
-czego my chcemy.
+00:15:22,700 --> 00:15:26,500
+Wydaje mi się,
+że to on zabił Talię.
 
 128
-00:11:46,700 --> 00:11:49,500
-Kocham Alaka Tarra
-i chcę go poślubić.
+00:15:26,800 --> 00:15:30,800
+Liv, poznaj Chasa,
+mojego najstarszego kumpla.
 
 129
-00:11:51,800 --> 00:11:55,700
-A ja chcę, żebyś odwołała ślub
-i wróciła do domu.
+00:15:30,900 --> 00:15:35,500
+- To on zrobił znak, który cię ocalił.
+- Cieszę się, że jesteś bezpieczna.
 
 130
-00:11:56,300 --> 00:11:59,000
-A jeśli tego nie zrobię?
+00:15:35,500 --> 00:15:39,300
+Gadatliwy to on nie jest.
+Ale przejdźmy do interesów.
 
 131
-00:12:00,200 --> 00:12:02,900
-Jeśli wyjdziesz,
-to nie wracaj.
+00:15:39,300 --> 00:15:41,800
+Jeśli cię gdzieś nie ukryjemy,
+ofiar będzie przybywać.
 
 132
-00:12:09,700 --> 00:12:12,800
-Od śmierci mamy tylko Christie
-trzymała tę rodzinę w kupie,
+00:15:41,800 --> 00:15:45,300
+Dlaczego ktoś chce mnie zabić?
+Nie jestem nikim szczególnym.
 
 133
-00:12:12,800 --> 00:12:15,500
-a ty odwracasz się od niej,
-bo pierwszy raz robi coś,
+00:15:45,300 --> 00:15:48,100
+Mówię to z ciężkim sercem,
+skarbie, ale tak nie jest.
 
 134
-00:12:15,500 --> 00:12:16,800
-co ci się nie podoba?
+00:15:48,100 --> 00:15:53,000
+Znałem twojego ojca, Jaspera Wintersa.
+Obiecałem mu, że będę cię chronił.
 
 135
-00:12:16,800 --> 00:12:19,700
-- Za to Luke...
-- Co z nim?
+00:15:53,000 --> 00:15:57,600
+To niemożliwe. Mój ojciec zmarł
+przed moimi narodzinami.
 
 136
-00:12:20,700 --> 00:12:24,100
-Twój brat
-był dobrym człowiekiem.
+00:15:57,600 --> 00:16:01,700
+Okłamano cię.
+Jasper zginął w zeszłym roku.
 
 137
-00:12:25,100 --> 00:12:29,200
-Więc czemu spotykał się sam
-w lesie z Benem Darisem,
+00:16:03,700 --> 00:16:06,800
+Był dobrym człowiekiem.
 
 138
-00:12:29,200 --> 00:12:33,100
-który ściągnął na nas Volgów?
+00:16:06,900 --> 00:16:09,100
+Trzymaj.
 
 139
-00:13:00,700 --> 00:13:02,400
-Zaraz będę.
+00:16:09,500 --> 00:16:14,300
+Otwórz. Należał do niego
+i chciał, byś go otrzymała.
 
 140
-00:13:02,400 --> 00:13:06,100
-Quentin, przyprowadź łazika.
-W kopalni doszło do wybuchu.
+00:16:26,900 --> 00:16:30,700
+Niech wszyscy stąd uciekają!
+Chas, wyprowadź ich.
 
 141
-00:13:06,500 --> 00:13:08,100
-/Twojemu zastępcy
-/nic nie będzie,
+00:16:30,700 --> 00:16:34,000
+- Uciekajcie!
+- Siedziałabym dokładnie tutaj.
 
 142
-00:13:08,100 --> 00:13:10,200
-/ale nie ma śladu
-/po Benie Darisie.
+00:16:34,000 --> 00:16:37,700
+Ktokolwiek na ciebie poluje,
+potrafi wyczuć twoją energię.
 
 143
-00:13:10,200 --> 00:13:13,000
-Odbicie go w biały dzień
-to spore ryzyko.
+00:16:37,700 --> 00:16:41,500
+I nie zrezygnuje,
+dopóki nie umrzesz.
 
 144
-00:13:14,100 --> 00:13:17,200
-Ktokolwiek pomógł go uruchomić,
-użył vriteksu.
+00:16:47,700 --> 00:16:50,600
+O mój Boże!
+Talia?
 
 145
-00:13:17,200 --> 00:13:19,800
-To niebezpieczny lek
-używany w medycynie polowej.
+00:16:51,600 --> 00:16:55,400
+- Ona żyje.
+- Nie. Coś ją wykorzystuje.
 
 146
-00:13:19,800 --> 00:13:22,800
-Być może to robota
-byłego żołnierza.
+00:16:55,500 --> 00:16:59,600
+Nic się tutaj nie zgadza.
+Nigdy nie działają tak otwarcie.
 
 147
-00:13:23,600 --> 00:13:25,800
-Quentin McCawley nas wezwał.
+00:16:59,600 --> 00:17:03,100
+Kim jesteś?
+Kto cię przysłał?
 
 148
-00:13:25,800 --> 00:13:29,700
-W kopalni doszło do eksplozji.
+00:17:06,600 --> 00:17:08,900
+/DIAB...
 
 149
-00:13:38,400 --> 00:13:39,900
-Tu jesteś.
+00:17:10,800 --> 00:17:13,700
+- Liv?
+- Zniknęła.
 
 150
-00:13:39,900 --> 00:13:42,700
-Wasz koleżka, Ben Daris,
-zaatakował mojego strażnika,
+00:17:13,900 --> 00:17:16,400
+Świetnie.
 
 151
-00:13:42,700 --> 00:13:46,400
-ukradł sporo gulanitu
-i zszedł pod ziemię.
+00:17:18,700 --> 00:17:23,800
+Mom, spójrz mi w oczy i powiedz,
+kiedy naprawdę umarł mój tata.
 
 152
-00:13:46,400 --> 00:13:49,400
-Wysadził szyb L9,
-żebyśmy nie mogli za nim pójść.
+00:17:25,000 --> 00:17:28,500
+- Nie jestem gotowa na tę rozmowę.
+- Przez całe życie to ukrywałaś.
 
 153
-00:13:49,400 --> 00:13:53,100
-To wasza wina,
-że morderca mojego syna jest na wolności.
+00:17:28,500 --> 00:17:32,800
+Mam gdzieś, że nie jesteś gotowa.
+Kim on był?
 
 154
-00:13:53,100 --> 00:13:56,300
-Złapiemy go.
-Ilu górników jest w szybie?
+00:17:33,000 --> 00:17:36,400
+Zwyczajnym chłopakiem,
+którego poznałam na koncercie.
 
 155
-00:13:56,300 --> 00:13:58,000
-Ani jednego.
-Szyb jest opuszczony.
+00:17:36,400 --> 00:17:38,800
+Nie chciał mieć z tobą kontaktu.
 
 156
-00:13:58,000 --> 00:14:00,000
-Prowadzi w dół
-do starego St. Louis.
+00:17:38,800 --> 00:17:42,400
+Twoja świętej pamięci babcia
+również tego nie chciała.
 
 157
-00:14:00,800 --> 00:14:03,500
-Starego St. Louis?
+00:17:42,400 --> 00:17:44,400
+Znalazł mnie
+jego przyjaciel.
 
 158
-00:14:03,900 --> 00:14:08,600
-Gdy maszyny przekształcające oszalały,
-większość miast została zrównana z ziemią.
+00:17:44,500 --> 00:17:47,200
+To niemożliwe.
+Jasper nie wiedział, gdzie mieszkamy.
 
 159
-00:14:08,600 --> 00:14:11,100
-W St. Louis stało się
-coś dziwnego.
+00:17:47,200 --> 00:17:52,500
+Powiedział, że to należało do niego.
+Widziałaś kiedyś coś takiego?
 
 160
-00:14:11,100 --> 00:14:13,500
-Przekształcona ziemia
-utworzyła fałdy nad miastem
+00:17:55,300 --> 00:17:58,200
+Liv?
+O co chodzi?
 
 161
-00:14:13,500 --> 00:14:15,400
-i stwardniała,
-nim je zmiażdżyła.
+00:17:58,600 --> 00:18:00,800
+Babciu!
 
 162
-00:14:15,400 --> 00:14:17,900
-Niektóre części miasta
-nadal pozostają nietknięte.
+00:18:03,100 --> 00:18:07,300
+Liv? Skarbie?!
+Co się stało?
 
 163
-00:14:17,900 --> 00:14:20,600
-- Nadal coś tu nie gra.
-- Co masz na myśli?
+00:18:11,900 --> 00:18:15,000
+- Co się ze mną dzieje?!
+- Budzisz się.
 
 164
-00:14:20,700 --> 00:14:24,000
-Czemu Ben ucieka tędy,
-skoro sieć nie działa?
+00:18:15,000 --> 00:18:18,000
+Dostrzegasz prawdziwą naturę świata.
+Tak jak twój ojciec.
 
 165
-00:14:24,000 --> 00:14:27,300
-- Po co uwięził się na dole?
-- Ukradł 20 kilogramów gulanitu.
+00:18:18,100 --> 00:18:21,800
+- I co to oznacza?!
+- Oj ta niecierpliwość.
 
 166
-00:14:27,400 --> 00:14:29,900
-Do wysadzenia tunelu
-wystarczą dwa.
+00:18:21,900 --> 00:18:25,500
+Choroba tocząca XXI wiek.
 
 167
-00:14:29,900 --> 00:14:33,600
-Zostaje 18 kilogramów.
-Wystarczy na sporą bombę.
+00:18:25,500 --> 00:18:28,500
+Gdzie masz naszyjnik?
 
 168
-00:14:33,600 --> 00:14:36,800
-To za mało,
-by zniszczyć stamtąd Defiance.
-
-169
-00:14:36,800 --> 00:14:38,900
-Może nam powiedzieć,
-kto stoi za atakiem Volgów.
-
-170
-00:14:38,900 --> 00:14:41,200
-Musimy go ścigać.
-Długo potrwa oczyszczenie drogi?
-
-171
-00:14:41,200 --> 00:14:43,500
-- Minimum 4 godziny.
-- To za długo.
-
-172
-00:14:43,500 --> 00:14:45,200
-Musimy znaleźć inną drogę.
-
-173
-00:14:46,600 --> 00:14:48,700
-- Co tu jest?
-- Szczurze Gniazdo.
-
-174
-00:14:48,700 --> 00:14:50,200
-To prawdziwy labirynt.
-
-175
-00:14:50,200 --> 00:14:53,400
-O ostrych jak brzytwa skałach
-i stromiznach nie wspominając.
-
-176
-00:14:53,400 --> 00:14:56,700
-Nikt nie tworzył mapy,
-bo L9 był większy i bezpieczniejszy.
-
-177
-00:14:56,700 --> 00:14:59,500
-Mapę mam w głowie.
-To ja odkryłem Szczurze Gniazdo.
-
-178
-00:14:59,500 --> 00:15:01,900
-To nasza szansa,
-by wyprzedzić Bena Darisa.
-
-179
-00:15:01,900 --> 00:15:04,500
-Quentin, znajdź Naka,
-Levona i kilku innych,
-
-180
-00:15:04,500 --> 00:15:06,400
-i przygotuj
-sprzęt wspinaczkowy.
-
-181
-00:15:06,400 --> 00:15:07,400
-Mowy nie ma.
-
-182
-00:15:07,900 --> 00:15:09,500
-To moje tunele
-i moi ludzie...
-
-183
-00:15:09,500 --> 00:15:11,700
-Skąd mam wiedzieć,
-że nie zastrzelisz Bena?
-
-184
-00:15:11,700 --> 00:15:13,800
-Masz moje słowo.
-A może nagle to za mało?
-
-185
-00:15:13,900 --> 00:15:15,500
-Pójdę z nim
-i będę go pilnował.
-
-186
-00:15:15,800 --> 00:15:18,600
-Nie jesteś górnikiem.
-To zbyt niebezpieczne.
-
-187
-00:15:18,600 --> 00:15:21,000
-Nie zabiorę balastu
-w postaci jakiegoś gliniarza.
-
-188
-00:15:21,000 --> 00:15:23,100
-Bez urazy,
-ale mam za sobą trudniejsze zejścia,
-
-189
-00:15:23,100 --> 00:15:25,600
-gdy podczas wojny
-szukałem podziemnych bunkrów.
-
-190
-00:15:25,600 --> 00:15:29,800
-Stawiam 20 scripów,
-że będę pierwszy na miejscu.
-
-191
-00:15:30,700 --> 00:15:32,200
-To twój zadek.
-
-192
-00:15:34,400 --> 00:15:36,900
-Dopilnuj,
-żeby nie zabił Bena.
-
-193
-00:15:36,900 --> 00:15:38,600
-Facet zabił jego syna.
-
-194
-00:15:38,600 --> 00:15:42,300
-- Na jego miejscu...
-- Wiem, ale musimy go przesłuchać.
-
-195
-00:15:42,400 --> 00:15:44,700
-Najważniejsze to chronić miasto.
-
-196
-00:15:44,700 --> 00:15:48,600
-Obiecuję,
-że przyprowadzę Bena żywego.
-
-197
-00:16:05,700 --> 00:16:09,500
-Nolan, nie narażaj życia
-dla tych ludzi.
-
-198
-00:16:09,500 --> 00:16:12,700
-- Nie są tego warci.
-- Niektórzy są.
-
-199
-00:16:13,800 --> 00:16:15,900
-Zostań tu
-i pomóż Tommy'emu rozgryźć,
-
-200
-00:16:15,900 --> 00:16:18,500
-kto uwolnił naszego zbiega.
-
-201
-00:16:18,500 --> 00:16:23,000
-I trzymaj się z daleka
-od Elaha Bandika.
-
-202
-00:16:23,500 --> 00:16:24,900
-Rozumiesz?
-
-203
-00:16:44,600 --> 00:16:48,700
-Wszyscy mówią o tej sprawie
-z Elah Bandikiem.
-
-204
-00:16:49,700 --> 00:16:52,700
-Nie zaczynaj, Stahmo.
-
-205
-00:16:52,700 --> 00:16:55,700
-To jedno
-z naszych starych praw.
-
-206
-00:16:57,700 --> 00:17:02,200
-To nowy świat.
-
-207
-00:17:04,200 --> 00:17:08,300
-Ludzie uważają to
-za coś niewłaściwego.
-
-208
-00:17:08,300 --> 00:17:12,400
-- Nie obchodzi mnie to.
-- Ale ich zdanie ma znaczenie.
-
-209
-00:17:12,600 --> 00:17:17,200
-Jeśli będą przeciw nam,
-nie przejmiemy kontroli nad kopalniami.
-
-210
-00:17:17,800 --> 00:17:21,600
-Myślę o przyszłości
-naszego syna.
-
-211
-00:17:24,300 --> 00:17:27,200
-Pomyśl o swoim życiu na Casti.
-
-212
-00:17:27,200 --> 00:17:30,300
-Byłeś na samym dole
-najniższej kasty.
-
-213
-00:17:30,300 --> 00:17:34,200
-Żyłeś w biedzie i upokorzeniu.
-
-214
-00:17:34,300 --> 00:17:38,700
-Naprawdę tak pragniesz zachować
-ten castitiański zwyczaj?
-
-215
-00:17:42,000 --> 00:17:49,800
-Tak, gdyż stoję na szczycie
-i szczam na tych na dole!
-
-216
-00:18:01,300 --> 00:18:03,600
-- Co się dzieje?
-- Chodzi o Christie.
-
-217
-00:18:03,600 --> 00:18:07,500
-Rafe McCawley
-miesza jej w głowie.
-
-218
-00:18:07,800 --> 00:18:09,000
-Nie wiem, co będzie.
-
-219
-00:18:09,000 --> 00:18:10,800
-Może będzie trzeba
-odwołać ślub.
-
-220
-00:18:10,800 --> 00:18:12,200
-Skarbie...
-
-221
-00:18:12,200 --> 00:18:14,400
-Rafe McCawley potrzebuje
-kulki w łeb.
-
-222
-00:18:14,400 --> 00:18:16,500
-- Tato!
-- Nie mówi poważnie.
-
-223
-00:18:16,500 --> 00:18:17,400
-Wręcz przeciwnie.
-
-224
-00:18:17,400 --> 00:18:20,700
-Wiesz, jak gorąca woda
-wpływa na usposobienie ojca.
-
-225
-00:18:22,300 --> 00:18:26,100
-Matka wszystkim się zajmie.
-
-226
-00:19:11,900 --> 00:19:14,500
-/Wojna światów
-
-227
-00:19:17,700 --> 00:19:19,700
-Masz odczyt gulanitu,
-który niesie?
-
-228
-00:19:19,700 --> 00:19:22,200
-Tak.
-Jest niedaleko.
-
-229
-00:19:23,000 --> 00:19:26,500
-Przyszpilmy gnoja.
-
-230
-00:19:31,200 --> 00:19:34,500
-Witamy w starym St. Louis.
-
-231
-00:19:51,100 --> 00:19:54,900
-W samą porę
-zabrałam swoje graty.
-
-232
-00:19:54,900 --> 00:19:59,600
-Masz szansę urządzić
-ten gabinet po swojemu.
-
-233
-00:20:00,200 --> 00:20:05,900
-Jako emerytka myślę
-o zainteresowaniu się golfem.
-
-234
-00:20:06,000 --> 00:20:08,200
-Kiedyś trafiłam
-w trzech uderzeniach.
-
-235
-00:20:08,200 --> 00:20:14,000
-Nikt nie może temu zaprzeczyć,
-bo tylko ja pamiętam przeklęte zasady.
-
-236
-00:20:24,500 --> 00:20:28,000
-Biedaczysko.
-Wisi tak od trzech godzin.
-
-237
-00:20:28,200 --> 00:20:30,800
-Naprawdę mi się to
-nie podoba, Nicky.
-
-238
-00:20:30,800 --> 00:20:34,600
-Mamy prawa miejskie,
-których od lat nie przestrzegamy.
-
-239
-00:20:34,600 --> 00:20:37,300
-To się musi skończyć.
-
-240
-00:20:37,400 --> 00:20:39,100
-Castitianie są trudni.
-
-241
-00:20:39,100 --> 00:20:46,300
-Mają obsesję na punkcie swojej przeszłości,
-przodków i tego, w jakim liro się urodzili.
-
-242
-00:20:46,600 --> 00:20:49,200
-Żyją na podstawie
-pradawnych tradycji,
-
-243
-00:20:49,200 --> 00:20:53,200
-które może dawniej
-miały jakiś cel...
-
-244
-00:20:54,800 --> 00:20:58,700
-ale nikt nie wie jaki.
-
-245
-00:20:59,300 --> 00:21:04,000
-- Zupełnie jak u nas.
-- Ich przeszłość przepadła.
-
-246
-00:21:04,400 --> 00:21:07,200
-Wybuchła razem z planetą.
-
-247
-00:21:07,200 --> 00:21:11,500
-Pozostały im tylko
-te żałosne popisy na ulicach.
-
-248
-00:21:13,300 --> 00:21:17,900
-Jeśli spróbujesz im to odebrać,
-powtórzy się historia z Irathienami.
-
-249
-00:21:20,300 --> 00:21:22,500
-Nie wierzę w to.
-
-250
-00:21:22,500 --> 00:21:25,700
-Defiance przez te pięć lat
-bardzo się zmieniło.
-
-251
-00:21:25,700 --> 00:21:29,100
-Razem pokonaliśmy Volgów.
-
-252
-00:21:29,100 --> 00:21:36,700
-Tworzymy większą tożsamość niż bycie
-człowiekiem, Irathienem czy Castitianem.
-
-253
-00:21:48,500 --> 00:21:50,800
-Będę za tobą tęsknić.
-
-254
-00:22:01,200 --> 00:22:03,500
-Birch.
-
-255
-00:22:08,900 --> 00:22:12,000
-Rycerskość umarła
-wraz z atakiem Volgów?
-
-256
-00:22:12,000 --> 00:22:15,000
-- Co z Benem?
-- Jest pod ziemią.
-
-257
-00:22:15,000 --> 00:22:19,000
-Musimy opuścić miasto.
-Za dwie godziny dotrze do celu.
-
-258
-00:22:19,500 --> 00:22:21,500
-Był ranny.
-Może zawieść.
-
-259
-00:22:21,500 --> 00:22:23,500
-Dopilnowałem,
-żeby był zmotywowany.
-
-260
-00:22:23,500 --> 00:22:26,900
-- Sam go obudziłem.
-- Trzymam za słowo.
-
-261
-00:22:26,900 --> 00:22:30,800
-Przed wyjazdem chcę się pożegnać
-z kilkoma osobami.
-
-262
-00:22:30,800 --> 00:22:33,300
-Zbytnio się do nich zbliżyłaś.
-
-263
-00:22:33,400 --> 00:22:35,300
-Dorastałam razem z nimi.
-
-264
-00:22:35,300 --> 00:22:38,900
-Widziałam,
-jak rodzą się i rosną ich dzieci.
-
-265
-00:22:41,600 --> 00:22:44,800
-Robię to dla dobra
-nas wszystkich.
-
-266
-00:22:44,800 --> 00:22:48,200
-I dlatego, że to konieczne.
-
-267
-00:22:49,200 --> 00:22:54,500
-Wiesz,
-że nie sprawia mi to przyjemności.
-
-268
-00:22:54,700 --> 00:22:55,900
-Wiem.
-
-269
-00:22:58,800 --> 00:23:02,300
-Po prostu skończył mi się czas.
-
-270
-00:23:02,300 --> 00:23:06,600
-Nieważne, ile go masz,
-to zawsze za mało.
-
-271
-00:23:09,000 --> 00:23:11,600
-- W porządku, weteranie?
-- Tak.
-
-272
-00:23:17,900 --> 00:23:20,300
-Zróbmy postój.
-
-273
-00:23:20,300 --> 00:23:22,500
-Nie zatrzymujcie się
-ze względu na mnie.
-
-274
-00:23:22,500 --> 00:23:25,200
-Muszę się napić.
-
-275
-00:23:27,400 --> 00:23:31,000
-Dobra, pięć minut przerwy.
-
-276
-00:23:36,900 --> 00:23:39,000
-Park Jeffersona.
-
-277
-00:23:39,000 --> 00:23:43,200
-Ostatni raz byłem tu,
-gdy miałem dziewięć lat.
-
-278
-00:23:43,600 --> 00:23:45,500
-- Byłeś tutejszy?
-- Tak.
-
-279
-00:23:45,500 --> 00:23:49,300
-Ale przyznaję,
-że to dość mgliste wspomnienie.
-
-280
-00:23:51,100 --> 00:23:55,300
-Mam wrażenie, że razem z rodzicami
-jadaliśmy niedaleko stąd.
-
-281
-00:23:55,800 --> 00:23:59,100
-Pewnie w Golden's
-po drugiej stronie parku.
-
-282
-00:23:59,100 --> 00:24:05,000
-- Chyba tak.
-- Najlepsze zapieczone ravioli w stanie.
-
-283
-00:24:05,200 --> 00:24:07,100
-Mieli też dobre
-ciasto-mordoklejkę.
-
-284
-00:24:07,100 --> 00:24:09,400
-Teraz pamiętam.
-
-285
-00:24:09,400 --> 00:24:12,700
-Najlepszy wynalazek na świecie
-obok penicyliny.
-
-286
-00:24:12,800 --> 00:24:17,300
-Zabierałem tam Luke'a,
-gdy miał jakieś trzy lata.
-
-287
-00:24:19,200 --> 00:24:23,500
-Czym zajmowała się
-twoja rodzina przed Deszczem Arek?
-
-288
-00:24:23,500 --> 00:24:26,400
-- Psim żarciem.
-- Co takiego?
-
-289
-00:24:28,400 --> 00:24:31,500
-Produkowaliśmy karmę dla psów.
-
-290
-00:24:31,500 --> 00:24:35,700
-- Twój ojciec to...
-- Tak.
-
-291
-00:24:35,700 --> 00:24:39,000
-"Wtrząchający"
-Brown McCawley.
-
-292
-00:24:39,500 --> 00:24:43,200
-- Jak szła ta melodyjka?
-- Nie zaśpiewam ci jej.
-
-293
-00:24:45,000 --> 00:24:48,500
-/Zdrowe szczeniaki
-/nie mają dość,
-
-294
-00:24:48,500 --> 00:24:50,500
-/Nigdy się nie krzywią...
-
-295
-00:24:50,500 --> 00:24:52,600
-Daj se siana.
-
-296
-00:24:52,600 --> 00:24:58,200
-/Bo już czas coś wtrząchnąć,
-/na to zawsze jest dobra pora.
-
-297
-00:24:58,800 --> 00:25:01,700
-Jakoś nie widzę cię
-w tej branży.
-
-298
-00:25:01,700 --> 00:25:05,700
-Chciałem być fotografem sportowym.
-
-299
-00:25:06,700 --> 00:25:09,500
-A dla rozrywki
-pstrykać fotki lasek w bikini.
-
-300
-00:25:09,500 --> 00:25:13,000
-Czemu z tego zrezygnowałeś?
-
-301
-00:25:13,700 --> 00:25:16,900
-Jakiś czas robiłem zdjęcia
-przekształconej ziemi,
-
-302
-00:25:16,900 --> 00:25:18,600
-ale przestałem.
-
-303
-00:25:19,400 --> 00:25:21,800
-To było zbyt przygnębiające.
-
-304
-00:25:21,800 --> 00:25:27,100
-Przypominało mi jedynie o wszystkim,
-co odebrali mi kosmici.
-
-305
-00:25:29,700 --> 00:25:31,300
-Żeby była jasność, Rafe.
-
-306
-00:25:31,300 --> 00:25:36,400
-- Votanin, którego ścigamy...
-- Mówisz o zabójcy mojego syna?
-
-307
-00:25:36,400 --> 00:25:40,000
-- Wiesz, że potrzebujemy go żywego.
-- Nic nie wiem.
-
-308
-00:25:41,000 --> 00:25:43,600
-Przewidywanie przyszłości
-to zabawa dla frajerów.
-
-309
-00:25:43,600 --> 00:25:47,400
-Nie wierzysz mi?
+00:18:30,300 --> 00:18:32,900
 Rozejrzyj się.
 
-310
-00:26:22,900 --> 00:26:26,100
-To nie jest miejsce dla dziecka.
-
-311
-00:26:38,100 --> 00:26:40,400
-Irathenko!
-Ty suko!
-
-312
-00:27:04,200 --> 00:27:06,800
-Elah Bandik jest aresztowany.
-
-313
-00:27:06,800 --> 00:27:10,400
-- Za co?
-- Podejrzane zachowanie.
-
-314
-00:27:21,700 --> 00:27:27,600
-Sygnał staje się coraz silniejszy.
-Jest blisko.
-
-315
-00:27:30,500 --> 00:27:34,400
-- Nie pamiętam tych wież.
-- To elektrownia atomowa.
-
-316
-00:27:34,400 --> 00:27:36,800
-Podczas wojny
-wyleciała w powietrze.
-
-317
-00:27:40,200 --> 00:27:43,300
-Jeśli Ben zdetonuje gulanit
-w jednym z reaktorów...
-
-318
-00:27:43,300 --> 00:27:47,100
-Promieniowanie wydostanie się
-przez tunele w Szczurzym Gnieździe.
-
-319
-00:27:47,100 --> 00:27:50,000
-Zabije wszystkich.
-
-320
-00:28:07,000 --> 00:28:10,200
-Dałabym grosika,
-żeby poznać twoje myśli.
-
-321
-00:28:12,200 --> 00:28:15,900
-Tak mówią ludzie, prawda?
-
-322
-00:28:20,300 --> 00:28:24,700
-Mój brat zbierał monety.
-Takie bardzo stare.
-
-323
-00:28:26,200 --> 00:28:31,400
-Mówił, że miedź była dawniej
-warta więcej niż sama moneta.
-
-324
-00:28:32,800 --> 00:28:37,000
-Myślałaś o nim.
-
-325
-00:28:41,300 --> 00:28:48,100
-Mamy obowiązek żyć pełnią życia,
-by uhonorować zmarłych.
-
-326
-00:28:52,100 --> 00:28:56,400
-Dlatego zdziwiło mnie,
-że wahasz się co do ślubu.
-
-327
-00:28:59,300 --> 00:29:02,800
-Chcę tylko
-trochę zwolnić tempo.
-
-328
-00:29:05,800 --> 00:29:09,500
-Ojciec na ciebie naciska, prawda?
-
-329
-00:29:09,700 --> 00:29:14,400
-- Zachowuje się jak palant.
-- Jak większość mężczyzn.
-
-330
-00:29:14,400 --> 00:29:18,700
-To cecha ponadgatunkowa.
-
-331
-00:29:20,200 --> 00:29:23,900
-Jeśli zechcesz,
-możesz z nim walczyć.
-
-332
-00:29:25,900 --> 00:29:28,900
-Nie wydaje mi się.
-
-333
-00:29:30,200 --> 00:29:35,200
-Nim opuściłam rodzinną planetę,
-moi rodzice zadali sobie wiele trudu,
-
-334
-00:29:35,200 --> 00:29:38,500
-bym poślubiła mężczyznę,
-którego uznali za odpowiedniego.
-
-335
-00:29:38,500 --> 00:29:43,400
-U mojego boku był nieznajomy,
-do tego niezbyt przystojny.
-
-336
-00:29:43,500 --> 00:29:50,200
-Ale pochodził za najwyższego liro
-i był człowiekiem honoru.
-
-337
-00:29:50,200 --> 00:29:54,300
-Moi rodzice sądzili,
-że ktoś taki
-
-338
-00:29:54,300 --> 00:29:57,300
-zapewni mi bezpieczeństwo.
-
-339
-00:29:57,500 --> 00:30:01,300
-- I co się stało?
-- Poznałam kogoś innego.
-
-340
-00:30:01,700 --> 00:30:05,200
-Był niechlujny, młody
-i nic nie znaczył,
-
-341
-00:30:05,200 --> 00:30:09,600
-ale przy tym piękny,
-groźny i miał szelmowski uśmieszek.
-
-342
-00:30:10,900 --> 00:30:15,900
-Wygrał przelot na Ziemię
-jako zapłatę za długi hazardowe.
-
-343
-00:30:15,900 --> 00:30:17,100
-Datak.
-
-344
-00:30:18,400 --> 00:30:21,800
-Z agresją dążył,
-by ze mną być.
-
-345
-00:30:22,500 --> 00:30:25,100
-Mój narzeczony wpadł w szał.
-
-346
-00:30:25,100 --> 00:30:29,900
-Wyzwał Dataka
-na castitiański pojedynek krwi.
-
-347
-00:30:30,100 --> 00:30:31,200
-Walczyli?
-
-348
-00:30:34,200 --> 00:30:36,800
-Nie mieli okazji.
-
-349
-00:30:37,200 --> 00:30:40,200
-W drodze na pojedynek
-mój człowiek honoru
-
-350
-00:30:40,200 --> 00:30:43,400
-przez przypadek
-wyleciał przez śluzę.
-
-351
-00:30:43,700 --> 00:30:46,800
-To był tragiczny wypadek.
-
-352
-00:30:47,900 --> 00:30:49,500
-Jak to przypadkiem?
-
-353
-00:30:49,500 --> 00:30:53,800
-Wiedziałam, że miłość Dataka
-przekracza granice rozsądku.
-
-354
-00:30:53,800 --> 00:30:55,700
-Był ocalałym.
-
-355
-00:30:55,700 --> 00:31:00,100
-Kimś, kto nie cofnie się przed niczym,
-by nas ochronić.
-
-356
-00:31:00,100 --> 00:31:06,000
-Rozumiałam lepiej od rodziców,
-jakiego mężczyzny potrzebuję.
-
-357
-00:31:09,100 --> 00:31:12,100
-To prawdziwa historia?
-
-358
-00:31:16,200 --> 00:31:19,700
-To będzie cudowny ślub.
-
-359
-00:31:38,000 --> 00:31:42,300
-Uważajcie pod nogi
-i miejcie oczy otwarte.
-
-360
-00:31:43,200 --> 00:31:45,300
-Trzymajcie się blisko.
-
-361
-00:31:45,300 --> 00:31:48,000
-- Dawno tu nie byłem.
-- Nadal nic?
-
-362
-00:32:24,800 --> 00:32:27,700
-- Dobra, bomba rozbrojona.
-- Świetnie.
-
-363
-00:32:30,000 --> 00:32:32,300
-Jeśli mamy się dowiedzieć,
-kto za tym stoi,
-
-364
-00:32:32,300 --> 00:32:34,000
-potrzebujemy go żywego.
-
-365
-00:32:35,100 --> 00:32:37,100
-Rozumiem,
-że chcesz pomścić Luke'a.
-
-366
-00:32:37,100 --> 00:32:40,800
-Rafe, w domu czekają na ciebie
-Christie i Quentin,
-
-367
-00:32:40,800 --> 00:32:43,800
-a ktoś staje na głowie,
-żeby zniszczyć to miasto.
-
-368
-00:32:43,800 --> 00:32:46,100
-Luke błagał o życie
-jak mała dziewczynka.
-
-369
-00:32:46,100 --> 00:32:48,500
-- Potrzebujemy od niego odpowiedzi.
-- Wiem, co robię.
-
-370
-00:32:48,500 --> 00:32:50,400
-Chcesz wiedzieć,
-czemu mi pomagał?
-
-371
-00:32:51,100 --> 00:32:54,000
-- Chcesz umrzeć dla sprawy?
-- Potrzebował forsy,
-
-372
-00:32:54,000 --> 00:32:56,800
-żeby wynieść się z Defiance
-i od ciebie.
-
-373
-00:32:56,800 --> 00:32:59,000
-To takie śmieszne.
-
-374
-00:32:59,000 --> 00:33:03,100
-Przyszedłeś pomścić biednego Luke'a,
-który nienawidził cię z całego serca.
-
-375
-00:33:03,100 --> 00:33:05,100
-Po tym,
-co zrobiłeś jego matce...
-
-376
-00:33:05,100 --> 00:33:06,300
-Zamknij się!
-
-377
-00:33:07,000 --> 00:33:09,300
-Możesz postąpić słusznie
-z punktu widzenia nieżyjącego syna
-
-378
-00:33:09,300 --> 00:33:11,700
-albo z punktu widzenia
-tych żyjących,
-
-379
-00:33:11,700 --> 00:33:15,400
-ale musisz wybrać.
-Decyduj.
-
-380
-00:33:16,300 --> 00:33:18,800
-Natychmiast.
-
-381
-00:33:39,100 --> 00:33:42,800
-Powiedz Amandzie,
-że mi przykro.
-
-382
-00:33:58,200 --> 00:34:01,000
-Jest tam dziwnie spokojnie.
-
-383
-00:34:01,000 --> 00:34:04,100
-Burmistrz zaraz przyjdzie.
-Może nic nam nie będzie.
-
-384
-00:34:05,400 --> 00:34:08,500
-Przyjdą po niego.
-
-385
-00:34:08,600 --> 00:34:10,600
-To był błąd.
-
-386
-00:34:10,600 --> 00:34:13,600
-Głupio zrobiłeś,
-pomagając mi.
-
-387
-00:34:13,600 --> 00:34:17,300
-Wykonałaś ruch
-i cię wsparłem.
-
-388
-00:34:17,300 --> 00:34:20,400
-Tak postępują stróże prawa.
-Clancy mnie tego nauczył.
-
-389
-00:34:20,400 --> 00:34:24,100
-Głupio zrobiłeś,
-słuchając go.
-
-390
-00:34:26,900 --> 00:34:29,000
-Shtako.
-
-391
-00:34:29,000 --> 00:34:29,700
-Ilu?
-
-392
-00:34:29,800 --> 00:34:32,900
-Widze Dataka
-i tego biomana.
-
-393
-00:34:33,500 --> 00:34:36,600
-/Idź z drugiej strony.
-
-394
-00:34:44,300 --> 00:34:46,900
-Wydajcie tego tchórza.
-
-395
-00:34:46,900 --> 00:34:50,100
-Obawiam się,
-że nie możemy.
-
-396
-00:34:50,100 --> 00:34:54,100
-To sprawa Castitian
-i przez nich zostanie załatwiona.
-
-397
-00:34:54,100 --> 00:34:57,300
-Jeszcze krok
-i pierwsza kula zabije ciebie.
-
-398
-00:34:57,300 --> 00:34:59,000
-Urocza dziewczyna.
-
-399
-00:34:59,000 --> 00:35:03,000
-Możemy przejść obok ciebie
-albo przez ciebie.
-
-400
-00:35:03,200 --> 00:35:06,200
-Twój wybór.
-
-401
-00:35:14,500 --> 00:35:16,600
-Zabierz Levona do lekarza.
-
-402
-00:35:23,900 --> 00:35:27,000
-Dość tego, Dataku.
-
-403
-00:35:29,100 --> 00:35:32,000
-Irisa i Tommy
-wykonywali moje rozkazy.
-
-404
-00:35:32,000 --> 00:35:37,000
-Postanowiłam wybaczyć Elah Bandikowi
-naruszenia castitiańskiego prawa.
-
-405
-00:35:37,900 --> 00:35:40,400
-Nie masz takiej władzy.
-
-406
-00:35:40,400 --> 00:35:44,100
-Jeśli go zabierzesz,
-będziesz musiał nas zabić.
-
-407
-00:35:44,800 --> 00:35:47,900
-/- Co tam się dzieje?
-- Nic dobrego.
-
-408
-00:35:49,100 --> 00:35:50,700
-Nak, chodź z nami.
-
-409
-00:35:50,700 --> 00:35:53,700
-- To nie twoja walka, Rafe.
-- Jestem ci to winien.
-
-410
-00:35:58,500 --> 00:36:01,200
-To jak będzie?
-
-411
-00:36:01,200 --> 00:36:06,500
-Bezsensowny rozlew krwi
-czy rozwiążemy to pokojowo?
-
-412
-00:36:36,300 --> 00:36:41,500
-Pani burmistrz,
-pani pasja chwyciła mnie za serce.
-
-413
-00:36:41,500 --> 00:36:43,400
-Tworzymy społeczeństwo.
-
-414
-00:36:44,500 --> 00:36:47,000
-Dość krwi już przelano.
-
-415
-00:36:47,000 --> 00:36:50,300
-Pochowajmy dziś
-poległych z godnością.
-
-416
-00:36:50,300 --> 00:36:53,400
-A później... kto wie?
-
-417
-00:36:53,600 --> 00:37:01,700
-Być może ochłoniemy i wrócimy
-do różnic kulturowych.
-
-418
-00:37:23,100 --> 00:37:26,500
-Do zobaczenia na ślubie.
-
-419
-00:37:33,200 --> 00:37:36,100
-Dzięki za pomoc, Rafe.
-Mogło być kiepsko.
-
-420
-00:37:36,100 --> 00:37:38,500
-Wtedy byłoby też czyściej.
-
-421
-00:37:38,700 --> 00:37:41,000
-Sprawdzę, co u moich ludzi.
-
-422
-00:37:49,100 --> 00:37:52,500
-Odprowadzę cię do domu.
-
-423
-00:37:53,800 --> 00:37:57,400
-- Wiesz, że to nie koniec.
-- Wiem.
-
-424
-00:38:00,000 --> 00:38:04,500
-- Gdzie Ben?
-- Nie żyje.
-
-425
-00:38:05,700 --> 00:38:09,400
-Kazał przekazać, że mu przykro.
-
-426
-00:38:11,000 --> 00:38:12,900
-Jak nam wszystkim.
-
-427
-00:38:12,900 --> 00:38:16,000
-Na razie miasto jest bezpieczne.
-
-428
-00:38:16,000 --> 00:38:17,500
-To wystarczy.
-
-429
-00:38:17,500 --> 00:38:19,400
-Później opowiesz mi szczegóły.
-
-430
-00:38:19,400 --> 00:38:23,400
-Muszę pochować 41 osób.
-
-431
-00:38:40,300 --> 00:38:43,300
-Nie lubię łańcuchów.
-
-432
-00:38:44,600 --> 00:38:47,000
-Słusznie postąpiłaś.
-
-433
-00:38:50,500 --> 00:38:53,200
-Amanda pomogła.
-
-434
-00:38:54,700 --> 00:38:58,400
-Czyli dobrze, że jej zufaliśmy.
-
-435
-00:39:04,600 --> 00:39:10,000
-- Dotrzemy kiedyś na Antarktydę?
-- Nie istnieje naprawdę.
-
-436
-00:39:10,000 --> 00:39:13,300
-- Jesteś pewny?
+169
+00:18:52,200 --> 00:18:56,100
+- Kim oni są?
+- Uwięzionymi duszami.
+
+170
+00:18:56,400 --> 00:18:58,500
+Szukającymi ucieczki.
+
+171
+00:18:58,500 --> 00:19:01,700
+- Też je widzisz?
 - Nie.
 
-437
-00:39:14,300 --> 00:39:19,900
-Ale wiem na pewno,
-że to miasto jest prawdziwe.
+172
+00:19:02,200 --> 00:19:05,300
+Co jeszcze dostrzegasz?
 
-438
-00:39:26,400 --> 00:39:29,100
-Zebraliśmy się,
-by uczcić pamięć 41 osób,
+173
+00:19:09,800 --> 00:19:13,400
+- Nadjeżdża pociąg.
+- Na pewno?
 
-439
-00:39:29,100 --> 00:39:32,300
-które oddały życie,
-by ratować miasto.
+174
+00:19:13,500 --> 00:19:17,100
+Co ty wyprawiasz?
+Nadjeżdża pociąg!
 
-440
-00:39:32,300 --> 00:39:38,000
-Są wśród nich matki i ojcowie,
-mężowie i żony, bracia i siostry.
+175
+00:19:17,100 --> 00:19:19,500
+Puszczaj!
 
-441
-00:39:39,000 --> 00:39:42,400
-Ale dla nas są bohaterami.
+176
+00:19:19,500 --> 00:19:23,200
+Co ty robisz?
+Jedzie na nas pociąg!
 
-442
-00:41:48,000 --> 00:41:51,300
-Dziękuję, że pozwoliłeś mi
-spędzić czas z rodziną.
+177
+00:19:23,200 --> 00:19:27,100
+Musimy zejść z torów!
+Puść mnie, John!
 
-443
-00:41:51,300 --> 00:41:57,400
-Nie ma za co.
-Postępujesz honorowo.
+178
+00:19:43,000 --> 00:19:47,500
+- Co się właśnie stało?
+- Pociąg-widmo.
 
-444
-00:41:59,400 --> 00:42:02,400
-.:: Napisy24 - Nowy Wymiar Napisów ::.
-Napisy24.pl
+179
+00:19:47,500 --> 00:19:51,200
+- Więcej zgonów, wyraźniejsze wizje.
+- To wszystko jest niemożliwe.
+
+180
+00:19:51,300 --> 00:19:54,800
+- Tak się tego nie pozbędziesz.
+- Dlaczego widzę te rzeczy?
+
+181
+00:19:54,900 --> 00:19:57,000
+Twój ojciec przekazał ci dar.
+
+182
+00:19:57,000 --> 00:20:00,800
+Gdy dotykasz jego naszyjnika,
+dostrzegasz to co niegdyś on.
+
+183
+00:20:00,800 --> 00:20:05,200
+Nasz świat nie jest jedyny.
+Istnieją także równoległe.
+
+184
+00:20:05,300 --> 00:20:10,400
+A pośród nas żyją różne istoty.
+Jasper dostrzegał je wszystkie.
+
+185
+00:20:11,000 --> 00:20:16,400
+Próbował mnie tego nauczyć,
+ale nie byłem tak zdolny jak on.
+
+186
+00:20:16,400 --> 00:20:20,600
+- Więc byliście przyjaciółmi?
+- Pogadamy o tym później.
+
+187
+00:20:20,600 --> 00:20:26,000
+Póki co jesteśmy na celowniku.
+Zostaw auto u matki, jedziesz z nami.
+
+188
+00:20:36,200 --> 00:20:41,200
+John miał mi opowiedzieć o Jasperze.
+Chcę wiedzieć, jak zginął.
+
+189
+00:20:41,300 --> 00:20:43,600
+- Bohatersko.
+- Byłeś przy tym?
+
+190
+00:20:43,600 --> 00:20:46,700
+- Starczy tego.
+- Może istota, która na mnie poluje,
+
+191
+00:20:46,800 --> 00:20:51,900
+- pragnie zemsty za czyny mojego ojca.
+- Mam gdzieś te powody.
+
+192
+00:20:52,000 --> 00:20:56,200
+Po prostu chcę to coś zabić
+i spłacić dług wobec twojego ojca.
+
+193
+00:20:56,300 --> 00:20:58,900
+Ścisz trochę.
+
+194
+00:20:59,700 --> 00:21:02,100
+Nie mogę.
+
+195
+00:21:07,100 --> 00:21:09,300
+Chas!
+
+196
+00:21:15,500 --> 00:21:18,600
+- John?
+- Astra?
+
+197
+00:21:18,700 --> 00:21:23,200
+Podąża za mną.
+Pozbądź się tego, błagam!
+
+198
+00:21:25,200 --> 00:21:29,100
+Jestem przy tobie.
+Nie dostaniesz jej!
+
+199
+00:21:29,200 --> 00:21:33,800
+/- Nie ocalisz jej.
+- Nie dostaniesz jej!
+
+200
+00:21:33,900 --> 00:21:37,100
+John!
+Zabierz mnie stąd!
+
+201
+00:21:42,000 --> 00:21:45,900
+John! Zabierz nas stąd!
+Pomóż nam!
+
+202
+00:21:49,900 --> 00:21:53,300
+John, pomóż nam!
+Zaklinowała mi się noga!
+
+203
+00:21:53,400 --> 00:21:56,900
+- John, błagam!
+- Trzymaj się!
+
+204
+00:22:13,300 --> 00:22:16,900
+Wysłuchaj woli Świętego Krzyża.
+Wysłuchaj woli Gwiazdy Dawida.
+
+205
+00:22:20,200 --> 00:22:23,700
+Porzuć to miejsce!
+
+206
+00:22:25,700 --> 00:22:28,700
+Przepadnij!
+
+207
+00:22:29,600 --> 00:22:32,200
+Chyba się udało.
+Wyciągnij ją!
+
+208
+00:22:40,800 --> 00:22:43,000
+Weź ją!
+
+209
+00:22:44,600 --> 00:22:47,300
+Chas, uważaj!
+
+210
+00:22:52,000 --> 00:22:56,600
+Istnieją miliony demonów.
+Trzeba ustalić, który cię ściga.
+
+211
+00:22:56,600 --> 00:22:59,700
+- Tutaj będziemy bezpieczni.
+- Żartujesz?
+
+212
+00:22:59,700 --> 00:23:03,600
+- Po tym, co spotkało Chasa?
+- Czasami pozory mylą, skarbie.
+
+213
+00:23:03,700 --> 00:23:07,700
+- Zrozum to, jeśli chcesz przeżyć.
+- Nie rozumiem połowy z tego, co gadasz.
+
+214
+00:23:07,700 --> 00:23:11,400
+- Mówisz kiedyś jasno?
+- Ten dom należał do twojego ojca.
+
+215
+00:23:11,500 --> 00:23:19,000
+Obiecałem mu, że w razie potrzeby
+oddam ci klucze do niego.
+
+216
+00:23:19,300 --> 00:23:22,700
+To załapałaś?
+
+217
+00:23:23,700 --> 00:23:28,100
+Jasper przebywał tu, by cię chronić,
+ale musiał zachować dystans.
+
+218
+00:23:28,200 --> 00:23:34,000
+- Naturalnie dla twojego bezpieczeństwa.
+- Nie ma w tym niczego naturalnego.
+
+219
+00:23:42,800 --> 00:23:47,300
+Coś nieprawdopodobnego!
+Można tu przeżyć apokalipsę.
+
+220
+00:23:47,400 --> 00:23:52,000
+Albo ją stąd rozpętać.
+Jasper praktykował tu wróżbiarstwo.
+
+221
+00:23:52,000 --> 00:23:57,400
+Nikt nie pakował się w tarapaty
+szybciej niż twój ojciec. Dosłownie.
+
+222
+00:24:01,800 --> 00:24:06,400
+Odstaw to, skarbie,
+zanim cię to załatwi.
+
+223
+00:24:17,200 --> 00:24:21,600
+Wygląda to na mapę Atlanty.
+Co się znajduje w tych miejscach?
+
+224
+00:24:21,700 --> 00:24:25,000
+- Illusion Falls?
+- Jasper nauczył się kartografii.
+
+225
+00:24:25,000 --> 00:24:30,000
+- Zaczął tworzyć własne mapy.
+- Potrafił... odnajdywać kłopoty?
+
+226
+00:24:30,000 --> 00:24:35,200
+To tak zwany dar widzenia.
+Zbliż naszyjnik do mapy, a zobaczysz.
+
+227
+00:24:35,400 --> 00:24:38,200
+Jest. Znalazłem demona,
+który na ciebie poluje.
+
+228
+00:24:38,300 --> 00:24:41,300
+Nazywa się Furcyfer.
+
+229
+00:24:41,900 --> 00:24:45,300
+Cholerny anioł miał rację.
+Stawka wzrasta.
+
+230
+00:24:45,300 --> 00:24:47,600
+- Jaki anioł?
+- Patrz na mapę.
+
+231
+00:24:47,600 --> 00:24:50,500
+Furcyfer czerpie siłę
+z elektryczności.
+
+232
+00:24:50,500 --> 00:24:54,500
+Jego zwiastunem mogą być
+pioruny i burze.
+
+233
+00:24:55,000 --> 00:24:59,100
+Dlatego też kontrolował
+linie wysokiego napięcia i ciała.
+
+234
+00:24:59,100 --> 00:25:01,600
+Ale nadal nie rozumiem,
+dlaczego chce dopaść mnie.
+
+235
+00:25:01,700 --> 00:25:04,200
+Bo zagrażasz ciemności,
+która rośnie w siłę.
+
+236
+00:25:04,200 --> 00:25:06,800
+A skoro widzisz te rzeczy,
+to one też widzą ciebie.
+
+237
+00:25:06,800 --> 00:25:12,700
+A większość nie lubi być obserwowana.
+Zabicie ciebie to działanie prewencyjne.
+
+238
+00:25:15,800 --> 00:25:19,900
+Nie puszczaj go.
+Niech spłynie trochę krwi.
+
+239
+00:25:22,200 --> 00:25:27,700
+- Mój Boże, co to takiego?
+- To, o co pytałaś. Kłopoty.
+
+240
+00:25:28,700 --> 00:25:33,800
+- Gdzie się skupiła krew?
+- Na Edgewood Avenue.
+
+241
+00:25:33,800 --> 00:25:38,700
+- Czyli dzieje się tam coś złego?
+- Dopiero się zdarzy. Mamy dzień.
+
+242
+00:25:38,700 --> 00:25:41,600
+Większość rzeczonych istot
+poluje w nocy.
+
+243
+00:25:41,600 --> 00:25:44,900
+- Powinniśmy kogoś ostrzec.
+- Chyba nie ma kogo, prawda?
+
+244
+00:25:45,000 --> 00:25:50,100
+- Ale musimy coś zrobić.
+- Robimy. Utrzymujemy cię przy życiu.
+
+245
+00:25:50,900 --> 00:25:56,800
+Wiem, jak go odstraszyć,
+ale musisz zostać przynętą.
+
+246
+00:25:56,900 --> 00:26:00,000
+Dlaczego mam wrażenie,
+że robisz to od początku?
+
+247
+00:26:00,000 --> 00:26:04,600
+Pomoże nam ktoś z uniwersytetu.
+Zaczekaj tu na mnie.
+
+248
+00:26:13,300 --> 00:26:16,300
+Mogę w czymś panu pomóc?
+
+249
+00:26:20,600 --> 00:26:24,400
+Między czuwaniem a prześladowaniem
+jest dość duża różnica.
+
+250
+00:26:24,400 --> 00:26:28,100
+Miałem rację, prawda?
+Robi się gorąco.
+
+251
+00:26:28,100 --> 00:26:32,200
+Możesz otworzyć bramę?
+Nie mam na to czasu.
+
+252
+00:26:56,100 --> 00:26:58,800
+To coś nowego.
+
+253
+00:27:06,800 --> 00:27:10,400
+- Wiesz, co poluje na dziewczynę?
+- Demon z wewnętrznego kręgu.
+
+254
+00:27:10,500 --> 00:27:12,500
+Doprawdy?
+
+255
+00:27:12,600 --> 00:27:15,600
+Coś takiego nie może tu przebywać
+bez pomocy poważnego gracza.
+
+256
+00:27:15,600 --> 00:27:19,600
+Coś mi się zdaje, że chcesz,
+by się czegoś dla ciebie dowiedział.
+
+257
+00:27:19,600 --> 00:27:21,800
+- Zgadza się.
+- Dlaczego?
+
+258
+00:27:21,800 --> 00:27:25,600
+Byliśmy tu od początku czasu.
+
+259
+00:27:26,200 --> 00:27:29,600
+Mieliśmy nadzorować
+rozwój ludzkiego ducha.
+
+260
+00:27:29,700 --> 00:27:34,300
+Pomagać niewidzialną ręką,
+przemycać szepty wiatrem.
+
+261
+00:27:34,300 --> 00:27:39,800
+- Nie do końca jest to skuteczne.
+- Więc wziąłeś sprawy w swoje ręce.
+
+262
+00:27:40,800 --> 00:27:43,500
+Dużo ryzykujesz, kolego.
+
+263
+00:27:43,500 --> 00:27:47,600
+- Spójrz na Pierwszego z Upadłych.
+- Różni nas cel.
+
+264
+00:27:47,700 --> 00:27:52,800
+Dowiedz się, z kim się mierzymy,
+a dzięki temu uratuję wiele istnień.
+
+265
+00:27:52,800 --> 00:27:57,600
+A co z moim życiem, co?
+Potępiliście mnie!
+
+266
+00:27:59,100 --> 00:28:04,200
+Dlaczego więc miałbym ryzykować
+ostatnimi dniami na Ziemi...
+
+267
+00:28:04,400 --> 00:28:06,900
+Dokładnie. Dlaczego?
+
+268
+00:28:07,000 --> 00:28:09,600
+Nic nie znaczysz.
+
+269
+00:28:09,600 --> 00:28:12,500
+- Jesteś zwykłym kuglarzem.
+- Zaraz, czasami..
+
+270
+00:28:12,500 --> 00:28:15,500
+Podejmowane przez ciebie decyzje
+są niepewne i pozbawione skrupułów.
+
+271
+00:28:15,500 --> 00:28:21,300
+Dlaczego miałbyś ryzykować?
+Bo jesteś skazany na piekło.
+
+272
+00:28:29,500 --> 00:28:33,000
+Przynajmniej na tę chwilę.
+
+273
+00:28:34,800 --> 00:28:39,600
+Mówisz, że mam jeszcze szansę
+na ocalenie mojej duszy?
+
+274
+00:28:44,500 --> 00:28:47,600
+Wszystko w porządku?
+
+275
+00:28:47,600 --> 00:28:51,700
+Nie.
+Ani trochę.
+
+276
+00:28:58,300 --> 00:29:02,300
+/RITCHE SIMPSON
+/PROFESOR METAFIZYKI
+
+277
+00:29:11,200 --> 00:29:14,800
+Czołem, Ritchie.
+Kopę lat.
+
+278
+00:29:15,000 --> 00:29:20,900
+Bardzo cię proszę, abyś w tej chwili
+wyniósł się z mojego biura!
+
+279
+00:29:21,000 --> 00:29:23,500
+- Ale już!
+- Tak się wita kumpla?
+
+280
+00:29:23,600 --> 00:29:27,100
+Dobra, zostań sobie,
+a ja się zmywam.
+
+281
+00:29:27,100 --> 00:29:31,700
+Nadal sprawdzasz w Internecie
+dziwne, nocne wydarzenia?
+
+282
+00:29:31,700 --> 00:29:36,100
+Pewien niebiański koleś rzekł,
+że kroi się grubsza impreza.
+
+283
+00:29:38,100 --> 00:29:42,100
+A pójdziesz sobie,
+jeśli coś ci powiem?
+
+284
+00:29:45,000 --> 00:29:47,100
+W porządku, masz rację.
+
+285
+00:29:47,100 --> 00:29:53,600
+Sprawdzałem niewyjaśnione zjawiska,
+raporty policyjne, czaty, połączenia
+
+286
+00:29:55,000 --> 00:30:01,200
+i wiedz, że wszelakie plugastwa
+wyłażą z mroku na niespotykaną skalę.
+
+287
+00:30:01,900 --> 00:30:06,800
+W tym demon z wewnętrznego kręgu,
+który dręczy córkę Jaspera.
+
+288
+00:30:06,900 --> 00:30:10,600
+Potrzebuję twojej pomocy.
+Możesz włamać się do sieci elektrycznej?
+
+289
+00:30:10,600 --> 00:30:17,000
+Czy mogę? Owszem, mógłbym
+i dzięki, ale tego nie zrobię.
+
+290
+00:30:17,000 --> 00:30:23,300
+- Wiem, że akcja w Newcastle była porażką.
+- To był prawdziwy koszmar, John!
+
+291
+00:30:23,400 --> 00:30:28,600
+Wszystko, co spotkało tę dziewczynkę...
+Od tej pory nie pociągnę ani dnia
+
+292
+00:30:28,700 --> 00:30:31,900
+bez środków przeciwbólowych
+i nasennych,
+
+293
+00:30:31,900 --> 00:30:36,600
+a z łóżka wstaję dzięki
+nowej kumpeli, dekstroamfetaminie!
+
+294
+00:30:36,700 --> 00:30:42,800
+- Każdy z nas dostał nauczkę.
+- Tak, i doszedłem do bolesnych wniosków,
+
+295
+00:30:42,800 --> 00:30:47,900
+że muszę robić wszystko,
+by trzymać się z dala od ciebie.
+
+296
+00:30:48,400 --> 00:30:53,700
+Gliny z Newcastle nadal szukają
+człowieka, który zamordował Astrę.
+
+297
+00:30:53,800 --> 00:30:59,000
+- Wiesz, że to nie był człowiek.
+- Ale oni chyba nie wiedzą, co?
+
+298
+00:31:00,200 --> 00:31:05,600
+Byłoby szkoda, gdyby otrzymali cynk,
+że również tam byłeś.
+
+299
+00:31:05,600 --> 00:31:10,100
+Nie przypuszczam,
+byś miał jakieś alibi.
+
+300
+00:31:11,400 --> 00:31:17,000
+Żałuję, że nie spotkało to ciebie.
+Naprawdę żałuję.
+
+301
+00:31:17,200 --> 00:31:22,700
+Żałuję, że nie porwał ciebie.
+
+302
+00:31:23,800 --> 00:31:27,000
+Więc w czymś się zgadzamy.
+
+303
+00:32:23,500 --> 00:32:25,700
+Tato...
+
+304
+00:32:30,600 --> 00:32:34,700
+- Nie płacz, pamiętałem o zakupach.
+- Widziałam kogoś w odbiciu lustra.
+
+305
+00:32:34,700 --> 00:32:37,000
+- Czy to...
+- Jasper. Na to wygląda.
+
+306
+00:32:37,100 --> 00:32:40,200
+- To jego duch?
+- Nie.
+
+307
+00:32:40,500 --> 00:32:43,800
+To połączenie wielu czasów.
+Patrzyłaś na przeszłość.
+
+308
+00:32:43,800 --> 00:32:48,300
+Pełno tu takich dynksów.
+Trzymaj, wziąłem twoje ciuchy.
+
+309
+00:32:48,400 --> 00:32:52,300
+- Jak wszedłeś d jego mieszkania?
+- Liv.
+
+310
+00:32:52,400 --> 00:32:56,000
+Nic mi nie jest.
+Wybacz, że cię przestraszyłem.
+
+311
+00:32:56,000 --> 00:32:59,400
+Przecież... zginąłeś.
+
+312
+00:32:59,400 --> 00:33:02,200
+Nie do końca.
+To skomplikowane.
+
+313
+00:33:02,200 --> 00:33:05,100
+Nie bez powodu Chas
+jest moim najstarszym kumplem.
+
+314
+00:33:05,200 --> 00:33:09,300
+- Byle co go nie załatwi.
+- Nikt nie mógł tego przeżyć.
+
+315
+00:33:09,300 --> 00:33:13,000
+Świetnie. Jeśli myślisz trzeźwo,
+to i tak nie zwrócisz uwagi.
+
+316
+00:33:13,000 --> 00:33:18,100
+Pora na twoje słynne jagnięce żeberka.
+Nie można walczyć z demonami na głodnego.
+
+317
+00:33:18,100 --> 00:33:23,100
+- Chcecie dziś dopaść to coś?
+- Trzeba żyć dniem dzisiejszym.
+
+318
+00:33:24,800 --> 00:33:29,400
+Trzysta, czterysta...
+pięćset dolarów.
+
+319
+00:33:31,200 --> 00:33:34,400
+- Żeby popukać sobie na dachu?
+- Szybciej.
+
+320
+00:33:34,400 --> 00:33:38,700
+- Ale ma chcicę.
+- I jeszcze jeden ważny szczegół.
+
+321
+00:33:38,800 --> 00:33:43,200
+Dam ci kolejną stówę,
+jeśli będziesz to miał przy sobie.
+
+322
+00:33:43,200 --> 00:33:46,500
+Jeśli się zaświeci,
+natychmiast do mnie zadzwoń.
+
+323
+00:33:46,500 --> 00:33:51,500
+- Przecież nie jest w nic wkręcona.
+- Ważne, że ja sobie pośrubuję, kolego.
+
+324
+00:33:51,500 --> 00:33:55,300
+Po prostu obserwuj ją
+i w razie czego daj znać.
+
+325
+00:33:55,300 --> 00:33:58,800
+Na wizytówce znajdziesz
+numer mojej komórki.
+
+326
+00:34:01,800 --> 00:34:05,300
+- Co to?
+- Demoniczna pieczęć.
+
+327
+00:34:09,500 --> 00:34:15,500
+- Podpatrzyłeś to w Internecie?
+- Nie. To zastrzeżony wzór.
+
+328
+00:34:15,700 --> 00:34:19,300
+Trójkąt Salomona i stare runy
+w języku enochiańskim.
+
+329
+00:34:19,400 --> 00:34:22,500
+Gdy Furcyfer cię zaatakuje,
+będzie musiał wejść w ten krąg.
+
+330
+00:34:22,500 --> 00:34:26,000
+Pieczęć go w nim zatrzyma,
+a ja odeślę go do piekła.
+
+331
+00:34:26,000 --> 00:34:29,900
+Chyba styknie.
+Pora wziąć się do roboty.
+
+332
+00:34:30,600 --> 00:34:34,000
+Wejdź do kręgu.
+
+333
+00:34:36,800 --> 00:34:40,500
+No nie!
+Szedłem na rekord.
+
+334
+00:34:46,200 --> 00:34:50,600
+- Skąd się tu wziąłeś, John?
+- Z uciech rodziców.
+
+335
+00:34:51,800 --> 00:34:54,200
+- Często tak się zachowujesz.
+- Jak?
+
+336
+00:34:54,300 --> 00:34:56,500
+- Przykrywasz emocje dowcipem.
+- Serio?
+
+337
+00:34:56,600 --> 00:34:59,700
+Przez co zastanawiam się,
+czy nie jesteś socjopatą.
+
+338
+00:34:59,700 --> 00:35:02,200
+Wybacz, jeśli nie pławię się
+we własnych uczuciach.
+
+339
+00:35:02,200 --> 00:35:04,500
+Jestem zwolennikiem
+olewania przeszłości.
+
+340
+00:35:04,500 --> 00:35:07,400
+- Liczy się tu i teraz.
+- Nie wierzę w to.
+
+341
+00:35:07,500 --> 00:35:11,200
+Zaryzykowałeś życiem, by przekonać mnie,
+że moja przeszłość jest ważna.
+
+342
+00:35:11,400 --> 00:35:14,400
+Daj spokój, John.
+Powierzyłam ci własne życie.
+
+343
+00:35:14,400 --> 00:35:18,600
+Mógłbyś zrobić coś dla mnie
+i zdradzić mi jakiś mały szczegół.
+
+344
+00:35:18,700 --> 00:35:22,700
+Moja matka umarła,
+wydając mnie na świat.
+
+345
+00:35:23,100 --> 00:35:28,100
+- Albo wielki szczegół.
+- Ojciec powiedział, że to moja wina.
+
+346
+00:35:30,000 --> 00:35:34,400
+Wymyślił mi nawet ksywkę.
+Co noc mam ją w mojej głowie.
+
+347
+00:35:34,400 --> 00:35:36,300
+"Czołem, Morderco".
+
+348
+00:35:36,400 --> 00:35:41,500
+A pewnego dnia, jak zresztą co dnia,
+wrócił z pubu, przywalił mi i rzekł:
+
+349
+00:35:41,500 --> 00:35:45,800
+"To za to, co zrobiłeś
+własnej matce, Morderco".
+
+350
+00:35:45,900 --> 00:35:51,200
+- Zastanawiasz się czasami, jaka była?
+- Nie ma sensu. Odnajdę ją.
+
+351
+00:35:52,100 --> 00:35:55,600
+Za dzieciaka zaczytywałem się
+w książkach o okultyzmie.
+
+352
+00:35:55,600 --> 00:35:58,200
+Nauczyłem się zaklęć,
+rytuałów i rzucania klątw.
+
+353
+00:35:58,200 --> 00:36:01,300
+Potrafiłem przywoływać
+wszelkie rodzaju martwe rzeczy.
+
+354
+00:36:01,400 --> 00:36:07,800
+Z wyjątkiem jej.
+Póki co.
+
+355
+00:36:08,900 --> 00:36:14,800
+- Potrafiłbyś przyzwać mojego ojca?
+- Nie spodobałoby ci się to.
+
+356
+00:36:16,100 --> 00:36:18,600
+Przygotuj się.
+
+357
+00:36:22,400 --> 00:36:26,800
+- Miałeś dać mi cynk.
+- Nie chce pan tu przebywać.
+
+358
+00:36:27,000 --> 00:36:32,200
+Owszem, chce.
+To nie nasz ochroniarz.
+
+359
+00:36:38,200 --> 00:36:39,900
+Spokojnie, Liv.
+
+360
+00:36:40,000 --> 00:36:44,700
+Zabiłeś tego miłego gościa.
+Powinienem to przewidzieć.
+
+361
+00:36:44,700 --> 00:36:48,100
+Chcesz jej, wodzu?
+No to po nią przyjdź.
+
+362
+00:36:48,200 --> 00:36:50,900
+Skoro nalegasz.
+
+363
+00:37:14,500 --> 00:37:19,200
+Nergal mówił, że twoim rytuałom
+brakuje mocy silnej woli.
+
+364
+00:37:21,000 --> 00:37:23,400
+Uciekaj, Liv!
+
+365
+00:37:25,100 --> 00:37:28,400
+- John!
+- Myślałeś, że mnie uwięzisz?
+
+366
+00:37:28,400 --> 00:37:32,900
+Sprowadziłeś mnie
+do centrum miasta w środku nocy.
+
+367
+00:37:39,500 --> 00:37:43,200
+W tym miejscu
+to ja jestem Bogiem.
+
+368
+00:37:43,300 --> 00:37:47,800
+O, przypomniałeś mi o czymś.
+Prawie bym zapomniał.
+
+369
+00:37:54,900 --> 00:37:58,100
+Oby to się udało, John.
+
+370
+00:38:07,800 --> 00:38:11,700
+- Co się dzieje?
+- Efekt silnej woli.
+
+371
+00:38:30,200 --> 00:38:34,800
+Wypuść mnie, John,
+a uwolnię duszę Astry.
+
+372
+00:38:34,800 --> 00:38:37,700
+Gdybyś tylko mógł.
+
+373
+00:38:40,600 --> 00:38:43,200
+John, to ty?
+
+374
+00:38:49,200 --> 00:38:53,300
+Chcę wrócić do domu.
+Zabierz mnie do niego.
+
+375
+00:38:56,000 --> 00:39:00,600
+Wypuść mnie,
+a uwolnię jej duszę.
+
+376
+00:39:05,500 --> 00:39:08,300
+John, boję się.
+
+377
+00:39:26,500 --> 00:39:30,500
+John, przestań!
+To nie Astra!
+
+378
+00:39:30,500 --> 00:39:33,000
+Boję się!
+
+379
+00:39:37,100 --> 00:39:42,600
+Myślisz, że możesz mieszać mi w życiu?
+Mam dla ciebie wiadomość, kolego.
+
+380
+00:39:43,200 --> 00:39:48,000
+Przybędę po Astrę.
+A Nergal będzie następny!
+
+381
+00:39:48,200 --> 00:39:52,000
+Możesz mu to przekazać...
+w piekle!
+
+382
+00:40:22,000 --> 00:40:24,600
+Wszystko w porządku?
+
+383
+00:40:24,600 --> 00:40:29,000
+Ma dole czeka mój kumpel.
+Odwiezie cię do domu.
+
+384
+00:40:34,500 --> 00:40:36,600
+Jazda!
+
+385
+00:40:44,000 --> 00:40:46,100
+/Kim jest Astra?
+
+386
+00:40:46,100 --> 00:40:50,500
+Była córką naszego przyjaciela
+z Newcastle w Anglii.
+
+387
+00:40:50,500 --> 00:40:52,700
+Opętał ją demon.
+
+388
+00:40:52,800 --> 00:40:58,600
+John stanął do walki sam i próbował
+przyzwać potężniejszego demona.
+
+389
+00:40:59,000 --> 00:41:00,200
+Nergala.
+
+390
+00:41:00,300 --> 00:41:05,400
+Powiedział, że rozkaże mu
+odwołać pomniejszego demona.
+
+391
+00:41:05,700 --> 00:41:09,200
+- Ale zamiast tego porwał Astrę?
+- Tak.
+
+392
+00:41:09,200 --> 00:41:13,200
+Po tym, jak rozszarpał ją
+na kawałki na naszych oczach.
+
+393
+00:41:13,300 --> 00:41:18,100
+John zawsze uważa,
+że ma wszystko pod kontrolą.
+
+394
+00:41:18,100 --> 00:41:22,500
+Aż sama w to wierzysz.
+Na tym polega jego magia.
+
+395
+00:41:22,600 --> 00:41:25,800
+Ale także jego klątwa.
+
+396
+00:41:26,700 --> 00:41:29,600
+Na twoim miejscu
+trzymałbym się z dala od niego.
+
+397
+00:41:29,600 --> 00:41:34,000
+Nawet nie wiesz, jak bardzo żałuję,
+że twój ojciec tak nie postąpił.
+
+398
+00:41:35,200 --> 00:41:38,200
+Jesteśmy na Edgewood Avenue.
+
+399
+00:41:38,200 --> 00:41:41,100
+Gdy użyłam daru widzenia,
+mapa wskazała na tę ulicę.
+
+400
+00:41:41,200 --> 00:41:43,900
+Zatrzymaj się.
+
+401
+00:41:49,400 --> 00:41:53,800
+Puszczaj mnie!
+Dlaczego?!
+
+402
+00:41:56,400 --> 00:42:01,600
+Kto mógł to zrobić
+mojemu chłopcu?!
+
+403
+00:42:12,100 --> 00:42:16,100
+Zabito dzisiaj nastolatka.
+Na Edgewood Avenue.
+
+404
+00:42:16,200 --> 00:42:18,700
+Wiedzieliśmy, że coś się stanie.
+Mogliśmy temu zapobiec.
+
+405
+00:42:18,700 --> 00:42:23,000
+- Porzuć tę filozofię, bo zwariujesz.
+- A może ocalę czyjeś życie?
+
+406
+00:42:23,000 --> 00:42:26,700
+Muszę sprawdzić, czy ktoś jeszcze
+może mieć kłopoty. Suń się.
+
+407
+00:42:26,700 --> 00:42:31,600
+Udałam się do biblioteki i spójrz.
+To się dzieje wszędzie.
+
+408
+00:42:32,100 --> 00:42:34,600
+Poradzę ci coś.
+Wróć do pracy w wypożyczalni
+
+409
+00:42:34,600 --> 00:42:36,800
+i mieszkaj sobie w norze hobbita.
+Będziesz bezpieczna.
+
+410
+00:42:36,800 --> 00:42:40,000
+Nie mogę się kryć,
+kiedy giną ludzie.
+
+411
+00:42:40,100 --> 00:42:44,400
+Muszę odnajdywać te istoty
+i powstrzymywać je jak mój ojciec.
+
+412
+00:42:44,500 --> 00:42:49,600
+- Ale nie zrobię tego sama.
+- Patrzysz na niewłaściwą osobę.
+
+413
+00:42:50,400 --> 00:42:54,900
+- Spłaciłem dług. Żyjesz, prawda?
+- Jeśli nie dla nich, zrób to dla Astry.
+
+414
+00:42:54,900 --> 00:42:59,200
+- Niech jej śmierć coś znaczy.
+- Pomyślę nad tym.
+
+415
+00:43:06,900 --> 00:43:09,500
+Dzięki, kolego.
+
+416
+00:43:11,000 --> 00:43:14,800
+Gratulacje. Naprawdę uwierzyła,
+że to był jej pomysł.
+
+417
+00:43:14,900 --> 00:43:16,000
+Prościzna.
+
+418
+00:43:16,100 --> 00:43:19,100
+Najtrudniej było nakłonić Ritchiego,
+by pojechał niedaleko Edgewood Avenue.
+
+419
+00:43:19,100 --> 00:43:23,100
+- Dlaczego nie poprosiłeś jej o pomoc?
+- Nigdy by mi nie zaufała.
+
+420
+00:43:23,100 --> 00:43:25,700
+- To musiało wyjść od niej.
+- Szkoda.
+
+421
+00:43:25,800 --> 00:43:29,300
+Młody chłopak musiał przez to
+zginąć na Edgewood Avenue.
+
+422
+00:43:29,300 --> 00:43:32,900
+Takie rzeczy
+prześladują mnie codziennie.
+
+423
+00:43:33,900 --> 00:43:38,700
+Liv i ten chłopak mieli dziś zginąć.
+Mogłem uratować jedno z nich.
+
+424
+00:43:38,700 --> 00:43:42,000
+Czyli jednak nam pomożesz.
+
+425
+00:43:42,700 --> 00:43:45,300
+Musisz zorientować się,
+z jaką siłą mamy do czynienia.
+
+426
+00:43:45,400 --> 00:43:48,900
+- Tego chciałeś, prawda.
+- Muszę cię o coś spytać.
+
+427
+00:43:48,900 --> 00:43:54,500
+Robisz to, by uratować tych ludzi,
+czy żeby ocalić własną, żałosną duszę?
+
+428
+00:43:55,000 --> 00:43:59,300
+Podchwytliwe pytanie.
+Nie będę na nie odpowiadał.
+
+429
+00:43:59,300 --> 00:44:03,800
+Dopisz mi to do rachunku.
+I tak ocaliłem im tyłki.
+
+430
+00:44:19,900 --> 00:44:24,200
+/Nazywam się John Constantine.
+/To ja wychodzę spośród cieni,
+
+431
+00:44:24,200 --> 00:44:27,900
+/ubrany w płaszcz i arogancję.
+/Odpędzę nękające cię demony.
+
+432
+00:44:28,000 --> 00:44:31,000
+/Przywalę im prosto w jaja
+/i splunę na nie.
+
+433
+00:44:31,000 --> 00:44:36,000
+/Podążam tą ścieżką samotnie,
+/ponieważ nie oszukujmy się...
+
+434
+00:44:38,100 --> 00:44:42,300
+/kto byłby na tyle szalony,
+/by podążyć nią ze mną?
+
+435
+00:44:43,600 --> 00:44:48,800
+.:: GrupaHatak.pl ::.
+
+436
+00:44:49,800 --> 00:44:53,750
+www.NapiProjekt.pl - nowa jakość napisów.
+Napisy zostały specjalnie dopasowane do Twojej wersji filmu.
+

@@ -13,7 +13,9 @@ scriptname = ptv.getAddonInfo('name')
 ptv = xbmcaddon.Addon(scriptID)
 
 import mrknow_Parser,mrknow_pCommon, mrknow_pLog
+from jsbeautifier import beautify
 
+HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
 
 CHARS = [
     [ 'F', 'a' ],
@@ -39,7 +41,6 @@ class mrknow_urlparser:
   def __init__(self):
     self.cm = mrknow_pCommon.common()
     self.log = mrknow_pLog.pLog()
-
 
   def hostSelect(self, v):
     hostUrl = False
@@ -76,7 +77,7 @@ class mrknow_urlparser:
   def getVideoLink(self, url,referer=''):
     nUrl=''
     host = self.getHostName(url)
-    self.log.info("uvideo hosted by: " + host)
+    self.log.info("URLPARSER uvideo hosted by: " + host)
     self.log.info('URL: '+url + ' ' +referer)
     
     if host == 'panel.erstream.com':
@@ -170,9 +171,93 @@ class mrknow_urlparser:
     if host== 'hqstream.tv':
         nUrl = self.hqstream(url,referer)           
     if host== 'maxupload.tv':
-        nUrl = self.maxuploadtv(url,referer)           
-            
+        nUrl = self.maxuploadtv(url,referer)
+    if host== 'www.fupptv.pl':
+        nUrl = self.fupptvpl(url,referer)
+    if host== '7cast.net':
+        nUrl = self.sevencastnet(url,referer)
+    if host== 'abcast.biz':
+        nUrl = self.abcastbiz(url,referer)
+    if host== 'flexstream.net':
+        nUrl = self.flexstreamnet(url,referer)
+    if host== 'file1.npage.de':
+        nUrl = self.file1npagede(url,referer)
+    if host== 'www.freelivestream.tv':
+        nUrl = self.freelivestreamtv(url,referer)
+    if 'webhostbox.net' in host:
+        nUrl = self.webhostboxnet(url,referer)
+    if '.bix.com' in host:
+        nUrl = self.bixcom(url,referer)
     return nUrl
+
+  def bixcom(self,url,referer):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile('<source src="(.*?).m3u8">').findall(link)
+    #query = urlparse.urlparse(url)
+    #p = urlparse.parse_qs(query.query)
+    #print p
+    print ("LINK",match)
+    if len(match) > 0:
+        #return match[0]+ ' playpath='+p['file'][0]+' swfUrl=http://www.freelivestream.tv/swfs/player.swf live=true timeout=15 swfVfy=true pageUrl=http://www.freelivestream.tv/'
+        #return match[0]+'.m3u8'
+        return "http://live.polwizjer.com/pl/2014tvaxn/playlist.m3u8/key=SFbctmb31JV9q0V11mfPGyB2JuexO5PMINxkAYozw73uKr8glKswx6OhFbU7V7ZnowO1g2LAoQHdTEymclv842GG8zzTikBOIbz4jbc="
+
+    else:
+        return ''
+
+
+  def freelivestreamtv(self,url,referer):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile('var streamer="(.*?)";').findall(link)
+    query = urlparse.urlparse(url)
+    p = urlparse.parse_qs(query.query)
+    print p
+    print ("LINK",link)
+    if len(match) > 0:
+        return match[0]+ ' playpath='+p['file'][0]+' swfUrl=http://www.freelivestream.tv/swfs/player.swf live=true timeout=15 swfVfy=true pageUrl=http://www.freelivestream.tv/'
+    else:
+        return ''
+  def file1npagede(self,url,referer):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile('file: "(.*?)"').findall(link)
+
+    print ("LINK",link)
+    if len(match) > 0:
+        link = match[0]
+        return link
+    else:
+        return ''
+
+  def webhostboxnet(self,url,referer):
+    query_data = { 'url': url, 'use_host': True,  'host': HOST,'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile('file: "(.*?)"').findall(link)
+    print ("LINK",link)
+    #return self.pp.pageanalyze(url,referer)
+    return ''
+
+  def flexstreamnet(self,url,referer):
+    query = urlparse.urlparse(url)
+    p = urlparse.parse_qs(query.query)
+    print p
+    print ("LINK",url)
+    link = 'rtmpe://94.242.228.143:443/loadbalance playpath='+p['file'][0]+' swfUrl=http://p.jwpcdn.com/6/8/jwplayer.flash.swf live=true timeout=15 swfVfy=true pageUrl=http://flexstream.net/'
+    #link = 'rtmp://live.flexstream.net/redirect playpath='+p['file'][0]+' swfUrl=http://p.jwpcdn.com/6/8/jwplayer.flash.swf live=true timeout=15 swfVfy=true pageUrl=http://flexstream.net/'
+    #    print link
+    return link
+
+
+  def abcastbiz(self,url,referer):
+    query = urlparse.urlparse(url)
+    p = urlparse.parse_qs(query.query)
+    print p
+    print ("LINK",url)
+    link = 'rtmpe://94.242.228.26:443/loadbalance playpath='+p['file'][0]+' swfUrl=http://www.curtirtv.net/player.swf live=true timeout=15 swfVfy=true pageUrl=http://www.abcast.biz'
+    #    print link
+    return link
 
   def parsererstream(self,url):
     req = urllib2.Request(url)
@@ -183,8 +268,36 @@ class mrknow_urlparser:
       return finalurl
     else: 
       return False
-  
-  
+
+  def sevencastnet(self,url,referer):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile('<script type="text/javascript">eval\(function\(p,a,c,k,e,d\)(.*?)\n</script>').findall(link)
+    txtjs= "eval(function(p,a,c,k,e,d)" + match[0]
+    link2 = beautify(txtjs)
+    match_myScrT = re.compile('myScrT.push\(\\\\\'(.*?)\\\\\'\);').findall(link2)
+    match_myRtk = re.compile('myRtk.push\(\\\\\'(.*?)\\\\\'\);').findall(link2)
+    myScrT = beautify('unescape(\'' + ''.join(match_myScrT) + '\');')
+    myRtk = beautify('unescape(\'' + ''.join(match_myRtk) + '\');')
+    match_file = re.compile('unescape\(\'(.*?)\'\);').findall(myScrT)
+    match_server =re.compile('unescape\(\'(.*?)\'\);').findall(myRtk)
+    print("match_file ", match_server, match_file )
+    nUrl = match_server[0] + ' playpath='+match_file[0] +'  live=true timeout=12 swfVfy=true swfUrl=http://7cast.net/jplayer.swf pageUrl='+referer
+    print("nUrl", nUrl)
+    return nUrl
+
+  def fupptvpl(self,url,referer):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile('file: "(.*?)"').findall(link)
+    match1 = re.compile('streamer: "(.*?)"').findall(link)
+    #print("Link",match,match1,link)
+    if len(match) > 0:
+        nUrl = match1[0] +match[1] +' live=true timeout=12 swfVfy=true  swfUrl=http://www.fupptv.pl/media/flash/player510.swf pageUrl='+referer
+        return nUrl
+    else:
+      return ''
+
   def maxuploadtv(self,url,referer):
     query_data = { 'url': url.replace('file', 'embed'), 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)    
@@ -200,19 +313,7 @@ class mrknow_urlparser:
     match = re.compile("url: \'(.*?)\'\r\n").findall(link)
     #print("Link",match,link)
     if len(match) > 0:
-    #    print ("PDATA",match)
-    #    url = "http://www.putlocker.com" + match[0]
-    #    query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
-    #    link = self.cm.getURLRequestData(query_data)
-    #    match = re.compile('</link><media:content url="(.+?)" type="video').findall(link)
-    #    print match
-    #    if len(match) > 0:
-    #      url = match[0].replace('&amp;','&')
-    #      print url
-    #      return url
-#        else:
-#          return False
-#      else:
+
         return match[0]
     else:
       return ''

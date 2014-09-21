@@ -39,7 +39,7 @@ TV_ONLINE_TABLE = {
          #    2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
         #     2500 : ["Netvi.tv", 'netvi'],
-             2600 : ["Radio81.pl [testy nic nie dziala]", 'radio81'],
+             2600 : ["Radio81.pl [test 10% dziala]", 'radio81'],
          #    2700 : ["Streamon.pl", 'streamon'],
              2800 : ["MmTV.pl","mmtv"]
 }

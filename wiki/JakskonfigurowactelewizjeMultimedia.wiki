@@ -1,0 +1,19 @@
+#summary One-sentence summary of this page.
+
+= MMTV.pl =
+
+Jak skonfigurować telewizję Multimedia na XBMC
+
+
+= Krok 1 - dodajemy urządzenie =
+Na iphonie, lub androidzie instalujemy aplikację MMTV:
+  * Android - https://www.mmtv.pl/FrontOffice/DocumentPage.go?id=22
+  * Iphone - [https://www.mmtv.pl/FrontOffice/DocumentPage.go?id=23 Iphone]
+
+Następnie, logujemy się pierwszy raz do aplikacji. Dzięki temu będziemy mieli id urządzenia dla XBMC
+
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages

@@ -18,7 +18,7 @@ import pLog, libCommon, Parser, settings
 log = pLog.pLog()
 
 mainUrl = 'http://www.mmtvliveapp.com/mobile/ios/pl/images/'
-chanels = 'https://www.mmtv.pl/FrontOffice/ApiliveProductsList.go?platform=IOS&terminal=PHONE'
+chanels = 'https://www.mmtv.pl/FrontOffice/ApiliveProductsList.go?platform='+ptv.getSetting('mmtv_platform')+'&terminal='+ptv.getSetting('mmtv_terminal')
 playerUrl = 'https://www.mmtv.pl/FrontOffice/LiveAvailability.go'
 loginUrl = 'https://www.mmtv.pl/FrontOffice/ApisubscriberLogin.go'
 
@@ -79,7 +79,7 @@ class mmtv:
             stream = json.dumps(o["live"]).replace('"','')
             image = json.dumps(o["cover"]).replace('"','')
         #    image = ptv.getAddonInfo('path') + os.path.sep + "images" + os.path.sep  + nazwa +".png"
-            
+            print ("Live",stream)
             #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
             #self.add('mmtv', 'playSelectedMovie', 'None', nazwa, mainUrl+image, stream, 'None', 'None', True, False)
             self.add('mmtv', 'playSelectedMovie', 'None', nazwa,image, stream, 'None', 'None', False, False)
@@ -94,16 +94,20 @@ class mmtv:
         #url = "https://www.mmtv.pl/FrontOffice/ApiliveProductPlaylist.go?productId=39&platform=IOS&terminal=PHONE"
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        print ("AL",link)
+        print ("ALLLLLLL",link)
         objs = json.loads(link)
         print objs
         session = self.cm.getCookieItem(self.COOKIEFILE, 'JSESSIONID')
         linkVideo = json.dumps(objs['result']['livx']).replace('"','')
 #        linkVideo = match[0].replace('sss','hls').replace('manifest?type=.ism','playlist.m3u8').replace('https','http')
         print ('Data',session,linkVideo)
-        #return linkVideo + '&stream=2'
+        print ("CEEEEDAA",link)
+        if (ptv.getSetting('mmtv_platform') == 'IOS'):
+            return linkVideo
+        if (ptv.getSetting('mmtv_platform') == 'ANDROID'):
+            linkVideo = linkVideo + '/playlist.m3u8?sessionId='+session
+            return linkVideo.replace('rtsp','hls')
         return linkVideo
-
 
 
     def getSizeAllItems(self, url):

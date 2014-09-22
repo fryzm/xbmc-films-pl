@@ -31,6 +31,8 @@ W konfiguracji XBMC wpisujemy
   * platforma - są dwie *IOS*, lub *ANDROID* (wszystkie DUŻYMI LITERAMI)
   * typ - znam dwa *PHONE* lub *TABLET* (wszystkie DUŻYMI LITERAMI)
 
+Jeżeli wpiszemy zły typ lub platformę - aplikacja nie będzie si chciała poprawnie zalogować 
+*CAPTCHA* - Jeżeli kilka razy źle się zalogujemy najpierw musimy poprawnie zalogować się na stronie https://www.mmtv.pl/ aby "wyłączyć" żądanie CAPTCHA 
 
 To tyle. 
 Po zapisaniu ustawień ponownie wychodzimy w xbmc do serwisu MmTV.pl

@@ -28,8 +28,8 @@ W konfiguracji XBMC wpisujemy
   * login 
   * hasło 
   * Id Urządzenia - dane ID z *data-deviceid*
-  * platforma - są dwie *IOS*, lub *ANDROID*
-  * typ - znam dwa *PHONE* lub *TABLET*
+  * platforma - są dwie *IOS*, lub *ANDROID* (wszystkie DUŻYMI LITERAMI)
+  * typ - znam dwa *PHONE* lub *TABLET* (wszystkie DUŻYMI LITERAMI)
 
 
 To tyle. 

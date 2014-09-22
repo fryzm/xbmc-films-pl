@@ -2,8 +2,6 @@
 
 = MMTV.pl =
 
-===Uwaga - działa tylko na razie z uzrądzeniami typu IOS ===
-
 Jak skonfigurować telewizję Multimedia na XBMC
 
 

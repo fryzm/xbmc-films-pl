@@ -80,8 +80,11 @@ class mrknow_Pageparser:
         nUrl = self.teamcastpl(url)
     elif host == 'www.yousat.tv':
         nUrl = self.yousattv(url)
+    #if 'webhostbox.net' in host:
+    #    nUrl = self.webhostboxnet(url,referer)
+
     elif nUrl  == '':
-        print "Jedziemy na ELSE - "+  nUrl
+        print "Jedziemy na ELSE - "+  url
         nUrl = self.pageanalyze(url,host)
 
 
@@ -94,7 +97,7 @@ class mrknow_Pageparser:
     match1=re.compile('<a href="(.*?)"(.*?)><span class="belka1a">(.*?)</span></a>').findall(link)
     print ("AAAAA",match1)
     if len(match1[0][0])>0:
-        nUrl = self.up.getVideoLink(match1[0][0], url)
+        nUrl = self.getVideoLink(match1[0][0])
         return nUrl
     else:
         return ''
@@ -107,13 +110,15 @@ class mrknow_Pageparser:
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match1=re.compile('<iframe(.*?)src="(.*?)"(.*?)></iframe>').findall(link)
-    print ("AAAAA",match1,match1)
-    if len(match1[0][1])>0:
+    print ("AAAAA",match1)
+    if len(match1)>0:
         print ("Jaedklsjkdfjljsdf")
         nUrl = self.pageanalyze(match1[0][1],url)
         return nUrl
     else:
-        return ''
+        nUrl = self.pageanalyze(url,url)
+        return nUrl
+
 
   def mecztv(self,url):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
@@ -288,7 +293,7 @@ class mrknow_Pageparser:
     #<script type='text/javascript'> file='kllkdkfhgdfh'; width='640'; height='400';</script><script type='text/javascript' src='http://flexstream.net/embedPlayer.js'></script>
     match25=re.compile('<script type=\'text/javascript\'> file=\'(.*?)\'; width=\'(.*?)\'; height=\'(.*?)\';</script><script type=\'text/javascript\' src=\'http://flexstream.net/embedPlayer.js\'></script>').findall(link)
     match26=re.compile('<script type=\'text/javascript\'> file=\'(.*?)\'(.*?)</script><script type=\'text/javascript\' src=\'http://abcast.biz/embedPlayer.js\'></script>').findall(link)
-    match27=re.compile('<script type=\'text/javascript\'> file=\'(.*?)\'(.*?)</script>(.*?)<script type=''text/javascript\' src=\'http://www.freelivestream.tv/embedPlayerScript.js\'></script>').findall(link)
+    match27=re.compile('<script type=\'text/javascript\'> file=\'(.*?)\'(.*?)</script>\n<script type=\'text/javascript\' src=\'http://www.freelivestream.tv/embedPlayerScript.js\'></script>').findall(link)
     #http://www.freelivestream.tv/embedPlayer.php?file=canalplus34952&amp;width=600&amp;height=400
     #<script type='text/javascript'> file='canalplus34952'; width='600'; height='400';</script>\n<script type='text/javascript' src='http://www.freelivestream.tv/embedPlayerScript.js'></script>
 

@@ -49,7 +49,7 @@ class mmtv:
             #data = self.cm.getURLRequestData(query_data, post_data)
             #print ("Data2",data)
             if self.isLoggedIn(data) == True:
-                xbmc.executebuiltin("XBMC.Notification(" + ptv.getSetting('mmtv_user') + ", Zostales poprawnie zalogowany,4000)")
+                xbmc.executebuiltin("(" + ptv.getSetting('mmtv_user') + ", Zostales poprawnie zalogowany,4000)")
             else:
                 xbmc.executebuiltin("XBMC.Notification(Blad logowania, sprawdź login i hasło. Używam Player z limitami,4000)")  
         else:
@@ -101,8 +101,9 @@ class mmtv:
         linkVideo = json.dumps(objs['result']['livx']).replace('"','')
 #        linkVideo = match[0].replace('sss','hls').replace('manifest?type=.ism','playlist.m3u8').replace('https','http')
         print ('Data',session,linkVideo)
-        return linkVideo + '&stream=2'
-        
+        #return linkVideo + '&stream=2'
+        return linkVideo
+
 
 
     def getSizeAllItems(self, url):

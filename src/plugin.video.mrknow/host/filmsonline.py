@@ -2,7 +2,7 @@
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
-import urlparser
+
 
 
 scriptID = 'plugin.video.mrknow'
@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,libCommon, Player
+import pLog, settings, Parser,libCommon, Player, mrknow_urlparser
 
 log = pLog.pLog()
 
@@ -36,7 +36,7 @@ class filmsonline:
         log.info('Starting filmsonline.pl')
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
-        self.up = urlparser.urlparser()
+        self.up = mrknow_urlparser.mrknow_urlparser()
         self.cm = libCommon.common()
         self.p = Player.Player()
 
@@ -234,12 +234,9 @@ class filmsonline:
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
         filtrowanie = self.parser.getParam(params, "filtrowanie")
-        print("url",url,strona, filtrowanie)
+        print("url",category,url,strona, filtrowanie)
         
         if name == None:
-            self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Wszystkie':
-            log.info('Jest Wszystkie: ')
             self.listsItems('http://www.films-online.pl/',1,'')
         elif name == 'main-menu' and category == 'Data premiery':
             log.info('Jest Wszystkie: ')

@@ -184,19 +184,32 @@ class mrknow_urlparser:
         nUrl = self.file1npagede(url,referer)
     if host== 'www.freelivestream.tv':
         nUrl = self.freelivestreamtv(url,referer)
-    if 'webhostbox.net' in host:
-        nUrl = self.webhostboxnet(url,referer)
+    if host== 'www.firedrive.com':
+        nUrl = self.firedrivecom(url,referer)
     if '.bix.com' in host:
         nUrl = self.bixcom(url,referer)
     return nUrl
+
+  def firedrivecom(self,url,referer):
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile('<input type="hidden" name="confirm" value="(.*?)"/>').findall(link)
+    print ("A",match)
+    COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "firedrivecom.cookie"
+    query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': COOKIEFILE, 'use_post': True, 'return_data': True }
+    postdata = {'confirm':match[0]}
+    link = self.cm.getURLRequestData(query_data, postdata)
+    match1 = re.compile('file: loadURL\(\'(.*?)\'\),').findall(link)
+    if len(match1) > 0:
+        return match1[0]
+    else:
+        return ''
+
 
   def bixcom(self,url,referer):
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match = re.compile('<source src="(.*?).m3u8">').findall(link)
-    #query = urlparse.urlparse(url)
-    #p = urlparse.parse_qs(query.query)
-    #print p
     print ("LINK",match)
     if len(match) > 0:
         #return match[0]+ ' playpath='+p['file'][0]+' swfUrl=http://www.freelivestream.tv/swfs/player.swf live=true timeout=15 swfVfy=true pageUrl=http://www.freelivestream.tv/'
@@ -231,13 +244,6 @@ class mrknow_urlparser:
     else:
         return ''
 
-  def webhostboxnet(self,url,referer):
-    query_data = { 'url': url, 'use_host': True,  'host': HOST,'use_cookie': False, 'use_post': False, 'return_data': True }
-    link = self.cm.getURLRequestData(query_data)
-    match = re.compile('file: "(.*?)"').findall(link)
-    print ("LINK",link)
-    #return self.pp.pageanalyze(url,referer)
-    return ''
 
   def flexstreamnet(self,url,referer):
     query = urlparse.urlparse(url)
@@ -282,7 +288,7 @@ class mrknow_urlparser:
     match_file = re.compile('unescape\(\'(.*?)\'\);').findall(myScrT)
     match_server =re.compile('unescape\(\'(.*?)\'\);').findall(myRtk)
     print("match_file ", match_server, match_file )
-    nUrl = match_server[0] + ' playpath='+match_file[0] +'  live=true timeout=12 swfVfy=true swfUrl=http://7cast.net/jplayer.swf pageUrl='+referer
+    nUrl = match_server[0] + ' playpath='+match_file[0] +'  live=true timeout=12 swfVfy=true swfUrl=http://7cast.net/jplayer.swf timeout=15 pageUrl='+referer
     print("nUrl", nUrl)
     return nUrl
 
@@ -293,7 +299,7 @@ class mrknow_urlparser:
     match1 = re.compile('streamer: "(.*?)"').findall(link)
     #print("Link",match,match1,link)
     if len(match) > 0:
-        nUrl = match1[0] +match[1] +' live=true timeout=12 swfVfy=true  swfUrl=http://www.fupptv.pl/media/flash/player510.swf pageUrl='+referer
+        nUrl = match1[0] +match[1] +' live=true timeout=15 swfVfy=true  swfUrl=http://www.fupptv.pl/media/flash/player510.swf pageUrl='+referer
         return nUrl
     else:
       return ''
@@ -611,7 +617,8 @@ class mrknow_urlparser:
     match23=re.compile("'streamer': '(.*?)',").findall(link22)
     match24=re.compile("'file': '(.*)',").findall(link22)
     #rtmpdump -r "rtmpe://204.45.157.74/live" -a "live" -f "WIN 11,6,602,171" -W "http://www.udemy.com/static/flash/player5.9.swf" -p "http://www.castamp.com/embed.php?c=ilmecz&tk=1dGwTOdu&vwidth=640&vheight=480" -y "ilmecz" -o ilmecz.flv
-    videolink = match23[0] + ' playpath=' +p['c'][0] + ' swfUrl=' + match22[0] + ' pageUrl=http://castamp.com/embed.php'
+    #videolink = match23[0] + ' playpath=' +p['c'][0] + ' swfUrl=' + match22[0] + ' timeout=15 pageUrl=http://castamp.com/embed.php'
+    videolink = match23[0] + ' playpath='+ match24[0] + ' swfUrl=' + match22[0] + ' timeout=15 live=true swfVfy=true pageUrl=http://castamp.com/embed.php'
     print ("Link",videolink)
     return videolink
 

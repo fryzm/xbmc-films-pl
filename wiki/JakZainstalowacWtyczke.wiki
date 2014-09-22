@@ -1,3 +1,5 @@
+#summary Instrukcja instalacji wtyczki Filmy online - mrknow.pl
+
 =Opis instalacji wtyczki=
 
 ==Instalacja repozytorium==

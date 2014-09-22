@@ -6,7 +6,7 @@ import urlparser,json
 
 
 scriptID = 'plugin.video.mrknow'
-scriptname = "Filmy online www.mrknow.pl - kinolive"
+scriptname = "Filmy online www.mrknow.pl - polvod"
 ptv = xbmcaddon.Addon(scriptID)
 
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
@@ -16,44 +16,32 @@ import pLog, settings, Parser,libCommon, Player
 
 log = pLog.pLog()
 
-#mainUrl = 'http://kinolive.pl/'
-mainUrl = 'http://alekino.tv'
+#mainUrl = 'http://polvod.pl/'
+mainUrl = 'http://polvod.pl'
 catUrl = 'http://alekino.tv/filmy/'
 
 HOST = 'Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/30.0'
 
 MENU_TAB = {0: "Filmy",
-            1: "Filmy z lektorem",
-            2: "Filmy z napisami",
-            3: "Filmy z dubbingiem",
-            4: "Filmy polskie",
-            5: "Filmy HD",
-#            6: "Top 100 - najczęściej oglądane",
-#            7: "Top 100 - ulubione",
-#            8: "Top 100 - najwyżej ocenione",
-#            7: "Popularne z okresu",
-#            10: "Sortowanie",
-            12: "Kategorie",
-            15: "Szukaj"
+            1: "Filmy dokumentalne",
+            #2: "Seriale",
+            3: "Dla dzieci",
+            4: "Top 100"
+            #15: "Szukaj"
             }
 
 
-
-class kinolive:
+class polvod:
     def __init__(self):
-        log.info('Starting kinolive.pl')
-        self.settings = settings.TVSettings()
+        log.info('Starting polvod.pl')
         self.parser = Parser.Parser()
         self.up = urlparser.urlparser()
         self.cm = libCommon.common()
-        self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveserial.cookie"
-        query_data = {'url': 'http://alekino.tv/auth/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
-        data = self.cm.getURLRequestData(query_data)
         self.p = Player.Player()
 
     def listsMainMenu(self, table):
         for num, val in table.items():
-            self.add('kinolive', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
+            self.add('polvod', 'main-menu', val, 'None', 'None', 'None', 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -68,7 +56,7 @@ class kinolive:
             log.info('Listuje kategorie: ')
             for i in range(len(match1)):
                 url = mainUrl + match1[i][0].replace('.html','')
-                self.add('kinolive', 'categories-menu', match1[i][1].strip() + ' ' + match1[i][2].strip(), 'None', 'None', catUrl, 'None', 'None', True, False,'1','genres[0]='+match1[i][0])
+                self.add('polvod', 'categories-menu', match1[i][1].strip() + ' ' + match1[i][2].strip(), 'None', 'None', catUrl, 'None', 'None', True, False,'1','genres[0]='+match1[i][0])
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -88,7 +76,7 @@ class kinolive:
             if len(match1) > 0:
                 for i in range(len(match1)):
                         #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                        self.add('kinolive', 'playSelectedMovie', 'None', match1[i][6],  match1[i][2], mainUrl+ match1[i][1], 'aaaa', 'None', False, False)
+                        self.add('polvod', 'playSelectedMovie', 'None', match1[i][6],  match1[i][2], mainUrl+ match1[i][1], 'aaaa', 'None', False, False)
 
             xbmcplugin.endOfDirectory(int(sys.argv[1]))
     def listsItemsTop(self, url):
@@ -99,33 +87,26 @@ class kinolive:
                 for i in range(len(match)):
                         match1 = re.compile('<a href="(.*?)"><img src="(.*?)" width="107" height="142" title="(.*?)" alt="(.*?)" /></a>', re.DOTALL).findall(match[i])
                         #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                        self.add('kinolive', 'playSelectedMovie', 'None', match1[0][2],  match1[0][1], mainUrl+ match1[0][0], 'aaaa', 'None', False, False)
+                        self.add('polvod', 'playSelectedMovie', 'None', match1[0][2],  match1[0][1], mainUrl+ match1[0][0], 'aaaa', 'None', False, False)
 
             xbmcplugin.endOfDirectory(int(sys.argv[1]))
         
     def listsItems(self, url, strona='0', filtrowanie=''):
         if filtrowanie == None:
             filtrowanie = ''
-        urllink = url + '?' + filtrowanie +'&p='+ str(strona)
+        urllink = url + '?page='+ str(strona)
         query_data = { 'url': urllink, 'use_host': False, 'use_cookie': False, 'use_post': True, 'return_data': True }        
         link = self.cm.getURLRequestData(query_data)
-        #print ("L",link)
+        print ("L",link)
         #match = re.compile('<div class="film-main round">(.*?)<div class="tac">', re.DOTALL).findall(link)
-        match = re.compile('<div class="row-fluid span12 movie-item">(.*?)<div class="clearfix">', re.DOTALL).findall(link)
-        #print ("Match",match)
+        match = re.compile('<img class="cover" src="(.*?)"(.*?)>\r\n            </a>\r\n            <div class="media-body">\r\n              <div class="media-block">\r\n                <h4 class="media-heading uc"><a class="none-decoration" href="(.*?)">(.*?)</a>\r\n                                                                  </h4>', re.DOTALL).findall(link)
+        print ("Match",match)
         
         if len(match) > 0:
             for i in range(len(match)):
-                okladka = ''
-                match1 = re.compile('<a class="title" href="(.*?)">(.*?)</a>', re.DOTALL).findall(match[i])
-                tytul = match1[0][1].replace('<small>','').replace('</small>','')
-                match2 = re.compile('<div class="pull-left thumb" style="background-image:url\((.*?)\);">', re.DOTALL).findall(match[i])
-                #print match2
-                if len(match2) > 0:
-                    okladka = match2[0]
-                self.add('kinolive', 'playSelectedMovie', 'None', tytul,  okladka, mainUrl+ match1[0][0], 'aaaa', 'None', False, False)
+                self.add('polvod', 'playSelectedMovie', 'None', match[i][3], mainUrl+match[i][0], match[i][2], 'aaaa', 'None', False, False)
         log.info('Nastepna strona: '+  urllink)
-        self.add('kinolive', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona) + 1), str(filtrowanie))
+        self.add('polvod', 'categories-menu', 'Następna', 'None', 'None', url, 'None', 'None', True, False,str(int(strona) + 1), str(filtrowanie))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -138,7 +119,7 @@ class kinolive:
                 num = i + 1
                 title = 'Lista ' + str(num)
                 destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('kinolive', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
+                self.add('polvod', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))        
 
 
@@ -151,7 +132,7 @@ class kinolive:
                 num = i + 1
                 title = 'Lista ' + str(num)
                 destUrl = url + sort_asc + '&page=' + str(num)
-                self.add('kinolive', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
+                self.add('polvod', 'items-menu', 'None', title, 'None', destUrl, 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1])) 
 
 
@@ -160,27 +141,13 @@ class kinolive:
         query_data = { 'url': url, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         VideoData['year'] = str(self.getMovieYear(link))
-        match1 = re.compile('<a href="#" data-type="player" data-version="standard" data-id="(.*?)">', re.DOTALL).findall(link)
-        url1 = "http://alekino.tv/players/init/" + match1[0] + "?mobile=false"
-        query_data = { 'url': url1, 'use_host': True, 'host': HOST, 'use_cookie': False, 'use_post': False, 'return_data': True }
-        link = self.cm.getURLRequestData(query_data)
-        match15 = re.compile('"data":"(.*?)"', re.DOTALL).findall(link)
-        hash = match15[0].replace('\\','')
-        post_data = {'hash': hash}
-        query_data = {'url': 'http://alekino.tv/players/get', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
-        data = self.cm.getURLRequestData(query_data, post_data)
-        match16 = re.compile('<iframe src="(.*?)" (.*?)', re.DOTALL).findall(data)
-        #<iframe src="http://www.putlocker.com/embed/57870E83A986112B" width="989" height="535" frameborder="0" scrolling="no"></iframe>
-        print ("match16",match16,data)
+        match1 = re.compile('<video style="display: none;" id="(.*?)" class="player-video" src="(.*?)"></video>', re.DOTALL).findall(link)
+        print ("match1",match1)
         linkVideo = ''
-        if len(match16) > 0:
-            linkVideo = self.up.getVideoLink(match16[0][0].decode('utf8'))
-            if len(linkVideo) > 0:
-                VideoData['link'] = linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
-            else:
-                VideoData['link'] = ''
-                
-        return VideoData
+        if len(match1) > 0:
+            linkVideo = match1[0][1]
+            return linkVideo
+        return ''
         
     def getMovieYear(self,link):
         match = re.compile('<h1 class="movie-title">(.*?)\((.*?)\)(.*?)</h1>', re.DOTALL).findall(link)
@@ -196,7 +163,7 @@ class kinolive:
         openURL = urllib2.urlopen(req)
         readURL = openURL.read()
         openURL.close()
-        match = re.compile('<span class="nav_ext">...</span> <a href="http://kinolive.pl/filmy/page/(.*?)/">(.*?)</a></div>(.*?)</li>', re.DOTALL).findall(readURL)
+        match = re.compile('<span class="nav_ext">...</span> <a href="http://polvod.pl/filmy/page/(.*?)/">(.*?)</a></div>(.*?)</li>', re.DOTALL).findall(readURL)
         if len(match) == 1:
             numItems = match[0]
         return numItems
@@ -291,42 +258,23 @@ class kinolive:
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
         filtrowanie = self.parser.getParam(params, "filtrowanie")
-        print ("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZD",category,url,strona,filtrowanie,name)
+        print ("A",category,url,strona,filtrowanie,name)
         if name == None:
             self.listsMainMenu(MENU_TAB)
-        elif name == 'main-menu' and category == 'Filmy z lektorem':
-            log.info('Jest Filmy z lektorem: ')
-            self.listsItems(catUrl,1,'types[0]=1')
-        elif name == 'main-menu' and category == 'Filmy z napisami':
-            log.info('Jest Wszystkie: ')
-            self.listsItems(catUrl,1,'types[0]=3')
-        elif name == 'main-menu' and category == 'Filmy z dubbingiem':
-            log.info('Jest Wszystkie: ')
-            self.listsItems(catUrl,1,'types[0]=2')
-        elif name == 'main-menu' and category == 'Filmy polskie':
-            log.info('Jest Wszystkie: ')
-            self.listsItems(catUrl,1,'types[0]=4')
-        elif name == 'main-menu' and category == 'Filmy HD':
-            log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy/hd',1,'')
         elif name == 'main-menu' and category == 'Filmy':
-            log.info('Jest F: ')
-            self.listsItems(catUrl,1,'')
-        elif name == 'main-menu' and category == 'Kategorie':
-            log.info('Jest Gorące: ')
-            self.listsCategoriesMenu()
+            log.info('Jest Filmy .... ')
+            self.listsItems(mainUrl + '/filmy',1,'')
+        elif name == 'main-menu' and category == 'Filmy dokumentalne':
+            log.info('Jest Dokumentalne: ')
+            self.listsItems(mainUrl + '/Dokumentalny',1,'')
+        elif name == 'main-menu' and category == 'Dla dzieci':
+            log.info('Jest Dla-dzieci: ')
+            self.listsItems(mainUrl + '/Dla-dzieci',1,'')
 
-        elif name == 'main-menu' and category == 'Top 100 - najczęściej oglądane':
-            log.info('Jest Gorące: ')
-            self.listsItemsTop('http://kinolive.pl/top100?o=mv')
-        elif name == 'main-menu' and category == 'Top 100 - ulubione':
-            log.info('Jest Gorące: ')
-            self.listsItemsTop('http://kinolive.pl/top100?o=tf')
-        elif name == 'main-menu' and category == 'Top 100 - najwyżej ocenione':
-            log.info('Jest Gorące: ')
-            self.listsItemsTop('http://kinolive.pl/top100?o=tr')
+        elif name == 'main-menu' and category == 'Top 100':
+            log.info('Jest Top100: ')
+            self.listsItems(mainUrl + '/filmy/top',1,'')
 
-            
         elif name == 'main-menu' and category == "Szukaj":
             key = self.searchInputText()
             if key != None:
@@ -336,11 +284,10 @@ class kinolive:
             self.listsItems(url,strona,filtrowanie)
         if name == 'playSelectedMovie':
             data = self.getMovieLinkFromXML(url)
-            self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon, data['year'])
+            self.p.LOAD_AND_PLAY_VIDEO(data, title, icon)
         if name == 'playselectedmovie':
-            #print "GGGGGGGGGGGGGGGGGGGGGGGGGGGRRRRRRRRRRRRAAAAAAAAAA"
             data = self.getMovieLinkFromXML(url)
-            self.p.LOAD_AND_PLAY_VIDEO(data['link'], title, icon, data['year'])
+            self.p.LOAD_AND_PLAY_VIDEO(data, title, icon)
 
         
   

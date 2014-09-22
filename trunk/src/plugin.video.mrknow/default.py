@@ -17,7 +17,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 import pLog, settings, Parser
 import noobroom, iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
 import filmboxmoovie,filmmex,plej,cdapl,nextplus
-import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv
+import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv, polvod
 #import weebtv, ipla, stations, tvp, tvn, iplex, tvpvod, 
 import iptak,radio81,streamon,strefavod,wrzuta,tvppl, interia
 
@@ -39,7 +39,7 @@ TV_ONLINE_TABLE = {
          #    2300 : ["Nextplus", 'nextplus'],
              2400 : ["TVP Stream", 'tvpstream'],
         #     2500 : ["Netvi.tv", 'netvi'],
-             2600 : ["Radio81.pl [test 10% dziala]", 'radio81'],
+             2600 : ["Radio81.pl [test 10% dziala, w tym hbo]", 'radio81'],
          #    2700 : ["Streamon.pl", 'streamon'],
              2800 : ["MmTV.pl","mmtv"]
 }
@@ -68,12 +68,13 @@ SERIALE_ONLINE_TABLE = {
 
 FILM_ONLINE_TABLE = {
 		     7400 : ["Cda.pl", 'cdapl'],
+             7300: ["Polvod.pl","polvod"],
              #7300: ["Noobroom.com","noobroom"],
              7000: ["Vod Onet PL","vodpl"],
              7100: ["Filmbox Movie","filmboxmoovie"],
              #7200: ["Filmmex","filmmex"],
              7500: ["Alekino.tv","kinolive"],
-             7600: ["Iptak","iptak"],
+             #7600: ["Iptak","iptak"],
              7700: ["Films-online.pl","filmsonline"],
              7800: ["StrefaVod.pl","strefavod"],
              5100: ["Wrzuta.pl [testy]","wrzuta"],
@@ -126,8 +127,8 @@ class MrknowFilms:
     elif mode == 7200 or service == 'filmmex':
         tv = filmmex.filmmex()
         tv.handleService()
-    elif mode == 7300 or service == 'noobroom':
-        tv = noobroom.Noobroom()
+    elif mode == 7300 or service == 'polvod':
+        tv = polvod.polvod()
         tv.handleService()
     elif mode == 7400 or service == 'cdapl':
         tv = cdapl.cdapl()

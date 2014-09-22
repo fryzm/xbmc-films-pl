@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.xbmcfilm"
        name="xbmcfilm.com"
-       version="0.2.3"
+       version="0.2.4"
        provider-name="mrknow">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.xbmcfilm" version="0.1.3"/>
+    <import addon="script.module.xbmcfilm" version="0.1.4"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">

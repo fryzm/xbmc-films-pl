@@ -157,6 +157,21 @@ class xbmcfilm:
             text = k.getText()
         return text
 
+    def getMovieLinkFromXML(self, url):
+        #szukamy iframe
+        progress = xbmcgui.DialogProgress()
+        progress.create('Postęp', '')
+        message = "Szukam adresu do wideo"
+        progress.update( 10, "", message, "" )
+        xbmc.sleep( 1000 )
+        progress.update( 30, "", message, "" )
+        progress.update( 50, "", message, "" )
+        VideoLink = ''
+        VideoLink = self.up.getVideoLink(url)
+        progress.update( 90, "", message, "" )
+        progress.close()
+        return VideoLink
+
     def handleService(self):
     	params = self.parser.getParams()
         name = self.parser.getParam(params, "name")
@@ -192,7 +207,7 @@ class xbmcfilm:
 
 
         if name == 'playSelectedMovie':
-            data = self.up.getVideoLink(url)
+            data = self.getMovieLinkFromXML(url)
             print ("A1111",data)
             print ("is String",isinstance(data, basestring))
             if isinstance(data, basestring):

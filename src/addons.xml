@@ -42,7 +42,7 @@
 
 <addon id="plugin.video.xbmcfilm"
        name="xbmcfilm.com"
-       version="0.2.9"
+       version="0.3.0"
        provider-name="xbmcfilm.com">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>

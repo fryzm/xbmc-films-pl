@@ -15,6 +15,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.xbmcfilm/changelog.txt" afterPath="$PROJECT_DIR$/plugin.video.xbmcfilm/changelog.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.mrknow/default.py" afterPath="$PROJECT_DIR$/plugin.video.mrknow/default.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" afterPath="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.mrknow/host/iptak.py" afterPath="$PROJECT_DIR$/plugin.video.mrknow/host/iptak.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.mrknow/host/kinolive.py" afterPath="$PROJECT_DIR$/plugin.video.mrknow/host/kinolive.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.mrknow/resources/lib/libCommon.py" afterPath="$PROJECT_DIR$/plugin.video.mrknow/resources/lib/libCommon.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.mrknow/host/meczyki.py" afterPath="$PROJECT_DIR$/plugin.video.mrknow/host/meczyki.py" />
@@ -55,10 +56,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="addon.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="addon.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/addon.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="57" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+            <state line="7" column="24" selection-start="269" selection-end="269" vertical-scroll-proportion="0.29095355" vertical-offset="0" max-vertical-offset="476">
               <folding />
             </state>
           </provider>
@@ -82,10 +83,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addons_xml_generator.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="addons_xml_generator.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/addons_xml_generator.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1309">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="default.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/default.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="88" column="26" selection-start="3120" selection-end="3124" vertical-scroll-proportion="-57.423077" vertical-offset="3" max-vertical-offset="4624">
+              <folding>
+                <element signature="e#24#76#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="iptak.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/host/iptak.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="13" selection-start="510" selection-end="510" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3434">
               <folding />
             </state>
           </provider>
@@ -122,8 +143,9 @@
         <option value="$PROJECT_DIR$/plugin.video.mrknow/host/teamcastpl.py" />
         <option value="$PROJECT_DIR$/plugin.video.mrknow/default.py" />
         <option value="$PROJECT_DIR$/plugin.video.mrknow/changelog.txt" />
-        <option value="$PROJECT_DIR$/plugin.video.mrknow/addon.xml" />
         <option value="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
+        <option value="$PROJECT_DIR$/plugin.video.mrknow/host/iptak.py" />
+        <option value="$PROJECT_DIR$/plugin.video.mrknow/addon.xml" />
       </list>
     </option>
   </component>
@@ -490,7 +512,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="162" y="77" width="1289" height="801" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -500,7 +522,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32142857" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32142857" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -733,23 +755,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="68" selection-start="665" selection-end="665" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="4573">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/changelog.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state line="2" column="20" selection-start="67" selection-end="67" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1173">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/addon.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="57" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
           <folding />
         </state>
       </provider>
@@ -771,6 +779,29 @@
     <entry file="file://$PROJECT_DIR$/addons_xml_generator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1309">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="88" column="26" selection-start="3120" selection-end="3124" vertical-scroll-proportion="-57.423077" vertical-offset="3" max-vertical-offset="4624">
+          <folding>
+            <element signature="e#24#76#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/host/iptak.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="13" selection-start="510" selection-end="510" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3434">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/addon.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="24" selection-start="269" selection-end="269" vertical-scroll-proportion="0.29095355" vertical-offset="0" max-vertical-offset="476">
           <folding />
         </state>
       </provider>

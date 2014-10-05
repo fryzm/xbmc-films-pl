@@ -75,7 +75,7 @@ BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
-import iptak, wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
+import wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
 import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv, polvod, teamcastpl
 import iptak,radio81,streamon,strefavod,wrzuta,tvppl, interia
 import filmboxmoovie, cdapl
@@ -119,17 +119,11 @@ class MrknowFilms:
         elif mode == 8100 or service == 'scs':
             tv = scs.scs()
             tv.handleService()
-        elif mode == 1000 or service == 'mrknowpl':
-            tv = mrknowpl.mrknowpl()
-            tv.handleService()
         elif mode == 7000 or service == 'vodpl':
             tv = vodpl.vodpl()
             tv.handleService()
         elif mode == 7100 or service == 'filmboxmoovie':
             tv = filmboxmoovie.filmboxmoovie()
-            tv.handleService()
-        elif mode == 7200 or service == 'filmmex':
-            tv = filmmex.filmmex()
             tv.handleService()
         elif mode == 7300 or service == 'polvod':
             tv = polvod.polvod()
@@ -154,14 +148,8 @@ class MrknowFilms:
             tv = tvppl.tvppl()
             tv.handleService()
 
-        elif mode == 2000 or service == 'iptak':
-            tv = iptak.IPTAK()
-            tv.handleService()
         elif mode == 2100 or service == 'filmbox':
             tv = filmbox.filmbox()
-            tv.handleService()
-        elif mode == 2200 or service == 'plej':
-            tv = plej.plej()
             tv.handleService()
         elif mode == 2300 or service == 'teamcastpl':
             tv = teamcastpl.teamcastpl()
@@ -169,14 +157,8 @@ class MrknowFilms:
         elif mode == 2400 or service == 'tvpstream':
             tv = tvpstream.tvpstream()
             tv.handleService()
-        elif mode == 2500 or service == 'netvi':
-            tv = netvi.netvi()
-            tv.handleService()
         elif mode == 2600 or service == 'radio81':
             tv = radio81.radio81()
-            tv.handleService()
-        elif mode == 2700 or service == 'streamon':
-            tv = streamon.streamon()
             tv.handleService()
         elif mode == 2800 or service == 'mmtv':
             tv = mmtv.mmtv()
@@ -184,17 +166,6 @@ class MrknowFilms:
         elif mode == 3000 or service == 'wykop':
             tv = wykop.WYKOP()
             tv.handleService()
-        elif mode == 4000 or service == 'meczyki':
-            tv = meczyki.MECZYKI()
-            tv.handleService()
-        elif mode == 4100 or service == 'drhtvcompl':
-            tv = drhtvcompl.drhtvcompl()
-            tv.handleService()
-
-        elif mode == 4200 or service == 'livelooker':
-            tv = livelooker.livelooker()
-            tv.handleService()
-
         elif mode == 5000 or service == 'joemonster':
             tv = joemonster.joemonster()
             tv.handleService()
@@ -203,12 +174,6 @@ class MrknowFilms:
             tv.handleService()
         elif mode == 5200 or service == 'interia':
             tv = interia.interia()
-            tv.handleService()
-        elif mode == 9000 or service == 'noobroom':
-            tv = noobroom.Noobroom()
-            tv.handleService()
-        elif mode == 4500 or service == 'tosiewytnie':
-            tv = tosiewytnie.ToSieWytnie()
             tv.handleService()
         elif mode == 6000 or service == 'milanos':
             tv = milanos.milanos()

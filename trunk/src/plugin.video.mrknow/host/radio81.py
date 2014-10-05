@@ -13,9 +13,9 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, mrknow_pCommon, Parser, settings, Player, mrknow_urlparser, mrknow_Pageparser,mrknow_Player
+import mrknow_pLog, mrknow_pCommon, Parser, settings, Player, mrknow_urlparser, mrknow_Pageparser,mrknow_Player
 
-log = pLog.pLog()
+log = mrknow_pLog.pLog()
 
 mainUrl = 'http://www.radio81.pl/'
 chanels = 'http://www.radio81.pl/tv-online/'

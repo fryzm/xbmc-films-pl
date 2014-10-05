@@ -16,9 +16,9 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, libCommon, Parser, Player
+import mrknow_pLog, libCommon, Parser, Player
 
-log = pLog.pLog()
+log = mrknow_pLog.pLog()
 
 catUrl = 'http://www.strefavod.pl/api/GetCategories?type=Genre&sort=Name'
 #http://www.strefavod.pl/api/GetMovies?categoryIds=433&limit=500

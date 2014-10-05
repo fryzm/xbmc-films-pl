@@ -13,9 +13,9 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, libCommon, Parser,Player, mrknow_urlparser
+import mrknow_pLog, libCommon, Parser,Player, mrknow_urlparser
 
-log = pLog.pLog()
+log = mrknow_pLog.pLog()
 
 mainUrl = 'http://pl.filmboxlive.com/'
 catUrl = 'http://api.invideous.com/plugin/get_package_videos?package_id=12&publisher_id=5842&records_per_page=50&filter_by_live=0&custom_order_by_order_priority=asc&custom_filter_by_genre='

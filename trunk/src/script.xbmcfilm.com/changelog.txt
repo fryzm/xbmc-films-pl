@@ -1,4 +1,0 @@
-initial release
-  - movie scrobbling
-  - works with local files and remote streams with correct metadata
-  - tested with XBMC library mode, PleXBMC, Amazon, CBS

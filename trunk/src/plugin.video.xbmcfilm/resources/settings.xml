@@ -2,13 +2,11 @@
 <settings>
 	
 	<category label="xbmcfilm.com">
-		<setting type="lsep" label="zaloguj sie do serwisu"/>
-		<setting id="xbmcfilm_login" type="bool" label="Zaloguj się" default="false" />
-		<setting type="sep"/>
-		<setting type="lsep" label="Login i hasło" />
-		<setting id="xbmcfilm_user" type="text" label="login" default="" />
-		<setting id="xbmcfilm_pass" type="text" label="hasło" option="hidden"  default="" />
-		<setting id="retries" type="slider" label="1017" range="1,1,10" default="5" option="int"/>
+		<setting type="lsep" label="30010"/>
+		<setting id="xbmcfilm_login" type="bool" label="30014" default="false" />
+		<setting id="xbmcfilm_user" type="text" label="30011" default="" />
+		<setting id="xbmcfilm_pass" type="text" label="30013" option="hidden"  default="" />
+		<setting id="retries" type="slider" label="30202" range="1,1,10" default="5" option="int"/>
 	</category>
 
 </settings>

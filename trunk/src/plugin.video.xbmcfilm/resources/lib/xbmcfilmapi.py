@@ -46,6 +46,7 @@ class XbmcFilmsNetworkError(XbmcFilmsError):
 class XbmcFilmAPI(object):
 
     __apikey = "a22023e223248f2390873"
+    #__baseURL = "http://127.0.0.1:5000/api2"
     __baseURL = "http://xbmcfilm.com/api2"
     __username = ""
     __password = ""
@@ -633,4 +634,14 @@ class XbmcFilmAPI(object):
         if self.testAccount():
             url = "%s/%s/get/%s" % (self.__baseURL, 'files', self.__apikey)
             Debug("[XbmcFilm] getcatalogs(url: %s, data: %s)" % (url, str(data)))
+            return self.XbmcFilmsRequest('POST', url, data, passVersions=True)
+    def getfilestype(self,data):
+        if self.testAccount():
+            url = "%s/%s/get/%s" % (self.__baseURL, 'filestype', self.__apikey)
+            Debug("[XbmcFilm] getfilestype(url: %s, data: %s)" % (url, str(data)))
+            return self.XbmcFilmsRequest('POST', url, data, passVersions=True)
+    def getfollow(self,data):
+        if self.testAccount():
+            url = "%s/%s/get/%s" % (self.__baseURL, 'following', self.__apikey)
+            Debug("[XbmcFilm] getfilestype(url: %s, data: %s)" % (url, str(data)))
             return self.XbmcFilmsRequest('POST', url, data, passVersions=True)

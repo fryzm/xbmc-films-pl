@@ -2,7 +2,12 @@
 import cookielib, os, string, StringIO
 import os, time, base64, logging, calendar
 import urllib, urllib2, re, sys, math
-import xbmcaddon, xbmc, xbmcgui, simplejson
+import xbmcaddon, xbmc, xbmcgui
+try:
+    import simplejson as json
+except ImportError:
+    import json
+
 import urlparse
 import httplib 
 
@@ -123,7 +128,7 @@ class mrknow_urlparser:
     if host== 'vimeo.com':
         nUrl = self.parserVIMEO(url)    
     if host== 'yukons.net':
-        nUrl = self.parserYUKONS(url)
+        nUrl = self.parserYUKONS(url,referer)
     if host== 'www.reyhq.com':
         nUrl = self.parserREYHQ(url)      
     if host== 'www.sawlive.tv':
@@ -191,15 +196,18 @@ class mrknow_urlparser:
     return nUrl
 
   def firedrivecom(self,url,referer):
-    query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    myhost = "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0"
+    query_data = { 'url': url, 'use_host': True, 'host': myhost, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match = re.compile('<input type="hidden" name="confirm" value="(.*?)"/>').findall(link)
-    print ("A",match)
+    print ("A",match,link)
+    time.sleep(5)
     COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "firedrivecom.cookie"
     query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': COOKIEFILE, 'use_post': True, 'return_data': True }
     postdata = {'confirm':match[0]}
     link = self.cm.getURLRequestData(query_data, postdata)
     match1 = re.compile('file: loadURL\(\'(.*?)\'\),').findall(link)
+    print ("link",link)
     if len(match1) > 0:
         return match1[0]
     else:
@@ -715,19 +723,43 @@ class mrknow_urlparser:
     print ("videolink", videolink)
     return videolink
 
-  def parserYUKONS(self,url):
+  def parserYUKONS(self,url,referer):
     query = urlparse.urlparse(url)
     channel = query.path
     channel=channel.replace("/","")
-    query_data = { 'url': 'http://yukons.net/lb.php', 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    decode = ''
+    decode2 = ''
+    videolink = ''
+    tmpheader = {}
+    for i in range(len(channel)):
+        decode += channel[i].encode("hex")
+    for i in range(len(decode)):
+        decode2 += decode[i].encode("hex")
+    url2 = 'http://yukons.net/yaem/'+ decode2
+    COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "yukons.cookie"
+    tmpheader['Referer'] = 'http://'+referer
+    tmpheader['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0'
+    query_data = { 'url': url2, 'use_host': True, 'use_header': True, 'header': tmpheader,'use_cookie': True, 'cookiefile': COOKIEFILE, 'save_cookie': True, 'use_post': False, 'return_data': True }
     link1 = self.cm.getURLRequestData(query_data)
-    link1 = link1.replace("srv=", "");
-    #"rtmp://198.144.158.83:443/kuyo" --app "kuyo" --flashVer "LNX 11,2,202,273" --swfVfy "http://yukons.net/yukplay.swf" 
-    #--pageUrl  "http://yukons.net" --playpath "drhtvvekko" -o drhtvvekko.flv
-    videolink = 'rtmp://198.144.158.83:443/kuyo app=kuyo playpath=' + channel 
-    videolink += ' pageUrl=http://yukons.net live=true'
-    videolink += ' swfVfy=http://yukons.net/yukplay.swf'
-    #print ("videolink", videolink)
+    chanell_id = link1.replace("function kunja() { return '", "").replace("'; }","")
+    url3 = 'http://yukons.net/embed/'+decode2+'/'+chanell_id+'/640/400'
+    query_data = { 'url': url3, 'use_host': True, 'use_header': True, 'header': tmpheader, 'use_cookie': True, 'cookiefile': COOKIEFILE, 'load_cookie': True, 'use_post': False, 'return_data': True }
+    link2 = self.cm.getURLRequestData(query_data)
+    match = re.compile('<script type="text/javascript">\r\n\t\t\t  \t\t\r\n\t        \t(.*?)\r\n\t        \t\t\t  \t\t  \r\n\t\t\t  \r\n                </script>\n</span>').findall(link2)
+    if len(match)>0:
+        dane = beautify(match[0])
+        match1 = re.compile('so.addParam\((.*?)\)').findall(dane)
+        print("match1",match1[-1])
+        if len(match1)>0:
+            query = urlparse.urlparse(match1[-1].replace("\\'","").replace('FlashVars,',''))
+            p = urlparse.parse_qs(query.path)
+            print("p",p)
+            url4 = 'http://yukons.net/srvload/'+p['id'][0]
+            query_data = { 'url': url4, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+            link3 = self.cm.getURLRequestData(query_data)
+            print ("link",link3)
+            videolink = 'rtmp://'+link3.replace('srv=','')+':443/kuyo playpath='+p['s'][0]+'?id='+p['id'][0]+'&pid='+p['pid'][0]+ ' swfUrl=http://yukons.net/yplay2.swf pageUrl=http://yukons.net/'
+    #videolink = 'rtmp://173.192.200.79:443/kuyo playpath=jsdhjfsjdaf?id=845e96a40c4d38b379cb05c0b6bc86f6&pid=38392e3233312e3132342e313034 swfUrl=http://yukons.net/yplay2.swf pageUrl=http://yukons.net/'
     return videolink
 
 

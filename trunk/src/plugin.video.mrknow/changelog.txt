@@ -1,19 +1,23 @@
+Wersja 1.7.20
+ Poprawiono wersjï¿½ dla Kodi 14.0
+ Dodano Tema-cast.pl
+
 Wersja 1.7.01
- Poprawiono wersjê dla xbmc 13.0
+ Poprawiono wersjï¿½ dla xbmc 13.0
 
 Wersja 1.6.41
  Poprawiono plej.tv - dodano kategorie do serwsiu 
- na razie weryfikujemy czy dzia³a 
+ na razie weryfikujemy czy dziaï¿½a 
 
 Wersja 1.6.40  
- Nowe ikony dla serwisów 
+ Nowe ikony dla serwisï¿½w 
 
 Wersja 1.5.01  
- Nowe ikony dla serwisów 
+ Nowe ikony dla serwisï¿½w 
  Poprawiono plej.tv - dodano logowanie do serwsiu 
  Dodano netvi.pl
 
-Wersja 1.4.82  - Nowe ikony dla serwisu dostarczy³ Micha³. Dziêki 
+Wersja 1.4.82  - Nowe ikony dla serwisu dostarczyï¿½ Michaï¿½. Dziï¿½ki 
  Poprawiono noobroom.com - dodano 2 nowe ukryte serwery
 
 Wersja 1.4.8  - dodano kinolive
@@ -22,7 +26,7 @@ Wersja 1.4.61 - dodano filmmex.pl
 
 Wersja 1.4.6 - poprawiono meczyki.pl
 
-Wersja 1.4.5 - dodano wersjê alpha serwisu VOD ONET PL, coœ zaczyna dzia³aæ 
+Wersja 1.4.5 - dodano wersjï¿½ alpha serwisu VOD ONET PL, coï¿½ zaczyna dziaï¿½aï¿½ 
 
 Wersja 1.4.4 - dodano:
  FilmBox Extra

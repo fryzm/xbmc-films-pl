@@ -117,10 +117,10 @@ class mrknow_Pageparser:
     print ("AAAAA",match1)
     if len(match1)>0:
         print ("Jaedklsjkdfjljsdf")
-        nUrl = self.pageanalyze(match1[0][1],url,url)
+        nUrl = self.pageanalyze(match1[0][1],url)
         return nUrl
     else:
-        nUrl = self.pageanalyze(url,url,url)
+        nUrl = self.pageanalyze(url,url)
         return nUrl
 
 

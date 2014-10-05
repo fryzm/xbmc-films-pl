@@ -75,9 +75,9 @@ BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
-import wykop, meczyki, joemonster, tosiewytnie, drhtvcompl, milanos,filmbox,vodpl
-import kinolive,tvpstream,kinoliveseriale,scs,netvi,filmsonline,mmtv, polvod, teamcastpl
-import iptak,radio81,streamon,strefavod,wrzuta,tvppl, interia
+import wykop, joemonster, milanos,filmbox,vodpl
+import kinolive,tvpstream,kinoliveseriale,scs,filmsonline,mmtv, polvod, teamcastpl
+import iptak,radio81,strefavod,wrzuta,tvppl, interia
 import filmboxmoovie, cdapl
 
 class MrknowFilms:

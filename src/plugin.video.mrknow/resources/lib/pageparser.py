@@ -2,17 +2,17 @@
 import cookielib, os, string, StringIO
 import os, time, base64, logging, calendar
 import urllib, urllib2, re, sys, math
-import xbmcaddon, xbmc, xbmcgui, simplejson
+import xbmcaddon, xbmc, xbmcgui
 import urlparse, httplib, random, string
 
 scriptID = 'plugin.video.mrknow'
 scriptname = "Wtyczka XBMC www.mrknow.pl"
 ptv = xbmcaddon.Addon(scriptID)
 
-import pLog, Parser, settings, libCommon, urlparser
+import z_pLog, Parser, settings, libCommon, urlparser
 
 
-log = pLog.pLog()
+log = z_pLog.pLog()
 sets = settings.TVSettings()
 
 class pageparser:

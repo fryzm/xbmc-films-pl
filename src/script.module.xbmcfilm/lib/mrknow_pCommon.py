@@ -44,11 +44,23 @@ import re, os, sys, cookielib, random
 import urllib, urllib2, re, sys, math
 #import elementtree.ElementTree as ET
 import xbmcaddon, xbmc, xbmcgui
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
-import pLog
 
-log = pLog.pLog()
+class StopDownloading(Exception):
+        def __init__(self, value):
+            self.value = value
+        def __str__(self):
+            return repr(self.value)
+
+
+
+import mrknow_pLog
+
+log = mrknow_pLog.pLog()
 
 scriptID = sys.modules[ "__main__" ].scriptID
 scriptname = "Polish Live TV"
@@ -56,7 +68,7 @@ ptv = xbmcaddon.Addon(scriptID)
 
 dbg = ptv.getSetting('default_debug')
 
-HOST_TABLE = { 100: 'Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0',
+HOST_TABLE = { 100: 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
 	       101: 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11',
 	       102: 'Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.11',
 	       103: 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1',
@@ -164,7 +176,7 @@ class common:
         
         if params.get('use_cookie', False):
             customOpeners.append( urllib2.HTTPCookieProcessor(cj) )
-            if params.get('load_cookie', False):
+            if params.get('load_cookie', True):
                 cj.load(params['cookiefile'], ignore_discard = True)
 
         if None != post_data:

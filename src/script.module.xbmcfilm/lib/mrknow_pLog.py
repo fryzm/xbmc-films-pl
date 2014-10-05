@@ -30,4 +30,4 @@ class pLog:
   
   def log(self, message, level):
     if self.logLevel <= level:
-      print '[Polish Live TV%s %d] %s' %(self.prefix, level, message)
+      print '[xbmcfilm.com %s %d] %s' %(self.prefix, level, message)

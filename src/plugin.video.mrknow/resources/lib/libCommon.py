@@ -44,12 +44,15 @@ import re, os, sys, cookielib, random
 import urllib, urllib2, re, sys, math
 #import elementtree.ElementTree as ET
 import xbmcaddon, xbmc, xbmcgui
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 import gzip, StringIO
 
-import pLog
+import z_pLog
 
-log = pLog.pLog()
+log = z_pLog.pLog()
 
 scriptID = sys.modules[ "__main__" ].scriptID
 scriptname = "Polish Live TV"
@@ -221,7 +224,7 @@ class common:
     def LOAD_AND_PLAY_VIDEO(self, url, title, player = True):
         if url == '':
             d = xbmcgui.Dialog()
-            d.ok('Nie znaleziono streamingu', 'MoÅŸe to chwilowa awaria.', 'SprÃ³buj ponownie za jakiÅ? czas')
+            d.ok('Nie znaleziono streamingu', 'MoÅŸe to chwilowa awaria.', 'SprÃ³buj ponownie za jakiï¿½? czas')
             return False
         thumbnail = xbmc.getInfoImage("ListItem.Thumb")
         liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail)
@@ -236,7 +239,7 @@ class common:
             xbmcPlayer.play(url, liz)
         except:
             d = xbmcgui.Dialog()
-	    d.ok('BÅ?Ä?d przy przetwarzaniu, lub wyczerpany limit czasowy oglÄ?dania.', 'Zarejestruj siÄ? i opÅ?aÄ? abonament.', 'Aby oglÄ?daÄ? za darmo sprÃ³buj ponownie za jakiÅ? czas')        
+	    d.ok('Bï¿½?ï¿½?d przy przetwarzaniu, lub wyczerpany limit czasowy oglï¿½?dania.', 'Zarejestruj siï¿½? i opï¿½?aï¿½? abonament.', 'Aby oglï¿½?daï¿½? za darmo sprÃ³buj ponownie za jakiï¿½? czas')        
 	    return False
 	return True
 	    

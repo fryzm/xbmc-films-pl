@@ -2,7 +2,11 @@
 import cookielib, os, string, StringIO
 import os, time, base64, logging, calendar
 import urllib, urllib2, re, sys, math
-import xbmcaddon, xbmc, xbmcgui, simplejson
+import xbmcaddon, xbmc, xbmcgui
+try:
+    import simplejson as json
+except ImportError:
+    import json
 import urlparse, httplib, random, string
 
 ptv = xbmcaddon.Addon()
@@ -113,10 +117,10 @@ class mrknow_Pageparser:
     print ("AAAAA",match1)
     if len(match1)>0:
         print ("Jaedklsjkdfjljsdf")
-        nUrl = self.pageanalyze(match1[0][1],url)
+        nUrl = self.pageanalyze(match1[0][1],url,url)
         return nUrl
     else:
-        nUrl = self.pageanalyze(url,url)
+        nUrl = self.pageanalyze(url,url,url)
         return nUrl
 
 
@@ -265,6 +269,7 @@ class mrknow_Pageparser:
 
         
     match=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
+    match1000=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script>\n<script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)
     match1=re.compile("<script type='text/javascript'>fid='(.*?)'; v_width=(.*?); v_height=(.*?);</script><script type='text/javascript' src='http://www.reyhq.com/player.js'></script>").findall(link)
     match2=re.compile("<script type='text/javascript' src='http://www.sawlive.tv/embed/(.*?)'>").findall(link)
     match3=re.compile("<script type='text/javascript' src='http://sawlive.tv/embed/(.*?)'>").findall(link)
@@ -294,11 +299,15 @@ class mrknow_Pageparser:
     match25=re.compile('<script type=\'text/javascript\'> file=\'(.*?)\'; width=\'(.*?)\'; height=\'(.*?)\';</script><script type=\'text/javascript\' src=\'http://flexstream.net/embedPlayer.js\'></script>').findall(link)
     match26=re.compile('<script type=\'text/javascript\'> file=\'(.*?)\'(.*?)</script><script type=\'text/javascript\' src=\'http://abcast.biz/embedPlayer.js\'></script>').findall(link)
     match27=re.compile('<script type=\'text/javascript\'> file=\'(.*?)\'(.*?)</script>\n<script type=\'text/javascript\' src=\'http://www.freelivestream.tv/embedPlayerScript.js\'></script>').findall(link)
-    #http://www.freelivestream.tv/embedPlayer.php?file=canalplus34952&amp;width=600&amp;height=400
-    #<script type='text/javascript'> file='canalplus34952'; width='600'; height='400';</script>\n<script type='text/javascript' src='http://www.freelivestream.tv/embedPlayerScript.js'></script>
+    match28=re.compile('<script type=\'text/javascript\'>id=\'(.*?)\'(.*?)</script><script type=\'text/javascript\' src=\'http://up4free.com/player.js\'></script>').findall(link)
+    match29=re.compile('<script type=\'text/javascript\'>id=\'(.*?)\'(.*?)</script><script type=\'text/javascript\' src=\'http://goodcast.me/player.js\'></script>').findall(link)
+    #
+    #<script type='text/javascript'>id='173381'; width='650'; height='450'; stretching='';</script><script type='text/javascript' src='http://goodcast.me/player.js'></script>
 
     if len(match) > 0:
-        return self.up.getVideoLink('http://yukons.net/'+match[0][0])
+        return self.up.getVideoLink('http://yukons.net/'+match[0][0],referer)
+    elif len(match1000) > 0:
+        return self.up.getVideoLink('http://yukons.net/'+match1000[0][0],referer)
     elif len(match1) > 0:
         return self.up.getVideoLink('http://www.reyhq.com/'+match1[0][0])
     elif len(match2) > 0:
@@ -375,6 +384,12 @@ class mrknow_Pageparser:
     elif len(match27) > 0:
         print ("Match27",match27)
         return self.up.getVideoLink('http://www.freelivestream.tv/embedPlayer.php?file='+match27[0][0]+'&amp;width=600&amp;height=400',referer)
+    elif len(match28) > 0:
+        print ("Match28",match28)
+        return self.pageanalyze('http://up4free.com/stream.php?id='+match28[0][0]+'&amp;width=580&amp;height=400&amp;stretching=',referer)
+    elif len(match29) > 0:
+        print ("Match29",match29)
+        return self.up.getVideoLink('http://goodcast.me/stream.php?id=match29'+[0][0]+'&amp;width=640&amp;height=480&amp;stretching=',referer)
     else:
         return self.up.getVideoLink(url,referer)
 

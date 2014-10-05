@@ -2,18 +2,23 @@
 import cookielib, os, string, StringIO
 import os, time, base64, logging, calendar
 import urllib, urllib2, re, sys, math
-import xbmcaddon, xbmc, xbmcgui, simplejson
+import xbmcaddon, xbmc, xbmcgui
 import urlparse
 import httplib 
+
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 scriptID = 'plugin.video.mrknow'
 scriptname = "Polish Live TV"
 ptv = xbmcaddon.Addon(scriptID)
 
-import pLog, parser, settings, libCommon,xppod
+import z_pLog, parser, settings, libCommon,xppod
 #import maxvideo, anyfiles
 
-log = pLog.pLog()
+log = z_pLog.pLog()
 sets = settings.TVSettings()
 
 CHARS = [
@@ -848,7 +853,7 @@ class urlparser:
 
         #json cleanup
         while data[-2:] != '"}': data = data[:-1]
-        result = simplejson.loads(data)
+        result = json.loads(data)
         if (result['ytube']=='0'):
             vUrl = result['file'].split("or")
             print ("Dasta",vUrl[0])
@@ -901,7 +906,7 @@ class urlparser:
     
     query_data = { 'url': apiVideoUrl + videoHash, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     data = self.cm.getURLRequestData(query_data, {'v' : videoHash})
-    result = simplejson.loads(data)
+    result = json.loads(data)
     print result
     result = dict([(str(k), v) for k, v in result.items()])
     if 'error' in result: 

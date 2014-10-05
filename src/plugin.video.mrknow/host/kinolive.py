@@ -28,11 +28,6 @@ MENU_TAB = {0: "Filmy",
             3: "Filmy z dubbingiem",
             4: "Filmy polskie",
             5: "Filmy HD",
-#            6: "Top 100 - najczęściej oglądane",
-#            7: "Top 100 - ulubione",
-#            8: "Top 100 - najwyżej ocenione",
-#            7: "Popularne z okresu",
-#            10: "Sortowanie",
             12: "Kategorie",
             15: "Szukaj"
             }
@@ -308,7 +303,7 @@ class kinolive:
             self.listsItems(catUrl,1,'types[0]=4')
         elif name == 'main-menu' and category == 'Filmy HD':
             log.info('Jest Wszystkie: ')
-            self.listsItems('http://kinolive.pl/filmy/hd',1,'')
+            self.listsItems('http://alekino.tv/filmy/hd',1,'')
         elif name == 'main-menu' and category == 'Filmy':
             log.info('Jest F: ')
             self.listsItems(catUrl,1,'')

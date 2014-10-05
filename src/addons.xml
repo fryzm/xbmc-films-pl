@@ -20,11 +20,13 @@
 
 <addon id="plugin.video.mrknow"
        name="Filmy Online - mrknow.pl"
-       version="1.7.11"
+       version="1.7.20"
        provider-name="mrknow">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcfilm" version="0.1.4"/>
+    <import addon="script.module.simplejson" version="2.0.10" />
+
 
   </requires>
   <extension point="xbmc.python.pluginsource"
@@ -40,19 +42,19 @@
 
 <addon id="plugin.video.xbmcfilm"
        name="xbmcfilm.com"
-       version="0.2.4"
-       provider-name="mrknow">
+       version="0.2.9"
+       provider-name="xbmcfilm.com">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.xbmcfilm" version="0.1.4"/>
+    <import addon="script.module.xbmcfilm" version="0.1.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Wtyczka MRKNOW</summary>
-    <description>Plugin pozwala nam ogladac popularne filmy na podstawie statystyk zbieranych na stronie www.xbmcfilm.com
+    <summary>xbmcfilm.com</summary>
+    <description>XbmcFilm.com is a free service that lets anyone create a custom playlist of videos from the top video sites on the web. Now start building that playlist ...
     </description>
     <platform>all</platform>
   </extension>
@@ -66,24 +68,6 @@
 	<extension library="lib" point="xbmc.python.module"/>
 		<extension point="xbmc.addon.metadata">
 		<language/>
-		<platform>all</platform>
-	</extension>
-</addon>
-
-<addon id="script.xbmcfilm.com" name="xbmcfilm.com" version="0.1.2" provider-name="script.xbmcfilm.com">
-	<requires>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.module.simplejson" version="2.0.10"/>
-	</requires>
-	<extension point="xbmc.service" name="xbmcfilm.service" library="service.py" start="login" />
-	<extension point="xbmc.python.script" library="sync_exec.py">
-		<provides>executable</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata" name="trakt.metadata">
-		<language></language>
-		<summary lang="en">TV and movie scrobbler for trakt.tv</summary>
-		<description lang="en">Automatically scrobble all  movies you are watching to xbmcfilm.com!
-		</description>
 		<platform>all</platform>
 	</extension>
 </addon>

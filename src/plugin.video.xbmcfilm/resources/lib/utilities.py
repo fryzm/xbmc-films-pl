@@ -22,9 +22,9 @@ time.strptime("1970-01-01 12:00:00", "%Y-%m-%d %H:%M:%S")
 def Debug(msg, force = False):
 	#if(getSettingAsBool('debug') or force):
 		try:
-			print "[trakt] " + msg
+			print "[xbmcfilm.com] " + msg
 		except UnicodeEncodeError:
-			print "[trakt] " + msg.encode('utf-8', 'ignore')
+			print "[xbmcfilm.com] " + msg.encode('utf-8', 'ignore')
 
 def notification(header, message, time=5000, icon=__addon__.getAddonInfo('icon')):
 	xbmc.executebuiltin("XBMC.Notification(%s,%s,%i,%s)" % (header, message, time, icon))

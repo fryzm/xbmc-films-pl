@@ -4,7 +4,10 @@ import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
 import urlparser
 import urlparse,httplib
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 scriptID = 'plugin.video.mrknow'
 scriptname = "Filmy online www.mrknow.pl - strefavod"

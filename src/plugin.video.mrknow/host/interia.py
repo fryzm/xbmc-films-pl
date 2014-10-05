@@ -14,9 +14,9 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, libCommon, Parser, settings
+import mrknow_pLog, libCommon, Parser, settings
 
-log = pLog.pLog()
+log = mrknow_pLog.pLog()
 
 mainUrl = 'http://www.interia.tv'
 catUrl = mainUrl + 'ajax/pliki/edytuj'

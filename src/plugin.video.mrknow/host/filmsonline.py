@@ -12,9 +12,9 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser,libCommon, Player, mrknow_urlparser
+import mrknow_pLog, settings, Parser,libCommon, Player, mrknow_urlparser
 
-log = pLog.pLog()
+log = mrknow_pLog.pLog()
 
 mainUrl = 'http://www.films-online.pl/'
 catUrl = 'filmy--0-0-0-2-0.html'

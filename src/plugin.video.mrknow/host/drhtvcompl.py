@@ -13,9 +13,9 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser, BeautifulSoup
+import mrknow_pLog, settings, Parser, BeautifulSoup
 
-log = pLog.pLog()
+log = mrknow_pLog.pLog()
 
 mainUrl = 'http://www.drhtv.com.pl/'
 

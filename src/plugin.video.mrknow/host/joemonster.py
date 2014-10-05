@@ -12,9 +12,9 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import pLog, settings, Parser
+import mrknow_pLog, settings, Parser
 
-log = pLog.pLog()
+log = mrknow_pLog.pLog()
 
 mainUrl = 'http://www.joemonster.org/'
 
@@ -230,7 +230,7 @@ class joemonster:
         ok=True
         if videoUrl == '':
                 d = xbmcgui.Dialog()
-                d.ok('Nie znaleziono streamingu.', 'MoÅ¼e to chwilowa awaria.', 'SprÃ³buj ponownie za jakiÅ› czas')
+                d.ok('Nie znaleziono streamingu.', 'Mo¿e to chwilowa awaria.', 'Spróbuj ponownie za jaki¶ czas')
                 return False
         liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
         liz.setInfo( type="Video", infoLabels={ "Title": title, } )
@@ -244,7 +244,7 @@ class joemonster:
             
         except:
             d = xbmcgui.Dialog()
-            d.ok('BÅ‚Ä…d przy przetwarzaniu.', 'Problem')        
+            d.ok('B³±d przy przetwarzaniu.', 'Problem')        
         return ok
 
 

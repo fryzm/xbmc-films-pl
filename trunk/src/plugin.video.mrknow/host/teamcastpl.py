@@ -82,9 +82,6 @@ class teamcastpl:
         #http://www.cda.pl/video/show/xxx/p2?s=best
         return url
 
-    def getMovieLinkFromXML(self, url):
-        return self.up.getVideoLink(url)
-
     def add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True,strona=''):
         u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + title + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage)+ "&strona=" + urllib.quote_plus(strona)
         #log.info(str(u))

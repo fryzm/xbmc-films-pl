@@ -736,7 +736,7 @@ class mrknow_urlparser:
             url4 = 'http://yukons.net/srvload/'+p['id'][0]
             query_data = { 'url': url4, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
             link3 = self.cm.getURLRequestData(query_data)
-            videolink = 'rtmp://'+link3.replace('srv=','')+':443/kuyo playpath='+p['s'][0]+'?id='+p['id'][0]+'&pid='+p['pid'][0]+ ' swfUrl=http://yukons.net/yplay2.swf pageUrl=http://yukons.net/'
+            videolink = 'rtmp://'+link3.replace('srv=','')+':443/kuyo playpath='+p['s'][0]+'?id='+p['id'][0]+'&pid='+p['pid'][0]+ '  live=true timeout=15 swfUrl=http://yukons.net/yplay2.swf pageUrl=http://yukons.net/'
     #videolink = 'rtmp://173.192.200.79:443/kuyo playpath=jsdhjfsjdaf?id=845e96a40c4d38b379cb05c0b6bc86f6&pid=38392e3233312e3132342e313034 swfUrl=http://yukons.net/yplay2.swf pageUrl=http://yukons.net/'
     return videolink
 

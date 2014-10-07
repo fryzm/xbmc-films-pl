@@ -48,19 +48,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addon.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="addon.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.12878788" vertical-offset="0" max-vertical-offset="442">
+            <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addon.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="mrknow_urlparser.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_urlparser.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="738" column="154" selection-start="33348" selection-end="33348" vertical-scroll-proportion="-9.961538" vertical-offset="12287" max-vertical-offset="20213">
+              <folding>
+                <element signature="e#24#62#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="addon.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="92" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="272">
+            <state line="0" column="93" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="409">
               <folding />
             </state>
           </provider>
@@ -147,13 +158,13 @@
         <option value="$PROJECT_DIR$/plugin.video.mrknow/addon.xml" />
         <option value="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Pageparser.py" />
         <option value="$PROJECT_DIR$/plugin.video.mrknow/host/teamcastpl.py" />
-        <option value="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_urlparser.py" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/resources/language/English/strings.xml" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/resources/language/Polish/strings.xml" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/resources/lib/xbmcfilmapi.py" />
-        <option value="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" />
+        <option value="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_urlparser.py" />
+        <option value="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
       </list>
     </option>
   </component>
@@ -240,24 +251,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="script.module.xbmcfilm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -807,13 +800,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_urlparser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="29" selection-start="1260" selection-end="1260" vertical-scroll-proportion="-0.4015748" vertical-offset="1122" max-vertical-offset="20162">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/resources/language/Polish/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="61" column="34" selection-start="2637" selection-end="2637" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1207">
@@ -824,13 +810,6 @@
     <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/resources/language/English/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="61" column="21" selection-start="2465" selection-end="2470" vertical-scroll-proportion="0.0" vertical-offset="544" max-vertical-offset="1224">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="92" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="409">
           <folding />
         </state>
       </provider>
@@ -860,7 +839,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.12878788" vertical-offset="0" max-vertical-offset="442">
+        <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_urlparser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="738" column="154" selection-start="33348" selection-end="33348" vertical-scroll-proportion="-9.961538" vertical-offset="12287" max-vertical-offset="20213">
+          <folding>
+            <element signature="e#24#62#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="93" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="409">
           <folding />
         </state>
       </provider>

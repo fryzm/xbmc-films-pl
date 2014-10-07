@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="d17704ee-8618-4085-9564-2f4ce971bdd8" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/icon.png" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/icon.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" afterPath="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons.xml.md5" afterPath="$PROJECT_DIR$/addons.xml.md5" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons.xml" afterPath="$PROJECT_DIR$/addons.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" afterPath="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" />
@@ -46,10 +48,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addon.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="addon.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="21" selection-start="138" selection-end="138" vertical-scroll-proportion="0.12230216" vertical-offset="0" max-vertical-offset="442">
+            <state line="3" column="21" selection-start="138" selection-end="138" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="addon.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="92" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="409">
               <folding />
             </state>
           </provider>
@@ -133,7 +144,6 @@
         <option value="$PROJECT_DIR$/plugin.video.mrknow/host/vodpl.py" />
         <option value="$PROJECT_DIR$/plugin.video.mrknow/host/wrzuta.py" />
         <option value="$PROJECT_DIR$/plugin.video.mrknow/default.py" />
-        <option value="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
         <option value="$PROJECT_DIR$/plugin.video.mrknow/addon.xml" />
         <option value="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Pageparser.py" />
         <option value="$PROJECT_DIR$/plugin.video.mrknow/host/teamcastpl.py" />
@@ -143,6 +153,7 @@
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/resources/lib/xbmcfilmapi.py" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" />
+        <option value="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
       </list>
     </option>
   </component>
@@ -193,6 +204,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="script.module.xbmcfilm" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -692,11 +717,6 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.24460432" vertical-offset="102" max-vertical-offset="1360" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="92" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="430" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plugin.video.mrknow/addon.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="0" selection-start="372" selection-end="372" vertical-scroll-proportion="0.39534885" vertical-offset="0" max-vertical-offset="476" />
@@ -779,7 +799,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="21" selection-start="138" selection-end="138" vertical-scroll-proportion="0.12230216" vertical-offset="0" max-vertical-offset="442">
+        <state line="3" column="21" selection-start="138" selection-end="138" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="92" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="409">
           <folding />
         </state>
       </provider>

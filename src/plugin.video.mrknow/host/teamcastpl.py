@@ -123,10 +123,7 @@ class teamcastpl:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         objs = json.loads(link)
-        print objs
         for o in objs:
-            print ("OOO",o,o[0],objs[o])
-            #add(self, service, name, category, title, iconimage, url, desc, rating, folder = True, isPlayable = True,strona=''):
             self.add('teamcastpl','librtmp','update',o,'None',objs[o],'None','None',True,False)
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -228,7 +225,6 @@ class teamcastpl:
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<iframe name="stream"(.*?)src="(.*?)"> </iframe>').findall(link)
         progress.update( 30, "", message, "" )
-        print ("Match",match)
         progress.update( 50, "", message, "" )
         VideoLink = ''
         if len(match)>0:
@@ -247,8 +243,9 @@ class teamcastpl:
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
-        print ("Dane",url,name,category,title)
-        
+        print("Dane",sys.argv[2],url,name,category,title)
+        print ("A")
+
         if name == None:
             self.listsMainMenu(MENU_TAB)
         elif name == 'main-menu' and category == "[COLOR yellow]Aktualizuj LIBRTMP - aby dzialy kanaly TV - Patche KSV[/COLOR]":

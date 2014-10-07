@@ -645,3 +645,9 @@ class XbmcFilmAPI(object):
             url = "%s/%s/get/%s" % (self.__baseURL, 'following', self.__apikey)
             Debug("[XbmcFilm] getfilestype(url: %s, data: %s)" % (url, str(data)))
             return self.XbmcFilmsRequest('POST', url, data, passVersions=True)
+
+    def getplay(self,data):
+        if self.testAccount():
+            url = "%s/%s/set/%s" % (self.__baseURL, 'play', self.__apikey)
+            Debug("[XbmcFilm] getfilestype(url: %s, data: %s)" % (url, str(data)))
+            return self.XbmcFilmsRequest('POST', url, data, passVersions=True)

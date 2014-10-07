@@ -63,6 +63,11 @@ class xbmcfilm:
         data = {'id': id}
         marek = json.dumps(self.api.getcatalogs(data))
         objs = json.loads(marek)
+
+        if "status" in objs.keys() and objs["status"] == 'fail_authenticated':
+            d = xbmcgui.Dialog()
+            d.ok(ptv.getLocalizedString(30010),ptv.getLocalizedString(30405))
+            return False
         if id=="0":
             for o in objs["data"][0]["children"]:
                 poster = self.chkdict(o,'poster')
@@ -78,7 +83,7 @@ class xbmcfilm:
             print("I",i)
             poster = self.chkdict(i,'poster')
             plot = self.chkdict(i,'plot')
-            self.add('cdapl', 'playSelectedMovie','None',i['title'].encode('utf-8', 'ignore') ,poster, i['url'], plot.encode('utf-8', 'ignore'), False, False,'None')
+            self.add('cdapl', 'playSelectedMovie','None',i['title'] ,poster, i['url'], plot, False, False,str(i['id']))
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
     
@@ -89,12 +94,16 @@ class xbmcfilm:
             data = {'type': type}
         files = json.dumps(self.api.getfilestype(data))
         filesobj = json.loads(files)
+        if "status" in filesobj.keys() and objs["status"] == 'fail_authenticated':
+            d = xbmcgui.Dialog()
+            d.ok(ptv.getLocalizedString(30010),ptv.getLocalizedString(30405))
+            return False
         print ("Marel",files)
         print ("objs", filesobj["data"])
         for i in filesobj["data"]:
             poster = self.chkdict(i,'poster')
             plot = self.chkdict(i,'plot')
-            self.add('cdapl', 'playSelectedMovie','None',i['title'].encode('utf-8', 'ignore'), poster.encode('utf-8', 'ignore'), i['url'], plot.encode('utf-8', 'ignore'), False, False,'None')
+            self.add('cdapl', 'playSelectedMovie','None',i['title'].encode('utf-8', 'ignore'), poster.encode('utf-8', 'ignore'), i['url'], plot.encode('utf-8', 'ignore'), False, False,str(i['id']))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
        
     def listsItemsFollow(self, type, dane=''):
@@ -104,6 +113,10 @@ class xbmcfilm:
             data = {'type': type}
         files = json.dumps(self.api.getfollow(data))
         filesobj = json.loads(files)
+        if "status" in filesobj.keys() and objs["status"] == 'fail_authenticated':
+            d = xbmcgui.Dialog()
+            d.ok(ptv.getLocalizedString(30010),ptv.getLocalizedString(30405))
+            return False
         if type == 'users':
             for i in filesobj["data"]:
                 data2 = {'type': 'follow', 'dane':str(i['id'])}
@@ -124,19 +137,21 @@ class xbmcfilm:
         print ("objs",objs)
         for o in objs["data"]:
             print ("o",o)
-            self.add('cdapl', 'follow-cat','User','[COLOR white]'+o['title'].encode('utf-8', 'ignore') + '[/COLOR]', 'None', 'None', 'None', True, False,str(o['id']))        #data2 = {'type': type, 'dane':dane, 'pliki': True}
+            self.add('cdapl', 'follow-cat','User','[COLOR white]'+o['title'].encode('utf-8', 'ignore') + '[/COLOR]', 'None', 'None', 'None', True, False,str(o['id']))
         data2 = {'type': type, 'dane':dane, 'pliki':True}
         files = json.dumps(self.api.getfollow(data2))
         filesobj = json.loads(files)
         for i in filesobj["data"]:
             poster = self.chkdict(i,'poster')
             plot = self.chkdict(i,'plot')
-            self.add('cdapl', 'playSelectedMovie','None',i['title'].encode('utf-8', 'ignore') ,poster, i['url'], plot.encode('utf-8', 'ignore'), False, False,'None')
+            self.add('cdapl', 'playSelectedMovie','None',i['title'].encode('utf-8', 'ignore') ,poster, i['url'], plot.encode('utf-8', 'ignore'), False, False,str(i['id']))
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def add(self, service, name, category, title, iconimage, url, desc='', folder = True, isPlayable = True,myid = "0"):
-        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category + "&title=" + urllib.quote_plus(title) + "&url=" + urllib.quote_plus(url) + "&icon=" + urllib.quote_plus(iconimage) + "&desc=" + urllib.quote_plus(desc) +"&myid="+myid
+        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category +\
+          "&title=" + title + "&url=" + urllib.quote_plus(url) + \
+          "&icon=" + urllib.quote_plus(iconimage) + "&desc=" + desc +"&myid="+myid
         #log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
             title = category 
@@ -157,20 +172,70 @@ class xbmcfilm:
             text = k.getText()
         return text
 
-    def getMovieLinkFromXML(self, url):
-        #szukamy iframe
+
+    def LOAD_AND_PLAY_VIDEO(self, url, title, icon,year='',plot='', id=''):
+        data = {'id': id}
+        self.api.getplay(data)
         progress = xbmcgui.DialogProgress()
         progress.create('Postęp', '')
-        message = "Szukam adresu do wideo"
+        message = ptv.getLocalizedString(30406)
         progress.update( 10, "", message, "" )
         xbmc.sleep( 1000 )
         progress.update( 30, "", message, "" )
         progress.update( 50, "", message, "" )
         VideoLink = ''
+        subs=''
         VideoLink = self.up.getVideoLink(url)
-        progress.update( 90, "", message, "" )
-        progress.close()
-        return VideoLink
+        if isinstance(VideoLink, basestring):
+            videoUrl = VideoLink
+        else:
+            videoUrl = VideoLink[0]
+            subs = VideoLink[1]
+        progress.update( 70, "", message, "" )
+        #progress.close()
+        if videoUrl == '':
+            progress.close()
+            d = xbmcgui.Dialog()
+            d.ok('Nie znaleziono streamingu', 'Mo�e to chwilowa awaria.', 'Spr�buj ponownie za jaki� czas')
+            return False
+        if icon == '' or  icon == 'None':
+            icon = "DefaultVideo.png"
+        if plot == '' or plot == 'None':
+            plot = ''
+        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
+        liz.setInfo( type="video", infoLabels={ "Title": title,"Plot": plot} )
+
+        if subs != '':
+            subsdir = os.path.join(ptv.getAddonInfo('path'), "subs")
+            if not os.path.isdir(subsdir):
+                os.mkdir(subsdir)
+            query_data = { 'url': subs, 'use_host': False, 'use_header': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+            progress.update( 90, "", message, "" )
+            data = self.cm.getURLRequestData(query_data)
+            output = open((os.path.join(subsdir, "napisy.txt" )),"w+")
+            progress.update( 100, "", message, "" )
+            output.write(data)
+            output.close()
+            time.sleep(6)
+            progress.close()
+            xbmcPlayer = xbmc.Player()
+            xbmcPlayer.play(videoUrl, liz)
+
+            for _ in xrange(30):
+                if xbmcPlayer.isPlaying():
+                    break
+                time.sleep(1)
+            else:
+                raise Exception('No video playing. Aborted after 30 seconds.')
+            xbmcPlayer.setSubtitles((os.path.join(subsdir, "napisy.txt" )))
+            xbmcPlayer.showSubtitles(True)
+            return True
+        else:
+            progress.update( 90, "", message, "" )
+            progress.close()
+            xbmcPlayer = xbmc.Player()
+            xbmcPlayer.play(videoUrl, liz)
+            return True
 
     def handleService(self):
     	params = self.parser.getParams()
@@ -204,16 +269,8 @@ class xbmcfilm:
 
         elif name == 'main-menu':
             self.listsMainMenu(myid)
-
-
         if name == 'playSelectedMovie':
-            data = self.getMovieLinkFromXML(url)
-            print ("A1111",data)
-            print ("is String",isinstance(data, basestring))
-            if isinstance(data, basestring):
-                self.p.LOAD_AND_PLAY_VIDEO(data, title, icon, '',desc,'')
-            else:
-                self.p.LOAD_AND_PLAY_VIDEO(data[0], title, icon, '',desc,data[1])
+            self.LOAD_AND_PLAY_VIDEO(url, title, icon, '',desc,myid)
 
 init = xbmcfilm()
 init.handleService()

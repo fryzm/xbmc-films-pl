@@ -80,11 +80,11 @@ class mrknow_urlparser:
 
 
   def getVideoLink(self, url,referer=''):
-    nUrl=''
+    nUrl=url
     host = self.getHostName(url)
     self.log.info("URLPARSER uvideo hosted by: " + host)
-    self.log.info('URL: '+url + ' ' +referer)
-    
+    #self.log.info('URL: '+url + ' ' +referer)
+
     if host == 'panel.erstream.com':
         nUrl = self.parsererstream(url)
     if host == 'www.putlocker.com':
@@ -200,14 +200,12 @@ class mrknow_urlparser:
     query_data = { 'url': url, 'use_host': True, 'host': myhost, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match = re.compile('<input type="hidden" name="confirm" value="(.*?)"/>').findall(link)
-    print ("A",match,link)
     time.sleep(5)
     COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "firedrivecom.cookie"
     query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': COOKIEFILE, 'use_post': True, 'return_data': True }
     postdata = {'confirm':match[0]}
     link = self.cm.getURLRequestData(query_data, postdata)
     match1 = re.compile('file: loadURL\(\'(.*?)\'\),').findall(link)
-    print ("link",link)
     if len(match1) > 0:
         return match1[0]
     else:
@@ -218,7 +216,6 @@ class mrknow_urlparser:
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match = re.compile('<source src="(.*?).m3u8">').findall(link)
-    print ("LINK",match)
     if len(match) > 0:
         #return match[0]+ ' playpath='+p['file'][0]+' swfUrl=http://www.freelivestream.tv/swfs/player.swf live=true timeout=15 swfVfy=true pageUrl=http://www.freelivestream.tv/'
         #return match[0]+'.m3u8'
@@ -234,8 +231,6 @@ class mrknow_urlparser:
     match = re.compile('var streamer="(.*?)";').findall(link)
     query = urlparse.urlparse(url)
     p = urlparse.parse_qs(query.query)
-    print p
-    print ("LINK",link)
     if len(match) > 0:
         return match[0]+ ' playpath='+p['file'][0]+' swfUrl=http://www.freelivestream.tv/swfs/player.swf live=true timeout=15 swfVfy=true pageUrl=http://www.freelivestream.tv/'
     else:
@@ -244,8 +239,6 @@ class mrknow_urlparser:
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match = re.compile('file: "(.*?)"').findall(link)
-
-    print ("LINK",link)
     if len(match) > 0:
         link = match[0]
         return link
@@ -256,8 +249,6 @@ class mrknow_urlparser:
   def flexstreamnet(self,url,referer):
     query = urlparse.urlparse(url)
     p = urlparse.parse_qs(query.query)
-    print p
-    print ("LINK",url)
     link = 'rtmpe://94.242.228.143:443/loadbalance playpath='+p['file'][0]+' swfUrl=http://p.jwpcdn.com/6/8/jwplayer.flash.swf live=true timeout=15 swfVfy=true pageUrl=http://flexstream.net/'
     #link = 'rtmp://live.flexstream.net/redirect playpath='+p['file'][0]+' swfUrl=http://p.jwpcdn.com/6/8/jwplayer.flash.swf live=true timeout=15 swfVfy=true pageUrl=http://flexstream.net/'
     #    print link
@@ -267,8 +258,6 @@ class mrknow_urlparser:
   def abcastbiz(self,url,referer):
     query = urlparse.urlparse(url)
     p = urlparse.parse_qs(query.query)
-    print p
-    print ("LINK",url)
     link = 'rtmpe://94.242.228.26:443/loadbalance playpath='+p['file'][0]+' swfUrl=http://www.curtirtv.net/player.swf live=true timeout=15 swfVfy=true pageUrl=http://www.abcast.biz'
     #    print link
     return link
@@ -277,8 +266,7 @@ class mrknow_urlparser:
     req = urllib2.Request(url)
     res = urllib2.urlopen(req)
     finalurl = res.geturl()
-    if finalurl:   
-      print finalurl
+    if finalurl:
       return finalurl
     else: 
       return False
@@ -295,9 +283,7 @@ class mrknow_urlparser:
     myRtk = beautify('unescape(\'' + ''.join(match_myRtk) + '\');')
     match_file = re.compile('unescape\(\'(.*?)\'\);').findall(myScrT)
     match_server =re.compile('unescape\(\'(.*?)\'\);').findall(myRtk)
-    print("match_file ", match_server, match_file )
     nUrl = match_server[0] + ' playpath='+match_file[0] +'  live=true timeout=12 swfVfy=true swfUrl=http://7cast.net/jplayer.swf timeout=15 pageUrl='+referer
-    print("nUrl", nUrl)
     return nUrl
 
   def fupptvpl(self,url,referer):
@@ -314,12 +300,7 @@ class mrknow_urlparser:
 
   def maxuploadtv(self,url,referer):
     query_data = { 'url': url.replace('file', 'embed'), 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-    link = self.cm.getURLRequestData(query_data)    
-
-    #r = re.search('value="(.+?)" name="fuck_you"', link)
-    #if r:
-   
-    #self.cm.checkDir(ptv.getAddonInfo('path') + os.path.sep + "cookies")
+    link = self.cm.getURLRequestData(query_data)
     self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "maxuploadtv.cookie"
     query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True }
     postdata = {'ok':'yes', 'Close Ad and Watch as Free User':'confirm', 'true': 'submited'}
@@ -749,15 +730,12 @@ class mrknow_urlparser:
     if len(match)>0:
         dane = beautify(match[0])
         match1 = re.compile('so.addParam\((.*?)\)').findall(dane)
-        print("match1",match1[-1])
         if len(match1)>0:
             query = urlparse.urlparse(match1[-1].replace("\\'","").replace('FlashVars,',''))
             p = urlparse.parse_qs(query.path)
-            print("p",p)
             url4 = 'http://yukons.net/srvload/'+p['id'][0]
             query_data = { 'url': url4, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
             link3 = self.cm.getURLRequestData(query_data)
-            print ("link",link3)
             videolink = 'rtmp://'+link3.replace('srv=','')+':443/kuyo playpath='+p['s'][0]+'?id='+p['id'][0]+'&pid='+p['pid'][0]+ ' swfUrl=http://yukons.net/yplay2.swf pageUrl=http://yukons.net/'
     #videolink = 'rtmp://173.192.200.79:443/kuyo playpath=jsdhjfsjdaf?id=845e96a40c4d38b379cb05c0b6bc86f6&pid=38392e3233312e3132342e313034 swfUrl=http://yukons.net/yplay2.swf pageUrl=http://yukons.net/'
     return videolink

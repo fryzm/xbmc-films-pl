@@ -53,8 +53,7 @@ class mrknow_Pageparser:
     nUrl=''
     host = self.getHostName(url)
     log.info("PAGEPARSER video hosted by: " + host)
-    log.info(url)
-    
+
     if host == 'livemecz.com':
         nUrl = self.livemecz(url)
         print "Self",nUrl
@@ -114,9 +113,7 @@ class mrknow_Pageparser:
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match1=re.compile('<iframe(.*?)src="(.*?)"(.*?)></iframe>').findall(link)
-    print ("AAAAA",match1)
     if len(match1)>0:
-        print ("Jaedklsjkdfjljsdf")
         nUrl = self.pageanalyze(match1[0][1],url)
         return nUrl
     else:
@@ -128,7 +125,6 @@ class mrknow_Pageparser:
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match1=re.compile('<iframe frameborder="0" height="480" marginheight="0px" marginwidth="0px" name="livemecz.com" scrolling="no" src="(.*?)" width="640"></iframe>').findall(link)
-    print ("AAAAA",match1)
     if len(match1[1])>0:
         query_data = { 'url': match1[0], 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
@@ -251,21 +247,21 @@ class mrknow_Pageparser:
     return self.pageanalyze(url,url,'','Accept-Encoding: gzip, deflate')
 
   def pageanalyze(self,url,referer='',cookie='',headers=''):
-    print ('DANE',url,referer,cookie,headers)
+    #print ('DANE',url,referer,cookie,headers)
    
     if cookie != '':
         query_data = { 'url': url, 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': cookie, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        print ("LINK cookie",link)
+        #print ("LINK cookie",link)
     elif headers != '':
         query_data = { 'url': url, 'use_host': True, 'host': headers, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        print ("LINK headers",link)
+        #print ("LINK headers",link)
     
     else:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        print ("LINK",link)
+        #print ("LINK",link)
 
         
     match=re.compile('<script type="text/javascript"> channel="(.*?)"; width="(.*?)"; height="(.*?)";</script><script type="text/javascript" src="http://yukons.net/share.js"></script>').findall(link)

@@ -58,6 +58,10 @@
 	<string id="30402">Watchlist</string>
 	<string id="30403">Favorite</string>
 	<string id="30404">Search</string>
+    <string id="30405">Problem with login or password</string>
+    <string id="30406">Working...</string>
+
+
 
 	<string id="30999">Unknown option</string>
 </strings>

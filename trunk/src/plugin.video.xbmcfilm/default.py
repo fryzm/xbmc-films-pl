@@ -17,7 +17,7 @@ BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 #sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
-import pLog, settings, mrknow_Parser, xbmcfilmapi, mrknow_urlparser, mrknow_Player
+import pLog, settings, mrknow_Parser, xbmcfilmapi, mrknow_urlparser, mrknow_Player, mrknow_pCommon
 import json
 
 log = pLog.pLog()
@@ -45,6 +45,8 @@ class xbmcfilm:
         self.up = mrknow_urlparser.mrknow_urlparser()
         #self.settings = settings.TVSettings()
         self.api = xbmcfilmapi.XbmcFilmAPI()
+        self.cm = mrknow_pCommon.common()
+
 
     def chkdict(self,dict,item):
         if item not in dict.keys():

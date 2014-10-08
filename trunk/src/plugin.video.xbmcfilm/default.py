@@ -73,11 +73,11 @@ class xbmcfilm:
         if id=="0":
             for o in objs["data"][0]["children"]:
                 poster = self.chkdict(o,'poster')
-                self.add('cdapl', 'main-menu', '[COLOR white]'+ o['title'].encode('utf-8', 'ignore') + '[/COLOR]', poster, 'None', 'None', 'None', True, False,str(o['id']))
+                self.add('cdapl', 'main-menu', '[COLOR white]'+ o['title'] + '[/COLOR]', poster, 'None', 'None', 'None', True, False,str(o['id']))
         else:
             for o in objs["data"]:
                 poster = self.chkdict(o,'poster')
-                self.add('cdapl', 'main-menu', '[COLOR white]'+ o['title'].encode('utf-8', 'ignore') + '[/COLOR]', poster, 'None', 'None', 'None', True, False,str(o['id']))
+                self.add('cdapl', 'main-menu', '[COLOR white]'+ o['title'] + '[/COLOR]', poster, 'None', 'None', 'None', True, False,str(o['id']))
 
         files = json.dumps(self.api.getfiles(data))
         filesobj = json.loads(files)
@@ -105,7 +105,7 @@ class xbmcfilm:
         for i in filesobj["data"]:
             poster = self.chkdict(i,'poster')
             plot = self.chkdict(i,'plot')
-            self.add('cdapl', 'playSelectedMovie','None',i['title'].encode('utf-8', 'ignore'), poster.encode('utf-8', 'ignore'), i['url'], plot.encode('utf-8', 'ignore'), False, False,str(i['id']))
+            self.add('cdapl', 'playSelectedMovie','None',i['title'], poster, i['url'], plot, False, False,str(i['id']))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
        
     def listsItemsFollow(self, type, dane=''):
@@ -126,7 +126,7 @@ class xbmcfilm:
                 catobj = json.loads(usercat)
                 for o in catobj["data"]:
                     print ("O",o)
-                    self.add('cdapl', 'follow-cat','User','[COLOR white]'+o['title'].encode('utf-8', 'ignore') + '[/COLOR]', 'None', 'None', 'None', True, False,str(o['id']))
+                    self.add('cdapl', 'follow-cat','User','[COLOR white]'+o['title'] + '[/COLOR]', 'None', 'None', 'None', True, False,str(o['id']))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def listsItemsFollowCat(self, type, dane=''):
@@ -139,21 +139,26 @@ class xbmcfilm:
         print ("objs",objs)
         for o in objs["data"]:
             print ("o",o)
-            self.add('cdapl', 'follow-cat','User','[COLOR white]'+o['title'].encode('utf-8', 'ignore') + '[/COLOR]', 'None', 'None', 'None', True, False,str(o['id']))
+            self.add('cdapl', 'follow-cat','User','[COLOR white]'+o['title']  + '[/COLOR]', 'None', 'None', 'None', True, False,str(o['id']))
         data2 = {'type': type, 'dane':dane, 'pliki':True}
         files = json.dumps(self.api.getfollow(data2))
         filesobj = json.loads(files)
         for i in filesobj["data"]:
             poster = self.chkdict(i,'poster')
             plot = self.chkdict(i,'plot')
-            self.add('cdapl', 'playSelectedMovie','None',i['title'].encode('utf-8', 'ignore') ,poster, i['url'], plot.encode('utf-8', 'ignore'), False, False,str(i['id']))
+            self.add('cdapl', 'playSelectedMovie','None',i['title'] ,poster, i['url'], plot, False, False,str(i['id']))
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def add(self, service, name, category, title, iconimage, url, desc='', folder = True, isPlayable = True,myid = "0"):
-        u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category +\
-          "&title=" + title + "&url=" + urllib.quote_plus(url) + \
-          "&icon=" + urllib.quote_plus(iconimage) + "&desc=" + desc +"&myid="+myid
+        #u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category +\
+        params = {'service': service, 'name': name, 'category': category, 'title':title.encode('utf-8','ignore'),
+                  'iconimage': iconimage, 'url':url.encode('utf-8','ignore'), 'desc':'', 'myid':myid}
+        u=sys.argv[0] + self.parser.setParam(params)
+        log.info('UUUUUUUUUUUUU' + u)
+        #u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category +\
+        #  "&title=" + title + "&url=" + urllib.quote_plus(url) + \
+        #  "&icon=" + urllib.quote_plus(iconimage) + "&desc=" + desc +"&myid="+myid
         #log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
             title = category 

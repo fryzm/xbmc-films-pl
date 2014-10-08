@@ -46,3 +46,10 @@ class mrknow_Parser:
                 if (len(splitparams)) == 2:
                     param[splitparams[0]] = splitparams[1]
         return param
+
+    def setParam(self, params, add=False):
+        param = urllib.urlencode(params)
+        if add == False:
+            return "?"+param
+        else:
+            return param

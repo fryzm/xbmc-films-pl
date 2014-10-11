@@ -76,7 +76,7 @@ class xbmcfilm:
         for i in filesobj["data"]:
             print("File",i)
             filename = i['title'] + '.strm'
-            filename1 = ''.join(c for c in filename if c in valid_chars)
+            filename1 = self.cm.encoded_item(''.join(c for c in filename if c in valid_chars))
             file = open(STRPATH + mypath + os.path.sep + filename1 , "w")
             params = {'service': 'cda', 'name': 'playSelectedMovie', 'category': None, 'title': i['title'].encode('utf-8','ignore'),
                   'iconimage': '', 'url':i['url'].encode('utf-8','ignore'), 'desc':'', 'myid':i['id']}
@@ -102,7 +102,7 @@ class xbmcfilm:
         marek = json.dumps(self.api.getcatalogs(data))
         objs = json.loads(marek)
         #delete old files
-        folder = STRPATH + os.path.sep + objs['data'][0]['title']
+        folder = STRPATH + os.path.sep + self.cm.encoded_item(objs['data'][0]['title'])
         for root, dirs, files in os.walk(folder, topdown=False):
             for name in files:
                 try:

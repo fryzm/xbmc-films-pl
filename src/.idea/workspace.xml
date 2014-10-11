@@ -4,7 +4,9 @@
     <list default="true" readonly="true" id="d17704ee-8618-4085-9564-2f4ce971bdd8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" afterPath="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons.xml.md5" afterPath="$PROJECT_DIR$/addons.xml.md5" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons.xml" afterPath="$PROJECT_DIR$/addons.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" afterPath="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Parser.py" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Parser.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py" />
     </list>
@@ -32,7 +34,16 @@
       <file leaf-file-name="default.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/default.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="282" column="54" selection-start="11711" selection-end="11711" vertical-scroll-proportion="0.0" vertical-offset="768" max-vertical-offset="5831">
+            <state line="104" column="87" selection-start="3856" selection-end="3856" vertical-scroll-proportion="0.0" vertical-offset="1159" max-vertical-offset="5831">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mrknow_pCommon.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="260" column="20" selection-start="10553" selection-end="10565" vertical-scroll-proportion="0.0" vertical-offset="4352" max-vertical-offset="7684">
               <folding />
             </state>
           </provider>
@@ -50,7 +61,7 @@
       <file leaf-file-name="addon.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="21" selection-start="162" selection-end="162" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+            <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
               <folding />
             </state>
           </provider>
@@ -59,7 +70,7 @@
       <file leaf-file-name="addon.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="8" selection-start="406" selection-end="406" vertical-scroll-proportion="0.47331786" vertical-offset="0" max-vertical-offset="431">
+            <state line="2" column="46" selection-start="108" selection-end="108" vertical-scroll-proportion="0.08292683" vertical-offset="0" max-vertical-offset="410">
               <folding />
             </state>
           </provider>
@@ -121,9 +132,9 @@
         <option value="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_urlparser.py" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/resources/language/Polish/strings.xml" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/resources/language/English/strings.xml" />
-        <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" />
         <option value="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Parser.py" />
         <option value="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py" />
+        <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" />
         <option value="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" />
         <option value="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
       </list>
@@ -190,6 +201,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="script.module.xbmcfilm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="script.module.xbmcfilm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -779,13 +808,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="282" column="54" selection-start="11711" selection-end="11711" vertical-scroll-proportion="0.0" vertical-offset="768" max-vertical-offset="5831">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Parser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="72" column="0" selection-start="2178" selection-end="2178" vertical-scroll-proportion="0.0" vertical-offset="684" max-vertical-offset="1309">
@@ -795,23 +817,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="255" column="0" selection-start="10412" selection-end="10412" vertical-scroll-proportion="0.0" vertical-offset="4134" max-vertical-offset="7701">
-          <folding>
-            <element signature="e#2318#2355#0" expanded="true" />
-          </folding>
+        <state line="260" column="20" selection-start="10553" selection-end="10565" vertical-scroll-proportion="0.0" vertical-offset="4352" max-vertical-offset="7684">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="104" column="87" selection-start="3856" selection-end="3856" vertical-scroll-proportion="0.0" vertical-offset="1159" max-vertical-offset="5831">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="21" selection-start="162" selection-end="162" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+        <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="8" selection-start="406" selection-end="406" vertical-scroll-proportion="0.47331786" vertical-offset="0" max-vertical-offset="431">
+        <state line="2" column="46" selection-start="108" selection-end="108" vertical-scroll-proportion="0.08292683" vertical-offset="0" max-vertical-offset="410">
           <folding />
         </state>
       </provider>

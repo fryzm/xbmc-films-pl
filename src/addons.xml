@@ -42,7 +42,7 @@
 
 <addon id="plugin.video.xbmcfilm"
        name="xbmcfilm.com"
-       version="0.3.41"
+       version="0.3.42"
        provider-name="xbmcfilm.com">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -60,7 +60,9 @@
   </extension>
 </addon>
 
-<addon id="script.module.xbmcfilm" name="lib-xbmcfilm" provider-name="Mrknow" version="0.21.22">
+<addon id="script.module.xbmcfilm"
+       name="lib-xbmcfilm"
+       provider-name="Mrknow" version="0.21.24">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>

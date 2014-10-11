@@ -255,9 +255,17 @@ class common:
 
 
     def checkDir(self, path):
-        if not os.path.isdir(path):
-            os.mkdir(path)
-            
+        if not os.path.isdir(self.encoded_item(path)):
+            os.mkdir(self.encoded_item(path))
+
+    def encoded_item(self,v):
+        if isinstance(v, unicode):
+                v = v.encode('utf8')
+        elif isinstance(v, str):
+            # Must be encoded in UTF-8
+            v.decode('utf8')
+        return v
+
     
     def getRandomHost(self):
 	host_id = random.choice(HOST_TABLE.keys())

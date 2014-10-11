@@ -2,7 +2,7 @@
 import urllib, urllib2, re, sys, xbmcplugin, xbmcgui
 import cookielib, os, string, cookielib, StringIO
 import os, time, base64, logging, calendar
-import xbmcaddon
+import xbmcaddon, string, xbmc
 
 
 
@@ -11,6 +11,7 @@ scriptID = ptv.getAddonInfo('id')
 scriptname = ptv.getAddonInfo('name')
 #dbg = ptv.getSetting('default_debug') in ('true')
 ptv = xbmcaddon.Addon(scriptID)
+pluginhandle = int(sys.argv[1])
 
 #BASE_RESOURCE_PATH = os.path.join( os.getcwd(), "resources" )
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "resources" )
@@ -33,8 +34,13 @@ MENU_TAB = {1: ptv.getLocalizedString(30400),
             4: ptv.getLocalizedString(30401),
             2: ptv.getLocalizedString(30402),
             3: ptv.getLocalizedString(30403),
-            5: ptv.getLocalizedString(30404)
+            5: ptv.getLocalizedString(30404),
+            6: ptv.getLocalizedString(30407)
             }
+
+
+STRPATH =  os.path.join( xbmc.translatePath( "special://home" ),'xbmcfilm_files')
+valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
 
 class xbmcfilm:
 
@@ -46,6 +52,8 @@ class xbmcfilm:
         #self.settings = settings.TVSettings()
         self.api = xbmcfilmapi.XbmcFilmAPI()
         self.cm = mrknow_pCommon.common()
+        self.level = 1
+        self.mytree = {}
 
 
     def chkdict(self,dict,item):
@@ -55,11 +63,60 @@ class xbmcfilm:
             dict[item] = ''
         return dict[item]
 
+    def traverse(self, data):
+        #print("Directory", "-"*self.level, data['title'], self.level)
+        self.mytree[self.level] = data['title']
+        mypath = ''
+        for o in range(0, self.level):
+            mypath = mypath + os.path.sep + self.mytree[o+1]
+        self.cm.checkDir(STRPATH + mypath)
+        dane = {'id': str(data["id"])}
+        files = json.dumps(self.api.getfiles(dane))
+        filesobj = json.loads(files)
+        for i in filesobj["data"]:
+            print("File",i)
+            filename = i['title'] + '.strm'
+            filename1 = ''.join(c for c in filename if c in valid_chars)
+            file = open(STRPATH + mypath + os.path.sep + filename1 , "w")
+            params = {'service': 'cda', 'name': 'playSelectedMovie', 'category': None, 'title': i['title'].encode('utf-8','ignore'),
+                  'iconimage': '', 'url':i['url'].encode('utf-8','ignore'), 'desc':'', 'myid':i['id']}
+            u=sys.argv[0] + self.parser.setParam(params)
+            file.write(u)
+            file.close()
+
+        for kid in data['children']:
+            self.level += 1
+            self.traverse(kid)
+            self.level -= 1
 
     def listsMain(self, table):
         for num, val in table.items():
             self.add('cdapl', 'main'+str(num), val, val, 'None', 'None', 'None', True, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+    def listStrm(self):
+        #check if directory exist
+        self.cm.checkDir(STRPATH)
+        #Get self home data
+        data = {'id': '0'}
+        marek = json.dumps(self.api.getcatalogs(data))
+        objs = json.loads(marek)
+        #delete old files
+        folder = STRPATH + os.path.sep + objs['data'][0]['title']
+        for root, dirs, files in os.walk(folder, topdown=False):
+            for name in files:
+                try:
+                    os.remove(os.path.join(root, name))
+                except Exception, e:
+                    print e
+            for name in dirs:
+                try:
+                    os.rmdir(os.path.join(root, name))
+                except Exception, e:
+                    print e
+
+        self.traverse(objs["data"][0])
+        xbmc.executebuiltin('XBMC.UpdateLibrary(video)')
 
     def listsMainMenu(self, id):
         data = {'id': id}
@@ -96,7 +153,7 @@ class xbmcfilm:
             data = {'type': type}
         files = json.dumps(self.api.getfilestype(data))
         filesobj = json.loads(files)
-        if "status" in filesobj.keys() and objs["status"] == 'fail_authenticated':
+        if "status" in filesobj.keys() and filesobj["status"] == 'fail_authenticated':
             d = xbmcgui.Dialog()
             d.ok(ptv.getLocalizedString(30010),ptv.getLocalizedString(30405))
             return False
@@ -115,7 +172,7 @@ class xbmcfilm:
             data = {'type': type}
         files = json.dumps(self.api.getfollow(data))
         filesobj = json.loads(files)
-        if "status" in filesobj.keys() and objs["status"] == 'fail_authenticated':
+        if "status" in filesobj.keys() and filesobj["status"] == 'fail_authenticated':
             d = xbmcgui.Dialog()
             d.ok(ptv.getLocalizedString(30010),ptv.getLocalizedString(30405))
             return False
@@ -164,8 +221,10 @@ class xbmcfilm:
             title = category 
         if iconimage == '':
             iconimage = "DefaultVideo.png"
-
         liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        if folder:
+            liz.addContextMenuItems([ ('Refresh', 'Container.Refresh'),('Go up', 'Action(ParentDir)') ])
+            print("Folder dsaadsads")
         if isPlayable:
             liz.setProperty("IsPlayable", "true")
         liz.setInfo( type="Video", infoLabels={ "Title": title, "Plot": desc} )
@@ -209,24 +268,24 @@ class xbmcfilm:
             icon = "DefaultVideo.png"
         if plot == '' or plot == 'None':
             plot = ''
-        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-        liz.setInfo( type="video", infoLabels={ "Title": title,"Plot": plot} )
+        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon, path=videoUrl )
+        liz.setInfo( type="video", infoLabels={ "Title": title} )
 
         if subs != '':
             subsdir = os.path.join(ptv.getAddonInfo('path'), "subs")
             if not os.path.isdir(subsdir):
                 os.mkdir(subsdir)
             query_data = { 'url': subs, 'use_host': False, 'use_header': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
-            progress.update( 90, "", message, "" )
+            progress.update( 80, "", message, "" )
             data = self.cm.getURLRequestData(query_data)
             output = open((os.path.join(subsdir, "napisy.txt" )),"w+")
-            progress.update( 100, "", message, "" )
+            progress.update( 90, "", message, "" )
             output.write(data)
             output.close()
-            time.sleep(6)
+            progress.update( 100, "", message, "" )
             progress.close()
             xbmcPlayer = xbmc.Player()
-            xbmcPlayer.play(videoUrl, liz)
+            xbmcplugin.setResolvedUrl(pluginhandle, True, liz)
 
             for _ in xrange(30):
                 if xbmcPlayer.isPlaying():
@@ -236,13 +295,12 @@ class xbmcfilm:
                 raise Exception('No video playing. Aborted after 30 seconds.')
             xbmcPlayer.setSubtitles((os.path.join(subsdir, "napisy.txt" )))
             xbmcPlayer.showSubtitles(True)
-            return True
+
         else:
             progress.update( 90, "", message, "" )
             progress.close()
-            xbmcPlayer = xbmc.Player()
-            xbmcPlayer.play(videoUrl, liz)
-            return True
+            #listitem = xbmcgui.ListItem(path=videoUrl)
+            xbmcplugin.setResolvedUrl(pluginhandle, True, liz)
 
     def handleService(self):
     	params = self.parser.getParams()
@@ -266,6 +324,9 @@ class xbmcfilm:
              self.listsItems('favorite')
         elif name == 'main4':
              self.listsItemsFollow('users')
+        elif name == 'main6':
+             self.listStrm()
+
         elif name == 'follow-cat':
              self.listsItemsFollowCat('followfiles',myid)
 
@@ -278,6 +339,7 @@ class xbmcfilm:
             self.listsMainMenu(myid)
         if name == 'playSelectedMovie':
             self.LOAD_AND_PLAY_VIDEO(url, title, icon, '',desc,myid)
+
 
 init = xbmcfilm()
 init.handleService()

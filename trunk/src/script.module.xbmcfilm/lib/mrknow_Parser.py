@@ -48,8 +48,24 @@ class mrknow_Parser:
         return param
 
     def setParam(self, params, add=False):
-        param = urllib.urlencode(params)
+        #http://stackoverflow.com/questions/3121186/error-with-urlencode-in-python
+        params_data = self.encoded_dict(params)
+        #for k, v in params.iteritems():
+        #    params_data[k] = unicode(v).encode('utf-8','replace')
+        param = urllib.urlencode(params_data)
+
         if add == False:
             return "?"+param
         else:
             return param
+
+    def encoded_dict(self,in_dict):
+        out_dict = {}
+        for k, v in in_dict.iteritems():
+            if isinstance(v, unicode):
+                v = v.encode('utf8')
+            elif isinstance(v, str):
+                # Must be encoded in UTF-8
+                v.decode('utf8')
+            out_dict[k] = v
+        return out_dict

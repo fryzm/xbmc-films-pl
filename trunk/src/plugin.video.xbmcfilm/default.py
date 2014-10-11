@@ -11,7 +11,7 @@ scriptID = ptv.getAddonInfo('id')
 scriptname = ptv.getAddonInfo('name')
 #dbg = ptv.getSetting('default_debug') in ('true')
 ptv = xbmcaddon.Addon(scriptID)
-pluginhandle = int(sys.argv[1])
+
 
 #BASE_RESOURCE_PATH = os.path.join( os.getcwd(), "resources" )
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "resources" )
@@ -142,7 +142,7 @@ class xbmcfilm:
             print("I",i)
             poster = self.chkdict(i,'poster')
             plot = self.chkdict(i,'plot')
-            self.add('cdapl', 'playSelectedMovie','None',i['title'] ,poster, i['url'], plot, False, False,str(i['id']))
+            self.add('cdapl', 'playSelectedMovie','None',i['title'] ,poster, i['url'], plot, False, True,str(i['id']))
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
     
@@ -162,7 +162,7 @@ class xbmcfilm:
         for i in filesobj["data"]:
             poster = self.chkdict(i,'poster')
             plot = self.chkdict(i,'plot')
-            self.add('cdapl', 'playSelectedMovie','None',i['title'], poster, i['url'], plot, False, False,str(i['id']))
+            self.add('cdapl', 'playSelectedMovie','None',i['title'], poster, i['url'], plot, False, True,str(i['id']))
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
        
     def listsItemsFollow(self, type, dane=''):
@@ -203,20 +203,15 @@ class xbmcfilm:
         for i in filesobj["data"]:
             poster = self.chkdict(i,'poster')
             plot = self.chkdict(i,'plot')
-            self.add('cdapl', 'playSelectedMovie','None',i['title'] ,poster, i['url'], plot, False, False,str(i['id']))
+            self.add('cdapl', 'playSelectedMovie','None',i['title'] ,poster, i['url'], plot, False, True,str(i['id']))
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def add(self, service, name, category, title, iconimage, url, desc='', folder = True, isPlayable = True,myid = "0"):
-        #u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category +\
         params = {'service': service, 'name': name, 'category': category, 'title':title.encode('utf-8','ignore'),
                   'iconimage': iconimage, 'url':url.encode('utf-8','ignore'), 'desc':'', 'myid':myid}
         u=sys.argv[0] + self.parser.setParam(params)
         log.info('UUUUUUUUUUUUU' + u)
-        #u=sys.argv[0] + "?service=" + service + "&name=" + name + "&category=" + category +\
-        #  "&title=" + title + "&url=" + urllib.quote_plus(url) + \
-        #  "&icon=" + urllib.quote_plus(iconimage) + "&desc=" + desc +"&myid="+myid
-        #log.info(str(u))
         if name == 'main-menu' or name == 'categories-menu':
             title = category 
         if iconimage == '':
@@ -258,7 +253,7 @@ class xbmcfilm:
             videoUrl = VideoLink[0]
             subs = VideoLink[1]
         progress.update( 70, "", message, "" )
-        #progress.close()
+        pluginhandle = int(sys.argv[1])
         if videoUrl == '':
             progress.close()
             d = xbmcgui.Dialog()
@@ -270,6 +265,7 @@ class xbmcfilm:
             plot = ''
         liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon, path=videoUrl )
         liz.setInfo( type="video", infoLabels={ "Title": title} )
+        xbmcPlayer = xbmc.Player()
 
         if subs != '':
             subsdir = os.path.join(ptv.getAddonInfo('path'), "subs")
@@ -284,8 +280,7 @@ class xbmcfilm:
             output.close()
             progress.update( 100, "", message, "" )
             progress.close()
-            xbmcPlayer = xbmc.Player()
-            xbmcplugin.setResolvedUrl(pluginhandle, True, liz)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
             for _ in xrange(30):
                 if xbmcPlayer.isPlaying():
@@ -300,7 +295,8 @@ class xbmcfilm:
             progress.update( 90, "", message, "" )
             progress.close()
             #listitem = xbmcgui.ListItem(path=videoUrl)
-            xbmcplugin.setResolvedUrl(pluginhandle, True, liz)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+
 
     def handleService(self):
     	params = self.parser.getParams()

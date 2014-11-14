@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="d17704ee-8618-4085-9564-2f4ce971bdd8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" afterPath="$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.mrknow/addon.xml" afterPath="$PROJECT_DIR$/plugin.video.mrknow/addon.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/addon.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons.xml.md5" afterPath="$PROJECT_DIR$/addons.xml.md5" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons.xml" afterPath="$PROJECT_DIR$/addons.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" afterPath="$PROJECT_DIR$/plugin.video.xbmcfilm/default.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Parser.py" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Parser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Pageparser.py" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Pageparser.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_urlparser.py" afterPath="$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_urlparser.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.video.mrknow/host/teamcastpl.py" afterPath="$PROJECT_DIR$/plugin.video.mrknow/host/teamcastpl.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="src.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,7 +35,7 @@
       <file leaf-file-name="default.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/default.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="104" column="87" selection-start="3856" selection-end="3856" vertical-scroll-proportion="0.0" vertical-offset="1159" max-vertical-offset="5831">
+            <state line="104" column="87" selection-start="3856" selection-end="3856" vertical-scroll-proportion="0.0" vertical-offset="1768" max-vertical-offset="5882">
               <folding />
             </state>
           </provider>
@@ -43,7 +44,7 @@
       <file leaf-file-name="mrknow_pCommon.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="260" column="20" selection-start="10553" selection-end="10565" vertical-scroll-proportion="0.0" vertical-offset="4352" max-vertical-offset="7684">
+            <state line="260" column="20" selection-start="10553" selection-end="10565" vertical-scroll-proportion="0.0" vertical-offset="4420" max-vertical-offset="7701">
               <folding />
             </state>
           </provider>
@@ -58,19 +59,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addon.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="addon.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+            <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.1281407" vertical-offset="0" max-vertical-offset="442">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addon.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="addon.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="46" selection-start="108" selection-end="108" vertical-scroll-proportion="0.08292683" vertical-offset="0" max-vertical-offset="410">
+            <state line="2" column="46" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="306">
               <folding />
             </state>
           </provider>
@@ -142,9 +143,9 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="4" />
-    <option name="y" value="57" />
+    <option name="y" value="56" />
     <option name="width" value="1331" />
-    <option name="height" value="801" />
+    <option name="height" value="802" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -190,70 +191,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="script.module.xbmcfilm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="script.module.xbmcfilm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugin.video.xbmcfilm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugin.video.xbmcfilm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -263,7 +200,7 @@
     <property name="recentsLimit" value="5" />
     <property name="SearchEverywhereHistory" value="" />
     <property name="FullScreen" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../xbmcfilm.com" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -531,8 +468,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="57" width="1331" height="801" extended-state="0" />
-    <editor active="true" />
+    <frame x="4" y="56" width="1331" height="802" extended-state="1" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -542,7 +479,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31994048" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31946507" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -782,23 +719,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/resources/language/Polish/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="54" selection-start="2687" selection-end="2701" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1241">
-          <folding />
-        </state>
+        <state line="62" column="54" selection-start="2687" selection-end="2701" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1241" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/resources/language/English/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="50" selection-start="2542" selection-end="2542" vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="1241">
-          <folding />
-        </state>
+        <state line="62" column="50" selection-start="2542" selection-end="2542" vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="1241" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.image.mrknow/host/iptak.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="221" column="12" selection-start="8574" selection-end="8604" vertical-scroll-proportion="0.0" vertical-offset="3409" max-vertical-offset="4471">
-          <folding />
-        </state>
+        <state line="221" column="12" selection-start="8574" selection-end="8604" vertical-scroll-proportion="0.0" vertical-offset="3409" max-vertical-offset="4471" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.image.mrknow/addon.xml">
@@ -810,9 +741,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_Parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="0" selection-start="2178" selection-end="2178" vertical-scroll-proportion="0.0" vertical-offset="684" max-vertical-offset="1309">
-          <folding />
-        </state>
+        <state line="72" column="0" selection-start="2178" selection-end="2178" vertical-scroll-proportion="0.0" vertical-offset="684" max-vertical-offset="1309" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/lib/mrknow_pCommon.py">
@@ -829,16 +758,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
+    <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+        <state line="2" column="46" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script.module.xbmcfilm/addon.xml">
+    <entry file="file://$PROJECT_DIR$/plugin.video.xbmcfilm/addon.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="46" selection-start="108" selection-end="108" vertical-scroll-proportion="0.08292683" vertical-offset="0" max-vertical-offset="410">
+        <state line="3" column="22" selection-start="139" selection-end="139" vertical-scroll-proportion="0.1281407" vertical-offset="0" max-vertical-offset="442">
           <folding />
         </state>
       </provider>

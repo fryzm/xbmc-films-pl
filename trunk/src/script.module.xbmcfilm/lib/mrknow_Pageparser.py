@@ -87,7 +87,7 @@ class mrknow_Pageparser:
     #    nUrl = self.webhostboxnet(url,referer)
 
     elif nUrl  == '':
-        print "Jedziemy na ELSE - "+  url
+        print "Jedziemy na ELSE - "+  url+ "Host" + host
         nUrl = self.pageanalyze(url,host)
 
 
@@ -297,8 +297,11 @@ class mrknow_Pageparser:
     match27=re.compile('<script type=\'text/javascript\'> file=\'(.*?)\'(.*?)</script>\n<script type=\'text/javascript\' src=\'http://www.freelivestream.tv/embedPlayerScript.js\'></script>').findall(link)
     match28=re.compile('<script type=\'text/javascript\'>id=\'(.*?)\'(.*?)</script><script type=\'text/javascript\' src=\'http://up4free.com/player.js\'></script>').findall(link)
     match29=re.compile('<script type=\'text/javascript\'>id=\'(.*?)\'(.*?)</script><script type=\'text/javascript\' src=\'http://goodcast.me/player.js\'></script>').findall(link)
-    #
-    #<script type='text/javascript'>id='173381'; width='650'; height='450'; stretching='';</script><script type='text/javascript' src='http://goodcast.me/player.js'></script>
+    match30=re.compile('<script type=\'text/javascript\' src=\'http://www.shidurlive.com/embed/(.*?)\'></script>').findall(link)
+    #<script type="text/javascript"> id="24810"; ew="640"; eh="400";</script><script type="text/javascript" src="http://www.castalba.tv/js/embed.js"></script>
+    match31=re.compile('<script type="text/javascript"> id="(.*?)"; ew="(.*?)"; eh="(.*?)";</script><script type="text/javascript" src="http://www.castalba.tv/js/embed.js"></script>').findall(link)
+    match32=re.compile('<script type=\'text/javascript\'>id=\'(.*?)\'(.*?)</script>\n<script type=\'text/javascript\' src=\'http://goodcast.co/player.js\'></script>').findall(link)
+    
 
     if len(match) > 0:
         return self.up.getVideoLink('http://yukons.net/'+match[0][0],referer)
@@ -385,7 +388,16 @@ class mrknow_Pageparser:
         return self.pageanalyze('http://up4free.com/stream.php?id='+match28[0][0]+'&amp;width=580&amp;height=400&amp;stretching=',referer)
     elif len(match29) > 0:
         print ("Match29",match29)
-        return self.up.getVideoLink('http://goodcast.me/stream.php?id=match29'+[0][0]+'&amp;width=640&amp;height=480&amp;stretching=',referer)
+        return self.up.getVideoLink('http://goodcast.me/stream.php?id='+match29[0][0]+'&amp;width=640&amp;height=480&amp;stretching=',referer)
+    elif len(match30) > 0:
+        print ("Match30",match30)
+        return self.up.getVideoLink('http://www.shidurlive.com/embed/'+match30[0],referer)
+    elif len(match31) > 0:
+        print ("Match31",match31)
+        return self.up.getVideoLink('http://castalba.tv/embed.php?cid='+match31[0][0]+'&amp;wh=640&amp;ht=400&amp;r='+referer,referer)
+    elif len(match32) > 0:
+        print ("Match32",match32)
+        return self.up.getVideoLink('http://goodcast.me/stream.php?id='+match32[0][0]+'&amp;width=640&amp;height=480&amp;stretching=',referer)
     else:
         return self.up.getVideoLink(url,referer)
 

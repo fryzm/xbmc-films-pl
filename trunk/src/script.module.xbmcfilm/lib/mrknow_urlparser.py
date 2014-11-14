@@ -82,7 +82,7 @@ class mrknow_urlparser:
   def getVideoLink(self, url,referer=''):
     nUrl=url
     host = self.getHostName(url)
-    self.log.info("URLPARSER uvideo hosted by: " + host)
+    self.log.info("URLPARSER uvideo hosted by: " + host + " referer: "+referer)
     #self.log.info('URL: '+url + ' ' +referer)
 
     if host == 'panel.erstream.com':
@@ -157,6 +157,8 @@ class mrknow_urlparser:
         nUrl = self.parseflashwiz(url,referer)   
     if host== 'goodcast.tv':
         nUrl = self.parsegoodcast(url)   
+    if host== 'goodcast.me':
+        nUrl = self.parsegoodcastme(url,referer)   
     if host== 'goodcast.org':
         nUrl = self.parsegoodcastorg(url,referer)   
     if host== 'sharecast.to':
@@ -189,11 +191,88 @@ class mrknow_urlparser:
         nUrl = self.file1npagede(url,referer)
     if host== 'www.freelivestream.tv':
         nUrl = self.freelivestreamtv(url,referer)
+    if host== 'www.shidurlive.com':
+        nUrl = self.shidurlive(url,referer)
+    if host== 'castalba.tv':
+        nUrl = self.castalbatv(url,referer)
+
+
+
     if host== 'www.firedrive.com':
         nUrl = self.firedrivecom(url,referer)
     if '.bix.com' in host:
         nUrl = self.bixcom(url,referer)
     return nUrl
+
+  def parsegoodcastme(self,url,referer):
+    req = urllib2.Request(url)
+    req.add_header('Referer', 'http://'+referer+'/')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    print("Link",link)
+    match1=re.compile('<object type="application/x-shockwave-flash" \n\t\t\t\tdata="(.*?)"').findall(link)
+    match2=re.compile('<param name="flashvars" value="file=(.*?)\&amp\;streamer=(.*?)\&amp\;').findall(link)
+    
+    print("match",match1,match2)
+    
+    if len(match1)>0:
+        linkVideo =  match2[0][1] + ' playpath=' + match2[0][0] +' live=true timeout=15 swfVfy=true swfUrl='+match1[0] +' token=Fo5_n0w?U.rA6l3-70w47ch pageUrl='+url
+        #linkVideo = "rtmp://95.211.186.67:1936/live/tvn24?token=ezf129U0OsDwPnbdrRAmAg pageUrl=http://goodcast.tv/tvn24.php swfUrl=http://goodcast.tv/jwplayer/player.swf"
+        # rtmpdump -r "rtmp://95.211.186.67:1936/live/" -a "live/" -f "LNX 11,2,202,297" -W "http://goodcast.tv/jwplayer/player.swf" -p "http://goodcast.tv" -y "tvn24?token=ezf129U0OsDwPnbdrRAmAg"
+        print ("LinkVideo", linkVideo)
+        return linkVideo
+    else:
+        return False
+
+    
+    
+  def castalbatv(self,url,referer):
+    myhost = "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0"
+    req = urllib2.Request(url)
+    req.add_header('Referer', 'http://'+referer+'/')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    print("Link",link)
+    match = re.compile("\'file\': \'(.*?)\',").findall(link)
+    match1 = re.compile("\'flashplayer\': \"(.*?)\"",).findall(link)
+    match2 = re.compile("\'streamer\': \'(.*?)\',").findall(link)
+    print("match",match,match1,match2)
+    if len(match1) > 0:
+        return match2[0] + ' playpath=' + match[0] + ' swfUrl=' + match1[0] + ' live=true timeout=15 swfVfy=true pageUrl='+url
+    else:
+        return ''
+
+    
+  def shidurlive(self,url,referer):
+    myhost = "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0"
+    referer1 = 'http://'+referer+'/'
+    query_data = { 'url': url, 'use_host': True, 'host': myhost, 'use_cookie': False, 'use_post': False, 'return_data': True }
+    link = self.cm.getURLRequestData(query_data)
+    match = re.compile('src="(.*?)"').findall(link)
+    if len(match )> 0:
+        url1 = match[0].replace("'+kol+'","")
+        host = self.getHostName(referer1)
+        result = ''
+        for i in host:
+            result += hex(ord(i)).split('x')[1]
+
+        query_data = { 'url': url1 + result, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
+        link = self.cm.getURLRequestData(query_data)
+        print("Link","",link,"")
+        match1 = re.compile("so.addVariable\(\'file\', \'(.*?)\'\);").findall(link)
+        match2 = re.compile("so.addVariable\(\'streamer\', \'(.*?)\'\);").findall(link)
+        print("match",match1,match2)
+
+    #if len(match1) > 0:
+    #    return match1[0]
+    #else:
+        return match2[1] + ' playpath=' + match1[1] + ' swfVfy=1 swfUrl=http://cdn.shidurlive.com/player.swf live=true pageUrl=' + url
+    return ''
+
 
   def firedrivecom(self,url,referer):
     myhost = "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0"
@@ -471,8 +550,8 @@ class mrknow_urlparser:
         return linkVideo
     else:
         return False
+        
   def parsegoodcast(self,url):
-  
     query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
     link = self.cm.getURLRequestData(query_data)
     match1=re.compile("file: '(.*?)',").findall(link)

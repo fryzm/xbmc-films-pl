@@ -59,19 +59,22 @@ class teamcastpl:
     def listsCategoriesMenu(self,url):
         query_data = { 'url': url, 'use_host': True, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<ul id="menu">(.*?)</ul><div style="width: 100%; padding: 10px 0 0 0;">', re.DOTALL).findall(link)
+        match = re.compile('<ul class="greybox">(.*?)</ul>', re.DOTALL).findall(link)
+        print("Match-->",match)
         valTab = []
         strTab = []
         if len(match)>0:
-            match1 = re.compile('<li><a href="(.*?)">(.*?)<img src="http://wrzucaj.net/images/2014/09/12/flash-player-icon.png" /></a></li>').findall(match[0])
-            if len(match1)>0:
-                for j in range(len(match1)):
-                    #print("MAtch1",match1[j])
-                    strTab.append(mainUrl+ match1[j][0])
-                    strTab.append(match1[j][1])
-                    valTab.append(strTab)
-                    strTab = []
-            valTab.sort(key = lambda x: x[1])
+            for l in range(len(match)):
+                print("Match->L>",match[l])
+                match1 = re.compile('<li><a href="(.*?)">(.*?)<img src="http://wrzucaj.net/images/2014/09/12/flash-player-icon.png" /></a></li>\n').findall(match[l])
+                if len(match1)>0:
+                    for j in range(len(match1)):
+                        #print("MAtch1",match1[j])
+                        strTab.append(mainUrl+ match1[j][0])
+                        strTab.append(match1[j][1])
+                        valTab.append(strTab)
+                        strTab = []
+                valTab.sort(key = lambda x: x[1])
             for i in valTab:
                 self.add('teamcastpl', 'playSelectedMovie', 'None', i[1], 'None', i[0], 'None', 'None', False, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -223,7 +226,8 @@ class teamcastpl:
         xbmc.sleep( 1000 )
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<iframe name="stream"(.*?)src="(.*?)"> </iframe>').findall(link)
+        match = re.compile('<iframe name="stream"(.*?)src="(.*?)"(.*?)> </iframe>').findall(link)
+        print("Match-->",match)
         progress.update( 30, "", message, "" )
         progress.update( 50, "", message, "" )
         VideoLink = ''

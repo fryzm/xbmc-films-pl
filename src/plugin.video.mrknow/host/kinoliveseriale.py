@@ -131,11 +131,16 @@ class kinoliveseriale:
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('<div class="row-fluid bgb pull-right" style="width:680px;padding:10px;margin-top:10px;" id="'+strona+'">(.*?)<div class="p10"></div>', re.DOTALL).findall(link)
         match2 = re.compile('<div class="span2">\n                       <img src="(.*?)" alt=""/>\n                       \n                    </div>', re.DOTALL).findall(link)
-        match1 = re.compile('<td class="episode">\n                       \n                       <a class="o" href="(.*?)">(.*?)</a>\n                       \n                       \n                    </td>\n                     <td class="translation"><span class="w pull-right">(.*?)</span></td>\n                 </tr>\n                 <tr>\n                    <td class="episode" style="width:90px;">\n                       <span class="w">(.*?)</span>\n                    </td>\n', re.DOTALL).findall(match[0])
+        #match1 = re.compile('<td class="episode">\n                       \n                       <a class="o" href="(.*?)">(.*?)</a>\n                       \n                       \n                    </td>\n                     <td class="translation"><span class="w pull-right">(.*?)</span></td>\n                 </tr>\n                 <tr>\n', re.DOTALL).findall(match[0])
+        match1 = re.compile('<td class="episode">\n                       \n                       <a class="o" href="(.*?)">(.*?)</a>(.*?)</td>\n                     <td class="translation"><span class="w pull-right">(.*?)</span></td>\n                 </tr>', re.DOTALL).findall(match[0])
+
+        print("Mam",match)
+        print("Mam-->1",match1)
+        #print("Mam-->3",match3)
         SerialImage = self.GetImage(url)
         if len(match1) > 0:
             for i in range(len(match1)):
-                title = match1[i][3]+ ' ' + match1[i][1]+' ' + match1[i][2]
+                title = match1[i][1]+' ' + match1[i][3]
                 self.add('kinoliveseriale', 'playSelectedMovie', 'None', self.cm.html_special_chars(title), SerialImage, mainUrl[:-1]+ match1[i][0], 'aaaa', 'None', False, False)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -296,7 +301,7 @@ class kinoliveseriale:
         icon = self.parser.getParam(params, "icon")
         strona = self.parser.getParam(params, "strona")
         img = self.parser.getParam(params, "img")
-        print ("DANE",url,title,strona)
+        print ("DANE",url,title,strona,name)
         
         
         if name == None:

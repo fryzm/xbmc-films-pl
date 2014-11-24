@@ -28,5 +28,8 @@
                 <setting id="wrzuta_user" type="text" label="login" default="" />
                 <setting id="wrzuta_pass" type="text" label="hasło" option="hidden"  default="" />      
         </category>
-
+        <category label="cda.pl">
+                <setting id="cda_wersja" type="labelenum" label="Preferowana jakość filmu" values="480p|720p|1080p" default="720p" />
+                <setting id="cda_show_wersja" type="bool" label="Pokazuj jakość filmu na liście (obniża prędkość generowania listy)" default="false" />
+        </category>
 </settings>

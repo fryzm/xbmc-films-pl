@@ -63,7 +63,7 @@ FILM_ONLINE_TABLE = {
              7100: ["Filmbox Movie","filmboxmoovie"],
              #7200: ["Filmmex","filmmex"],
              7500: ["Alekino.tv","kinolive"],
-             #7600: ["Iptak","iptak"],
+             7600: ["Iptak","iptak"],
              #7700: ["Films-online.pl","filmsonline"],
              7800: ["StrefaVod.pl","strefavod"],
              5100: ["Wrzuta.pl [testy]","wrzuta"],

@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-import urllib, urllib2, re, os, sys, math
-import xbmcgui, xbmc, xbmcaddon, xbmcplugin
-from urlparse import urlparse, parse_qs
-import urlparser
-import urlparse,Player
+
+import urllib, urllib2, re, sys, xbmcplugin, xbmcgui
+import cookielib, os, string, cookielib, StringIO
+import os, time, base64, logging, calendar
+import xbmcaddon, string, xbmc
 
 
 scriptID = 'plugin.video.mrknow'
 scriptname = "Filmy online www.mrknow.pl - iptak"
 ptv = xbmcaddon.Addon(scriptID)
+plugin_pid = int(sys.argv[1])
 
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import mrknow_pLog, settings, Parser, libCommon
+import mrknow_pLog, settings, Parser, libCommon, mrknow_urlparser
 
 log = mrknow_pLog.pLog()
 
@@ -37,12 +38,11 @@ class IPTAK:
         log.info('Starting IPTAK')
         #self.settings = settings.TVSettings()
         #self.parser = Parser.Parser()
-        self.up = urlparser.urlparser()
+        self.up = mrknow_urlparser.mrknow_urlparser()
         self.cm = libCommon.common()
         self.parser = Parser.Parser()
-        self.up = urlparser.urlparser()
+        self.up = mrknow_urlparser.mrknow_urlparser()
         self.page = ""
-        self.p = Player.Player()
 
 
     def listsMainMenu(self, table):
@@ -87,7 +87,7 @@ class IPTAK:
         if len(match1) > 0:
             for i in range(len(match1)):
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                self.add('iptak', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][1]), match1[i][3], match1[i][2], 'aaaa', 'None', True, False)
+                self.add('iptak', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][1]), match1[i][3], match1[i][2], 'aaaa', 'None', False, True)
         match2 = re.compile('<div style="width:640px; font-size: 18px;" id="stronicowanie">(.*?)</div>' ,re.DOTALL).findall(readURL)
         if len(match2)>0:
             match3 = re.compile('<a href="(.*?)">(.*?)</a>',re.UNICODE).findall(match2[0])
@@ -107,7 +107,7 @@ class IPTAK:
                 #print("Match1",match1)
                 if len(match1) > 0:
                         for i in range(len(match1)):
-                                self.add('iptak', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][0]), match1[i][4], match1[i][2], 'aaaa', 'None', True, False)
+                                self.add('iptak', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][0]), match1[i][4], match1[i][2], 'aaaa', 'None', False, True)
         match2 = re.compile('class="next page-numbers"(.*?)href="(.*?)"',re.DOTALL).findall(readURL)
         if len(match2) > 0:
                 self.add('iptak', 'categories-menu1', 'Nastepna Strona',  'None', 'None', match2[0][1],'aaaa', 'None', True, False)
@@ -126,7 +126,7 @@ class IPTAK:
                 for i in range(len(match1)):
                     okladka = match1[i][3].replace('mala','srednia').replace('../../..','')
                 #add(self, service, name,               category, title,     iconimage, url, desc, rating, folder = True, isPlayable = True):
-                    self.add('iptak', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][1]), mainUrl+okladka, match1[i][0], 'aaaa', 'None', True, False)
+                    self.add('iptak', 'playSelectedMovie', 'None', self.cm.html_special_chars(match1[i][1]), mainUrl+okladka, match1[i][0], 'aaaa', 'None', False, True)
 
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -137,24 +137,31 @@ class IPTAK:
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
         match = re.compile('playMovie\("(.*?)","(.*?)"\)', re.DOTALL).findall(link)
-        #match = re.compile("playMovie\('(.*?)','(.*?)'\)", re.DOTALL).findall(link)
-       
+        match1 = re.compile("playMovie\('(.*?)','(.*?)'\)", re.DOTALL).findall(link)
+        print("Match",match)
         #VideoData['year'] = str(self.getMovieYear(link))
-        VideoData['year'] = '2090'
+        # VideoData['year'] = '2090'
         if len(match) > 0:
             if match[0][1] == 'cda':
-                linkVideo = self.up.getVideoLink('http://www.cda.pl/video/'+match[0][0])
+                linkVideo = 'http://www.cda.pl/video/'+match[0][0]
             elif match[0][1] == 'yt':
-                linkVideo = self.up.getVideoLink('http://www.youtube.com/watch?v='+match[0][0])
+                linkVideo = 'http://www.youtube.com/watch?v='+match[0][0]
             else:
                 linkVideo = False
+        elif len(match1)>0:
+            if match1[0][1] == 'cda':
+                linkVideo = 'http://www.cda.pl/video/'+match1[0][0]
+            elif match1[0][1] == 'yt':
+                linkVideo = 'http://www.youtube.com/watch?v='+match1[0][0]
+            else:
+                linkVideo = False
+
         else:
             linkVideo = False
-        VideoData['link'] = linkVideo
-        VideoData['STRplayer'] = match[0][1]
-        print ("VideoData",VideoData)
-        return VideoData
-       
+
+        print ("VideoData",linkVideo)
+        return linkVideo
+
 
     def getMovieYear(self,link):
         match = re.compile('Film z (.*?) roku.', re.DOTALL).findall(link)
@@ -186,33 +193,41 @@ class IPTAK:
         liz.setInfo( type="Video", infoLabels={ "Title": title } )
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=folder)
            
-    def LOAD_AND_PLAY_VIDEO(self, videoUrl, title, icon, STRplayer):
-        ok=True
-       
+    def LOAD_AND_PLAY_VIDEO(self, url, title, icon,year='',plot='', id=''):
+        progress = xbmcgui.DialogProgress()
+        progress.create('Postęp', '')
+        message = "Pracuje...."
+        progress.update( 10, "", message, "" )
+        xbmc.sleep( 1000 )
+        progress.update( 30, "", message, "" )
+        progress.update( 50, "", message, "" )
+        VideoLink = ''
+        subs=''
+        VideoLink = self.up.getVideoLink(url)
+        if isinstance(VideoLink, basestring):
+            videoUrl = VideoLink
+        else:
+            videoUrl = VideoLink[0]
+            subs = VideoLink[1]
+        progress.update( 70, "", message, "" )
         if videoUrl == '':
-                d = xbmcgui.Dialog()
-                d.ok('Nie znaleziono streamingu.', 'Może to chwilowa awaria.', 'Spróbuj ponownie za jakiś czas')
-                return False
-        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-        liz.setInfo( type="Video", infoLabels={ "Title": title, } )
-        try:
-            xbmcPlayer = xbmc.Player()
-            if STRplayer == 'cda':
-                xbmcPlayer.play(videoUrl+"|Referer=http://static.cda.pl/player5.9/player.swf", liz)
-            if STRplayer == 'yt':
-                #d = xbmcgui.Dialog()
-                #d.ok('YT', 'YT')
-                xbmcPlayer.play(videoUrl, liz)
-            if not xbmc.Player().isPlaying():
-                xbmc.sleep( 10000 )
-                #xbmcPlayer.play(url, liz)
-           
-        except:
+            progress.close()
             d = xbmcgui.Dialog()
-            d.ok('Błąd przy przetwarzaniu.', 'Problem')
-        print ("STRplayer",STRplayer)
-        return ok
-       
+            d.ok('Nie znaleziono streamingu', 'Mo�e to chwilowa awaria.', 'Spr�buj ponownie za jaki� czas')
+            return False
+        if icon == '' or  icon == 'None':
+            icon = "DefaultVideo.png"
+        if plot == '' or plot == 'None':
+            plot = ''
+        liz=xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon, path=videoUrl)
+        liz.setInfo( type="video", infoLabels={ "Title": title} )
+        xbmcPlayer = xbmc.Player()
+        progress.update( 90, "", message, "" )
+        progress.close()
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+
+
+
     def handleService(self):
         params = self.parser.getParams()
         name = self.parser.getParam(params, "name")
@@ -221,6 +236,7 @@ class IPTAK:
         title = self.parser.getParam(params, "title")
         icon = self.parser.getParam(params, "icon")
         page = self.parser.getParam(params, "page")
+        print("Dane", sys.argv[0],sys.argv[1])
         if page ==None:
             page=''
        
@@ -247,4 +263,4 @@ class IPTAK:
         if name == 'playSelectedMovie':
             log.info('playSelectedMovie: ' + str(url))
             data = self.getMovieLinkFromXML(url)
-            self.LOAD_AND_PLAY_VIDEO(data['link'], title, icon,data['STRplayer'])
+            self.LOAD_AND_PLAY_VIDEO(data, title, icon)

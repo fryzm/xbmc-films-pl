@@ -1041,19 +1041,21 @@ class mrknow_urlparser:
 
 
   def parserANYFILES(self,url):
-    HOST = 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3'
+    HOST = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'
     self.cm.checkDir(ptv.getAddonInfo('path') + os.path.sep + "cookies")
     COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "anyfiles.cookie"
     MAINURL = 'http://video.anyfiles.pl'
-    HEADER = {'Referer': MAINURL}
+    HEADER = {'Accept-Language':'pl,en-US;q=0.7,en;q=0.3','Referer': MAINURL, 'User-Agent': HOST}
     u = url.split('/')
-    #fUrl = MAINURL + "/w.jsp?id=%s&width=620&height=349&pos=&skin=0" % (u[-1])
-    fUrl = MAINURL + "/w.jsp?id=%s&width=620&height=349" % (u[-1])
+    fUrl = MAINURL + "/w.jsp?id=%s&width=620&height=349&pos=&skin=0" % (u[-1])
+    #fUrl = MAINURL + "/w.jsp?id=%s&width=620&height=349" % (u[-1])
     f1Url = MAINURL + "/videos.jsp?id=%s" % (u[-1])
     query_data = { 'url': f1Url, 'use_host': False, 'use_header': True, 'header': HEADER, 'use_cookie': True, 'cookiefile': COOKIEFILE, 'load_cookie': False, 'save_cookie': True, 'use_post': False, 'return_data': True }
     data = self.cm.getURLRequestData(query_data)
-    HEADER = {'Referer' : url, 'Cookie' : 'JSESSIONID=' + self.cm.getCookieItem(COOKIEFILE,'JSESSIONID')}
+    HEADER = {'Accept-Language':'pl,en-US;q=0.7,en;q=0.3','User-Agent': HOST, 'Referer' : url, 'Cookie' : 'JSESSIONID=' + self.cm.getCookieItem(COOKIEFILE,'JSESSIONID')+ ';AF-Definition-Language=pl'}
+    #HEADER = {'Referer' : url, 'Cookie' : 'AF-Definition-Language=pl'}
     query_data = { 'url': fUrl, 'use_host': False, 'use_header': True, 'header': HEADER, 'use_cookie': True, 'cookiefile': COOKIEFILE, 'load_cookie': True, 'save_cookie': True, 'use_post': False, 'return_data': True }
+    data = self.cm.getURLRequestData(query_data)
     data = self.cm.getURLRequestData(query_data)
     print ("DDDD",u,data)
     #add extra cookie

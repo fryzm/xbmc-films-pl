@@ -1,3 +1,7 @@
+Wersja 1.7.40
+ Dodano looknij.tv
+ Usunieto team-cast.pl
+
 Wersja 1.7.20
  Poprawiono wersj� dla Kodi 14.0
  Dodano Tema-cast.pl

@@ -25,7 +25,8 @@ MENU_TABLE = { #1000: "www.mrknow.pl [filmy online]",
 TV_ONLINE_TABLE = {
 		#     2100 : ["Film Box", 'filmbox'],
         #     2200 : ["Plejer.tv", 'plej'],
-             2300 : ["Team-cast.pl [dziala jak weeb.tv ale za darmo]", 'teamcastpl'],
+         #    2300 : ["Team-cast.pl [dziala jak weeb.tv ale za darmo]", 'teamcastpl'],
+              2350 : ["Looknij.tv [troche przycina]", 'looknijtv'],
              2400 : ["TVP Stream", 'tvpstream'],
         #     2500 : ["Netvi.tv", 'netvi'],
              2600 : ["Radio81.pl [test 10% dziala, w tym hbo]", 'radio81'],
@@ -76,7 +77,7 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
 import wykop, joemonster, milanos,filmbox,vodpl
-import kinolive,tvpstream,kinoliveseriale,scs,filmsonline,mmtv, polvod, teamcastpl
+import kinolive,tvpstream,kinoliveseriale,scs,filmsonline,mmtv, polvod, looknijtv
 import iptak,radio81,strefavod,wrzuta,tvppl, interia
 import filmboxmoovie, cdapl
 
@@ -151,8 +152,8 @@ class MrknowFilms:
         elif mode == 2100 or service == 'filmbox':
             tv = filmbox.filmbox()
             tv.handleService()
-        elif mode == 2300 or service == 'teamcastpl':
-            tv = teamcastpl.teamcastpl()
+        elif mode == 2350 or service == 'looknijtv':
+            tv = looknijtv.looknijtv()
             tv.handleService()
         elif mode == 2400 or service == 'tvpstream':
             tv = tvpstream.tvpstream()

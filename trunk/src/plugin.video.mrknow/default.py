@@ -62,7 +62,7 @@ FILM_ONLINE_TABLE = {
              #7300: ["Noobroom.com","noobroom"],
              7000: ["Vod Onet PL","vodpl"],
              7100: ["Filmbox Movie","filmboxmoovie"],
-             #7200: ["Filmmex","filmmex"],
+             7200: ["Seansik.tv","seansiktv"],
              7500: ["Alekino.tv","kinolive"],
              7600: ["Iptak","iptak"],
              #7700: ["Films-online.pl","filmsonline"],
@@ -79,7 +79,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 import wykop, joemonster, milanos,filmbox,vodpl
 import kinolive,tvpstream,kinoliveseriale,scs,filmsonline,mmtv, polvod, looknijtv
 import iptak,radio81,strefavod,wrzuta,tvppl, interia
-import filmboxmoovie, cdapl
+import filmboxmoovie, cdapl, seansiktv
 
 class MrknowFilms:
     def __init__(self):
@@ -125,6 +125,9 @@ class MrknowFilms:
             tv.handleService()
         elif mode == 7100 or service == 'filmboxmoovie':
             tv = filmboxmoovie.filmboxmoovie()
+            tv.handleService()
+        elif mode == 7200 or service == 'seansiktv':
+            tv = seansiktv.seansiktv()
             tv.handleService()
         elif mode == 7300 or service == 'polvod':
             tv = polvod.polvod()

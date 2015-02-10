@@ -18,10 +18,8 @@ BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 #sys.path.append( os.path.join( ptv.getAddonInfo('path'), "host" ) )
 
-import pLog, settings, mrknow_Parser, xbmcfilmapi, mrknow_urlparser, mrknow_Player, mrknow_pCommon
+import mrknow_pLog, settings, mrknow_Parser, xbmcfilmapi, mrknow_urlparser, mrknow_Player, mrknow_pCommon
 import json
-
-log = pLog.pLog()
 
 #my_hello_string = ptv.getLocalizedString(30300)
 
@@ -35,7 +33,8 @@ MENU_TAB = {1: ptv.getLocalizedString(30400),
             2: ptv.getLocalizedString(30402),
             3: ptv.getLocalizedString(30403),
             5: ptv.getLocalizedString(30404),
-            6: ptv.getLocalizedString(30407)
+            6: ptv.getLocalizedString(30407),
+            7: ptv.getLocalizedString(30000)
             }
 
 
@@ -45,15 +44,17 @@ valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
 class xbmcfilm:
 
     def __init__(self):
-        log.info('Starting xbmcfilm.pl')
+        self.log = mrknow_pLog.pLog()
+        self.log.info('Starting xbmcfilm.pl')
         self.p = mrknow_Player.mrknow_Player()
         self.parser = mrknow_Parser.mrknow_Parser()
         self.up = mrknow_urlparser.mrknow_urlparser()
-        #self.settings = settings.TVSettings()
+        self.settings = settings.TVSettings()
         self.api = xbmcfilmapi.XbmcFilmAPI()
         self.cm = mrknow_pCommon.common()
         self.level = 1
         self.mytree = {}
+
 
 
     def chkdict(self,dict,item):
@@ -211,7 +212,6 @@ class xbmcfilm:
         params = {'service': service, 'name': name, 'category': category, 'title':title.encode('utf-8','ignore'),
                   'iconimage': iconimage, 'url':url.encode('utf-8','ignore'), 'desc':'', 'myid':myid}
         u=sys.argv[0] + self.parser.setParam(params)
-        log.info('UUUUUUUUUUUUU' + u)
         if name == 'main-menu' or name == 'categories-menu':
             title = category 
         if iconimage == '':
@@ -322,6 +322,9 @@ class xbmcfilm:
              self.listsItemsFollow('users')
         elif name == 'main6':
              self.listStrm()
+        elif name == 'main7':
+            self.log.info('Wyświetlam ustawienia')
+            self.settings.showSettings()
 
         elif name == 'follow-cat':
              self.listsItemsFollowCat('followfiles',myid)

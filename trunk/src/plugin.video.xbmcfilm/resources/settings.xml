@@ -8,5 +8,9 @@
 		<setting id="xbmcfilm_pass" type="text" label="30013" option="hidden"  default="" />
 		<setting id="retries" type="slider" label="30202" range="1,1,10" default="5" option="int"/>
 	</category>
+	<category label="cda.pl">
+    	<setting id="cda_wersja" type="labelenum" label="Preferowana jakość filmu" values="480p|720p|1080p" default="720p" />
+        <setting id="cda_show_wersja" type="bool" label="Pokazuj jakość filmu na liście (obniża prędkość generowania listy)" default="false" />
+	</category>
 
 </settings>

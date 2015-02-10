@@ -182,6 +182,11 @@ class MrknowFilms:
         elif mode == 6000 or service == 'milanos':
             tv = milanos.milanos()
             tv.handleService()
+        elif mode == 7200 or service == 'seansiktv':
+            tv = seansiktv.seansiktv()
+            tv.handleService()
+
+
         elif mode == 20:
             self.log.info('Wyświetlam ustawienia')
             self.settings.showSettings()

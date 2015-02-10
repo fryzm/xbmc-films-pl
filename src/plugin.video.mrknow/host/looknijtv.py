@@ -135,15 +135,16 @@ class looknijtv:
         xbmc.sleep( 1000 )
         query_data = { 'url': url, 'use_host': False, 'use_cookie': False, 'use_post': False, 'return_data': True }
         link = self.cm.getURLRequestData(query_data)
-        match = re.compile('<div class="yendifplayer" data-poster="(.*?)"><video><source type="video/mp4" src=""><source type="video/flash" src="(.*?)" data-rtmp="(.*?)"><track src="(.*?)"></video></div>').findall(link)
-        print("Match-->",match)
+        match3 = re.compile('<div class="yendifplayer" data-poster="(.*?)" data-vid="(.*?)"><video><source type="(.*?)" src="(.*?)" data-rtmp="(.*?)"></video></div>').findall(link)
+        #match = re.compile('<div class="yendifplayer" data-poster="(.*?)"><video><source type="video/mp4" src=""><source type="video/flash" src="(.*?)" data-rtmp="(.*?)"><track src="(.*?)"></video></div>').findall(link)
+        print("Match-->",match3)
         progress.update( 30, "", message, "" )
         progress.update( 50, "", message, "" )
         VideoLink = ''
-        if len(match)>0:
+        if len(match3)>0:
             message = "Mam adres wideo, dekoduję..."
             progress.update( 60, "", message, "" )
-            VideoLink = match[0][2]+match[0][1]
+            VideoLink = match3[0][4]+match3[0][3] + ' live=true timeout=15'
             progress.update( 90, "", message, "" )
         progress.close()
         return VideoLink
@@ -166,7 +167,7 @@ class looknijtv:
         elif name == 'librtmp' and category == "update":
             self.DLLIBRTMP(title,url)
         elif name == 'main-menu' and category == 'Kanały':
-            self.listsCategoriesMenu(mainUrl + '?page_id=2')
+            self.listsCategoriesMenu(mainUrl + '?page_id=11')
         if name == 'playSelectedMovie':
             self.LOAD_AND_PLAY_VIDEO(self.getMovieLinkFromXML(url), title, icon)
 

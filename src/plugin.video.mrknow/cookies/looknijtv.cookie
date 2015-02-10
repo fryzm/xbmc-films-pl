@@ -1,7 +1,6 @@
 # Netscape HTTP Cookie File
-# http://www.netscape.com/newsref/std/cookie_spec.html
+# http://curl.haxx.se/rfc/cookie_spec.html
 # This is a generated file!  Do not edit.
 
-video.anyfiles.pl	FALSE	/	FALSE		AnyF18	mam18
-video.anyfiles.pl	FALSE	/	FALSE		JSESSIONID	04C2DBF73DFEABB9F9C6A5A71E5AE140
-video.anyfiles.pl	FALSE	/Perception+s03+e05+napisy+PL/Rozrywka/video	FALSE	1440875327	AF-Definition-Language	en
+looknij.tv	FALSE	/	FALSE		PHPSESSID	e8iobisp0r14bmarb61prb5em0
+looknij.tv	FALSE	/	FALSE	1423689279	show_landing_at	true

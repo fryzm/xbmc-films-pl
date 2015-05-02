@@ -2,7 +2,7 @@
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
-import urlparser,json
+import json
 
 
 scriptID = 'plugin.video.mrknow'
@@ -12,7 +12,7 @@ ptv = xbmcaddon.Addon(scriptID)
 BASE_RESOURCE_PATH = os.path.join( ptv.getAddonInfo('path'), "../resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import mrknow_pLog, settings, Parser,libCommon, Player
+import mrknow_pLog, settings, Parser,libCommon, Player, mrknow_urlparser
 
 log = mrknow_pLog.pLog()
 
@@ -39,7 +39,7 @@ class kinolive:
         log.info('Starting kinolive.pl')
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
-        self.up = urlparser.urlparser()
+        self.up = mrknow_urlparser.mrknow_urlparser()
         self.cm = libCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveserial.cookie"
         query_data = {'url': 'http://alekino.tv/auth/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
@@ -166,10 +166,14 @@ class kinolive:
         data = self.cm.getURLRequestData(query_data, post_data)
         match16 = re.compile('<iframe src="(.*?)" (.*?)', re.DOTALL).findall(data)
         #<iframe src="http://www.putlocker.com/embed/57870E83A986112B" width="989" height="535" frameborder="0" scrolling="no"></iframe>
-        print ("match16",match16,data)
+        #print ("match16",match16,data)
         linkVideo = ''
         if len(match16) > 0:
-            linkVideo = self.up.getVideoLink(match16[0][0].decode('utf8'))
+            page = urllib.urlopen(match16[0][0].decode('utf8'))
+            #print page.geturl()   # This will show the redirected-to URL
+            #print ("match16_link",page.geturl())
+
+            linkVideo = self.up.getVideoLink(page.geturl())
             if len(linkVideo) > 0:
                 VideoData['link'] = linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
             else:

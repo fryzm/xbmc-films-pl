@@ -2,7 +2,7 @@
 import urllib, urllib2, re, os, sys, math
 import xbmcgui, xbmc, xbmcaddon, xbmcplugin
 from urlparse import urlparse, parse_qs
-import urlparser,json
+import mrknow_urlparser,json
 
 
 scriptID = 'plugin.video.mrknow'
@@ -63,7 +63,7 @@ class kinoliveseriale:
         log.info('Starting kinoliveseriale.pl')
         self.settings = settings.TVSettings()
         self.parser = Parser.Parser()
-        self.up = urlparser.urlparser()
+        self.up = mrknow_urlparser.mrknow_urlparser()
         self.cm = libCommon.common()
         self.COOKIEFILE = ptv.getAddonInfo('path') + os.path.sep + "cookies" + os.path.sep + "kinoliveseriale.cookie"
         query_data = {'url': 'http://alekino.tv/auth/login', 'use_host': False, 'use_cookie': True, 'save_cookie': True, 'load_cookie': False, 'cookiefile': self.COOKIEFILE, 'use_post': False, 'return_data': True}
@@ -237,13 +237,25 @@ class kinoliveseriale:
         query_data = {'url': 'http://alekino.tv/players/get', 'use_host': False, 'use_cookie': True, 'save_cookie': False, 'load_cookie': True, 'cookiefile': self.COOKIEFILE, 'use_post': True, 'return_data': True}
         data = self.cm.getURLRequestData(query_data, post_data)
         #print("Data",data)
-        match16 = re.compile('<iframe src="(.*?)" width="989" height="535" scrolling="no" frameborder="0">', re.DOTALL).findall(data)
+        match16 = re.compile('<iframe src="(.*?)" (.*?)', re.DOTALL).findall(data)
         match17 = re.compile('<iframe src="(.*?)" style="border:0px; width: 630px; height: 430px;" scrolling="no"></iframe>', re.DOTALL).findall(data)
+        print("Match",match16,match17)
         if len(match16) > 0:
-            linkVideo = self.up.getVideoLink(match16[0].decode('utf8'))
+            page = urllib.urlopen(match16[0][0].decode('utf8'))
+            #print page.geturl()   # This will show the redirected-to URL
+            #print ("match16_link",page.geturl())
+
+            linkVideo = self.up.getVideoLink(page.geturl())
+
+            #linkVideo = self.up.getVideoLink(match16[0].decode('utf8'))
             return linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
         if len(match17) > 0:
-            linkVideo = self.up.getVideoLink(match17[0].decode('utf8'))
+            page = urllib.urlopen(match17[0].decode('utf8'))
+            #print page.geturl()   # This will show the redirected-to URL
+            #print ("match16_link",page.geturl())
+
+            linkVideo = self.up.getVideoLink(page.geturl())
+            #linkVideo = self.up.getVideoLink(match17[0].decode('utf8'))
             return linkVideo + '|Referer=http://alekino.tv/assets/alekino.tv/swf/player.swf'
         
 
